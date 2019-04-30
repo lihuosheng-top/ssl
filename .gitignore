@@ -1,0 +1,10 @@
+.idea
+composer.lock
+*.log
+
+thinkphp
+vendor
+runtime
+tmp
+database.php
+extend
