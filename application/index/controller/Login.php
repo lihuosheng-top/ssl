@@ -27,9 +27,9 @@ class Login extends Controller{
     public function index_login()
     {
         //获取app配置信息
-        $app_info=Config::get('app_info');
-        $post['account'] = '15729016523';               //获取前端提交数据
-        // $post = input('post.');              //获取前端提交数据
+//        $app_info=Config::get('app_info');
+//        $post['account'] = '15729016523';               //获取前端提交数据
+         $post = input('');              //获取前端提交数据
         if($post){
             $re=DB::name('member')
                 ->where('account',$post['account'])
@@ -40,12 +40,12 @@ class Login extends Controller{
                 $code=rand(100,999);
                 Session::set('code',$code);
                 $content='尊敬的'.$post['account'].'请输入有效码'.$code.'有效期10分钟';
-                $re= sms_message($post['account'],$content);
+                $re2= sms_message($post['account'],$content);
                 //获取token
 //                $key=$re['passwd'];          //客户秘钥--注册时生成
 //                $data['time']=time();        //当前时间戳
 //                $data['token']=md5($key.md5($data['time']));    //token加密
-                if($re){
+                if($re2){
                     return  ajax_success('发送短信成功');
                 }else{
                     return  ajax_error('发送短信失败');
@@ -54,17 +54,19 @@ class Login extends Controller{
                 //注册用户信息
                 $user['account']=$post['account'];       //用户手机号
                 $user['passwd']=md5($post['account'].time());
-                $re=DB::name('member')
+                $re2=DB::name('member')
                     ->insert($user);                //添加用户信息
-                if($re){
+                if($re2){
                     //发送短信
-                    $content='甩甩乐做测试';
-                    $re=sms_message($post['account'],$content);
+                    $code=rand(100,999);
+                    Session::set('code',$code);
+                    $content='尊敬的'.$post['account'].'请输入有效码'.$code.'有效期10分钟';
+                    $re3=sms_message($post['account'],$content);
 //                        //获取token
 //                        $key=$user['passwd'];          //客户秘钥--注册时生成
 //                        $data['time']=time();        //当前时间戳
 //                        $data['token']=md5($key.md5($data['time']));    //token加密
-                    if($re){
+                    if($re3){
                         return  ajax_success('发送短信成功');
                     }else{
                         return  ajax_error('发送短信失败');
@@ -104,13 +106,13 @@ class Login extends Controller{
                 ->find();
             if($user){
                 //验证码判断
-                if(password_verify($code,$code_se)){                         //验证码通过
+                if($code==$code_se){                         //验证码通过
                     Session::delete('code');
                     //获取token
                     $key=$user['passwd'];          //客户秘钥--注册时生成
                     $data['time']=time();        //当前时间戳
                     $data['token']=md5($key.md5($data['time']));    //token加密
-                    return   ajax_success('登录成功'，$data);
+                    return   ajax_success('登录成功',$data);
                 }else{
                     return   ajax_error('登录失败');
                 }
@@ -121,20 +123,20 @@ class Login extends Controller{
                 $re=DB::name('member')->insert($member);
                 if($re){
                     //验证码判断
-                    if(password_verify($code,$code_se)){                         //验证码通过
+                       $code_se=Session::get('code');
+                    if($code==$code_se){                             //验证码通过
                         Session::delete('code');
                         //获取token
                         $key=$user['passwd'];          //客户秘钥--注册时生成
                         $data['time']=time();        //当前时间戳
                         $data['token']=md5($key.md5($data['time']));    //token加密
-                        return   ajax_success('登录成功'，$data);
+                        return   ajax_success('登录成功',$data);
                 }else{
                         return   ajax_error('登录失败');
                     }
                 }else{
                     return   ajax_error('请输入摇一摇获取的验证码');
                 }
-
             }
         }
     }

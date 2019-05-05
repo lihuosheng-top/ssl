@@ -10,6 +10,9 @@ class checkLogin extends Controller {
     use \traits\controller\Jump;
     public function run(){
         $arr = request()->routeInfo();
+        if(preg_match("/index\/Login/",$arr["route"])){
+            return ;
+        }
         if(!preg_match("/admin\/Login/",$arr["route"])){
             $data = Session::get("user_id");
             if(empty($data)){
