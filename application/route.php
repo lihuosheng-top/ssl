@@ -11,13 +11,14 @@
 use think\Route;
 
 /**
-*   [前端路由]
-**/
+ *   [前端路由]
+ **/
 Route::group("",[
 
-  /*登录*/
-  "index_login"=>"index/Login/index_login",       //前端登录
-  "index_dolog"=>"index/Login/index_dolog",       //前端登录处理
+    /*登录*/
+    "index"      =>"index/Index/index",             //前端登录页面
+    "index_login"=>"index/Login/index_login",       //前端登录--获取验证码
+    "index_dolog"=>"index/Login/index_dolog",       //前端登录处理
 
 
 ]);
@@ -34,7 +35,7 @@ Route::group("admin",[
 
 
 
-    /*登录*/	
+    /*登录*/
     "index"=>"admin/Login/index",
     "login"=>"admin/Login/login",    //登录
 
@@ -43,7 +44,7 @@ Route::group("admin",[
     "login_captcha"=>"admin/Login/captchas",
 
 
-     /*管理员列表*/
+    /*管理员列表*/
     "admin_index"=>"admin/admin/index",
     "admin_add"=>"admin/admin/add",
     "admin_save"=>"admin/admin/save",
@@ -119,7 +120,7 @@ Route::group("admin",[
     "capital"=>"admin/Capital/capital",                      //资金流水
 
 
-   
+
 
 
 

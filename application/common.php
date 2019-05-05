@@ -35,9 +35,11 @@ function curl($url){
  * $text  欲请求的文本内容
  * return json数据
  */
-function sms_message($text){
+function sms_message( $phone = "" ,$content = ""){
+    $account='shuaishuaile';
+    $password="123qwe";
     $url = "http://120.26.38.54:8000/interface/smssend.aspx";
-    $post_data = array ("account" => "用户名","password" => "密码","mobile"=>"电话","content"=>$text);
+    $post_data = array ("account" => $account,"password" => $password,"mobile"=>$phone,"content"=>$content);
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL,$url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
