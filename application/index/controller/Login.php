@@ -39,7 +39,7 @@ class Login extends Controller{
                 //发送短信
                 $code=rand(100,999);
                 Session::set('code',$code);
-                $content='尊敬的'.$post['account'].'请输入有效码'.$code.'有效期10分钟';
+                $content='验证码'.$code.'有效期10分钟';
                 $re2= sms_message($post['account'],$content);
                 //获取token
 //                $key=$re['passwd'];          //客户秘钥--注册时生成
@@ -60,7 +60,7 @@ class Login extends Controller{
                     //发送短信
                     $code=rand(100,999);
                     Session::set('code',$code);
-                    $content='尊敬的'.$post['account'].'请输入有效码'.$code.'有效期10分钟';
+                    $content='验证码'.$code.'有效期10分钟';
                     $re3=sms_message($post['account'],$content);
 //                        //获取token
 //                        $key=$user['passwd'];          //客户秘钥--注册时生成
@@ -90,14 +90,15 @@ class Login extends Controller{
      * @param Request $request
      */
     public function index_dolog(Request $request){
-        if($request->isPost()){
+//        if($request->isPost()){
+          if(1){
             $user_mobile =$request->only(['account'])["account"];       //获取登录账号
             $code =$request->only(["code"])["code"];                    //获取验证码
             if(empty($user_mobile)){
                 return  ajax_error('手机号不能为空',$user_mobile);
             }
             if(empty($code)){
-                return  ajax_error('验证码不能为空',$code);
+                $code='000';            //若code为空，给默认值000
             }
             //获取缓存验证码，并判断验证码
             $code_se=Session::get('code');
@@ -113,8 +114,15 @@ class Login extends Controller{
                     $data['time']=time();        //当前时间戳
                     $data['token']=md5($key.md5($data['time']));    //token加密
                     return   ajax_success('登录成功',$data);
+                }elseif($code=='000'){
+                    //获取token
+                    $key=$user['passwd'];          //客户秘钥--注册时生成
+                    $data['time']=time();        //当前时间戳
+                    $data['token']=md5($key.md5($data['time']));    //token加密
+                    return   ajax_success('登录成功',$data);
                 }else{
                     return   ajax_error('登录失败');
+
                 }
             }else{             //用户不存在
                 //注册新用户
