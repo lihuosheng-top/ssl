@@ -78,7 +78,7 @@ Route::group("admin",[
     "menu_status"=>"admin/menu/status",
 
     /*商品管理*/
-    "good_index"=>"admin/Goods/index",                //商品列表
+    "goods_index"=>"admin/Goods/goods_index",                //商品列表
 
 
 

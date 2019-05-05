@@ -26,12 +26,14 @@ class Goods extends Controller
 
     /**
      * [商品列表显示]
-     * GY
+     * lilu
      */
-    public function index(Request $request)
+    public function goods_index(Request $request)
     {
-        
-        return view("goods_index");
+        //获取所有的商品
+//        $goods=DB::name('good')
+//               ->paginate()
+        return view("goods_index ");
 
 
     }

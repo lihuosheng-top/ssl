@@ -39,7 +39,7 @@ class Login extends Controller{
                 //发送短信
                 $code=rand(100,999);
                 Session::set('code',$code);
-                $content='验证码'.$code.'有效期10分钟';
+                $content='您的验证码：'.$code;
                 $re2= sms_message($post['account'],$content);
                 //获取token
 //                $key=$re['passwd'];          //客户秘钥--注册时生成
@@ -60,7 +60,7 @@ class Login extends Controller{
                     //发送短信
                     $code=rand(100,999);
                     Session::set('code',$code);
-                    $content='验证码'.$code.'有效期10分钟';
+                    $content='您的验证码：'.$code;
                     $re3=sms_message($post['account'],$content);
 //                        //获取token
 //                        $key=$user['passwd'];          //客户秘钥--注册时生成
