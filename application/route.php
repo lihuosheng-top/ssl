@@ -81,11 +81,14 @@ Route::group("admin",[
     "goods_index"=>"admin/Goods/goods_index",                //商品列表
     "goods_add"   =>"admin/Goods/goods_add",                 //商品添加
     "goods_edit"   =>"admin/Goods/goods_edit",               //商品编辑
-
+    "goods_search"   =>"admin/Goods/goods_search",           //商品检索
+    "goods_label_edit"   =>"admin/Goods/goods_label_edit",   //商品上下架设置
+    "goods_add_do"   =>"admin/Goods/goods_add_do",           //商品添加处理
 
 
     /*订单列表*/
-    "order_list"=>"admin/Order/order_list",
+    "order_list"=>"admin/Order/order_list",                   //订单列表
+    "order_search"=>"admin/Order/order_search",               //订单检索
 
 
 

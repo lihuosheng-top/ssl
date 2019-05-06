@@ -30,12 +30,22 @@ class Goods extends Controller
      */
     public function goods_index(Request $request)
     {
-        //获取所有的商品
-//        $goods=DB::name('goods')
-//        ->page(3)
-//        ->select();
-        return view("goods_index");
-
+        //获取商品
+        $goods = db("goods")->order("id asc")->select();
+        $num = db("goods")->count();        //获取商品总数
+        $all_idents = $goods;               //获取分页的数据
+        $curPage = input('get.page') ? input('get.page') : 1;//接收前端分页传值
+        $listRow = 10;//每页10行记录
+        $showdata = array_slice($all_idents, ($curPage - 1) * $listRow, $listRow, true);// 数组中根据条件取出一段值，并返回
+        $goods = Bootstrap::make($showdata, $listRow, $curPage, count($all_idents), false, [
+            'var_page' => 'page',
+            'path' => url('admin/Goods/goods_index'),//这里根据需要修改url
+            'query' => [],
+            'fragment' => '',
+        ]);
+        $goods->appends($_GET);
+        $this->assign('listpage', $goods->render());
+        return view("goods_index", ["goods" => $goods,"num" => $num]);
 
     }
 
@@ -45,16 +55,9 @@ class Goods extends Controller
      * [商品列表添加组]
      * GY
      */
-    public function goods_add($pid = 0)
+    public function goods_add()
     {
-        $goods_list = [];
-        if ($pid == 0) {
-            $goods_list = getSelectList("wares");
-        }
-        $expenses = db("express")->field("id,name")->select();
-        $scope = db("member_grade")->field("member_grade_name")->select();
-
-        return view("goods_add", ["goods_list" => $goods_list,"scope"=>$scope,"expenses"=>$expenses]);
+        return view("goods_add");
     }
 
 
@@ -64,14 +67,14 @@ class Goods extends Controller
      * GY
      * 
      */
-    public function save(Request $request)
+    public function goods_add_do(Request $request)
     {
-        
-        if ($request->isPost()) {
+        if ($request->isPost()) {                       //判断请求类型
             $goods_data = $request->param(); 
             $show_images = $request->file("goods_show_images");
             $imgs = $request->file("imgs");
             $list = [];
+            dump($goods_data);die;
             unset($goods_data["aaa"]);
             if (!empty($show_images)) {              
                 foreach ($show_images as $k=>$v) {
@@ -81,34 +84,15 @@ class Goods extends Controller
                 $goods_data["goods_show_image"] =  $list[0];
                 $goods_data["goods_show_images"] = implode(',', $list);
             }
-            if(!empty($goods_data["scope"])){
-                $goods_data["scope"] = implode(',', $goods_data["scope"]);
-            } else {
-                $goods_data["scope"] = "";
-            }
-            
-        
-            $goods_data["templet_id"] = isset($goods_data["templet_id"])?implode(",",$goods_data["templet_id"]):null;
-            $goods_data["templet_name"] = isset($goods_data["templet_name"])?implode(",",$goods_data["templet_name"]):null;
-                           
-            if(empty($goods_data["num"][1]) && empty($goods_data["unit"][0])){ //存             
-                $goods_data["num"] = array();
-                $goods_data["unit"] = array();
-            } else {
-                $goods_data["element"] = unit_comment($goods_data["num"],$goods_data["unit"]);
-                $goods_data["num"] = implode(",",$goods_data["num"]);
-                $goods_data["unit"] = implode(",",$goods_data["unit"]);
-            }
-            
-            if ($goods_data["goods_standard"] == "0") {
+            if ($goods_data["goods_standard"] == "0") {         //统一规格
                 $bool = db("goods")->insert($goods_data);
                 if ($bool && (!empty($show_images))) {
-                    $this->success("添加成功", url("admin/Goods/index"));
+                    $this->success("添加成功", url("admin/Goods/goods_index"));
                 } else {
-                    $this->success("添加失败", url('admin/Goods/add'));
+                    $this->success("添加失败", url('admin/Goods/goods_add'));
                 }
             }
-            if ($goods_data["goods_standard"] == "1") {
+            if ($goods_data["goods_standard"] == "1") {          //特殊规格
                 $goods_special = [];
                 $goods_special["goods_name"] = $goods_data["goods_name"];
                 $goods_special["produce"] = $goods_data["produce"];
@@ -515,63 +499,31 @@ class Goods extends Controller
     }
 
 
-
     /**
-     * [商品列表组首页推荐]
-     * 郭杨
+     * [商品上下架状态]
+     * lilu
+     * label  0->下架   1->上架
      */
-    public function status(Request $request)
-    {
-        if ($request->isPost()) {
-            $status = $request->only(["status"])["status"];
-            if ($status == 0) {
-                $id = $request->only(["id"])["id"];
-                $bool = db("goods")->where("id", $id)->update(["status" => 0]);
-                if ($bool) {
-                    $this->redirect(url("admin/Goods/index"));
-                } else {
-                    $this->error("修改失败", url("admin/Goods/index"));
-                }
-            }
-            if ($status == 1) {
-                $id = $request->only(["id"])["id"];
-                $bool = db("goods")->where("id", $id)->update(["status" => 1]);
-                if ($bool) {
-                    $this->redirect(url("admin/Goods/index"));
-                } else {
-                    $this->error("修改失败", url("admin/Goods/index"));
-                }
-            }
-        }
-    }
-
-
-    /**
-     * [商品列表组是否上架]
-     * 陈绪
-     */
-    public function ground(Request $request)
+    public function goods_label_edit(Request $request)
     {
         if ($request->isPost()) {
             $status = $request->only(["status"])["status"];
             if ($status == 0) {
                 $id = $request->only(["id"])["id"];
                 $bool = db("goods")->where("id", $id)->update(["label" => 0]);
-                $rest = db("join")->where("goods_id",$id)->update(["label" => 0]);
                 if ($bool) {
-                    $this->redirect(url("admin/Goods/index"));
+                    $this->redirect(url("admin/Goods/goods_index"));
                 } else {
-                    $this->error("修改失败", url("admin/Goods/index"));
+                    $this->error("修改失败", url("admin/Goods/goods_index"));
                 }
             }
             if ($status == 1) {
                 $id = $request->only(["id"])["id"];
                 $bool = db("goods")->where("id", $id)->update(["label" => 1]);
-                $rest = db("join")->where("goods_id",$id)->update(["label" => 1]);
                 if ($bool) {
-                    $this->redirect(url("admin/Goods/index"));
+                    $this->redirect(url("admin/Goods/goods_index"));
                 } else {
-                    $this->error("修改失败", url("admin/Goods/index"));
+                    $this->error("修改失败", url("admin/Goods/goods_index"));
                 }
             }
         }
@@ -716,53 +668,25 @@ class Goods extends Controller
 
     /**
      * [商品列表搜索]
-     * 郭杨
+     * lilu
+     * goods_number  商品编号
+     * goods_name    商品名称
      */
-    public function search()
+    public function goods_search()
     {
         $goods_number = input('goods_number');
-        $pid = input('pid');
-
-        if((empty($goods_number)) && (!empty($pid))){
-            $goods = db("goods")
-                    ->where("pid",$pid)
-                    ->order("id desc")
-                    ->select();
-        } else if ((!empty($goods_number)) && (empty($pid))) {
+        if ((!empty($goods_number))) {     //获取检索的商品
             $goods = db("goods")
                     ->where("goods_number",$goods_number)
-                    ->order("id desc")
+                    ->whereOr('goods_name',$goods_number)
+                    ->order("id asc")
                     ->select();
-        } else if ((!empty($goods_number)) && (!empty($pid))) {
-            $goods = db("goods")
-            ->where("goods_number",$goods_number)
-            ->where("pid",$pid)
-            ->order("id desc")
-            ->select();
-        } else {
+        }else {                             //获取不到则获取所有商品
             $goods = db("goods")->order("id desc")->select();
         }
-      
-        $goods_list = getSelectList("wares");
-        foreach ($goods as $key => $value) {
-            if ($value["pid"]) {
-                $res = db("wares")->where("id", $value['pid'])->field("name")->find();
-                if($goods[$key]["goods_standard"] == "1")
-                {
-                    $max[$key] = db("special")->where("goods_id", $goods[$key]['id'])->max("price");//最高价格
-                    $min[$key] = db("special")->where("goods_id", $goods[$key]['id'])->min("price");//最低价格
-                    $goods[$key]["goods_repertory"] = db("special")->where("goods_id", $goods[$key]['id'])->sum("stock");//库存
-                    $goods[$key]["max_price"] = $max[$key];
-                    $goods[$key]["min_price"] = $min[$key];
-                }
-                $goods[$key]["named"] = $res["name"];               
-                $goods[$key]["goods_show_images"] = explode(",", $goods[$key]["goods_show_images"])[0];
-            }
-        }
-
         $all_idents = $goods;//这里是需要分页的数据
         $curPage = input('get.page') ? input('get.page') : 1;//接收前段分页传值
-        $listRow = 20;//每页20行记录
+        $listRow = 10;//每页20行记录
         $showdata = array_slice($all_idents, ($curPage - 1) * $listRow, $listRow, true);// 数组中根据条件取出一段值，并返回
         $goods = Bootstrap::make($showdata, $listRow, $curPage, count($all_idents), false, [
             'var_page' => 'page',
@@ -772,7 +696,7 @@ class Goods extends Controller
         ]);
         $goods->appends($_GET);
         $this->assign('listpage', $goods->render());
-        return view("goods_index", ["goods" => $goods,"goods_list" => $goods_list]);
+        return view("goods_index", ["goods" => $goods]);
     }
 
 

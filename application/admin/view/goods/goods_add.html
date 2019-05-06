@@ -468,7 +468,7 @@
             </div>
         </div>
     </div>
-    <form class="layui-form layui-form-lists" action="{:url('admin/Goods/save')}" method="post"
+    <form class="layui-form layui-form-lists" action="{:url('admin/Goods/goods_add_do')}" method="post"
         enctype="multipart/form-data">
         <div class="form-title">基础信息 </div>
         <div class="form-item">
@@ -812,10 +812,7 @@
                             *已经在甩的商品，就不能帮别人甩同一个商品了，要弹框提示：此商品您已开甩，不能帮甩
                     </div>
                 </div>
-                
         </div>
-        
-
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button class="layui-btn layui-btn-normal" type="submit" id="submit">保存</button>
@@ -860,21 +857,21 @@
                         console.log(data)
                     }
                 });
-                // 运费模板
-                var unit1 = [];
-                var unit2 = [];
-
-                Array.prototype.unique3 = function () {
-                    var res = [];
-                    var json = {};
-                    for (var i = 0; i < this.length; i++) {
-                        if (!json[this[i]]) {
-                            res.push(this[i]);
-                            json[this[i]] = 1;
-                        }
-                    }
-                    return res;
-                }
+//                // 运费模板
+//                var unit1 = [];
+//                var unit2 = [];
+//
+//                Array.prototype.unique3 = function () {
+//                    var res = [];
+//                    var json = {};
+//                    for (var i = 0; i < this.length; i++) {
+//                        if (!json[this[i]]) {
+//                            res.push(this[i]);
+//                            json[this[i]] = 1;
+//                        }
+//                    }
+//                    return res;
+//                }
 
 
                 $(".general_content").on("blur", ".units", function () {
@@ -1055,65 +1052,7 @@
                     }
 
                 })
-                $("form").submit(function (e) {
-                    var unit1_a = unit1.unique3();
-                    var unit2_a = unit2.unique3();
-                    var val = $('input[name="goods_standard"]:checked').val();
-                    var vals = $('input[name="aaa"]:checked').val();
-                    var text = $(".monomer").val();
-                    var nums = 0;
-                    for (var i = 0; i < unit1_a.length; i++) {
-                        if (unit1_a[i] == text) {
-                            nums++;
-                        }
-                    }
-                    if (val == "0") {
-                        if (nums == 0) {
-                            alert("你输入的单位“包装规格”中没有添加");
-                            return false;
-                        }
-
-                    }
-
-
-
-                    var num = 0;
-                    for (var i = 0; i < $(".muban_list").length; i++) {
-                        for (var j = i + 1; j < $(".muban_list").length; j++) {
-                            if ($(".muban_list")[i].value == $(".muban_list")[j].value) {
-                                num++;
-                                break;
-                            }
-
-                        }
-                    }
-                    if (num > 0) {
-                        alert("相同的单位不能有两套运费模板")
-                        return false;
-                    }
-                    if (vals == "1") {
-                        if (val == "0") {
-                            console.log($(".muban").length);
-                            console.log(unit1_a.length);
-                            if ($(".muban").length != unit1_a.length) {
-                                alert("包装规格”中的单位需要全部添加对应运费模版");
-                                return false;
-                            }
-                        }
-                        else {
-                            console.log($(".muban").length);
-                            console.log(unit2_a.length);
-                            if ($(".muban").length != unit2_a.length) {
-                                alert("包装规格”中的单位需要全部添加对应运费模版");
-                                return false;
-                            }
-                        }
-                    }
-
-
-                });
                 $(".yunfei").on('click', ".delect_img", function () {
-
                     $(this).parent().remove();
                 })
                 // 运费模板
@@ -1594,8 +1533,8 @@
         };
         // 包装规格
         // $("#submit").click(function(){
-        //     var para = $('form').serializeObject() ;  
-        //      para = JSON.stringify(para) ; 　      
+        //     var para = $('form').serializeObject() ;
+        //      para = JSON.stringify(para) ; 　
         //      var partb=eval("(" + para + ")");
         //    var shuju=[];
         //      for(var i=0;i<codings.length;i++){
