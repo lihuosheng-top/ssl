@@ -17,13 +17,113 @@
         padding-left: 50px;
         background: #FDFDFE;
     }
+
+    .noshow {
+        display: none !important;
+    }
+
+    .popup {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 99999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: solid 1px #D7D7D7;
+        box-sizing: border-box;
+    }
+
+    .popup_doms {
+        width: 700px;
+        height: 400px;
+        background: #fff;
+    }
+
+    .popup_doms1 {
+        width: 900px;
+        background: #fff;
+    }
+
+    .popup_content {
+        padding: 20px;
+    }
+
+    .popup_title {
+        height: 40px;
+        line-height: 40px;
+        color: #66662B;
+        background: #EEF7EA;
+        padding-left: 20px;
+        position: relative;
+    }
+
+    .popup_x {
+        width: 25px;
+        position: absolute;
+        right: 12px;
+        top: -4px;
+        cursor: pointer;
+    }
+
+    .btn_all {
+        text-align: center;
+        margin-top: 100px;
+    }
+
+    .btn {
+        width: 150px;
+        height: 45px;
+        color: #fff;
+    }
+
+    .btn:hover {
+        background-color: rgb(0, 204, 255)
+    }
+
+    .btn_0 {
+        margin-right: 70px;
+    }
+
+    .btn_1 {
+        background-color: rgb(230, 45, 49)
+    }
 </style>
 
 {/block}
 
 <body>
 
-    
+    <!-- 弹出框 -->
+    <div class="popup popup_one noshow">
+        <div class="popup_doms">
+
+            <div class="popup_title">
+                设置
+                <div class="popup_x">
+                    <img src="__STATIC__/admin/index/img/X.png" />
+                </div>
+            </div>
+            <div style="clear:both;text-align: center;">
+                <div style="display:flex;">
+                    <label class="form-label">免单策略：</label>
+                    <div class="">
+                        <input type="radio" name="rule" value="0" title="开启" lay-filter="limit" checked="">
+                        <input type="radio" name="rule" value="1" title="关闭" lay-filter="nolimit">
+                        
+                    </div>
+                    <div class="tips">
+                            设置策略>>
+                    </div>
+                </div>
+            </div>
+            <div class="btn_all">
+                <button class="btn btn_0">返回</button>
+                <button class="btn btn_1">确定</button>
+            </div>
+        </div>
+    </div>
 
     <div class="childrenBody">
         <blockquote class="layui-elem-quote news_search">
@@ -93,21 +193,19 @@
                         <td>2019-05-06 10:01:55</td>
                         <td>2019-05-06 12:01:55</td>
                         <td>
-                            <a class="layui-btn layui-btn-mini edit"
-                                href="{:url()}"> 配置策略
-                            </a>
-                            <a class="layui-btn layui-btn-mini edit"
-                                href="{:url()}"> 编辑
+                            <div class="layui-btn layui-btn-mini edit tank">
+                                配置策略
+                            </div>
+                            <a class="layui-btn layui-btn-mini edit" href="{:url()}"> 编辑
                             </a>
 
 
-                            <a href="{:url()}"
-                                onclick="if(!confirm('确定要删除吗？')) return false"
+                            <a href="{:url()}" onclick="if(!confirm('确定要删除吗？')) return false"
                                 class="layui-btn layui-btn-danger layui-btn-mini news_del" data-id="undefined"><i
                                     class="layui-icon"></i> 删除</a>
                         </td>
                     </tr>
-                   
+
                 </tbody>
             </table>
             <div id="page">
@@ -137,6 +235,19 @@
     <!--请在下方写此页面业务相关的脚本-->
     {block name="bottom"}
     <script type="text/javascript">
+        $(".change").on("click", function () {
+            $(".popup").removeClass("noshow");
+        });
+        $(".popup_x").click(function () {
+            $(".popup").addClass("noshow");
+        });
+        $(".btn_0").click(function () {
+            $(".popup").addClass("noshow");
+        });
+        $(".btn_1").click(function () {
+            $(".popup").removeClass("noshow");
+            
+        });
         layui.config({
             base: "js/"
         }).use(['form', 'layer', 'jquery', 'laypage'], function () {
