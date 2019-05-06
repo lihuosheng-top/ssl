@@ -79,6 +79,8 @@ Route::group("admin",[
 
     /*商品管理*/
     "goods_index"=>"admin/Goods/goods_index",                //商品列表
+    "goods_add"   =>"admin/Goods/goods_add",                 //商品添加
+    "goods_edit"   =>"admin/Goods/goods_edit",               //商品编辑
 
 
 

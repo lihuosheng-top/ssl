@@ -31,8 +31,9 @@ class Goods extends Controller
     public function goods_index(Request $request)
     {
         //获取所有的商品
-//        $goods=DB::name('good')
-//               ->paginate()
+//        $goods=DB::name('goods')
+//               ->select();
+//        dump($goods);die;
         return view("goods_index ");
 
 
