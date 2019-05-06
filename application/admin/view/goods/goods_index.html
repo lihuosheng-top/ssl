@@ -23,7 +23,7 @@
 
 <body>
 
-    {block name="content"}
+    
 
     <div class="childrenBody">
         <blockquote class="layui-elem-quote news_search">
@@ -72,7 +72,7 @@
                 <tbody class="news_content">
 
                     <tr>
-                        <td><input type="checkbox" name="" lay-skin="primary" lay-filter="choose" data-id="{$value.id}">
+                        <td><input type="checkbox" name="" lay-skin="primary" lay-filter="choose" data-id="">
                         </td>
                         <td>NB666</td>
                         <td>苏伟</td>
@@ -107,7 +107,7 @@
                                     class="layui-icon"></i> 删除</a>
                         </td>
                     </tr>
-                    {/volist}
+                   
                 </tbody>
             </table>
             <div id="page">
@@ -122,14 +122,13 @@
                         style="width: 60px; background: #fff; color: #333333;border:#CCCCCC solid 1px;height: 38px;line-height: 38px;">确定
                     </button>
                 </div>
-                {$listpage}
             </div>
 
         </div>
 
     </div>
 
-    {/block}
+
 
     <!--_footer 作为公共模版分离出去-->
     {include file="template/_footer" /}
