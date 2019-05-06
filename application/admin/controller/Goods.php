@@ -32,9 +32,9 @@ class Goods extends Controller
     {
         //获取所有的商品
 //        $goods=DB::name('goods')
-//               ->select();
-//        dump($goods);die;
-        return view("goods_index ");
+//        ->page(3)
+//        ->select();
+        return view("goods_index");
 
 
     }
