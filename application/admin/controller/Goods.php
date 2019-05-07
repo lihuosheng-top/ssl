@@ -71,10 +71,13 @@ class Goods extends Controller
     {
         if ($request->isPost()) {                       //判断请求类型
             $goods_data = $request->param(); 
-            $show_images = $request->file("goods_show_images");
+            $show_images = $request->file("goods_show_images");        //商品图片
             $imgs = $request->file("imgs");
             $list = [];
-            halt($goods_data);
+            dump($goods_data);
+            dump($show_images);
+            dump($imgs);
+            die;
             unset($goods_data["aaa"]);
             if (!empty($show_images)) {              
                 foreach ($show_images as $k=>$v) {
