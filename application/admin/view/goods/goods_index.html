@@ -89,6 +89,9 @@
     .btn_1 {
         background-color: rgb(230, 45, 49)
     }
+    .m_r {
+        margin-right: 35px;
+    }
 </style>
 
 {/block}
@@ -96,7 +99,7 @@
 <body>
 
     <!-- 弹出框 -->
-    <div class="popup popup_one noshow">
+    <div class="popup popup_one">
         <div class="popup_doms">
 
             <div class="popup_title">
@@ -105,12 +108,12 @@
                     <img src="__STATIC__/admin/index/img/X.png" />
                 </div>
             </div>
-            <div style="clear:both;text-align: center;">
-                <div style="display:flex;">
+            <div style=" line-height:25px;margin-left: 180px;">
+                <div style="display:flex;align-items: center;">
                     <label class="form-label">免单策略：</label>
                     <div class="">
-                        <input type="radio" name="rule" value="0" title="开启" lay-filter="limit" checked="">
-                        <input type="radio" name="rule" value="1" title="关闭" lay-filter="nolimit">
+                        <input type="radio" name="rule" value="0" title="开启" lay-filter="limit" checked=""><span class="m_r">开启</span>
+                        <input type="radio" name="rule" value="1" title="关闭" lay-filter="nolimit"><span class="m_r">关闭</span>
                         
                     </div>
                     <div class="tips">
@@ -219,7 +222,9 @@
                 <div class="opation" style="width: 200px; float: left;">
                     <select name="" style="color: #C1A5A5; border-color: #E4E4E4;height: 30px;">
                         <option check="" value="0">请选择</option>
-                        <option value="1">批量删除</option>
+                        <option value="1">商品</option>
+                        <option value="2">批量删除</option>
+                        <option value="3">批量删除</option>
                     </select>
                 </div>
                 <div style="float: left; height: 52px;line-height: 52px; margin-left: 20px;">
@@ -264,7 +269,7 @@
                 laypage = layui.laypage,
                 $ = layui.jquery;
             var vals = $("input").data("id");
-            //点击操作确认按钮
+            //批量操作
             var data_id = [];
             $("#opration_btu").click(function () {
                 var opration_val = $(".opation select option:selected").val();
