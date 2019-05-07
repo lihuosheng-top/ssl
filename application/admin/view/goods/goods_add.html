@@ -647,8 +647,13 @@
             <div class="form-item">
                 <label class="form-label"><span class="red">*</span>商品划线价</label>
                 <div class="form-input line">
+<<<<<<< HEAD
                     <input type="text" name="line_price" lay-verify="title" autocomplete="off" placeholder="请输入"
                         class="layui-input">
+=======
+                    <input type="text" name="goods_bottom_money" lay-verify="title" autocomplete="off" placeholder="请输入"
+                        class="layui-input" required>
+>>>>>>> a1bb0b89661f89223b48ce9fa92f1730c5e538be
                     <div class="tips">
                         必填项，显示在前端
                     </div>
@@ -719,7 +724,7 @@
                             <div class="z_photo upimg-div clear">
                                 <section class="z_file fl">
                                     <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img">
-                                    <input type="file" name="goods_images_two[]" id="file" class="file" value=""
+                                    <input type="file" name="goods_images_two[]" id="file2" class="file" value=""
                                         accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="15"
                                         />
                                 </section>
@@ -744,9 +749,13 @@
                             <div class="z_photo upimg-div clear">
                                 <section class="z_file fl">
                                     <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img">
-                                    <input type="file" name="goods_images_three[]" id="file" class="file" value=""
+                                    <input type="file" name="goods_images_three[]" id="file3" class="file" value=""
                                         accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="15"
+<<<<<<< HEAD
                                         />
+=======
+                                         />
+>>>>>>> a1bb0b89661f89223b48ce9fa92f1730c5e538be
                                 </section>
                                 <div class="tips" style="width:250px;">
                                         配图三：个人中心商品图片，建议尺寸：650 x 200像素，只有一张
@@ -847,7 +856,7 @@
                 });
 
 
-
+                //规格切换
                 $(".general_content").on("blur", ".units", function () {
                     id = $(this).data("id");
                     if ($(this).data("value") != $(this).val()) {

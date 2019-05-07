@@ -74,7 +74,7 @@ class Goods extends Controller
             $show_images = $request->file("goods_show_images");
             $imgs = $request->file("imgs");
             $list = [];
-            dump($goods_data);die;
+            halt($goods_data);
             unset($goods_data["aaa"]);
             if (!empty($show_images)) {              
                 foreach ($show_images as $k=>$v) {
