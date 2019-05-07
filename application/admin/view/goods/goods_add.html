@@ -692,12 +692,11 @@
                     <div class="img-box full">
                         <section class=" img-section">
                             <div class="z_photo upimg-div clear">
-                                <section class="z_file fl">
-                                    <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img">
-                                    <input type="file" name="goods_images_one[]" id="file" class="file" value=""
-                                        accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="15"
-                                         />
-                                </section>
+                                    <section class="z_file fl">
+                                            <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img">
+                                            <input type="file" name="goods_images_one[]" id="file_one" class="file" value=""
+                                                accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="15" />
+                                    </section>
                                 <div class="tips" style="width:250px;">
                                         配图一：首页上滑，商品详情右上架图，建议尺寸：300*300像素，只有一张
                                 </div>
@@ -719,7 +718,7 @@
                             <div class="z_photo upimg-div clear">
                                 <section class="z_file fl">
                                     <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img">
-                                    <input type="file" name="goods_images_two[]" id="file2" class="file" value=""
+                                    <input type="file" name="goods_images_two[]" id="file_two" class="file" value=""
                                         accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="15"
                                         />
                                 </section>
@@ -744,8 +743,9 @@
                             <div class="z_photo upimg-div clear">
                                 <section class="z_file fl">
                                     <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img">
-                                    <input type="file" name="goods_images_three[]" id="file3" class="file" value=""
-                                        accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="15"/>
+                                    <input type="file" name="goods_images_three[]" id="file_three" class="file" value=""
+                                        accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="15"
+                                        />
                                 </section>
                                 <div class="tips" style="width:250px;">
                                         配图三：个人中心商品图片，建议尺寸：650 x 200像素，只有一张
@@ -828,22 +828,7 @@
                 var form = layui.form(),
                     $ = layui.jquery;
                 form.render();
-                var templet = [];
-                $.ajax({
-                    type: "POST",
-                    url: "delivery_templet",
-                    data: {
-
-                    },
-                    success: function (data) {
-                        data = eval("(" + data + ")");
-                        templet = data.data;
-
-                    },
-                    error: function (data) {
-                        console.log(data)
-                    }
-                });
+               
 
 
                 //规格切换
