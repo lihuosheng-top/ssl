@@ -289,7 +289,9 @@
                 <div class="opation" style="width: 200px; float: left;">
                     <select name="" style="color: #C1A5A5; border-color: #E4E4E4;height: 30px;">
                         <option check="" value="0">请选择</option>
-                        <option value="1">批量删除</option>
+                        <option value="1">商品</option>
+                        <option value="2">批量删除</option>
+                        <option value="3">批量删除</option>
                     </select>
                 </div>
                 <div style="float: left; height: 52px;line-height: 52px; margin-left: 20px;">
@@ -334,7 +336,7 @@
                 laypage = layui.laypage,
                 $ = layui.jquery;
             var vals = $("input").data("id");
-            //点击操作确认按钮
+            //批量操作
             var data_id = [];
             $("#opration_btu").click(function () {
                 var opration_val = $(".opation select option:selected").val();
