@@ -84,6 +84,7 @@ Route::group("admin",[
     "goods_search"   =>"admin/Goods/goods_search",           //商品检索
     "goods_label_edit"   =>"admin/Goods/goods_label_edit",   //商品上下架设置
     "goods_add_do"   =>"admin/Goods/goods_add_do",           //商品添加处理
+    "goods_edit_do"   =>"admin/Goods/goods_edit_do",           //商品编辑处理
 
 
     /*订单列表*/
