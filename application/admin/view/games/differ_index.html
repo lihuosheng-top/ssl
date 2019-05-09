@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
-
-<head>
+<html lang="en">
     <meta charset="utf-8">
     <meta name="renderer" content="webkit">
     <meta name="format-detection" content="telephone=no">
@@ -102,11 +100,9 @@
                     console.log("正在进行，请稍候");
                 },
                 success: function (data) {
-                    //console.log(data[0][0]);
-
+                    console.log(data[0]);
                    var result=' <input type="text"  value="" />';
-                    var str='<div class="menu"  style="width:1100px;">';
-                  
+                    var str='<div class="menu"  style="width:1000px;height: 1000px;">';
                      //console.log(data);
                      $.each(data[0],function(index,value){  
                                  //console.log(index);
@@ -118,13 +114,10 @@
                                   str+= '<input type="checkbox"  style="z-index:1;opacity:0; filter: alpha(opacity=0);" name='+val["num_string"]+  '  value="0"  onclick="getImgPosition(this)" />';
                                    str+='<img  style="z-index:1000; " src='+val["image_name"]+' >'; 
                                     str+="</li>";
-
                                 });
-                                    
                              str+='</ul>';
                     });
-                          
-                     str+="</div>"; 
+                     str+="</div>";
                     $('#app').prepend(str);
                    // console.log('1111111111');
                     $("input[name=img_position]").val('');
@@ -144,7 +137,6 @@
      
       function getImgPosition(e)
       {
-          
           var checkbox=$('input[type=checkbox]');
           $("input[type='checkbox']").each(function(index,value){
 
@@ -180,13 +172,8 @@
             var arrString = new_arr.join(',');
             $("input[name=img_position]").val(arrString);
             console.log(arrString); 
-
-           
-               
-
             });
       }
-      
 
 </script>
 

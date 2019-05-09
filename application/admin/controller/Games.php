@@ -72,33 +72,25 @@ class Games extends Controller
 //        $info = $file->rule('md5')->move(__UPLOAD__.'/index/images/slideshow/');
 //        $saveName = $info->getsaveName();
         $show = $file->move(ROOT_PATH . 'public' . DS . 'uploads');
-        $list = str_replace("\\", "/", $show->getSaveName());    //图片路径
+        $list = str_replace("\\", "/", $show->getSaveName());    //图片
+        $image_url=ROOT_PATH . 'public' . DS . 'uploads'.DS.$list;
 //        $root_pa=env('root_path');
 //        $url="D:/phpStudy/PHPTutorial/WWW/ThinkAdmin/public/static/index/images/slideshow/".$saveName;
 //        $url = strtr($url, '\\', '/');
         //$savePath="D:/phpStudy/PHPTutorial/WWW/ThinkAdmin/public/static/index/images/copper/";
         $savePath = ROOT_PATH . 'public' . DS . 'uploads';
-        $data=$this->img_tom($list,$savePath);
-        dump($data);die;
+        $data=$this->img_tom($image_url,$savePath);  //返回切割的图片
         if(!empty($data)){
             foreach ($data as $key => $value) {
-                $res[$key]['image_name']='./../../../static/index/images/copper/w/'.$value['image_name'];
+                $res[$key]['image_name']=$value['image_name'];
                 $res[$key]['num_string']=$value['num_string'];
             }
         }else{
             exit();
         }
-        $result[]=array_chunk($res, 10);
-        # code...
-        die(json_encode($result));
-        $saveName = $info->getsaveName();
-        $str = "/Blogs/public/static/index/images/slideshow/". $saveName;
-        //dump($saveName);
-        // dump($str);
-        // strtr 字符串替换函数 -> 将路径的\\替换成
-        $str1 = strtr($str, '\\', '/');
-        // 将拼接成的字符串路径插入到数据库中
-        exit();
+        $result[]=array_chunk($res, 11);
+        return $result;
+
 
     }
     /*
