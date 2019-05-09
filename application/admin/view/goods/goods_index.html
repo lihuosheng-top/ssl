@@ -245,13 +245,13 @@
                 <tbody class="news_content">
                     {volist name="goods" id="vo"}
                     <tr>
-                        <td><input type="checkbox" name="" lay-skin="primary" lay-filter="choose" data-id="$vo.id">
+                        <td><input type="checkbox" name="" lay-skin="primary" lay-filter="choose" data-id="{$vo.id}">
                         </td>
                         <td>{$vo['goods_number']}</td>
                         <td>{$vo.goods_name}</td>
                         <td>{$vo.brand}</td>
                         <td>
-                            <div class="tdimg"><img src="{$vo.goods_show_images}" /></div>
+                            <div class="tdimg"><img src="{$vo.goods_show_image}" /></div>
                         </td>
                         <td>{$vo.goods_repertory}</td>
                         <td>{$vo.goods_volume}</td>
@@ -268,8 +268,8 @@
                             {/if}
                         </td>
 
-                        <td>{$vo.start_date}</td>
-                        <td>{$vo.end_date}</td>
+                        <td>{$vo.start_date|date="Y-m-d",###}</td>
+                        <td>{$vo.end_date|date="Y-m-d ",###}</td>
                         <td>
                             <div class="layui-btn layui-btn-mini edit change" > 配置策略
                             </div>
@@ -289,9 +289,9 @@
                 <div class="opation" style="width: 200px; float: left;">
                     <select name="" style="color: #C1A5A5; border-color: #E4E4E4;height: 30px;">
                         <option check="" value="0">请选择</option>
-                        <option value="1">商品</option>
-                        <option value="2">批量删除</option>
-                        <option value="3">批量删除</option>
+                        <!--<option value="1">商品上架</option>-->
+                        <!--<option value="2">批量下架</option>-->
+                        <option value="3">移入回收站</option>
                     </select>
                 </div>
                 <div style="float: left; height: 52px;line-height: 52px; margin-left: 20px;">
@@ -346,17 +346,18 @@
                         ,
                         closeBtn: 0
                     });
-                } else if (opration_val == 1) {
+                } else if (opration_val == 3) {
                     layer.confirm('你确认要删除吗？', {
                         btn: ['确认', '取消'] //按钮
                     }, function () {
-                        var child = $("tbody").find('input[type="checkbox"]:not([name="show"]):checked');
+                        var child = $('.layui-form-checked');
                         for (var i = 0; i < child.length; i++) {
-                            data_id.push($(child[i])[0].dataset.id);
+                            var id=child.eq(i).prev().attr('data-id');
+                            data_id.push(id);
                         }
                         $.ajax({
                             type: "POST",
-                            url: "{:url('admin/Goods/dels')}",
+                            url: "{:url('admin/Goods/goods_del')}",
                             data: {
                                 "id": data_id,
                             },
