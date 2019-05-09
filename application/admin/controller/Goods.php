@@ -270,7 +270,14 @@ class Goods extends Controller
                         $goods_data['goods_images_three'] = str_replace("\\", "/", $info->getSaveName());
                     }
                 }
-                dump($goods_data);die;
+                $goods_data['start_date']=strtotime($goods_data['start_date']);
+                $goods_data['end_date']=strtotime($goods_data['end_date']);
+                $re=db('goods')->where('id',$goods_data['id'])->update($goods_data);
+                if($re){
+                    $this->success("编辑成功", url("admin/Goods/goods_index"));
+                }else{
+                    $this->error("编辑失败");
+                }
             }else{
                 //特殊规格图片
                 $imgs_one = $request->file("imgs_one");
@@ -279,21 +286,24 @@ class Goods extends Controller
                 if (!empty($imgs_one)) {
                     foreach ($imgs_one as $k=>$v) {
                         $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
-                        $goods_data['image_one'][] = str_replace("\\", "/", $info->getSaveName());
+                        $list1['images_one'][] = str_replace("\\", "/", $info->getSaveName());
                     }
+                }
+                else{
+                    $list1['images_one']=[];
                 }
                 //处理商品规格图片
                 if (!empty($imgs_two)) {
                     foreach ($imgs_two as $k=>$v) {
                         $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
-                        $goods_data['image_two'][] = str_replace("\\", "/", $info->getSaveName());
+                        $list2['images_two'][] = str_replace("\\", "/", $info->getSaveName());
                     }
+                }else{
+                    $list2['images_two']=[];
                 }
-                dump($goods_data);die;
-                $goods_special = [];
+                $goods_special = [];                           //特殊商品基本信息
                 $goods_special["goods_name"] = $goods_data["goods_name"];
-                $goods_special["produce"] = $goods_data["produce"];
-                $goods_special["brand"] = $goods_data["produce"];
+                $goods_special["brand"] = $goods_data["brand"];
                 $goods_special["start_date"] = strtotime($goods_data["start_date"]);
                 $goods_special["end_date"] = strtotime($goods_data["end_date"]);
                 $goods_special["goods_number"] = $goods_data["goods_number"];        //商品编号
@@ -303,57 +313,45 @@ class Goods extends Controller
                 $goods_special["goods_share_title"] = $goods_data["goods_share_title"];
                 $goods_special["video_link"] = $goods_data["video_link"];             //视频链接
                 $goods_special["goods_freight"] = $goods_data["goods_freight"];
-                $goods_special["label"] = 1;                      //上下架   默认上架
-
-                if (isset($goods_data["goods_detail"])) {         //商品详情
-                    $goods_special["goods_detail"] = $goods_data["goods_detail"];
-                } else {
-                    $goods_special["goods_detail"] = "";
-                    $goods_data["goods_detail"] = "";
-                }
-                if (isset($goods_data["text"])) {                 //检测报告
-                    $goods_special["text"] = $goods_data["text"];
-                } else {
-                    $goods_special["text"] = "";
-                    $goods_data["text"] = "";
-                }
-                $goods_special["goods_show_images"] = $goods_data["goods_show_images"];
-                $goods_special["goods_show_image"] = $goods_data["goods_show_image"];
-                $goods_id = db('goods')->insertGetId($goods_special);       //添加商品数据,返回商品id
-                $result = implode(",", $goods_data["lv1"]);         //商品规格title
+                $goods_special["label"] = $goods_data['label'];                                //上下架
+                $goods_special["goods_setting"] = $goods_data['goods_setting'];               //帮甩限制
+                $goods_special["goods_detail"] = $goods_data["goods_detail"];
+                $good_image=explode(',',$goods_data['goods_show_images']);
+                $goods_special["goods_show_image"] = $good_image[0];
+                //更新商品信息
+                db('goods')->where('id',$goods_data['id'])->update($goods_special);
                 if (!empty($goods_data)) {
-                    $attr=[];
-                    $i=0;
-                    foreach ($goods_data as $kn => $nl) {
-                        if (substr($kn, 0, 3) == "sss") {      //判断是否是规格记录
-                            $attr[$i]['stock']=$nl['stock'];            //库存
-                            $attr[$i]['coding']=$nl['coding'];          //规格
-                            $attr[$i]['cost']=$nl['cost'];              //成本价
-                            $attr[$i]['line']=$nl['line'];              //划线价
-                            $attr[$i]['total']=$nl['total'];            //积分
-                            $attr[$i]['jilt']=$nl['jilt'];              //帮甩费用
-                            $attr[$i]['status']=$nl['status'];          //上下架
-                            $attr[$i]['goods_id']=$goods_id;
-                            $attr[$i]['lv1']=$result;                    //规格title
-                            $attr[$i]['name']=$nl['name'];                //规格名称
-                            $attr[$i]['image_one']=$goods_data['image_one'][$i];                //规格图片
-                            $attr[$i]['image_two']=$goods_data['image_two'][$i];                //规格图片
-                            $i++;
+                        $attr=[];
+                        $i=0;
+                        foreach ($goods_data as $kn => $nl) {
+                            if (substr($kn, 0, 3) == "sss") {      //判断是否是规格记录
+                                $attr[$i]['stock']=$nl['stock'];            //库存
+                                $attr[$i]['coding']=$nl['coding'];          //规格
+                                $attr[$i]['cost']=$nl['cost'];              //成本价
+                                $attr[$i]['line']=$nl['line'];              //划线价
+                                $attr[$i]['total']=$nl['total'];            //积分
+                                $attr[$i]['jilt']=$nl['jilt'];              //帮甩费用
+                                $attr[$i]['status']=$nl['status'];          //上下架
+                                if(array_key_exists($i,$list1['images_one'])){
+                                    $attr[$i]['image_one']=$list1['images_one'][$i];
+                                }else{
+                                    $attr[$i]['image_one']=$nl['image_one'];                //规格图片
+                                }
+                                if(array_key_exists($i,$list2['images_two'])){
+                                    $attr[$i]['image_two']=$list2['images_two'][$i];
+                                }else{
+                                    $attr[$i]['image_two']=$nl['image_two'][$i];                //规格图片
+                                }
+                                $res=db('special')->where('id',$nl['id'])->update($attr[$i]);
+                                $i++;
+                            }
                         }
-                    }
+                    $this->success('编辑成功',url('admin/Goods/goods_index'));
+                }else{
+                    $this->error();
                 }
 
-                foreach ($attr as $kz => $vw) {
-                    $rest = db('special')->insertGetId($vw);
-                }
-                if ($rest && (!empty($show_images))) {
-                    $this->success("添加成功", url("admin/Goods/goods_index"));
-                } else {
-                    $this->success("添加失败", url('admin/Goods/add'));
-                }
             }
-
-
         }
     }
 
@@ -624,23 +622,60 @@ class Goods extends Controller
 
     /**
      * [商品列表组批量删除]
-     * 陈绪
+     * lilu
+     * $parsm id   商品id
      */
-    public function dels(Request $request)
+    public function goods_del(Request $request,$id)
     {
-        if ($request->isPost()) {
-            $id = $request->only(["id"])["id"];
-            if (is_array($id)) {
-                $where = 'id in(' . implode(',', $id) . ')';
-            } else {
-                $where = 'id=' . $id;
+        if ($request->isGet()) {
+            $id = $request->only(["id"])["id"];    //商品id
+            //获取商品信息
+            $goods_info=db('goods')->where('id',$id)->find();
+            if($goods_info['goods_standard']=='1'){    //特殊规格
+                  //1.删除商品信息
+                $re=db('goods')->delete($id);
+                //2.删除规格信息
+                $res=db('special')->where('goods_id',$id)->delete();
+                if($re && $res){
+                   $this->success('删除成功',url('admin/Goods/goods_index'));
+                }else{
+                   $this->error('删除失败');
+                }
+            }else{
+                //1.删除商品信息
+                $re=db('goods')->delete($id);
+                if($re){
+                    $this->success('删除成功',url('admin/Goods/goods_index'));
+                }else{
+                    $this->error('删除失败');
+                }
             }
-            halt($where);
-            $list = Db::name('goods')->where($where)->delete();
-            if (empty($list)) {
-                return ajax_success('成功删除!', ['status' => 1]);
-            } else {
-                return ajax_error('删除失败', ['status' => 0]);
+        }else{
+            $id = $request->only(["id"])["id"];
+            $num=count($id);
+            $i=0;
+            foreach ($id as $k=>$v){
+                $goods_info=db('goods')->where('id',$v)->find();
+                if($goods_info['goods_standard']=='1'){    //特殊规格
+                    //1.删除商品信息
+                    $re=db('goods')->delete($v);
+                    //2.删除规格信息
+                    $res=db('special')->where('goods_id',$v)->delete();
+                    if($re && $res){
+                        $i++;
+                    }
+                }else{
+                    //1.删除商品信息
+                    $re=db('goods')->delete($v);
+                    if($re){
+                        $i++;
+                    }
+                }
+            }
+            if($i==$num){
+                return ajax_success('批量删除成功');
+            }else{
+                return ajax_error('批量删除失败');
             }
         }
     }

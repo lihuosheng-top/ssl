@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=0.4">
+<script src="__STATIC__/admin/common/js/jquery.js"></script>
+<script src="__STATIC__/admin/index/js/pace.min.js"></script>
+<style type="text/css">
+    div.menu ul {
+        /*list-style:none;*/
+        /* 去掉ul前面的符号 */
+        margin: 0px;
+        /* 与外界元素的距离为0 */
+        padding: 0px;
+        /* 与内部元素的距离为0 */
+        width: auto;
+        /* 宽度根据元素内容调整 */
+
+    }
+
+    /* 所有class为menu的div中的ul中的li样式 */
+    ul>li {
+        float: left;
+        /* 向左漂移，将竖排变为横排 */
+        text-align: center;
+    }
+
+    /*ul li input[type='checkbox'] {
+        visibility:hidden;
+        position:absolute;
+       }*/
+    ul li input[type='checkbox'] {
+        padding: 10px 15px;
+        margin: 5px;
+        width: 85px;
+        height: 55px;
+        position: absolute;
+        margin-left: 0px;
+        margin-top: 0px;
+        z-index: 1;
+
+
+    }
+
+    input[type="radio"i],
+    input[type="checkbox"i] {
+        background-color: initial;
+        cursor: default;
+        margin: 20px 1ex;
+        padding: initial;
+        border: initial;
+    }
+
+    input[type="checkbox"]:checked+label::before {
+        content: "\2713";
+        background-color: yellowgreen;
+    }
+
+    .clear {
+        clear: both;
+    }
+</style>
+
+</head>
+
+<body class="layui-layout-body">
+
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15" id="app" style="margin: 0 auto;">
+            <form>
+                <div class="clear"></div>
+                <div class='filename'>
+                    <input type="file" name='pic' id="uploadInp" value="上传图片">
+                    <input type="button" value="图片切割" class="uploadForm">
+                </div>
+            </form>
+            <form>
+                <div>
+                    <input type="text" name='img_position' value="" />
+                </div>
+                <input type="button" value="提交" class="uploadForm2">
+        </div>
+        </form>
+    </div>
+
+</body>
+<script type="text/javascript">
+    var storage = window.localStorage;
+    //图片切割
+    $('.uploadForm').on('click', function () {
+        var formData = new FormData();
+        var file = $("#uploadInp")[0].files[0];
+        //console.log(file);
+        formData.append("file", file);
+        $.ajax({
+            url: "{:url('admin/Games/update_images')}",
+            type: 'POST',
+            data: formData,
+            // 告诉jQuery不要去处理发送的数据
+            processData: false,
+            dataType: "json",
+            // 告诉jQuery不要去设置Content-Type请求头
+            contentType: false,
+            beforeSend: function () {
+                console.log("正在进行，请稍候");
+            },
+            success: function (data) {
+                console.log(data[0]);
+                var result = ' <input type="text"  value="" />';
+                var str = '<div class="menu"  style="width:1000px;height: 1000px;">';
+                //console.log(data);
+                $.each(data[0], function (index, value) {
+                    //console.log(index);
+                    //console.log(data[0][index]);
+                    str += '<ul >';
+                    $.each(data[0][index], function (i, val) {
+                        //console.log(val);
+                        str += "<li class='' style='border:1px solid #f3f3f3f3;position:relative;'>";
+                        str += '<input type="checkbox"  style="z-index:1;opacity:0; filter: alpha(opacity=0);" name=' + val["num_string"] + '  value="0"  onclick="getImgPosition(this)" />';
+                        str += '<img  style="z-index:1000; " src=' + val["image_name"] + ' >';
+                        str += "</li>";
+                    });
+                    str += '</ul>';
+                });
+                str += "</div>";
+                $('#app').prepend(str);
+                // console.log('1111111111');
+                $("input[name=img_position]").val('');
+
+
+            },
+            error: function (data) {
+                console.log('222222');
+                console.log(data);
+            }
+        });
+
+    })
+
+
+    var name = "";
+
+    function getImgPosition(e) {
+        var checkbox = $('input[type=checkbox]');
+        $("input[type='checkbox']").each(function (index, value) {
+
+            // console.log($(value).val());
+            if ($(e).val() == 0) {
+                $(e).val("1");
+                if ($(e).val() == 1) {
+                    name += $(e).attr("name") + ',';
+                    var storage = window.localStorage;
+                    storage.setItem("myName", name);
+                    $("input[name=img_position]").val(name);
+                    var proto = $("input[name=img_position]").val();
+                    //console.log(name);
+                }
+            } else if ($(value).val() == 1) {
+                name += $(e).attr("name") + ',';
+                $("input[name=img_position]").val(name);
+            }
+
+            var proto = $("input[name=img_position]").val();
+            var arr = proto.split(',');
+            var new_arr = [];
+            for (var i = 0; i < arr.length; i++) {
+
+                var items = arr[i];
+                if ($.inArray(items, new_arr) == -1) {
+                    new_arr.push(items);
+                }
+                if (new_arr.length > 5) {
+                    // alert('最多选择4张图片');
+                }
+            }
+            var arrString = new_arr.join(',');
+            $("input[name=img_position]").val(arrString);
+            console.log(arrString);
+        });
+    }
+
+</script>

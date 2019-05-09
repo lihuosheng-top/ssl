@@ -85,6 +85,7 @@ Route::group("admin",[
     "goods_label_edit"   =>"admin/Goods/goods_label_edit",   //商品上下架设置
     "goods_add_do"   =>"admin/Goods/goods_add_do",           //商品添加处理
     "goods_edit_do"   =>"admin/Goods/goods_edit_do",           //商品编辑处理
+    "goods_del"   =>"admin/Goods/goods_del",           //商品编辑处理
 
 
     /*订单列表*/
@@ -108,6 +109,8 @@ Route::group("admin",[
     "differ"=>"admin/Games/differ",                          //找不同
     "differ_add"=>"admin/Games/differ_add",                  //添加找不同
     "appear_pro"=>"admin/Games/appear_pro",                  //出现概率
+    "differ_index"=>"admin/Games/differ_index",              //出现概率
+    "update_images"=>"admin/Games/update_images",              //出现概率
 
 
 

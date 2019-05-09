@@ -8,6 +8,20 @@
     body {
         background: #fff;
     }
+
+    .add_tp {
+        color: rgb(0, 153, 255);
+        margin-top: 65px;
+    }
+
+    .add_tp:hover {
+        cursor: pointer;
+    }
+
+    .upimg-div .up-section {
+        width: 500px;
+        height: 500px;
+    }
 </style>
 
 {/block}
@@ -16,21 +30,83 @@
     {block name="content"}
     <form class="layui-form layui-form-lists" action="{:url()}" method="post" enctype="multipart/form-data">
         <blockquote class="layui-elem-quote news_search">
-                <div class="form-item">
-                        找不同
-                    </div> 
+            <div class="form-item">
+                找不同
+            </div>
         </blockquote>
         <div class="form-item">
-            <label class="form-label">添加图片</label>
+                <div style="width:550px;height:2px; display: flex;">
+                        <div style="height: 50px;font-weight: 500">1</div>
+                        <div style="height: 50px;font-weight: 500">2</div>
+                        <div style="height: 50px;font-weight: 500">3</div>
+                        <div style="height: 50px;font-weight: 500">4</div>
+                        <div style="height: 50px;font-weight: 500">5</div>
+                        <div style="height: 50px;font-weight: 500">6</div>
+                        <div style="height: 50px;font-weight: 500">7</div>
+                        <div style="height: 50px;font-weight: 500">8</div>
+                        <div style="height: 50px;font-weight: 500">9</div>
+                        <div style="height: 50px;font-weight: 500">10</div>
+                        <div style="height: 50px;font-weight: 500">11</div>
+                </div>
+        </div>
+        <div class="form-item">
+            <label class="form-label" style="width:20%">添加图片</label>
+            <div style="width:20px;height:550px; display: flex; align-items:stretch;text-align: right;">
+                    <div style="width:50px; display: flex; flex-direction: column;">
+                            <div style="height: 50px;font-weight: 500">1</div>
+                            <div style="height: 50px;font-weight: 500">2</div>
+                            <div style="height: 50px;font-weight: 500">3</div>
+                            <div style="height: 50px;font-weight: 500">4</div>
+                            <div style="height: 50px;font-weight: 500">5</div>
+                            <div style="height: 50px;font-weight: 500">6</div>
+                            <div style="height: 50px;font-weight: 500">7</div>
+                            <div style="height: 50px;font-weight: 500">8</div>
+                            <div style="height: 50px;font-weight: 500">9</div>
+                            <div style="height: 50px;font-weight: 500">10</div>
+                            <div style="height: 50px;font-weight: 500">11</div>
+                        </div>
+                    </div>
+            <div style="width:550px;height:550px; border: 1px solid red; display: flex; align-items:stretch;">
+                <div style="width:50px; display: flex; flex-direction: column;">
+                    <div style="height: 50px; border: 1px solid red;"><img src="__STATIC__/admin/common/upfile/img/a11.png" style="height:48px;"></div>
+                    <div style="height: 50px; border: 1px solid red;"><img src="__STATIC__/admin/common/upfile/img/a11.png" style="height:48px;"></div>
+                    <div style="height: 50px; border: 1px solid red;"><img src="__STATIC__/admin/common/upfile/img/a11.png" style="height:48px;"></div>
+                    <div style="height: 50px; border: 1px solid red;"><img src="__STATIC__/admin/common/upfile/img/a11.png" style="height:48px;"></div>
+                    <div style="height: 50px; border: 1px solid red;"><img src="__STATIC__/admin/common/upfile/img/a11.png" style="height:48px;"></div>
+                    <div style="height: 50px; border: 1px solid red;"><img src="__STATIC__/admin/common/upfile/img/a11.png" style="height:48px;"></div>
+                    <div style="height: 50px; border: 1px solid red;"><img src="__STATIC__/admin/common/upfile/img/a11.png" style="height:48px;"></div>
+                    <div style="height: 50px; border: 1px solid red;"><img src="__STATIC__/admin/common/upfile/img/a11.png" style="height:48px;"></div>
+                    <div style="height: 50px; border: 1px solid red;"><img src="__STATIC__/admin/common/upfile/img/a11.png" style="height:48px;"></div>
+                    <div style="height: 50px; border: 1px solid red;"><img src="__STATIC__/admin/common/upfile/img/a11.png" style="height:48px;"></div>
+                    <div style="height: 50px; border: 1px solid red;"><img src="__STATIC__/admin/common/upfile/img/a11.png" style="height:48px;"></div>
+                </div>
+                <div style="width:50px; border: 1px solid red;"></div>
+                <div style="width:50px; border: 1px solid red;"></div>
+                <div style="width:50px; border: 1px solid red;"></div>
+                <div style="width:50px; border: 1px solid red;"></div>
+                <div style="width:50px; border: 1px solid red;"></div>
+                <div style="width:50px; border: 1px solid red;"></div>
+                <div style="width:50px; border: 1px solid red;"></div>
+                <div style="width:50px; border: 1px solid red;"></div>
+                <div style="width:50px; border: 1px solid red;"></div>
+                <div style="width:50px; border: 1px solid red;"></div>
+            </div>
+
+        </div>
+        <div class="form-item">
+            <label class="form-label" style="width:20%"></label>
             <div class="form-input">
                 <div class="img-box full">
                     <section class=" img-section">
                         <div class="z_photo upimg-div clear">
                             <section class="z_file fl">
-                                <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img">
+                                <!-- <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img"> -->
+
                                 <input type="file" name="goods_show_images[]" id="file" class="file" value=""
                                     accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="15" required />
+                                <div class="add_tp">+添加图片</div>
                             </section>
+                            <div class="add_tp uploadForm" style="width: 150px;">图片切割</div>
                         </div>
                     </section>
                 </div>
@@ -40,20 +116,20 @@
                         <p class="check-p"><span class="del-com wsdel-ok">确定</span><span class="wsdel-no">取消</span></p>
                     </div>
                 </aside>
-                
+
             </div>
         </div>
         <div class="form-item">
-            <label class="form-label">正确答案</label>
+            <label class="form-label" style="width:20%">正确答案</label>
             <div class="form-input">
                 <input type="text" name="goods_share_title" lay-verify="title" autocomplete="off" placeholder=""
                     class="layui-input">
                 <div class="tips">
-                        *直接点击方框内的图片，获取正确答案
+                    *直接点击方框内的图片，获取正确答案
                 </div>
             </div>
         </div>
-        
+
     </form>
     {/block}
     <!--_footer 作为公共模版分离出去-->
@@ -62,7 +138,7 @@
 
     <!--请在下方写此页面业务相关的脚本-->
     {block name="bottom"}
-
+    <script src="__STATIC__/admin/index/js/pace.min.js"></script>
     <script type="text/javascript">
         layui.config({
             base: "js/"
@@ -73,7 +149,80 @@
                 $ = layui.jquery;
 
         })
+        var storage = window.localStorage;
+        //图片切割
+        $('.uploadForm').on('click', function () {
+            alert('s')
+            var formData = new FormData();
+            var file = $("#file")[0].files[0];
+            //console.log(file);
+            formData.append("file", file);
+            $.ajax({
+                url: "{:url('admin/Games/update_images')}",
+                type: 'POST',
+                data: formData,
+                // 告诉jQuery不要去处理发送的数据
+                processData: false,
+                dataType: "json",
+                // 告诉jQuery不要去设置Content-Type请求头
+                contentType: false,
+                beforeSend: function () {
+                    console.log("正在进行，请稍候");
+                },
+                success: function (data) {
+                    console.log(data[0]);
 
+
+
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+
+        })
+
+
+        var name = "";
+
+        function getImgPosition(e) {
+            var checkbox = $('input[type=checkbox]');
+            $("input[type='checkbox']").each(function (index, value) {
+
+                // console.log($(value).val());
+                if ($(e).val() == 0) {
+                    $(e).val("1");
+                    if ($(e).val() == 1) {
+                        name += $(e).attr("name") + ',';
+                        var storage = window.localStorage;
+                        storage.setItem("myName", name);
+                        $("input[name=img_position]").val(name);
+                        var proto = $("input[name=img_position]").val();
+                        //console.log(name);
+                    }
+                } else if ($(value).val() == 1) {
+                    name += $(e).attr("name") + ',';
+                    $("input[name=img_position]").val(name);
+                }
+
+                var proto = $("input[name=img_position]").val();
+                var arr = proto.split(',');
+                var new_arr = [];
+                for (var i = 0; i < arr.length; i++) {
+
+                    var items = arr[i];
+                    if ($.inArray(items, new_arr) == -1) {
+                        new_arr.push(items);
+                    }
+                    if (new_arr.length > 5) {
+                        // alert('最多选择4张图片');
+                    }
+                }
+                var arrString = new_arr.join(',');
+                $("input[name=img_position]").val(arrString);
+                console.log(arrString);
+            });
+        }
 
 
 
