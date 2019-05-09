@@ -91,6 +91,7 @@ Route::group("admin",[
     /*订单列表*/
     "order_list"=>"admin/Order/order_list",                   //订单列表
     "order_search"=>"admin/Order/order_search",               //订单检索
+    "order_status"=>"admin/Order/order_status",               //订单检索
 
 
 

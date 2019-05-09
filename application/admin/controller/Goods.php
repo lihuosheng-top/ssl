@@ -123,8 +123,9 @@ class Goods extends Controller
                             $goods_data['goods_images_three'] = str_replace("\\", "/", $info->getSaveName());
                         }
                     }
-                    $goods_data['label']=1;             //上下架     默认上架
                     $goods_data['brand']=$goods_data['produce'];
+                    $goods_data['start_date']=strtotime($goods_data['start_date']);
+                    $goods_data['end_date']=strtotime($goods_data['end_date']);
                     $bool = db("goods")->insert($goods_data);
                     if($bool){
                         $this->success("添加成功", url("admin/Goods/goods_index"));
