@@ -42,4 +42,11 @@ class Games extends Controller
 	{
         return view('appear_pro');
 	}
+	/**
+	*  找不同添加
+	*/
+	public function differ_add()
+	{
+        return view('differ_add');
+	}
 }

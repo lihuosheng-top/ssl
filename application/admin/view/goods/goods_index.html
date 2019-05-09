@@ -273,11 +273,11 @@
                         <td>
                             <div class="layui-btn layui-btn-mini edit change" > 配置策略
                             </div>
-                            <a class="layui-btn layui-btn-mini edit" href="{:url('admin/Goods/goods_edit')}"> 编辑
+                            <a class="layui-btn layui-btn-mini edit" href="{:url('admin/Goods/goods_edit' ,['id'=>$vo.id])}"> 编辑
                             </a>
 
 
-                            <a href="{:url('admin/Goods/goods_del')}" onclick="if(!confirm('确定要删除吗？')) return false"
+                            <a href="{:url('admin/Goods/goods_del',['id'=>$vo['id']])}" onclick="if(!confirm('确定要删除吗？')) return false"
                                 class="layui-btn layui-btn-danger layui-btn-mini news_del" data-id="undefined"><i
                                     class="layui-icon"></i> 删除</a>
                         </td>

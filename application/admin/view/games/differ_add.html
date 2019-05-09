@@ -1,0 +1,86 @@
+{include file="template/_meta" /}
+<title></title>
+</head>
+
+{block name="css"}
+<link rel="stylesheet" type="text/css" href="__STATIC__/admin/common/css/aaa.css" />
+<style type="text/css">
+    body {
+        background: #fff;
+    }
+</style>
+
+{/block}
+
+<body>
+    {block name="content"}
+    <form class="layui-form layui-form-lists" action="{:url()}" method="post" enctype="multipart/form-data">
+        <blockquote class="layui-elem-quote news_search">
+                <div class="form-item">
+                        找不同
+                    </div> 
+        </blockquote>
+        <div class="form-item">
+            <label class="form-label">添加图片</label>
+            <div class="form-input">
+                <div class="img-box full">
+                    <section class=" img-section">
+                        <div class="z_photo upimg-div clear">
+                            <section class="z_file fl">
+                                <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img">
+                                <input type="file" name="goods_show_images[]" id="file" class="file" value=""
+                                    accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="15" required />
+                            </section>
+                        </div>
+                    </section>
+                </div>
+                <aside class="mask works-mask">
+                    <div class="mask-content">
+                        <p class="del-p ">您确定要删除作品图片吗？</p>
+                        <p class="check-p"><span class="del-com wsdel-ok">确定</span><span class="wsdel-no">取消</span></p>
+                    </div>
+                </aside>
+                
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="form-label">正确答案</label>
+            <div class="form-input">
+                <input type="text" name="goods_share_title" lay-verify="title" autocomplete="off" placeholder=""
+                    class="layui-input">
+                <div class="tips">
+                        *直接点击方框内的图片，获取正确答案
+                </div>
+            </div>
+        </div>
+        
+    </form>
+    {/block}
+    <!--_footer 作为公共模版分离出去-->
+    {include file="template/_footer" /}
+    <!--/_footer 作为公共模版分离出去-->
+
+    <!--请在下方写此页面业务相关的脚本-->
+    {block name="bottom"}
+
+    <script type="text/javascript">
+        layui.config({
+            base: "js/"
+        }).use(['form', 'layer', 'jquery', 'laypage'], function () {
+            var form = layui.form(),
+                layer = parent.layer === undefined ? layui.layer : parent.layer,
+                laypage = layui.laypage,
+                $ = layui.jquery;
+
+        })
+
+
+
+
+    </script>
+
+    {/block}
+
+</body>
+
+</html>

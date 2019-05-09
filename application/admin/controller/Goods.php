@@ -70,58 +70,95 @@ class Goods extends Controller
     public function goods_add_do(Request $request)
     {
         if ($request->isPost()) {                       //判断请求类型
-            $goods_data = $request->param(); 
-            $show_images = $request->file("goods_show_images");
-            $imgs = $request->file("imgs");
+            $goods_data = $request->param();
+            $show_images = $request->file("goods_show_images");        //商品大图
+            //统一规格图片
+            $goods_images_one = $request->file("goods_images_one");        //商品1
+            $goods_images_two = $request->file("goods_images_two");        //商品2
+            $goods_images_three = $request->file("goods_images_three");        //商品3
+            //特殊规格图片
+            $imgs_one = $request->file("imgs_one");
+            $imgs_two = $request->file("imgs_two");
+            //处理商品规格图片
+            if (!empty($imgs_one)) {
+                foreach ($imgs_one as $k=>$v) {
+                    $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
+                    $goods_data['image_one'][] = str_replace("\\", "/", $info->getSaveName());
+                }
+            }
+            //处理商品规格图片
+            if (!empty($imgs_two)) {
+                foreach ($imgs_two as $k=>$v) {
+                    $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
+                    $goods_data['image_two'][] = str_replace("\\", "/", $info->getSaveName());
+                }
+            }
             $list = [];
-            halt($goods_data);
             unset($goods_data["aaa"]);
-            if (!empty($show_images)) {              
+            if (!empty($show_images)) {
                 foreach ($show_images as $k=>$v) {
                     $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
                     $list[] = str_replace("\\", "/", $info->getSaveName());
-                }            
+                }
                 $goods_data["goods_show_image"] =  $list[0];
                 $goods_data["goods_show_images"] = implode(',', $list);
             }
             if ($goods_data["goods_standard"] == "0") {         //统一规格
-                $bool = db("goods")->insert($goods_data);
-                if ($bool && (!empty($show_images))) {
-                    $this->success("添加成功", url("admin/Goods/goods_index"));
+                if ((!empty($show_images))) {
+                    if (!empty($goods_images_one)) {
+                        foreach ($goods_images_one as $k=>$v) {
+                            $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
+                            $goods_data['goods_images_one'] = str_replace("\\", "/", $info->getSaveName());
+                        }
+                    }
+                    if (!empty($goods_images_two)) {
+                        foreach ($goods_images_two as $k=>$v) {
+                            $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
+                            $goods_data['goods_images_two'] = str_replace("\\", "/", $info->getSaveName());
+                        }
+                    }
+                    if (!empty($goods_images_three)) {
+                        foreach ($goods_images_three as $k=>$v) {
+                            $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
+                            $goods_data['goods_images_three'] = str_replace("\\", "/", $info->getSaveName());
+                        }
+                    }
+                    $goods_data['label']=1;             //上下架     默认上架
+                    $goods_data['brand']=$goods_data['produce'];
+                    $bool = db("goods")->insert($goods_data);
+                    if($bool){
+                        $this->success("添加成功", url("admin/Goods/goods_index"));
+                    }else{
+                        $this->error("添加失败");
+                    }
                 } else {
-                    $this->success("添加失败", url('admin/Goods/goods_add'));
+//                    $this->success("添加失败", url('admin/Goods/goods_add'));
+                      $this->error("添加失败");
                 }
             }
             if ($goods_data["goods_standard"] == "1") {          //特殊规格
                 $goods_special = [];
                 $goods_special["goods_name"] = $goods_data["goods_name"];
                 $goods_special["produce"] = $goods_data["produce"];
-                $goods_special["brand"] = $goods_data["brand"];
-                $goods_special["date"] = $goods_data["date"];
-                $goods_special["goods_number"] = $goods_data["goods_number"];
-                $goods_special["goods_standard"] = $goods_data["goods_standard"];
-                $goods_special["goods_selling"] = $goods_data["goods_selling"];
+                $goods_special["brand"] = $goods_data["produce"];
+                $goods_special["start_date"] = strtotime($goods_data["start_date"]);
+                $goods_special["end_date"] = strtotime($goods_data["end_date"]);
+                $goods_special["goods_number"] = $goods_data["goods_number"];        //商品编号
+                $goods_special["goods_standard"] = $goods_data["goods_standard"];    //商品规格
                 $goods_special["goods_sign"] = $goods_data["goods_sign"];
-                $goods_special["goods_describe"] = $goods_data["goods_describe"];
-                $goods_special["pid"] = $goods_data["pid"];
-                $goods_special["sort_number"] = $goods_data["sort_number"];
-                $goods_special["video_link"] = $goods_data["video_link"];
-                $goods_special["goods_delivery"] = $goods_data["goods_delivery"];
-                $goods_special["goods_franking"] = $goods_data["goods_franking"];
-                $goods_special["templet_id"] = $goods_data["templet_id"];
-                $goods_special["label"] = $goods_data["label"];
-                $goods_special["status"] = $goods_data["status"];
-                $goods_special["scope"] = $goods_data["scope"];
-                $goods_special["templet_id"] = $goods_data["templet_id"];
-                $goods_special["templet_name"] = $goods_data["templet_name"];
+                $goods_special["goods_share_describe"] = $goods_data["goods_share_describe"];
+                $goods_special["goods_share_title"] = $goods_data["goods_share_title"];
+                $goods_special["video_link"] = $goods_data["video_link"];             //视频链接
+                $goods_special["goods_freight"] = $goods_data["goods_freight"];
+                $goods_special["label"] = 1;                      //上下架   默认上架
 
-                if (isset($goods_data["goods_text"])) {
-                    $goods_special["goods_text"] = $goods_data["goods_text"];
+                if (isset($goods_data["goods_detail"])) {         //商品详情
+                    $goods_special["goods_detail"] = $goods_data["goods_detail"];
                 } else {
-                    $goods_special["goods_text"] = "";
-                    $goods_data["goods_text"] = "";
+                    $goods_special["goods_detail"] = "";
+                    $goods_data["goods_detail"] = "";
                 }
-                if (isset($goods_data["text"])) {
+                if (isset($goods_data["text"])) {                 //检测报告
                     $goods_special["text"] = $goods_data["text"];
                 } else {
                     $goods_special["text"] = "";
@@ -129,94 +166,35 @@ class Goods extends Controller
                 }
                 $goods_special["goods_show_images"] = $goods_data["goods_show_images"];
                 $goods_special["goods_show_image"] = $goods_data["goods_show_image"];
-                $result = implode(",", $goods_data["lv1"]);
-                $goods_id = db('goods')->insertGetId($goods_special);
-                
+                $goods_id = db('goods')->insertGetId($goods_special);       //添加商品数据,返回商品id
+                $result = implode(",", $goods_data["lv1"]);         //商品规格title
                 if (!empty($goods_data)) {
+                    $attr=[];
+                    $i=0;
                     foreach ($goods_data as $kn => $nl) {
-                        if (substr($kn, 0, 3) == "sss") {
-                            $price[] = $nl["price"];
-                            $stock[] = $nl["stock"];
-                            $coding[] = $nl["coding"];
-                            $cost[] = $nl["cost"];
-                            $line[] = $nl["line"];
-                            $offer[] = $nl["offer"];
-                            if (isset($nl["status"])) {
-                                $status[] = $nl["status"];
-                            } else {
-                                $status[] = "0";
-                            }
-                            if (isset($nl["save"])) {
-                                $save[] = $nl["save"];
-                            } else {
-                                $save[] = "0";
-                            }
-                        }
-
-                        if(substr($kn,strrpos($kn,"_")+1) == "num"){
-                            $num1[substr($kn,0,strrpos($kn,"_"))]["num"] = implode(",",$goods_data[$kn]);
-                            $num[substr($kn,0,strrpos($kn,"_"))]["num"] = $goods_data[$kn];
-                        } 
-                        if(substr($kn,strrpos($kn,"_")+1) == "unit"){
-                            $unit1[substr($kn,0,strrpos($kn,"_"))]["unit"] = implode(",",$goods_data[$kn]);
-                            $unit[substr($kn,0,strrpos($kn,"_"))]["unit"] = $goods_data[$kn]; 
-                        }                        
-                    }
-                }
-                if (!empty($imgs)) {
-                    foreach ($imgs as $k => $v) {
-                        $shows = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
-                        $tab = str_replace("\\", "/", $shows->getSaveName());
-
-                        if (is_array($goods_data)) {
-                            foreach ($goods_data as $key => $value) {
-                                if (substr($key, 0, 3) == "sss") {
-                                    $str[] = substr($key, 3);
-                                    $values[$k]["name"] = $str[$k];
-                                    $values[$k]["price"] = $price[$k];
-                                    $values[$k]["lv1"] = $result;
-                                    $values[$k]["stock"] = $stock[$k];
-                                    $values[$k]["coding"] = $coding[$k];
-                                    if(isset($num1)){
-                                        if(array_key_exists($coding[$k],$num1)){
-                                            $values[$k]["num"] = $num1[$coding[$k]]["num"]; 
-                                        } else {
-                                            $values[$k]["num"] = null;
-                                        }
-                                    } else {
-                                            $values[$k]["num"] = null;
-                                    }
-                                    if(isset($unit1)){
-                                        if(array_key_exists($coding[$k],$unit1)){
-                                            $values[$k]["unit"] = $unit1[$coding[$k]]["unit"];
-                                            $values[$k]["element"] = unit_comment($num[$coding[$k]]["num"],$unit[$coding[$k]]["unit"]);
-                                        } else {
-                                            $values[$k]["unit"] = null;
-                                            $values[$k]["element"] = null;
-                                        }
-                                    } else {
-                                            $values[$k]["unit"] = null;
-                                            $values[$k]["element"] = null;
-                                    }
-                                    $values[$k]["status"] = $status[$k];
-                                    $values[$k]["save"] = $save[$k];
-                                    $values[$k]["cost"] = $cost[$k];
-                                    $values[$k]["line"] = $line[$k];                                    
-                                    $values[$k]["images"] = $tab;
-                                    $values[$k]["goods_id"] = $goods_id;
-                                    $values[$k]["offer"] = $offer[$k];
-                                    
-                                }
-                            }
+                        if (substr($kn, 0, 3) == "sss") {      //判断是否是规格记录
+                               $attr[$i]['stock']=$nl['stock'];            //库存
+                               $attr[$i]['coding']=$nl['coding'];          //规格
+                               $attr[$i]['cost']=$nl['cost'];              //成本价
+                               $attr[$i]['line']=$nl['line'];              //划线价
+                               $attr[$i]['total']=$nl['total'];            //积分
+                               $attr[$i]['jilt']=$nl['jilt'];              //帮甩费用
+                               $attr[$i]['status']=$nl['status'];          //上下架
+                               $attr[$i]['goods_id']=$goods_id;
+                               $attr[$i]['lv1']=$result;                    //规格title
+                               $attr[$i]['name']=$nl['name'];                //规格名称
+                               $attr[$i]['image_one']=$goods_data['image_one'][$i];                //规格图片
+                               $attr[$i]['image_two']=$goods_data['image_two'][$i];                //规格图片
+                               $i++;
                         }
                     }
                 }
 
-                foreach ($values as $kz => $vw) {
+                foreach ($attr as $kz => $vw) {
                     $rest = db('special')->insertGetId($vw);
                 }    
                 if ($rest && (!empty($show_images))) {
-                    $this->success("添加成功", url("admin/Goods/index"));
+                    $this->success("添加成功", url("admin/Goods/goods_index"));
                 } else {
                     $this->success("添加失败", url('admin/Goods/add'));
                 }
@@ -226,44 +204,156 @@ class Goods extends Controller
 
 
     /**
-     * [商品列表组修改]
-     * GY
+     * [商品修改]
+     * lilu
+     * @parsm  goods_id
      */
-    public function edit(Request $request, $id)
+    public function goods_edit(Request $request, $id)
     {
         $goods = db("goods")->where("id", $id)->select();
-        $scope = db("member_grade")->field("member_grade_name")->select();
-        $goods_standard = db("special")->where("goods_id", $id)->select();
-        $expenses = db("express")->field("id,name")->select();
+//        $scope = db("member_grade")->field("member_grade_name")->select();    //获取会员列表
+        $goods_standard = db("special")->where("goods_id", $id)->select();      //获取该商品规格
+//        $expenses = db("express")->field("id,name")->select();                //获取快递列表
         foreach ($goods as $key => $value) {
-            if(!empty($goods[$key]["goods_show_images"])){
+            if(!empty($goods)){
             $goods[$key]["goods_show_images"] = explode(',', $goods[$key]["goods_show_images"]);
-            $goods[$key]["scope"] = explode(',', $goods[$key]["scope"]);
-            $goods[$key]["unit"] = explode(',', $goods[$key]["element"]);
-            $goods[$key]["templet_name"] = explode(',', $goods[$key]["templet_name"]);
-            $goods[$key]["templet_id"] = explode(',', $goods[$key]["templet_id"]);
+            $goods[$key]["goods_attr"] =  $goods_standard; //商品规格记录
+//            $goods[$key]["scope"] = explode(',', $goods[$key]["scope"]);                   //面向会员范围
+//            $goods[$key]["unit"] = explode(',', $goods[$key]["element"]);                    //单位名称
         }
      }
-        $team = isset($goods[0]["templet_id"])?$goods[0]["templet_id"]:null;
-        
-        if(!empty($team)){
-            foreach($team as $ke => $val){
-                $temp[$ke] = db("express")->where("id",$team[$ke])->field("name,id")->find();
-            }
-        }
-       
-        foreach ($goods_standard as $k => $v) {
-            $goods_standard[$k]["title"] = explode('_', $v["name"]);
-            $res = explode(',', $v["lv1"]);         
-        }
-          
-        
-        $goods_list = getSelectList("wares");
         $restel = $goods[0]["goods_standard"]; //判断是否为通用或特殊
-        if ($restel == 0) {
-            return view("goods_edit", ["goods" => $goods, "goods_list" => $goods_list,"scope" => $scope,"expenses"=>$expenses,"temp"=>$temp]);
+        if ($restel == 0) {                 //统一规格
+            return view("goods_edit", ["goods" => $goods]);
         } else {
-            return view("goods_edit", ["goods" => $goods, "goods_list" => $goods_list, "res" => $res, "goods_standard" => $goods_standard,"scope" => $scope,"expenses"=>$expenses,"temp"=>$temp]);
+            return view("goods_edit", ["goods" => $goods ]);
+        }
+    }
+    /**
+     * [商品修改处理]
+     * lilu
+     * @parsm  id   商品id
+     */
+    public function goods_edit_do(Request $request, $id)
+    {
+        if ($request->isPost()) {                                  //判断请求类型
+            $goods_data = $request->param();                         //获取表单数据
+            if($goods_data['goods_standard']=='0'){                //判断商品规格
+                $show_images = $request->file("goods_show_images");        //商品大图
+                if (!empty($show_images)) {
+                    foreach ($show_images as $k=>$v) {
+                        $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
+                        $list[] = str_replace("\\", "/", $info->getSaveName());
+                    }
+                    $goods_data["goods_show_image"] =  $list[0];
+                    $goods_data["goods_show_images"] = implode(',', $list);
+                }
+                //统一规格图片
+                $goods_images_one = $request->file("goods_images_one");        //商品1
+                $goods_images_two = $request->file("goods_images_two");        //商品2
+                $goods_images_three = $request->file("goods_images_three");        //商品3
+                if (!empty($goods_images_one)) {
+                    foreach ($goods_images_one as $k=>$v) {
+                        $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
+                        $goods_data['goods_images_one'] = str_replace("\\", "/", $info->getSaveName());
+                    }
+                }
+                if (!empty($goods_images_two)) {
+                    foreach ($goods_images_two as $k=>$v) {
+                        $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
+                        $goods_data['goods_images_two'] = str_replace("\\", "/", $info->getSaveName());
+                    }
+                }
+                if (!empty($goods_images_three)) {
+                    foreach ($goods_images_three as $k=>$v) {
+                        $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
+                        $goods_data['goods_images_three'] = str_replace("\\", "/", $info->getSaveName());
+                    }
+                }
+                dump($goods_data);die;
+            }else{
+                //特殊规格图片
+                $imgs_one = $request->file("imgs_one");
+                $imgs_two = $request->file("imgs_two");
+                //处理商品规格图片
+                if (!empty($imgs_one)) {
+                    foreach ($imgs_one as $k=>$v) {
+                        $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
+                        $goods_data['image_one'][] = str_replace("\\", "/", $info->getSaveName());
+                    }
+                }
+                //处理商品规格图片
+                if (!empty($imgs_two)) {
+                    foreach ($imgs_two as $k=>$v) {
+                        $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
+                        $goods_data['image_two'][] = str_replace("\\", "/", $info->getSaveName());
+                    }
+                }
+                dump($goods_data);die;
+                $goods_special = [];
+                $goods_special["goods_name"] = $goods_data["goods_name"];
+                $goods_special["produce"] = $goods_data["produce"];
+                $goods_special["brand"] = $goods_data["produce"];
+                $goods_special["start_date"] = strtotime($goods_data["start_date"]);
+                $goods_special["end_date"] = strtotime($goods_data["end_date"]);
+                $goods_special["goods_number"] = $goods_data["goods_number"];        //商品编号
+                $goods_special["goods_standard"] = $goods_data["goods_standard"];    //商品规格
+                $goods_special["goods_sign"] = $goods_data["goods_sign"];
+                $goods_special["goods_share_describe"] = $goods_data["goods_share_describe"];
+                $goods_special["goods_share_title"] = $goods_data["goods_share_title"];
+                $goods_special["video_link"] = $goods_data["video_link"];             //视频链接
+                $goods_special["goods_freight"] = $goods_data["goods_freight"];
+                $goods_special["label"] = 1;                      //上下架   默认上架
+
+                if (isset($goods_data["goods_detail"])) {         //商品详情
+                    $goods_special["goods_detail"] = $goods_data["goods_detail"];
+                } else {
+                    $goods_special["goods_detail"] = "";
+                    $goods_data["goods_detail"] = "";
+                }
+                if (isset($goods_data["text"])) {                 //检测报告
+                    $goods_special["text"] = $goods_data["text"];
+                } else {
+                    $goods_special["text"] = "";
+                    $goods_data["text"] = "";
+                }
+                $goods_special["goods_show_images"] = $goods_data["goods_show_images"];
+                $goods_special["goods_show_image"] = $goods_data["goods_show_image"];
+                $goods_id = db('goods')->insertGetId($goods_special);       //添加商品数据,返回商品id
+                $result = implode(",", $goods_data["lv1"]);         //商品规格title
+                if (!empty($goods_data)) {
+                    $attr=[];
+                    $i=0;
+                    foreach ($goods_data as $kn => $nl) {
+                        if (substr($kn, 0, 3) == "sss") {      //判断是否是规格记录
+                            $attr[$i]['stock']=$nl['stock'];            //库存
+                            $attr[$i]['coding']=$nl['coding'];          //规格
+                            $attr[$i]['cost']=$nl['cost'];              //成本价
+                            $attr[$i]['line']=$nl['line'];              //划线价
+                            $attr[$i]['total']=$nl['total'];            //积分
+                            $attr[$i]['jilt']=$nl['jilt'];              //帮甩费用
+                            $attr[$i]['status']=$nl['status'];          //上下架
+                            $attr[$i]['goods_id']=$goods_id;
+                            $attr[$i]['lv1']=$result;                    //规格title
+                            $attr[$i]['name']=$nl['name'];                //规格名称
+                            $attr[$i]['image_one']=$goods_data['image_one'][$i];                //规格图片
+                            $attr[$i]['image_two']=$goods_data['image_two'][$i];                //规格图片
+                            $i++;
+                        }
+                    }
+                }
+
+                foreach ($attr as $kz => $vw) {
+                    $rest = db('special')->insertGetId($vw);
+                }
+                if ($rest && (!empty($show_images))) {
+                    $this->success("添加成功", url("admin/Goods/goods_index"));
+                } else {
+                    $this->success("添加失败", url('admin/Goods/add'));
+                }
+            }
+
+
         }
     }
 
