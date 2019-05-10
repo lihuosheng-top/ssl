@@ -65,6 +65,7 @@ class Games extends Controller
      * 轮播图片 -> 获取前端要修改的id和新图片
      */
     public function update_images(){
+
         // 接收前端传来点击修改的id的值和前端在本地选择想要更换上传的图片 -> 获取表单上传文件
         $file = request()->file('file');
         // 判断是否有上传的图片

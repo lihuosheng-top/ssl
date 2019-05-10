@@ -93,9 +93,11 @@
     //图片切割
     $('.uploadForm').on('click', function () {
         var formData = new FormData();
+        console.log(file)
         var file = $("#uploadInp")[0].files[0];
-        //console.log(file);
+        console.log(file);
         formData.append("file", file);
+        console.log(formData)
         $.ajax({
             url: "{:url('admin/Games/update_images')}",
             type: 'POST',
@@ -109,27 +111,27 @@
                 console.log("正在进行，请稍候");
             },
             success: function (data) {
-                console.log(data[0]);
+                console.log(data);
                 var result = ' <input type="text"  value="" />';
                 var str = '<div class="menu"  style="width:1000px;height: 1000px;">';
                 //console.log(data);
-                $.each(data[0], function (index, value) {
-                    //console.log(index);
-                    //console.log(data[0][index]);
-                    str += '<ul >';
-                    $.each(data[0][index], function (i, val) {
-                        //console.log(val);
-                        str += "<li class='' style='border:1px solid #f3f3f3f3;position:relative;'>";
-                        str += '<input type="checkbox"  style="z-index:1;opacity:0; filter: alpha(opacity=0);" name=' + val["num_string"] + '  value="0"  onclick="getImgPosition(this)" />';
-                        str += '<img  style="z-index:1000; " src=' + val["image_name"] + ' >';
-                        str += "</li>";
-                    });
-                    str += '</ul>';
-                });
-                str += "</div>";
-                $('#app').prepend(str);
-                // console.log('1111111111');
-                $("input[name=img_position]").val('');
+                // $.each(data[0], function (index, value) {
+                //     //console.log(index);
+                //     //console.log(data[0][index]);
+                //     str += '<ul >';
+                //     $.each(data[0][index], function (i, val) {
+                //         //console.log(val);
+                //         str += "<li class='' style='border:1px solid #f3f3f3f3;position:relative;'>";
+                //         str += '<input type="checkbox"  style="z-index:1;opacity:0; filter: alpha(opacity=0);" name=' + val["num_string"] + '  value="0"  onclick="getImgPosition(this)" />';
+                //         str += '<img  style="z-index:1000; " src=' + val["image_name"] + ' >';
+                //         str += "</li>";
+                //     });
+                //     str += '</ul>';
+                // });
+                // str += "</div>";
+                // $('#app').prepend(str);
+                // // console.log('1111111111');
+                // $("input[name=img_position]").val('');
 
 
             },
