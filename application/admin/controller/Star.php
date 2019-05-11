@@ -21,6 +21,16 @@ class Star extends Controller
 
 
 	/**
+	*   奖品添加
+	**/
+	public function prize_add()
+	{
+       return  view('prize_add');
+	}
+
+
+	
+	/**
 	*   星光值兑换记录
 	**/
 	public function list_exchange()

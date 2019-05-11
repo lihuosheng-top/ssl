@@ -122,6 +122,7 @@ Route::group("admin",[
 
     /*星光值管理*/
     "star_exchange"=>"admin/Star/star_exchange",             //星光值兑换
+    "prize_add"=>"admin/Star/prize_add",                     //奖品添加
     "list_exchange"=>"admin/Star/list_exchange",             //星光值兑换列表
 
 

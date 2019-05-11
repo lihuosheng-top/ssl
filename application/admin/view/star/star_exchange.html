@@ -10,14 +10,13 @@
     }
 
     #page {
-        width: 96%;
+        width: 97%;
         height: 50px;
         line-height: 50px;
         border: solid 1px #E2E2E2;
         padding-left: 50px;
         background: #FDFDFE;
     }
-   
 </style>
 
 {/block}
@@ -26,7 +25,7 @@
 
     <div class="childrenBody">
         <blockquote class="layui-elem-quote news_search">
-            <form class="layui-form" action="{:url('admin/Goods/goods_search')}">
+            <form class="layui-form" action="{:url('')}">
                 <div class="seach">
                     <div class="seach_list">
                         <div class="seach_laber">输入搜索：</div>
@@ -41,7 +40,7 @@
             </form>
         </blockquote>
 
-        <a class="layui-btn layui-btn-danger batchDel" href="goods_add">+添加奖品</a>
+        <a class="layui-btn layui-btn-danger batchDel" href="prize_add">+添加奖品</a>
 
         <div class="layui-form news_list">
             <table class="layui-table">
@@ -63,30 +62,30 @@
                     </tr>
                 </thead>
                 <tbody class="news_content">
-                    {volist name="goods" id="vo"}
                     <tr>
-                        <td><input type="checkbox" name="" lay-skin="primary" lay-filter="choose" data-id="{$vo.id}">
+                        <td><input type="checkbox" name="" lay-skin="primary" lay-filter="choose" data-id="">
                         </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>100001</td>
+                        <td>远古巨鲲</td>
+                        <td>
+                            <div class="tdimg"><img src="" /></div>
+                        </td>
+                        <td>1</td>
+                        <td>1</td>
                         <td class="td-status">
-                            <input type="checkbox" class="Status" name="status" value="{$vo.label}" lay-skin="switch"
-                                lay-text="上架|下架" lay-filter="isShows" checked data-id="{$vo.id}">
-                           
+                            <input type="checkbox" class="Status" name="status" value="" lay-skin="switch"
+                                lay-text="上架|下架" lay-filter="isShows" checked data-id="">
+
                         </td>
                         <td>1</td>
                         <td>
-                            <a class="layui-btn layui-btn-mini edit" href="{:url('admin/Goods/goods_edit' ,['id'=>$vo.id])}"> 编辑
+                            <a class="layui-btn layui-btn-mini edit" href="{:url()}"> 编辑
                             </a>
-                            <a href="{:url('admin/Goods/goods_del',['id'=>$vo['id']])}" onclick="if(!confirm('确定要删除吗？')) return false"
+                            <a href="{:url()}" onclick="if(!confirm('确定要删除吗？')) return false"
                                 class="layui-btn layui-btn-danger layui-btn-mini news_del" data-id="undefined"><i
                                     class="layui-icon"></i> 删除</a>
                         </td>
                     </tr>
-                    {/volist}
                 </tbody>
             </table>
             <div id="page">
@@ -103,7 +102,6 @@
                         style="width: 60px; background: #fff; color: #333333;border:#CCCCCC solid 1px;height: 38px;line-height: 38px;">确定
                     </button>
                 </div>
-                {$listpage}
             </div>
 
         </div>
@@ -119,7 +117,7 @@
     <!--请在下方写此页面业务相关的脚本-->
     {block name="bottom"}
     <script type="text/javascript">
-        
+
         layui.config({
             base: "js/"
         }).use(['form', 'layer', 'jquery', 'laypage'], function () {
@@ -144,7 +142,7 @@
                     }, function () {
                         var child = $('.layui-form-checked');
                         for (var i = 0; i < child.length; i++) {
-                            var id=child.eq(i).prev().attr('data-id');
+                            var id = child.eq(i).prev().attr('data-id');
                             data_id.push(id);
                         }
                         $.ajax({
@@ -204,7 +202,7 @@
                 }
                 form.render('checkbox');
             })
-            
+
             // 奖品上下架ajax修改
             form.on('switch(isShows)', function (data) {
                 if ($(this).val() == 0) {
