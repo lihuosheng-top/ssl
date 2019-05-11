@@ -69,6 +69,12 @@
         margin-left: 250px;
         margin-top: 80px;
     }
+    .del_div {
+        display: inline;
+    }
+    .del_div:hover {
+        cursor: pointer;
+    }
 </style>
 
 {/block}
@@ -86,7 +92,7 @@
             <div class="form-item m_t oneself">
                 <label class="form-label" style="width:20%">自己免单金额和概率</label>
                 <div class="form-input ziji">
-                    <input type="radio" name="oneself" value="自己概率" title=" " lay-filter="gailv" checked="">
+                    <input type="radio" name="oneself" value="自己概率" title=" " lay-filter="gailv" checked=''>
                 </div>
                 <div class="form-input ziji m_r">
                     <input type="text" name="percent_oneself" lay-verify="title" autocomplete="off" placeholder=""
@@ -105,37 +111,14 @@
                 </div>
 
             </div>
-            <!-- jiajiajiajia-->
-            <!-- <div class="clone">
-                <label class="form-label" style="width:20%"></label>
-                <div class="form-input ziji">
-                    <input type="radio" name="oneself" value="自己概率" title=" " lay-filter="gailv" checked="">
-                </div>
-                <div class="form-input ziji m_r">
-                    <input type="text" name="percent_oneself" lay-verify="title" autocomplete="off" placeholder=""
-                        class="layui-input">
-                    <span class="percent">%</span>
-                    <div class="tips">
-                        <span class="red">*</span>0 ~ 100,表示减免单次甩费的百分比
-                    </div>
-                </div>
-                <div class="form-input ziji">
-                    <input type="text" name="probability_oneself" lay-verify="title" autocomplete="off" placeholder=""
-                        class="layui-input" style="margin-right: 110px;">
-                    <a href="#"><img src="__STATIC__/admin/index/img/u1306.png" class="img_x"></a>
-                    <div class="tips">
-                        <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
-                    </div>
-                </div>
-            </div> -->
-
+          
             <div class="one_more" @click="add_oneself">添加一档</div>
 
 
             <div class="form-item m_t help">
                 <label class="form-label" style="width:20%">帮别人甩免单金额和概率</label>
                 <div class="form-input ziji">
-                    <input type="radio" name="help" value="" title=" " lay-filter="" checked="">
+                    <input type="radio" name="help" value="别人概率" title=" " lay-filter="help" checked=''>
                 </div>
                 <div class="form-input ziji m_r">
                     <input type="text" name="goods_share_title" lay-verify="title" autocomplete="off" placeholder=""
@@ -153,7 +136,7 @@
                     </div>
                 </div>
             </div>
-            <div class="one_more">添加一档</div>
+            <div class="one_more" @click="add_help">添加一档</div>
 
             <div class="layui-form-item" style="width:100%;">
                 <div class="layui-input-block">
@@ -176,48 +159,86 @@
     <script type="text/javascript">
         layui.config({
             base: "js/"
-        }).use(['form', 'layer', 'jquery', 'laypage'], function () {
+        }).use(['form', 'layer', 'jquery', 'laypage'], () =>  {
             var form = layui.form(),
                 layer = parent.layer === undefined ? layui.layer : parent.layer,
                 laypage = layui.laypage,
                 $ = layui.jquery;
-        })
 
-        var app = new Vue({
-            el: "#app",
-            data: {
 
-            },
-            methods: {
-                //自己概率的增加
-                add_oneself: () => {
-                    var dhtml = "";
-                    dhtml = `<div class="clone">
-                                <label class="form-label" style="width:20%"></label>
-                                <div class="form-input ziji">
-                                        <input type="radio" name="oneself" value="" title=" " lay-filter="" checked="">
-                                </div>
-                                <div class="form-input ziji m_r">
-                                    <input type="text" name="percent_oneself" lay-verify="title" autocomplete="off" placeholder=""
-                                        class="layui-input">
-                                    <span class="percent">%</span>
-                                    <div class="tips">
-                                        <span class="red">*</span>0 ~ 100,表示减免单次甩费的百分比
+            const app = new Vue({
+                el: "#app",
+                data: {
+
+                },
+                methods: {
+                    //自己概率的增加
+                    add_oneself: () => {
+                        var dhtml = "";
+                        dhtml = `<div class="form-item clone">
+                                        <label class="form-label" style="width:20%"></label>
+                                        <div class="form-input ziji">
+                                                <input type="radio" name="oneself" value="" title=" " lay-filter="gailv" >
+                                        </div>
+                                        <div class="form-input ziji m_r">
+                                            <input type="text" name="percent_oneself" lay-verify="title" autocomplete="off" placeholder=""
+                                                class="layui-input">
+                                            <span class="percent">%</span>
+                                            <div class="tips">
+                                                <span class="red">*</span>0 ~ 100,表示减免单次甩费的百分比
+                                            </div>
+                                        </div>
+                                        <div class="form-input ziji">
+                                            <input type="text" name="probability_oneself" lay-verify="title" autocomplete="off" placeholder=""
+                                                class="layui-input" style="margin-right: 110px;">
+                                            <div class="del_div" id="del_oneself"><img src="__STATIC__/admin/index/img/u1306.png" class="img_x"></div>
+                                            <div class="tips">
+                                                <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                                            </div>
+                                        </div>
+                                    </div>`;
+                        $('.oneself').after(dhtml);
+                        $('#del_oneself').on('click', () => {
+                            $("#del_oneself").parents('.clone').remove();
+                        });
+                        form.render();
+                    },
+                    
+                    add_help: () => {
+                        var dhtml = "";
+                        dhtml = `<div class="form-item clone">
+                                    <label class="form-label" style="width:20%"></label>
+                                    <div class="form-input ziji">
+                                        <input type="radio" name="help" value="别人概率" title=" " lay-filter="help" >
                                     </div>
-                                </div>
-                                <div class="form-input ziji">
-                                    <input type="text" name="probability_oneself" lay-verify="title" autocomplete="off" placeholder=""
-                                        class="layui-input" style="margin-right: 110px;">
-                                    <a href="#"><img src="__STATIC__/admin/index/img/u1306.png" class="img_x"></a>
-                                    <div class="tips">
-                                        <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                                    <div class="form-input ziji m_r">
+                                        <input type="text" name="goods_share_title" lay-verify="title" autocomplete="off" placeholder=""
+                                            class="layui-input">
+                                        <span class="percent">%</span>
+                                        <div class="tips">
+                                            <span class="red">*</span>0 ~ 100,表示减免单次甩费的百分比
+                                        </div>
                                     </div>
-                                </div>
-                            </div>`;
-                    $('.oneself').after(dhtml);
+                                    <div class="form-input ziji">
+                                        <input type="text" name="goods_share_title" lay-verify="title" autocomplete="off" placeholder=""
+                                            class="layui-input"  style="margin-right: 110px;">
+                                        <div class="del_div" id="del_help"><img src="__STATIC__/admin/index/img/u1306.png" class="img_x"></div>
+                                        <div class="tips">
+                                            <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                                        </div>
+                                    </div>
+                                    </div>`;
+                        $('.help').after(dhtml);
+                        $('#del_help').on('click', () => {
+                            $("#del_help").parents('.clone').remove();
+                        });
+                        form.render();
+                    }
                 }
-            }
+            })
         })
+
+
 
     </script>
 

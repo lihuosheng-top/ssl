@@ -1,1 +1,128 @@
-big_slam_tactics
+{include file="template/_meta" /}
+<title></title>
+</head>
+
+{block name="css"}
+<link rel="stylesheet" type="text/css" href="__STATIC__/admin/common/css/aaa.css" />
+<style type="text/css">
+    body {
+        background: #fff;
+    }
+
+    .form-input {
+        width: auto;
+    }
+
+    .form-input > input {
+        width: 100px;
+    }
+
+    .m_r {
+        margin-right: 50px;
+    }
+
+    .m_t {
+        margin-top: 50px;
+    }
+    .p_l {
+        padding-left: 6px;
+    }
+
+    .layui-btn {
+        border-radius: 6px;
+        height: 50px;
+    }
+
+    .layui-form-lists .layui-btn {
+        width: 170px;
+    }
+
+    .layui-btn-normal {
+        margin-right: 150px;
+    }
+
+    .layui-form-item {
+        margin-left: 250px;
+        margin-top: 80px;
+    }
+   
+</style>
+
+{/block}
+
+<body>
+    {block name="content"}
+    <div id="app">
+        <form class="layui-form layui-form-lists" action="{:url()}" method="post" enctype="multipart/form-data">
+            <blockquote class="layui-elem-quote news_search">
+                <div class="form-item">
+                    大满贯策略
+                </div>
+            </blockquote>
+
+            <div class="form-item m_t">
+                <label class="form-label" style="width:20%">触发条件</label>
+                <div class="form-input" style="margin-right:15px; padding-top: 10px;">
+                    达到总积分的：
+                </div>
+                <div class="form-input m_r">
+                    <input type="text" name="condition" lay-verify="title" autocomplete="off" placeholder="  请输入"
+                    class="layui-input">
+                    <span>%</span>
+                    <span>（注明：填写1~100）</span>
+                    <div class="tips p_l" >
+                         <span class="red">*</span>实际总的付款（自己甩+别人帮甩）要大于商品进货价+运费，才能触发以上条件
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-item m_t">
+                    <label class="form-label" style="width:20%">赠送</label>
+                    <div class="form-input" style="margin-right:15px;  padding-top: 10px;">
+                        剩余的积分的：
+                    </div>
+                    <div class="form-input m_r">
+                        <input type="text" name="give" lay-verify="title" autocomplete="off" placeholder="  请输入"
+                        class="layui-input">
+                        <span>%</span>
+                        <span>（注明：填写1~100）</span>
+                    </div>
+                </div>
+            
+
+            <div class="layui-form-item" style="width:100%;">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal" type="submit" id="submit">保存</button>
+                    <button type="button" class="layui-btn layui-btn-primary"
+                        onClick="javascript :history.back(-1);">返回</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    {/block}
+    <!--_footer 作为公共模版分离出去-->
+    {include file="template/_footer" /}
+    <!--/_footer 作为公共模版分离出去-->
+
+    <!--请在下方写此页面业务相关的脚本-->
+    {block name="bottom"}
+    <script type="text/javascript">
+        layui.config({
+            base: "js/"
+        }).use(['form', 'layer', 'jquery', 'laypage'], () =>  {
+            var form = layui.form(),
+                layer = parent.layer === undefined ? layui.layer : parent.layer,
+                laypage = layui.laypage,
+                $ = layui.jquery;
+        })
+
+
+
+    </script>
+
+    {/block}
+
+</body>
+
+</html>

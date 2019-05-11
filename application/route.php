@@ -96,10 +96,10 @@ Route::group("admin",[
 
 
     /*策略管理*/
-    "free_tactics"=>"admin/tactics/free_tactics",          //免单策略
-    "bao_tactics"=>"admin/tactics/bao_tactics",            //红包策略
-    "zpoint_tactics"=>"admin/tactics/zpoint_tactics",      //增积分策略
-    "big_slam_tactics"=>"admin/tactics/big_slam_tactics",      //大满贯策略
+    "free_tactics"=>"admin/tactics/free_tactics",            //免单策略
+    "bao_tactics"=>"admin/tactics/bao_tactics",              //红包策略
+    "zpoint_tactics"=>"admin/tactics/zpoint_tactics",        //赠积分策略
+    "big_slam_tactics"=>"admin/tactics/big_slam_tactics",    //大满贯策略
     "new_man_tactics"=>"admin/tactics/new_man_tactics",      //新人帮甩策略
     "old_man_tactics"=>"admin/tactics/old_man_tactics",      //老人帮甩策略
 
