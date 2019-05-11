@@ -101,10 +101,10 @@ Route::group("admin",[
 
 
     /*策略管理*/
-    "free_tactics"=>"admin/tactics/free_tactics",          //面单策略
-    "bao_tactics"=>"admin/tactics/bao_tactics",            //红包策略
-    "zpoint_tactics"=>"admin/tactics/zpoint_tactics",      //增积分策略
-    "big_slam_tactics"=>"admin/tactics/big_slam_tactics",      //大满贯策略
+    "free_tactics"=>"admin/tactics/free_tactics",            //免单策略
+    "bao_tactics"=>"admin/tactics/bao_tactics",              //红包策略
+    "zpoint_tactics"=>"admin/tactics/zpoint_tactics",        //赠积分策略
+    "big_slam_tactics"=>"admin/tactics/big_slam_tactics",    //大满贯策略
     "new_man_tactics"=>"admin/tactics/new_man_tactics",      //新人帮甩策略
     "old_man_tactics"=>"admin/tactics/old_man_tactics",      //老人帮甩策略
 
@@ -113,6 +113,7 @@ Route::group("admin",[
     "answer_bank"=>"admin/Games/answer_bank",                //答题库
     "answer_bri"=>"admin/Games/answer_bri",                  //答题阶梯
     "differ"=>"admin/Games/differ",                          //找不同
+    "differ_add"=>"admin/Games/differ_add",                  //添加找不同
     "appear_pro"=>"admin/Games/appear_pro",                  //出现概率
     "differ_index"=>"admin/Games/differ_index",              //出现概率
     "update_images"=>"admin/Games/update_images",              //出现概率

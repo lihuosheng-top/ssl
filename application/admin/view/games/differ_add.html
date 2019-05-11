@@ -1,0 +1,306 @@
+{include file="template/_meta" /}
+<title></title>
+</head>
+
+{block name="css"}
+<link rel="stylesheet" type="text/css" href="__STATIC__/admin/common/css/aaa.css" />
+<style type="text/css">
+    body {
+        background: #fff;
+    }
+
+    .add_tp {
+        color: rgb(0, 153, 255);
+        margin-top: 65px;
+    }
+
+    .add_tp:hover {
+        cursor: pointer;
+    }
+
+    .upimg-div .up-section {
+        width: 500px;
+        height: 500px;
+
+    }
+
+    .az {
+        width: 550px;
+        display: flex;
+        align-items: stretch;
+        text-align: left;
+        margin-left: 23px;
+    }
+
+    .az_1 {
+        width: 50px;
+        font-weight: 500;
+        padding-top: 24px;
+        position: relative;
+        color: red;
+    }
+
+    .az_2 {
+        position: absolute;
+        bottom: -14px;
+    }
+
+    .num {
+        width: 20px;
+        height: 550px;
+        display: flex;
+        align-items: stretch;
+        text-align: right;
+    }
+
+    .num_1 {
+        width: 50px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .num_2 {
+        height: 50px;
+        font-weight: 500;
+        color: red;
+    }
+
+    .tp_all {
+        width: 550px;
+        height: 550px;
+        border: 1px solid red;
+        display: flex;
+        align-items: stretch;
+    }
+
+    .img_div {
+        height: 50px;
+        border: 1px solid red;
+    }
+
+    .noshow {
+        display: none;
+    }
+    .layui-input-block {
+        margin-left: 300px;
+        margin-top: 30px;
+    }
+    .layui-btn-normal {
+        margin-right: 80px
+    }
+    .form-input > input {
+        width: 250px;
+    }
+</style>
+
+{/block}
+
+<body>
+    {block name="content"}
+    <div id="app">
+        <form class="layui-form layui-form-lists" action="{:url()}" method="post" enctype="multipart/form-data">
+            <blockquote class="layui-elem-quote news_search">
+                <div class="form-item">
+                    找不同
+                </div>
+            </blockquote>
+            <div class="form-item hidden_all noshow">
+                <label class="form-label" style="width:20%"></label>
+                <div class="az">
+                    <div class="az_1"><span class="az_2">A</span></div>
+                    <div class="az_1"><span class="az_2">B</span></div>
+                    <div class="az_1"><span class="az_2">C</span></div>
+                    <div class="az_1"><span class="az_2">D</span></div>
+                    <div class="az_1"><span class="az_2">E</span></div>
+                    <div class="az_1"><span class="az_2">F</span></div>
+                    <div class="az_1"><span class="az_2">G</span></div>
+                    <div class="az_1"><span class="az_2">H</span></div>
+                    <div class="az_1"><span class="az_2">I</span></div>
+                    <div class="az_1"><span class="az_2">J</span></div>
+                    <div class="az_1"><span class="az_2">K</span></div>
+                </div>
+            </div>
+            <div class="form-item hidden_all noshow">
+                <label class="form-label" style="width:20%">添加图片</label>
+                <div class="num">
+                    <div class="num_1">
+                        <div class="num_2">1</div>
+                        <div class="num_2">2</div>
+                        <div class="num_2">3</div>
+                        <div class="num_2">4</div>
+                        <div class="num_2">5</div>
+                        <div class="num_2">6</div>
+                        <div class="num_2">7</div>
+                        <div class="num_2">8</div>
+                        <div class="num_2">9</div>
+                        <div class="num_2">10</div>
+                        <div class="num_2">11</div>
+                    </div>
+                </div>
+                <div class="tp_all">
+                    <div class="num_1 hang_0">
+
+                    </div>
+                    <div class="num_1 hang_1">
+
+                    </div>
+                    <div class="num_1 hang_2">
+
+                    </div>
+                    <div class="num_1 hang_3">
+
+                    </div>
+                    <div class="num_1 hang_4">
+
+                    </div>
+                    <div class="num_1 hang_5">
+
+                    </div>
+                    <div class="num_1 hang_6">
+
+                    </div>
+                    <div class="num_1 hang_7">
+
+                    </div>
+                    <div class="num_1 hang_8">
+
+                    </div>
+                    <div class="num_1 hang_9">
+
+                    </div>
+                    <div class="num_1 hang_10">
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-item add">
+                <label class="form-label" style="width:20%">添加图片</label>
+                <div class="form-input">
+                    <div class="img-box full">
+                        <section class=" img-section">
+                            <div class="z_photo upimg-div clear">
+                                <section class="z_file fl">
+                                    <!-- <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img"> -->
+
+                                    <input type="file" name="goods_show_images[]" id="file" class="file" value=""
+                                        accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="15"
+                                        required />
+                                    <div class="add_tp">+添加图片</div>
+                                </section>
+                                <div class="add_tp uploadForm" style="width: 150px;">图片切割</div>
+                            </div>
+                        </section>
+                    </div>
+                    <aside class="mask works-mask">
+                        <div class="mask-content">
+                            <p class="del-p ">您确定要删除作品图片吗？</p>
+                            <p class="check-p"><span class="del-com wsdel-ok">确定</span><span class="wsdel-no">取消</span>
+                            </p>
+                        </div>
+                    </aside>
+
+                </div>
+            </div>
+            <div class="form-item">
+                <label class="form-label" style="width:20%">正确答案</label>
+                <div class="form-input">
+                    <input type="text" name="true_title" lay-verify="title" autocomplete="off" placeholder=""
+                        class="layui-input true_title">
+                    <div class="tips">
+                        *直接点击方框内的图片，获取正确答案
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal" type="submit" id="submit">保存</button>
+                    <button type="button" class="layui-btn layui-btn-primary"
+                        onClick="javascript :history.back(-1);">返回</button>
+                </div>
+    
+            </div>
+        </form>
+    </div>
+    {/block}
+    <!--_footer 作为公共模版分离出去-->
+    {include file="template/_footer" /}
+    <!--/_footer 作为公共模版分离出去-->
+
+    <!--请在下方写此页面业务相关的脚本-->
+    {block name="bottom"}
+    <script src="__STATIC__/admin/index/js/pace.min.js"></script>
+    <script src="__STATIC__/admin/common/js/vue.js"></script>
+    <script src="__STATIC__/admin/common/js/vue-resource.js"></script>
+    <script src="__STATIC__/admin/common/js/vue-router.js"></script>
+    <script type="text/javascript">
+        layui.config({
+            base: "js/"
+        }).use(['form', 'layer', 'jquery', 'laypage'], function () {
+            var form = layui.form(),
+                layer = parent.layer === undefined ? layui.layer : parent.layer,
+                laypage = layui.laypage,
+                $ = layui.jquery;
+
+        })
+
+        var storage = window.localStorage;
+        //图片切割
+        $('.uploadForm').on('click', function () {
+            $('.hidden_all').removeClass('noshow');
+            $('.hidden_all').removeClass('noshow');
+            $('.add').addClass("noshow");
+            var formData = new FormData();
+            var file = $("#file")[0].files[0];
+            //console.log(file);
+            formData.append("file", file);
+            $.ajax({
+                url: "{:url('admin/Games/update_images')}",
+                type: 'POST',
+                data: formData,
+                // 告诉jQuery不要去处理发送的数据
+                processData: false,
+                dataType: "json",
+                // 告诉jQuery不要去设置Content-Type请求头
+                contentType: false,
+                beforeSend: function () {
+                    console.log("正在进行，请稍候");
+                },
+                success: function (data) {
+
+                    //遍历切割后的图片
+                    var data_all = data[0];///全部
+                    for (let i = 0; i < data_all.length; i++) {
+                        var data_1 = data_all[i];//列 A1,B1...
+                        var dhtml = '';
+                        for (let u = 0; u < data_1.length; u++) {
+                            dhtml += `<div class='img_div img_div_${data_1[u].num_string}' id="${data_1[u].num_string}"><img src="${data_1[u].image_name}" style="height:46px;width:46px;"></div>`;
+                        }
+                        $(`.hang_${i}`).after().html(dhtml);
+                    }
+
+                    //点击获取当前图片的id,赋值到input框
+                    var id_all = [];
+                    $('.img_div').on('click', function (e) {
+                        var get_id = $(e.currentTarget).attr("id");
+                        id_all.push(get_id);
+                        // console.log(id_all);
+                        $(".true_title").val(id_all);
+                    })
+
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+
+        })
+
+
+    </script>
+
+    {/block}
+
+</body>
+
+</html>
