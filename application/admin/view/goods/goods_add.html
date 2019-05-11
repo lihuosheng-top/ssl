@@ -600,10 +600,11 @@
             <div class="seach_input">
                 <span class="time">
                     <input name="end_date" type="text" class=" text datetimepicker layui-input" readonly="readonly"
-                        id="endTime" value="">
+                        id="nextTime" value="">
                 </span>
             </div>
         </div>
+        
 
         <div class="form-title">价格库存 </div>
 
@@ -817,20 +818,22 @@
 
     <!--请在下方写此页面业务相关的脚本-->
     {block name="bottom"}
-
+    <script src="__STATIC__/admin/common/laydate/laydate.js"></script>
     <script type="text/javascript">
         var ue = UE.getEditor('editor');
         var ue1 = UE.getEditor('editor1');
         var codings = [];
+        
+       
         layui.config({
             base: "js/"
         }).use(['form', 'layer', 'jquery', 'laypage', 'upload'],
             function () {
                 var form = layui.form(),
                     $ = layui.jquery;
+                
                 form.render();
-
-
+                
 
                 //规格切换
                 $(".general_content").on("blur", ".units", function () {
