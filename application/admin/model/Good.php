@@ -7,4 +7,11 @@ class Good extends Model
 {
     protected $table = "tb_goods";
 
+
+
+    public function index()
+    {
+
+    }
+
 }

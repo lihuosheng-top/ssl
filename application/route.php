@@ -21,6 +21,9 @@ Route::group("",[
     "index_dolog"=>"index/Login/index_dolog",       //前端登录处理
 
 
+   /*商品*/
+   "goods_info"=>"index/Goods/goods_info",                                //商品详细信息
+
 ]);
 
 
@@ -38,6 +41,7 @@ Route::group("admin",[
     /*登录*/
     "index"=>"admin/Login/index",
     "login"=>"admin/Login/login",    //登录
+    "logout"=>"admin/Login/logout",  //退出登录
 
 
     /*验证码*/
@@ -92,6 +96,7 @@ Route::group("admin",[
     "order_list"=>"admin/Order/order_list",                   //订单列表
     "order_search"=>"admin/Order/order_search",               //订单检索
     "order_status"=>"admin/Order/order_status",               //订单检索
+    "order_del"=>"admin/Order/order_del",                     //订单删除
 
 
 

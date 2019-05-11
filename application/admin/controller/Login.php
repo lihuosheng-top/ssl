@@ -66,9 +66,9 @@ class Login extends Controller{
                 ->where("account",$username)
                 ->where("status","<>",1)
                 ->select();
-            if($username !="admin"){
-                $this->success("商户请在前台登录","index/index/sign_in");
-            }
+//          if($username !="admin"){
+//                $this->success("商户请在前台登录","index/index/sign_in");
+//           }
             if (!$userInfo) {
                 $this->success("账户名不正确或管理员以被停用","admin/Login/index");
             }
@@ -97,8 +97,8 @@ class Login extends Controller{
         Session::delete("user_id");
         Session::delete("user_info");
         Session::delete("store_id");
-        if(!empty($store_id)){
-            $this->redirect("index/index/my_shop");
+        if(!empty($store_id)){     //店铺id为空
+            $this->redirect("index/Index/index");
         }else{
             $this->redirect("admin/Login/index");
         }

@@ -89,6 +89,33 @@ use think\Request;
          }
          return view('order_list',['data'=>$order_list]);
      }
+     /**
+      * lilu
+      * 订单删除
+      *
+      */
+     public function order_del(Request $request)
+     {
+         $id=$request->only(['id'])['id'];   //获取order的id
+         $num=count($id);
+         $i=0;
+         foreach ($id as $k =>$v)
+         {
+             $re=db('order')->delete($v);
+             if($re)
+             {
+                  $i++;
+             }else{
+
+             }
+         }
+         if($num==$i)
+         {
+             return ajax_success('批量删除成功');
+         }else{
+             return ajax_error('批量删除失败');
+         }
+     }
 
 
  }

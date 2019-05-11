@@ -552,7 +552,7 @@
 						}
 						$.ajax({
 							type: "POST",
-							url: "{:url('admin/Category/dels')}",
+							url: "{:url('admin/Order/order_del')}",
 							data: {
 								"id": data_id,
 							},
@@ -597,7 +597,6 @@
 			//通过判断文章是否全部选中来确定全选按钮是否选中
 			form.on("checkbox(choose)", function (data) {
 				// console.log($(data.elem).parents('table').find('thead input[lay-filter="allChoose"]').get(0))
-
 				var child = $(data.elem).parents('table').find('tbody input[lay-skin="primary"]:not([name="show"])');
 				var childChecked = $(data.elem).parents('table').find('tbody input[lay-skin="primary"]:not([name="show"]):checked');
 				if (childChecked.length === child.length) {

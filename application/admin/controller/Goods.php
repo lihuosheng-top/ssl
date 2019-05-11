@@ -79,6 +79,7 @@ class Goods extends Controller
             //特殊规格图片
             $imgs_one = $request->file("imgs_one");
             $imgs_two = $request->file("imgs_two");
+            $imgs_three = $request->file("imgs_three");
             //处理商品规格图片
             if (!empty($imgs_one)) {
                 foreach ($imgs_one as $k=>$v) {
@@ -91,6 +92,13 @@ class Goods extends Controller
                 foreach ($imgs_two as $k=>$v) {
                     $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
                     $goods_data['image_two'][] = str_replace("\\", "/", $info->getSaveName());
+                }
+            }
+            //处理商品规格图片
+            if (!empty($imgs_three)) {
+                foreach ($imgs_three as $k=>$v) {
+                    $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
+                    $goods_data['image_three'][] = str_replace("\\", "/", $info->getSaveName());
                 }
             }
             $list = [];
@@ -126,6 +134,8 @@ class Goods extends Controller
                     $goods_data['brand']=$goods_data['produce'];
                     $goods_data['start_date']=strtotime($goods_data['start_date']);
                     $goods_data['end_date']=strtotime($goods_data['end_date']);
+                    //随机生成商品编码（6位）
+                    $goods_data['goods_number']=randomkeys();
                     $bool = db("goods")->insert($goods_data);
                     if($bool){
                         $this->success("添加成功", url("admin/Goods/goods_index"));
@@ -144,27 +154,17 @@ class Goods extends Controller
                 $goods_special["brand"] = $goods_data["produce"];
                 $goods_special["start_date"] = strtotime($goods_data["start_date"]);
                 $goods_special["end_date"] = strtotime($goods_data["end_date"]);
-                $goods_special["goods_number"] = $goods_data["goods_number"];        //商品编号
+                $goods_special['goods_number']=randomkeys();                            //商品编号
                 $goods_special["goods_standard"] = $goods_data["goods_standard"];    //商品规格
                 $goods_special["goods_sign"] = $goods_data["goods_sign"];
                 $goods_special["goods_share_describe"] = $goods_data["goods_share_describe"];
                 $goods_special["goods_share_title"] = $goods_data["goods_share_title"];
                 $goods_special["video_link"] = $goods_data["video_link"];             //视频链接
                 $goods_special["goods_freight"] = $goods_data["goods_freight"];
-                $goods_special["label"] = 1;                      //上下架   默认上架
+                $goods_special["label"] = $goods_data['label'];                      //上下架   默认上架
+                $goods_special["goods_setting"] = $goods_data['goods_setting'];     //上下架   默认上架
 
-                if (isset($goods_data["goods_detail"])) {         //商品详情
-                    $goods_special["goods_detail"] = $goods_data["goods_detail"];
-                } else {
-                    $goods_special["goods_detail"] = "";
-                    $goods_data["goods_detail"] = "";
-                }
-                if (isset($goods_data["text"])) {                 //检测报告
-                    $goods_special["text"] = $goods_data["text"];
-                } else {
-                    $goods_special["text"] = "";
-                    $goods_data["text"] = "";
-                }
+                $goods_special["goods_detail"] = $goods_data["goods_detail"];  //商品详情
                 $goods_special["goods_show_images"] = $goods_data["goods_show_images"];
                 $goods_special["goods_show_image"] = $goods_data["goods_show_image"];
                 $goods_id = db('goods')->insertGetId($goods_special);       //添加商品数据,返回商品id
@@ -186,11 +186,11 @@ class Goods extends Controller
                                $attr[$i]['name']=$nl['name'];                //规格名称
                                $attr[$i]['image_one']=$goods_data['image_one'][$i];                //规格图片
                                $attr[$i]['image_two']=$goods_data['image_two'][$i];                //规格图片
+                               $attr[$i]['image_three']=$goods_data['image_three'][$i];                //规格图片
                                $i++;
                         }
                     }
                 }
-
                 foreach ($attr as $kz => $vw) {
                     $rest = db('special')->insertGetId($vw);
                 }    
@@ -283,6 +283,7 @@ class Goods extends Controller
                 //特殊规格图片
                 $imgs_one = $request->file("imgs_one");
                 $imgs_two = $request->file("imgs_two");
+                $imgs_three = $request->file("imgs_three");
                 //处理商品规格图片
                 if (!empty($imgs_one)) {
                     foreach ($imgs_one as $k=>$v) {
@@ -301,6 +302,15 @@ class Goods extends Controller
                     }
                 }else{
                     $list2['images_two']=[];
+                }
+                //处理商品规格图片
+                if (!empty($imgs_three)) {
+                    foreach ($imgs_three as $k=>$v) {
+                        $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
+                        $list2['imgs_three'][] = str_replace("\\", "/", $info->getSaveName());
+                    }
+                }else{
+                    $list2['imgs_three']=[];
                 }
                 $goods_special = [];                           //特殊商品基本信息
                 $goods_special["goods_name"] = $goods_data["goods_name"];
@@ -342,6 +352,11 @@ class Goods extends Controller
                                     $attr[$i]['image_two']=$list2['images_two'][$i];
                                 }else{
                                     $attr[$i]['image_two']=$nl['image_two'][$i];                //规格图片
+                                }
+                                if(array_key_exists($i,$list2['imgs_three'])){
+                                    $attr[$i]['imgs_three']=$list2['imgs_three'][$i];
+                                }else{
+                                    $attr[$i]['imgs_three']=$nl['imgs_three'][$i];                //规格图片
                                 }
                                 $res=db('special')->where('id',$nl['id'])->update($attr[$i]);
                                 $i++;

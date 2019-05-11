@@ -789,12 +789,18 @@
                 </div>
 
         </div>
-
+        <div class="form-item">
+            <label class="form-label">状态</label>
+            <div class="form-input">
+                <input type="radio" name="label" value="1" title="立即上架" checked="checked">
+                <input type="radio" name="label" value="0" title="暂不上架" >
+            </div>
+        </div>
         <div class="form-item">
                 <label class="form-label">帮甩限制</label>
                 <div class="form-input">
-                    <input type="radio" name="goods_setting" value="0" title="限制" lay-filter="limit" checked="">
-                    <input type="radio" name="goods_setting" value="1" title="不限制" lay-filter="nolimit">
+                    <input type="radio" name="goods_setting" value="0" title="不限制" lay-filter="nolimit"  checked>
+                    <input type="radio" name="goods_setting" value="1" title="限制" lay-filter="limit">
                     <div class="tips">
                             *已经在甩的商品，就不能帮别人甩同一个商品了，要弹框提示：此商品您已开甩，不能帮甩
                     </div>
@@ -828,8 +834,6 @@
                 var form = layui.form(),
                     $ = layui.jquery;
                 form.render();
-               
-
 
                 //规格切换
                 $(".general_content").on("blur", ".units", function () {
@@ -1049,6 +1053,7 @@
                         tableHTML += '			<th width="100px"><input value="甩费"  readonly style="border:0;"></th>';
                         tableHTML += '			<th width="100px"><input value="配图一"  readonly style="border:0;"></th>';
                         tableHTML += '			<th width="100px"><input value="配图二"  readonly style="border:0;"></th>';
+                        tableHTML += '			<th width="100px"><input value="配图三"  readonly style="border:0;"></th>';
                         tableHTML += '			<th width="100px"><input value="是否上架"  readonly style="border:0;"></th>';
                         tableHTML += '		</tr>';
                         tableHTML += '	</thead>';
@@ -1115,7 +1120,7 @@
                             tableHTML += '	                        <div class="z_photo upimg-div clear">';
                             tableHTML += '	                            <section class="z_file fl">';
                             tableHTML += '	                                <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img">';
-                            tableHTML += '	                                <input type="file" name="imgs_one[]" id="file_' + i + '" class="file" value="" accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="1" required />';
+                            tableHTML += '	                                <input type="file" name="imgs_one[]" id="file1_' + i + '" class="file" value="" accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="1" required />';
                             tableHTML += '	                            </section>';
                             tableHTML += '	                        </div>';
                             tableHTML += '                    </section>';
@@ -1133,7 +1138,25 @@
                             tableHTML += '	                        <div class="z_photo upimg-div clear">';
                             tableHTML += '	                            <section class="z_file fl">';
                             tableHTML += '	                                <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img">';
-                            tableHTML += '	                                <input type="file" name="imgs_two[]" id="file_' + i + '" class="file" value="" accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="1" required />';
+                            tableHTML += '	                                <input type="file" name="imgs_two[]" id="file2_' + i + '" class="file" value="" accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="1" required />';
+                            tableHTML += '	                            </section>';
+                            tableHTML += '	                        </div>';
+                            tableHTML += '                    </section>';
+                            tableHTML += '                </div>';
+                            tableHTML += '                <aside class="mask works-mask">';
+                            tableHTML += '                   <div class="mask-content">';
+                            tableHTML += '                       <p class="del-p ">您确定要删除作品图片吗？</p>';
+                            tableHTML += '                     <p class="check-p"><span class="del-com wsdel-ok">确定</span><span class="wsdel-no">取消</span></p>';
+                            tableHTML += '                 </div>';
+                            tableHTML += '            </aside>';
+                            tableHTML += '          </td>';
+                            tableHTML += '			<td width="100px">';
+                            tableHTML += '                         <div class="img-box full">';
+                            tableHTML += '	                    <section class=" img-section">';
+                            tableHTML += '	                        <div class="z_photo upimg-div clear">';
+                            tableHTML += '	                            <section class="z_file fl">';
+                            tableHTML += '	                                <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img">';
+                            tableHTML += '	                                <input type="file" name="imgs_three[]" id="file3_' + i + '" class="file" value="" accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="1" required />';
                             tableHTML += '	                            </section>';
                             tableHTML += '	                        </div>';
                             tableHTML += '                    </section>';
