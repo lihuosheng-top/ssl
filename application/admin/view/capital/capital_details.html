@@ -1,0 +1,129 @@
+{include file="template/_meta" /}
+<title></title>
+</head>
+
+{block name="css"}
+<link rel="stylesheet" type="text/css" href="__STATIC__/admin/common/css/aaa.css" />
+<style type="text/css">
+    body {
+        background: #fff;
+    }
+
+    .form-input {
+        width: auto;
+    }
+
+    .form-input>input {
+        width: 200px;
+    }
+
+    .layui-btn {
+        border-radius: 6px;
+        height: 50px;
+    }
+
+    .layui-form-lists .layui-btn {
+        width: 170px;
+    }
+
+    .layui-btn-normal {
+        margin-right: 100px;
+    }
+
+    .layui-form-item {
+        margin-top: 50px;
+    }
+
+    .form-item {
+        margin-top: 15px;
+    }
+
+    .upimg-div .up-section {
+        width: 200px;
+        height: 200px;
+    }
+
+    .noshow {
+        display: none;
+    }
+    .all {
+        padding: 10px;
+    }
+</style>
+
+{/block}
+
+<body>
+    {block name="content"}
+    <div class="all">
+        <blockquote class="layui-elem-quote news_search">
+            <div class="seach_laber">
+                甩一甩订单
+            </div>
+        </blockquote>
+        <table class="layui-table">
+
+            <thead>
+
+            </thead>
+            <tbody class="news_content">
+                <tr>
+                    <td>会员账号：</td>
+                    <td>13922830809</td>
+                    <td>流水号：</td>
+                    <td>2018062803890</td>
+                </tr>
+                <tr>
+                    <td>商品名称：</td>
+                    <td>法国进口 雀巢（Nestle） 金牌咖啡法式烘焙 100g</td>
+                    <td>甩一甩时间</td>
+                    <td>2018-06-28 17:52:49</td>
+                </tr>
+                <tr>
+                    <td>商品编号：</td>
+                    <td>75775757</td>
+                    <td>订单金额：</td>
+                    <td>0.5</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {/block}
+    <!--_footer 作为公共模版分离出去-->
+    {include file="template/_footer" /}
+    <!--/_footer 作为公共模版分离出去-->
+
+    <!--请在下方写此页面业务相关的脚本-->
+    {block name="bottom"}
+    <script type="text/javascript">
+        layui.config({
+            base: "js/"
+        }).use(['form', 'layer', 'jquery', 'laypage'], () => {
+            var form = layui.form(),
+                layer = parent.layer === undefined ? layui.layer : parent.layer,
+                laypage = layui.laypage,
+                $ = layui.jquery;
+
+            // TODO商品规格变化
+            form.on('radio(prize)', function (data) {
+                var checkval = data.value;
+                if (checkval == "0") { //红包
+                    $(".general_content").addClass("noshow");
+                    $(".nomal").removeClass("noshow");
+                } else {
+                    $(".nomal").addClass("noshow");
+                    $(".general_content ").removeClass("noshow");
+                }
+
+            });
+        })
+
+
+
+    </script>
+
+    {/block}
+
+</body>
+
+</html>
