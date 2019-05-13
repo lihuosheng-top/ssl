@@ -16,6 +16,14 @@ class Capital extends Controller
     public function  capital()
     {
     	return   view('capital');
+	}
+	
+	/**
+	*   资金流水详情
+	**/
+    public function  capital_details()
+    {
+    	return   view('capital_details');
     }
 
 }

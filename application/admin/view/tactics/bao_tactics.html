@@ -27,7 +27,6 @@
 
     .clone {
         display: flex;
-        margin-left: 4px;
         margin-top: 15px;
     }
 
@@ -75,6 +74,9 @@
     .del_div:hover {
         cursor: pointer;
     }
+    .layui-form-checkbox {
+        margin-top: 5px;
+    }
 </style>
 
 {/block}
@@ -92,7 +94,7 @@
             <div class="form-item m_t oneself">
                 <label class="form-label" style="width:20%">自己甩奖励金额和概率</label>
                 <div class="form-input ziji">
-                    <input type="radio" name="oneself" value="自己概率" title=" " lay-filter="gailv" checked=''>
+                    <input type="checkbox" name="oneself_0" value="自己概率" title=" " lay-skin="gailv" checked=''>
                 </div>
                 <div class="form-input ziji m_r">
                     <input type="text" name="percent_oneself" lay-verify="title" autocomplete="off" placeholder="  请输入金额"
@@ -118,7 +120,7 @@
             <div class="form-item m_t help">
                 <label class="form-label" style="width:20%">帮别人甩奖励金额和概率</label>
                 <div class="form-input ziji">
-                    <input type="radio" name="help" value="别人概率" title=" " lay-filter="help" checked=''>
+                    <input type="checkbox" name="help_0" value="别人概率" title=" " lay-skin="help" checked=''>
                 </div>
                 <div class="form-input ziji m_r">
                     <input type="text" name="goods_share_title" lay-verify="title" autocomplete="off" placeholder="  请输入金额"
@@ -169,16 +171,18 @@
             const app = new Vue({
                 el: "#app",
                 data: {
-
+                    i: 0,
+                    u:0
                 },
                 methods: {
                     //自己概率的增加
                     add_oneself: () => {
                         var dhtml = "";
+                        this.i = this.i + 1;
                         dhtml = `<div class="form-item clone">
                                         <label class="form-label" style="width:20%"></label>
                                         <div class="form-input ziji">
-                                                <input type="radio" name="oneself" value="" title=" " lay-filter="gailv" >
+                                                <input type="checkbox" name="oneself_${this.i}" value="" title=" " lay-skin="gailv" >
                                         </div>
                                         <div class="form-input ziji m_r">
                                             <input type="text" name="percent_oneself" lay-verify="title" autocomplete="off" placeholder="  请输入金额"
@@ -206,10 +210,11 @@
                     
                     add_help: () => {
                         var dhtml = "";
+                        this.u = this.u + 1;
                         dhtml = `<div class="form-item clone">
                                     <label class="form-label" style="width:20%"></label>
                                     <div class="form-input ziji">
-                                        <input type="radio" name="help" value="别人概率" title=" " lay-filter="help" >
+                                        <input type="checkbox" name="help_${this.u}" value="别人概率" title=" " lay-skin="help" >
                                     </div>
                                     <div class="form-input ziji m_r">
                                         <input type="text" name="goods_share_title" lay-verify="title" autocomplete="off" placeholder="  请输入金额"

@@ -150,6 +150,7 @@ Route::group("admin",[
 
     /*资金流水*/
     "capital"=>"admin/Capital/capital",                      //资金流水
+    "capital_details"=>"admin/Capital/capital_details",      //资金流水详情
 
     /*设置*/
 
