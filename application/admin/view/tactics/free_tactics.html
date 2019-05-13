@@ -68,12 +68,17 @@
         margin-left: 250px;
         margin-top: 80px;
     }
+
     .del_div {
         display: inline;
+    }
+    .one_more:hover {
+        cursor: pointer;
     }
     .del_div:hover {
         cursor: pointer;
     }
+
     .layui-form-checkbox {
         margin-top: 5px;
     }
@@ -84,7 +89,8 @@
 <body>
     {block name="content"}
     <div id="app">
-        <form class="layui-form layui-form-lists" action="{:url('admin/Tictics/free_tactics_do')}" method="post" enctype="multipart/form-data">
+        <form class="layui-form layui-form-lists" action="{:url('admin/Tictics/free_tactics_do')}" method="post"
+            enctype="multipart/form-data">
             <blockquote class="layui-elem-quote news_search">
                 <div class="seach_laber">
                     免单策略
@@ -97,7 +103,7 @@
                     <input type="checkbox" name="oneself_0" value="自己概率" title=" " lay-skin="gailv" checked=''>
                 </div>
                 <div class="form-input ziji m_r">
-                    <input type="text" name="percent_oneself" lay-verify="title" autocomplete="off" placeholder=""
+                    <input type="text" name="one_0[percent]" lay-verify="title" autocomplete="off" placeholder=""
                         class="layui-input">
                     <span class="percent">%</span>
                     <div class="tips">
@@ -105,7 +111,7 @@
                     </div>
                 </div>
                 <div class="form-input ziji">
-                    <input type="text" name="probability_oneself" lay-verify="title" autocomplete="off" placeholder=""
+                    <input type="text" name="one_0[probability]" lay-verify="title" autocomplete="off" placeholder=""
                         class="layui-input">
                     <div class="tips">
                         <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
@@ -113,8 +119,8 @@
                 </div>
 
             </div>
-          
-            <div class="one_more" @click="add_oneself">添加一档</div>
+
+            <div class="one_more" id="one_more" @click="add_oneself">添加一档</div>
 
 
             <div class="form-item m_t help">
@@ -123,7 +129,7 @@
                     <input type="checkbox" name="help_0" value="别人概率" title=" " lay-skin="help" checked=''>
                 </div>
                 <div class="form-input ziji m_r">
-                    <input type="text" name="goods_share_title" lay-verify="title" autocomplete="off" placeholder=""
+                    <input type="text" name="work_0[percent]" lay-verify="title" autocomplete="off" placeholder=""
                         class="layui-input">
                     <span class="percent">%</span>
                     <div class="tips">
@@ -131,14 +137,14 @@
                     </div>
                 </div>
                 <div class="form-input ziji">
-                    <input type="text" name="goods_share_title" lay-verify="title" autocomplete="off" placeholder=""
+                    <input type="text" name="work_0[probability]" lay-verify="title" autocomplete="off" placeholder=""
                         class="layui-input">
                     <div class="tips">
                         <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
                     </div>
                 </div>
             </div>
-            <div class="one_more" @click="add_help">添加一档</div>
+            <div class="one_more" id="one_help" @click="add_help">添加一档</div>
 
             <div class="layui-form-item" style="width:100%;">
                 <div class="layui-input-block">
@@ -161,7 +167,7 @@
     <script type="text/javascript">
         layui.config({
             base: "js/"
-        }).use(['form', 'layer', 'jquery', 'laypage'], () =>  {
+        }).use(['form', 'layer', 'jquery', 'laypage'], () => {
             var form = layui.form(),
                 layer = parent.layer === undefined ? layui.layer : parent.layer,
                 laypage = layui.laypage,
@@ -170,12 +176,12 @@
             const app = new Vue({
                 el: "#app",
                 data: {
-                    i: 0,
-                    u: 0
+                    e: 0,
+                    i: 0
                 },
                 methods: {
                     //自己概率的增加
-                    add_oneself: function() {
+                    add_oneself: function () {
                         var dhtml = "";
                         this.i = this.i + 1;
                         dhtml = `<div class="form-item clone">
@@ -184,7 +190,7 @@
                                                 <input type="checkbox" name="oneself_${this.i}" value="" title=" " lay-skin="gailv" >
                                         </div>
                                         <div class="form-input ziji m_r">
-                                            <input type="text" name="percent_oneself" lay-verify="title" autocomplete="off" placeholder=""
+                                            <input type="text" name="one_${this.i}[percent]" lay-verify="title" autocomplete="off" placeholder=""
                                                 class="layui-input">
                                             <span class="percent">%</span>
                                             <div class="tips">
@@ -192,7 +198,7 @@
                                             </div>
                                         </div>
                                         <div class="form-input ziji">
-                                            <input type="text" name="probability_oneself" lay-verify="title" autocomplete="off" placeholder=""
+                                            <input type="text" name="one_${this.i}[probability]" lay-verify="title" autocomplete="off" placeholder=""
                                                 class="layui-input" style="margin-right: 110px;">
                                             <div class="del_div" id="del_oneself"><img src="__STATIC__/admin/index/img/u1306.png" class="img_x"></div>
                                             <div class="tips">
@@ -200,23 +206,23 @@
                                             </div>
                                         </div>
                                     </div>`;
-                        $('.oneself').after(dhtml);
-                        $('#del_oneself').on('click', () => {
+                                    $('.oneself').after(dhtml);
+                        $('#del_oneself').on('click', function() {
                             $("#del_oneself").parents('.clone').remove();
                         });
                         form.render();
                     },
-                    
-                    add_help: () => {
+
+                    add_help: function () {
                         var dhtml = "";
-                        this.u = this.u + 1;
+                        this.e = this.e + 1;
                         dhtml = `<div class="form-item clone">
                                     <label class="form-label" style="width:20%"></label>
                                     <div class="form-input ziji">
-                                        <input type="checkbox" name="help_${this.u}" value="别人概率" title=" " lay-skin="help" >
+                                        <input type="checkbox" name="help_${this.e}" value="别人概率" title=" " lay-skin="help" >
                                     </div>
                                     <div class="form-input ziji m_r">
-                                        <input type="text" name="goods_share_title" lay-verify="title" autocomplete="off" placeholder=""
+                                        <input type="text" name="work_${this.e}[percent]" lay-verify="title" autocomplete="off" placeholder=""
                                             class="layui-input">
                                         <span class="percent">%</span>
                                         <div class="tips">
@@ -224,7 +230,7 @@
                                         </div>
                                     </div>
                                     <div class="form-input ziji">
-                                        <input type="text" name="goods_share_title" lay-verify="title" autocomplete="off" placeholder=""
+                                        <input type="text" name="work_${this.e}[probability]" lay-verify="title" autocomplete="off" placeholder=""
                                             class="layui-input"  style="margin-right: 110px;">
                                         <div class="del_div" id="del_help"><img src="__STATIC__/admin/index/img/u1306.png" class="img_x"></div>
                                         <div class="tips">
@@ -232,8 +238,8 @@
                                         </div>
                                     </div>
                                     </div>`;
-                        $('.help').after(dhtml);
-                        $('#del_help').on('click', () => {
+                                    $('.help').after(dhtml);
+                        $('#del_help').on('click', function() {
                             $("#del_help").parents('.clone').remove();
                         });
                         form.render();
