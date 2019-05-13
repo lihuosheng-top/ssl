@@ -26,7 +26,7 @@ class Tactics extends Controller
 		$key2="free_tactics_other";                //帮别人甩免单策略的信息key
 		$value2=$user->get_tactics_info($key2);
 
-             return  view('free_tactics',['tactics1'=>$value1,'tactics2'=>$value2]);
+       return  view('free_tactics',['tactics1'=>$value1,'tactics2'=>$value2]);
 	}
 
 	/*
@@ -55,7 +55,8 @@ class Tactics extends Controller
 		$value1=$user->get_tactics_info($key1);
 		$key2="bao_tactics_other";                //帮别人甩增积分策略的信息key
 		$$value1=$user->get_tactics_info($key2);
-              return  view('zpoint_tactics');
+				  
+		return  view('zpoint_tactics');
 	}
 
 	/*
@@ -82,7 +83,8 @@ class Tactics extends Controller
 		$key1="new_man_tactics_own";                  //新人帮甩策略的信息key
 		$user =new T();
 		$value1=$user->get_tactics_info($key1);
-              return  view('new_man_tactics');
+				  
+		return  view('new_man_tactics');
 	}
 
 	/*
@@ -94,7 +96,110 @@ class Tactics extends Controller
 		$key1="old_man_tactics_own";                  //老人帮甩策略的信息key
 		$user =new T();
 		$value1=$user->get_tactics_info($key1);
-              return  view('old_man_tactics');
+
+      return  view('old_man_tactics');
+	}
+	/**
+	 * lilu
+	 * 免费策略处理
+	 */
+	public function free_tactics_do()
+	{
+		$input=input('post.');  //获取表单数据
+		if($input){
+			$attr=[];
+			$i=0;
+			foreach($input as $k =>$vo)
+			{
+				if (substr($kn, 0, 3) == "sss")  
+				{
+					if(!$vo['id'])   //判断是否为新增加的记录
+					{ //添加
+					  $data['tactics_key']='';                   //key
+					  $data['tactics_status']='';                //开启状态
+					  $data['tactics_pre']='';                   //百分比
+					  $data['tactics_num']='';                   //数字
+					  $data['tactics_chance']='';                //计算的获奖概率  
+					  $res=db('tactics')->insert();
+					  if($res)
+					  {
+                   $i++;
+					  }
+					}else{
+
+					}
+					$attr[$i]['stock']=$nl['stock'];            //库存
+					$attr[$i]['coding']=$nl['coding'];          //规格
+					$attr[$i]['cost']=$nl['cost'];              //成本价
+					$attr[$i]['line']=$nl['line'];              //划线价
+					$attr[$i]['total']=$nl['total'];            //积分
+					$attr[$i]['jilt']=$nl['jilt'];              //帮甩费用
+				}
+           
+			}
+		}
+
+
+		halt($input);
+
+		ruturn view('free_tactics');
+	}
+	/**
+	 * lilu
+	 * 红包策略处理
+	 */
+	public function bao_tactics_do()
+	{
+		$input=input('post.');
+		halt($input);
+
+		return view('bao_tactics');
+	}
+	/**
+	 * lilu
+	 * 赠积分策略处理
+	 */
+	public function zpoints_tactics_do()
+	{
+		$input=input('post.');
+		halt($input);
+
+		return view('zpoints_tactics');
+	}
+	/**
+	 * lilu
+	 * 大满贯策略处理
+	 */
+	public function big_slam_tactics_do()
+	{
+		$input=input('post.');
+		halt($input);
+
+		return view('bid_slam_tactics');
+
+
+	}
+	/**
+	 * lilu
+	 * 新人帮甩策略处理
+	 */
+	public function new_man_tactics_do()
+	{
+		$input=input('post.');
+		halt($input);
+
+		return view('new_man_tactics');
+	}
+	/**
+	 * lilu
+	 * 老人策略处理
+	 */
+	public function old_man_tactics_do()
+	{
+		$input=input('post.');
+		halt($input);
+
+		return view('old_man_tactics');
 	}
 	
 }
