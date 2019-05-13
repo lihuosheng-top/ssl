@@ -48,7 +48,7 @@ Route::group("admin",[
     "login_captcha"=>"admin/Login/captchas",
 
 
-    /*管理员列表*/
+    /*后台设置*/
     "admin_index"=>"admin/admin/index",
     "admin_add"=>"admin/admin/add",
     "admin_save"=>"admin/admin/save",
@@ -57,6 +57,13 @@ Route::group("admin",[
     "admin_updata"=>"admin/admin/updata",
     "admin_status"=>"admin/admin/status",
     "admin_passwd"=>"admin/admin/passwd",
+    "admin_opera"=>"admin/admin/admin_opera",                       //运维
+    "admin_play_ad"=>"admin/admin/admin_play_ad",                   //玩法公告
+    "admin_goods_tactics"=>"admin/admin/admin_goods_tactics",       //商品策略
+    "admin_agreement"=>"admin/admin/admin_agreement",               //商品策略
+    "admin_message_note"=>"admin/admin/admin_message_note",         //商品策略
+    "admin_lock_time"=>"admin/admin/admin_lock_time",               //商品策略
+
 
 
 
@@ -135,6 +142,7 @@ Route::group("admin",[
     /*资金流水*/
     "capital"=>"admin/Capital/capital",                      //资金流水
 
+    /*设置*/
 
 
 

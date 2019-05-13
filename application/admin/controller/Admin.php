@@ -183,7 +183,55 @@ class Admin extends Controller
             $this->success("修改成功，请重新登录", "admin/Login/index");
         }
     }
-
+    /**
+     * lilu
+     *  Notes:设置模块--运维
+     */
+    public function admin_opera()
+    {
+       return view('admin_opera');
+    }
+    /**
+     * lilu
+     *  Notes:设置模块--玩法广告
+     */
+    public function admin_play_ad()
+    {
+       return view('admin_play_ad');
+    }
+    /**
+     * lilu
+     *  Notes:设置模块--商品策略
+     */
+    public function admin_goods_tactics()
+    {
+       return view('admin_play_ad');
+    }
+    /**
+     * lilu
+     *  Notes:设置模块--平台协议
+     */
+    public function admin_agreement()
+    {
+       return view('admin_agreement');
+    }
+    /**
+     * lilu
+     *  Notes:设置模块--消息提醒
+     */
+    public function admin_message_note()
+    {
+       return view('admin_message_note');
+    }
+    
+    /**
+     * lilu
+     *  Notes:设置模块--锁定时间
+     */
+    public function admin_lock_time()
+    {
+       return view('admin_lock_time');
+    }
 
 
 }
