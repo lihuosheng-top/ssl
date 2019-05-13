@@ -295,7 +295,7 @@
                     <span class="span">用户申请邮寄地址：</span>
                     <!-- <input type="text" name="" lay-verify="title" readonly autocomplete="off" placeholder="用户地址"
 						class="layui-input Information"> -->
-						<span class="a1">用户的默认收获地址123</span>
+						<span class="a1"></span>
                 </div>
                 <div class="repany">
                     <span class="span">官方短信</span>
@@ -321,7 +321,7 @@
                     <span class="span">用户申请邮寄地址：</span>
                     <!-- <input type="text" name="" lay-verify="title" autocomplete="off" placeholder="用户地址"
 						class="layui-input Information"> -->
-						<span class="a2">用户的默认收获地址456</span>
+						<span class="a2"></span>
                 </div>
                 <div class="repany">
                     <span class="span">官方备注</span>
@@ -347,7 +347,7 @@
                     <span class="span">用户申请邮寄地址：</span>
                     <!-- <input type="text" name="" lay-verify="title" autocomplete="off" placeholder="用户地址"
 						class="layui-input Information"> -->
-						<span class="a3">用户的默认收获地址789</span>
+						<span class="a3"></span>
                 </div>
                 <div class="repany">
                     <span class="span">官方短信</span>
@@ -373,7 +373,10 @@
                     <span class="span">用户申请邮寄地址：</span>
                     <!-- <input type="text" name="" lay-verify="title" autocomplete="off" placeholder="用户地址"
 						class="layui-input Information"> -->
-						<span class="a4">用户的默认收获地址123</span>
+						<span class="a4">
+
+							
+						</span>
                 </div>
                 <div class="repany">
                     <span class="span">官方备注</span>
@@ -706,29 +709,80 @@
 		})
 		//订单状态---弹窗时间
 		$(".static_btus").click(function () {
-			var data_id = $(this).data("id");
-			var way = 0;
+			var data_id = $(this).data("id");   //订单id
 			var data_value = $(this).data("value");   //订单状态
 			if(data_value=='0')
 			{       //待确定订单
+			    //获取订单的信息
+				$.ajax({
+					url:"get_orderinfo",
+					type:"post",
+					data:{"id":data_id
+					},
+					success : function(data)
+					{
+						var json=eval("("+data+")");
+						$('.popup_one').find('.a1').text(json.data.harvester_address);
+					}
+				})
 				$(".popup_one").removeClass("noshow");
 
 			}else if(data_value=='1'){    //代发货
+			 //获取订单的信息
+			 $.ajax({
+					url:"get_orderinfo",
+					type:"post",
+					data:{"id":data_id
+					},
+					success : function(data)
+					{
+						var json=eval("("+data+")");
+						$('.popup_two').find('.a2').text(json.data.harvester_address);
+					}
+				})
                 $(".popup_two").removeClass("noshow");
 
 
 			}else if(data_value=='2'){    //已收货
+				//获取订单的信息
+				$.ajax({
+						url:"get_orderinfo",
+						type:"post",
+						data:{"id":data_id
+						},
+						success : function(data)
+						{
+							var json=eval("("+data+")");
+							$('.popup_three').find('.a3').text(json.data.harvester_address);
+						}
+					})
 				$(".popup_three").removeClass("noshow");
 
 
 			}else if(data_value=='3'){     //已完成
+			 //获取订单的信息
+			 $.ajax({
+					url:"get_orderinfo",
+					type:"post",
+					data:{"id":data_id
+					},
+					success : function(data)
+					{
+						var json=eval("("+data+")");
+						$('.popup_four').find('.a4').text(json.data.harvester_address);
+					}
+				})
 			    $(".popup_four").removeClass("noshow");
 
+			}else{
+				akert('获取订单状态出错');
+				return false;
 			}
 
 			
 
 		});
+		//状态弹窗隐藏
 		$(".popup_x").click(function () {
 			$(".popup").addClass("noshow");
 		});

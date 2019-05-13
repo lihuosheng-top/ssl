@@ -116,6 +116,21 @@ use think\Request;
              return ajax_error('批量删除失败');
          }
      }
+     /**
+      * lilu
+        $parsm $id   订单id
+        return orderinfo   订单信息
+      */
+      public function get_orderinfo()
+      {
+        $id=input('post.id');
+        if($id){
+            $orderinfo=db('order')->where('id',$id)->find();
+            return ajax_success('获取成功',$orderinfo);
+        }else{
+            return  ajax_error('参数错误');
+        }
+    }
 
 
  }
