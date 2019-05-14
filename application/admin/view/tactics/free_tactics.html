@@ -72,9 +72,11 @@
     .del_div {
         display: inline;
     }
+
     .one_more:hover {
         cursor: pointer;
     }
+
     .del_div:hover {
         cursor: pointer;
     }
@@ -88,16 +90,19 @@
 
 <body>
     {block name="content"}
-    <div id="app">
-        <form class="layui-form layui-form-lists" action="{:url('admin/Tactics/free_tactics_do')}" method="post" enctype="multipart/form-data">
-            <blockquote class="layui-elem-quote news_search">
-                <div class="seach_laber">
-                    免单策略
-                </div>
-            </blockquote>
-            {if $tactics1}
-            <div class="form-item m_t oneself">
+    <form class="layui-form layui-form-lists" action="{:url('admin/Tactics/free_tactics_do')}" method="post"
+        enctype="multipart/form-data">
+        <blockquote class="layui-elem-quote news_search">
+            <div class="seach_laber">
+                免单策略
+            </div>
+        </blockquote>
+        {if $tactics1}
+        <div class="oneself m_t">
+            {volist name="$tactics1" id="vo1"}
+            <div class="form-item" style="margin-top: 15px;">
                 <label class="form-label" style="width:20%">自己免单金额和概率</label>
+<<<<<<< HEAD
                 {volist name="$tactics1" id="vo1"}
                 {if $key=='0'}
                 <div class="form-item m_t ">
@@ -126,10 +131,36 @@
                 </div>
                  {/if}   
                 {/volist}
+=======
+                <input name="one_{$key}[tactics_key]" value="free_tactics_own" style="display: none">
+                <input name="one_{$key}[id]" value="{$vo1.id}" style="display: none">
+                <div class="form-input ziji">
+                    <input type="checkbox" name="one_{$key}[status]" value="1" lay-filter="choose1"  checked=''>
+                </div>
+                <div class="form-input ziji m_r">
+                    <input type="text" name="one_{$key}[percent]" value="{$vo1.tactics_pre}" lay-verify="title"
+                        autocomplete="off" placeholder="" class="layui-input">
+                    <span class="percent">%</span>
+                    <div class="tips">
+                        <span class="red">*</span>0 ~ 100,表示减免单次甩费的百分比
+                    </div>
+                </div>
+                <div class="form-input ziji">
+                    <input type="text" name="one_0[probability]" value="{$vo1.tactics_num}" lay-verify="title"
+                        autocomplete="off" placeholder="" class="layui-input">
+                    <div class="tips">
+                        <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                    </div>
+                </div>
+>>>>>>> 4eb7c879a31f772fa566806807fc713db4851b87
             </div>
-            {else}
+            {/volist}
+        </div>
+        {else}
+        <div class="oneself m_t">
             <input name="one_0[tactics_key]" value="free_tactics_own" style="display: none">
             <input name="one_0[id]" value="" style="display: none">
+<<<<<<< HEAD
            <div class="form-item m_t oneself">
                <label class="form-label" style="width:20%">自己免单金额和概率</label>
                <div class="form-input ziji">
@@ -157,9 +188,39 @@
 
 
             <!-- <div class="form-item m_t help">
+=======
+            <div class="form-item" style="margin-top: 15px;">
+                <label class="form-label" style="width:20%">自己免单金额和概率</label>
+                <div class="form-input ziji">
+                    <input type="checkbox" name="one_0[status]" lay-filter="choose1"  checked=''>
+                </div>
+                <div class="form-input ziji m_r">
+                    <input type="text" name="one_0[percent]" lay-verify="title" autocomplete="off" placeholder=""
+                        class="layui-input">
+                    <span class="percent">%</span>
+                    <div class="tips">
+                        <span class="red">*</span>0 ~ 100,表示减免单次甩费的百分比
+                    </div>
+                </div>
+                <div class="form-input ziji">
+                    <input type="text" name="one_0[probability]" lay-verify="title" autocomplete="off" placeholder=""
+                        class="layui-input">
+                    <div class="tips">
+                        <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                    </div>
+                </div>
+            </div>
+        </div>
+        {/if}
+
+        <div class="one_more" id="one_more">添加一档</div>
+
+        <div class="help m_t">
+            <div class="form-item" style="margin-top:15px;">
+>>>>>>> 4eb7c879a31f772fa566806807fc713db4851b87
                 <label class="form-label" style="width:20%">帮别人甩免单金额和概率</label>
                 <div class="form-input ziji">
-                    <input type="checkbox" name="help_0" value="别人概率" title=" " lay-skin="help" checked=''>
+                    <input type="checkbox" name="help_0[status]" lay-filter="choose1" value="1"  checked=''>
                 </div>
                 <input name="tactics_key" value="free_tactics_other" style="display: none">
                 <div class="form-input ziji m_r">
@@ -178,6 +239,7 @@
                     </div>
                 </div>
             </div>
+<<<<<<< HEAD
             <div class="one_more" id="one_help" @click="add_help">添加一档</div> -->
 
             <div class="layui-form-item" style="width:100%;">
@@ -186,10 +248,20 @@
                     <button type="button" class="layui-btn layui-btn-primary"
                         onClick="javascript :history.back(-1);">返回</button>
                 </div>
+=======
+        </div>
+        <div class="one_more" id="one_help">添加一档</div>
+>>>>>>> 4eb7c879a31f772fa566806807fc713db4851b87
 
+        <div class="layui-form-item" style="width:100%;">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" type="submit" id="submit">保存</button>
+                <button type="button" class="layui-btn layui-btn-primary"
+                    onClick="javascript :history.back(-1);">返回</button>
             </div>
-        </form>
-    </div>
+
+        </div>
+    </form>
     {/block}
     <!--_footer 作为公共模版分离出去-->
     {include file="template/_footer" /}
@@ -207,26 +279,37 @@
                 laypage = layui.laypage,
                 $ = layui.jquery;
 
-            const app = new Vue({
-                el: "#app",
-                data: {
-                    e: 0,
-                    i: 0
-                },
-                methods: {
-                    //自己概率的增加
-                    add_oneself: function () {
-                        var dhtml = "";
-                        this.i = this.i + 1;
-                        dhtml = `<div class="form-item clone">
+            form.on("checkbox(choose1)", function (data) {
+                
+                if(data.value == "1"){
+                    $(this).val('0');
+                    data.value = "0";
+                } else { 
+                    $(this).val('1');
+                    data.value = "1";
+                }
+                form.render('checkbox');
+            })
+
+
+
+            let i = 0, e = 0;
+            $('#one_more').on('click', function () {
+                let dhtml = "";
+                i = i + 1;
+                dhtml = `<div class="form-item clone">
                                         <label class="form-label" style="width:20%"></label>
                                         <input name="one_${this.i}[tactics_key]" value="free_tactics_own" style="display: none">
                                         <input name="one_${this.i}[id]" value="" style="display: none">
                                         <div class="form-input ziji">
+<<<<<<< HEAD
                                                 <input type="checkbox" name="one_${this.i}[status]" value="" title=" " lay-skin="gailv" >
+=======
+                                                <input type="checkbox" name="oneself_${i}[status]" value="0" lay-filter="choose1" >
+>>>>>>> 4eb7c879a31f772fa566806807fc713db4851b87
                                         </div>
                                         <div class="form-input ziji m_r">
-                                            <input type="text" name="one_${this.i}[percent]" lay-verify="title" autocomplete="off" placeholder=""
+                                            <input type="text" name="one_${i}[percent]" lay-verify="title" autocomplete="off" placeholder=""
                                                 class="layui-input">
                                             <span class="percent">%</span>
                                             <div class="tips">
@@ -234,7 +317,7 @@
                                             </div>
                                         </div>
                                         <div class="form-input ziji">
-                                            <input type="text" name="one_${this.i}[probability]" lay-verify="title" autocomplete="off" placeholder=""
+                                            <input type="text" name="one_${i}[probability]" lay-verify="title" autocomplete="off" placeholder=""
                                                 class="layui-input" style="margin-right: 110px;">
                                             <div class="del_div" id="del_oneself"><img src="__STATIC__/admin/index/img/u1306.png" class="img_x"></div>
                                             <div class="tips">
@@ -242,23 +325,23 @@
                                             </div>
                                         </div>
                                     </div>`;
-                                    $('.oneself').after(dhtml);
-                        $('#del_oneself').on('click', function() {
-                            $("#del_oneself").parents('.clone').remove();
-                        });
-                        form.render();
-                    },
+                $('.oneself').append(dhtml);
 
-                    add_help: function () {
-                        var dhtml = "";
-                        this.e = this.e + 1;
-                        dhtml = `<div class="form-item clone">
+                $(document).on('click', '#del_oneself', function () {
+                    $(this).parents('.clone').remove();
+                });
+                form.render();
+            })
+            $('#one_help').on('click', function () {
+                let dhtml = "";
+                e = e + 1;
+                dhtml = `<div class="form-item clone">
                                     <label class="form-label" style="width:20%"></label>
                                     <div class="form-input ziji">
-                                        <input type="checkbox" name="help_${this.e}" value="别人概率" title=" " lay-skin="help" >
+                                        <input type="checkbox" name="help_${e}[status]" value="0" lay-filter="choose1" >
                                     </div>
                                     <div class="form-input ziji m_r">
-                                        <input type="text" name="work_${this.e}[percent]" lay-verify="title" autocomplete="off" placeholder=""
+                                        <input type="text" name="work_${e}[percent]" lay-verify="title" autocomplete="off" placeholder=""
                                             class="layui-input">
                                         <span class="percent">%</span>
                                         <div class="tips">
@@ -266,7 +349,7 @@
                                         </div>
                                     </div>
                                     <div class="form-input ziji">
-                                        <input type="text" name="work_${this.e}[probability]" lay-verify="title" autocomplete="off" placeholder=""
+                                        <input type="text" name="work_${e}[probability]" lay-verify="title" autocomplete="off" placeholder=""
                                             class="layui-input"  style="margin-right: 110px;">
                                         <div class="del_div" id="del_help"><img src="__STATIC__/admin/index/img/u1306.png" class="img_x"></div>
                                         <div class="tips">
@@ -274,14 +357,14 @@
                                         </div>
                                     </div>
                                     </div>`;
-                                    $('.help').after(dhtml);
-                        $('#del_help').on('click', function() {
-                            $("#del_help").parents('.clone').remove();
-                        });
-                        form.render();
-                    }
-                }
+                $('.help').append(dhtml);
+                $(document).on('click', '#del_help', function () {
+                    $(this).parents('.clone').remove();
+                });
+                form.render();
             })
+
+            form.render();
         })
 
 

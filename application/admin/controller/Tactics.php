@@ -27,6 +27,8 @@ class Tactics extends Controller
        return  view('free_tactics',['tactics1'=>$value1,'tactics2'=>$value2]);
 	}
 
+	
+
 	/*
 	   lilu
 	*  红包策略
