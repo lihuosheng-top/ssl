@@ -22,8 +22,10 @@ Route::group("",[
 
 
    /*商品*/
-   "goods_info"=>"index/Goods/goods_info",                                //商品详细信息
-
+   "goods_info"=>"index/Goods/goods_info",           //商品详细信息
+   
+   /*订单模块*/
+   "help_record"=>"index/Order/help_record"           //生成帮甩记录
 ]);
 
 
@@ -110,18 +112,18 @@ Route::group("admin",[
 
 
     /*策略管理*/
-    "free_tactics"=>"admin/tactics/free_tactics",            //免单策略
-    "bao_tactics"=>"admin/tactics/bao_tactics",              //红包策略
-    "zpoint_tactics"=>"admin/tactics/zpoint_tactics",        //赠积分策略
-    "big_slam_tactics"=>"admin/tactics/big_slam_tactics",    //大满贯策略
-    "new_man_tactics"=>"admin/tactics/new_man_tactics",      //新人帮甩策略
-    "old_man_tactics"=>"admin/tactics/old_man_tactics",      //老人帮甩策略
-    "bao_tactics_do"=>"admin/tactics/bao_tactics_do",              //红包策略处理
-    "zpoint_tactics_do"=>"admin/tactics/zpoint_tactics_do",        //赠积分策略处理
-    "big_slam_tactics_do"=>"admin/tactics/big_slam_tactics_do",    //大满贯策略处理
-    "new_man_tactics_do"=>"admin/tactics/new_man_tactics_do",      //新人帮甩策略处理
-    "old_man_tactics_do"=>"admin/tactics/old_man_tactics_do",      //老人帮甩策略处理
-    "free_tactics_do"=>"admin/tactics/free_tactics_do",            //免单策略处理
+    "free_tactics"=>"admin/Tactics/free_tactics",            //免单策略
+    "bao_tactics"=>"admin/Tactics/bao_tactics",              //红包策略
+    "zpoint_tactics"=>"admin/Tactics/zpoint_tactics",        //赠积分策略
+    "big_slam_tactics"=>"admin/Tactics/big_slam_tactics",    //大满贯策略
+    "new_man_tactics"=>"admin/Tactics/new_man_tactics",      //新人帮甩策略
+    "old_man_tactics"=>"admin/Tactics/old_man_tactics",      //老人帮甩策略
+    "bao_tactics_do"=>"admin/Tactics/bao_tactics_do",              //红包策略处理
+    "zpoint_tactics_do"=>"admin/Tactics/zpoint_tactics_do",        //赠积分策略处理
+    "big_slam_tactics_do"=>"admin/Tactics/big_slam_tactics_do",    //大满贯策略处理
+    "new_man_tactics_do"=>"admin/Tactics/new_man_tactics_do",      //新人帮甩策略处理
+    "old_man_tactics_do"=>"admin/Tactics/old_man_tactics_do",      //老人帮甩策略处理
+    "free_tactics_do"=>"admin/Tactics/free_tactics_do",            //免单策略处理
 
 
     /*小游戏管理*/
@@ -151,6 +153,7 @@ Route::group("admin",[
     /*资金流水*/
     "capital"=>"admin/Capital/capital",                      //资金流水
     "capital_details"=>"admin/Capital/capital_details",      //资金流水详情
+    "goods_bill"=>"admin/Capital/goods_bill",                //商品账单
 
     /*设置*/
 

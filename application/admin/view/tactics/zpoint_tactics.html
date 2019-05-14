@@ -56,7 +56,7 @@
 <body>
     {block name="content"}
     <div id="app">
-        <form class="layui-form layui-form-lists" action="{:url()}" method="post" enctype="multipart/form-data">
+        <form class="layui-form layui-form-lists" action="{:url('admin/Tactics/zpoint_tactics_do')}" method="post" enctype="multipart/form-data">
             <blockquote class="layui-elem-quote news_search">
                 <div class="seach_laber">
                     赠甩策略
@@ -64,13 +64,15 @@
             </blockquote>
 
             <div class="form-item m_t">
-                <label class="form-label" style="width:20%">自己甩奖励金额和概率</label>
+                <label class="form-label" style="width:20%">答对奖励</label>
                 <div class="form-input" style="margin-right:15px;">
                     <input type="radio" name="oneself" value="自己概率" title="自己甩奖励积分" lay-filter="gailv" checked =''>
                 </div>
                 <div class="form-input m_r">
                     <span class="one">1~</span>
-                    <input type="text" name="percent_oneself" lay-verify="title" autocomplete="off" placeholder="  请输入"
+                    <input type="hidden" name="sss0[tactics_key]" value="zpoints_own">
+                    <input type="hidden" name="sss0[id]" value="{$tactics1['id']}">
+                    <input type="text" name="sss0[tactics_num]" lay-verify="title"  value="{$tactics1['tactics_num']}" autocomplete="off" placeholder="  请输入"
                     class="layui-input">
                     <span>积分</span>
                     <div class="tips">
@@ -89,7 +91,9 @@
                     </div>
                     <div class="form-input m_r">
                         <span class="one">1~</span>
-                        <input type="text" name="percent_help" lay-verify="title" autocomplete="off" placeholder="  请输入"
+                        <input type="hidden" name="sss1[tactics_key]" value="zpoints_other">
+                        <input type="hidden" name="sss1[id]" value="{$tactics2['id']}">
+                        <input type="text" name="sss1[tactics_num]" lay-verify="title" value="{$tactics2['tactics_num']}" autocomplete="off" placeholder="  请输入"
                         class="layui-input">
                         <span>积分</span>
                         <div class="tips">

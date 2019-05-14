@@ -34,10 +34,9 @@ class Tactics extends Controller
 	public function bao_tactics()
 	{
 		$key1="bao_tactics_own";                  //自己甩红包策略的信息key
-		$user =new T();
-		$value1=$user->get_tactics_info($key1);
+		$value1=db('tactics')->where('tactics_key',$key1)->select();
 		$key2="bao_tactics_other";                //帮别人甩红包策略的信息key
-		$$value2=$user->get_tactics_info($key2);
+		$value2=db('tactics')->where('tactics_key',$key2)->select();
 			
                return  view('bao_tactics',['tactics'=>$value1,'tactics2'=>$value2]);
 	}
@@ -48,13 +47,11 @@ class Tactics extends Controller
 	*/
 	public function zpoint_tactics()
 	{
-		$key1="bao_tactics_own";                  //自己甩增积分策略的信息key
-		$user =new T();
-		$value1=$user->get_tactics_info($key1);
-		$key2="bao_tactics_other";                //帮别人甩增积分策略的信息key
-		$$value1=$user->get_tactics_info($key2);
-				  
-		return  view('zpoint_tactics');
+		$key1="zpoints_own";                  //自己甩增积分策略的信息key
+		$value1=db('tactics')->where('tactics_key',$key1)->find();
+		$key2="zpoints_other";                //帮别人甩增积分策略的信息key
+		$value2=db('tactics')->where('tactics_key',$key2)->find();
+		return  view('zpoint_tactics',['tactics1'=>$value1,'tactics2'=>$value2]);
 	}
 
 	/*
@@ -63,13 +60,12 @@ class Tactics extends Controller
 	*/
 	public function big_slam_tactics()
 	{
-		$key1="big_slam_tactics_own";                  //自己甩大满贯策略的信息key
-		$user =new T();
-		$value1=$user->get_tactics_info($key1);
-		$key2="big_slam_tactics_other";                //帮别人甩大满贯策略的信息key
-		$$value1=$user->get_tactics_info($key2);
+		$key1="big_falm_condition";                  //大满贯赠积分条件策略的信息key
+		$value1=db('tactics')->where('tactics_key',$key1)->find();
+		$key2="giving";                             //满足条件赠送积分的key
+		$value2=db('tactics')->where('tactics_key',$key2)->find();
 			  
-		return  view('big_slam_tactics');
+		return  view('big_slam_tactics',['tactics1'=>$value1,'tactics2'=>$value2]);
 	}
 
 	/*
@@ -79,10 +75,9 @@ class Tactics extends Controller
 	public function new_man_tactics()
 	{
 		$key1="new_man_tactics_own";                  //新人帮甩策略的信息key
-		$user =new T();
-		$value1=$user->get_tactics_info($key1);
+		$value1=db('tactics')->where('tactics_key',$key1)->find();
 				  
-		return  view('new_man_tactics');
+		return  view('new_man_tactics',['tactics'=>$value1]);
 	}
 
 	/*
@@ -92,10 +87,9 @@ class Tactics extends Controller
 	public function old_man_tactics()
 	{
 		$key1="old_man_tactics_own";                  //老人帮甩策略的信息key
-		$user =new T();
-		$value1=$user->get_tactics_info($key1);
+		$value1=db('tactics')->where('tactics_key',$key1)->find();
 
-      return  view('old_man_tactics');
+      return  view('old_man_tactics',['tactics'=>$value1]);
 	}
 	/**
 	 * lilu
@@ -105,15 +99,16 @@ class Tactics extends Controller
 	{
 		$input=input('post.');  //获取表单数据
 		if($input){
-			$attr=[];
+			$data=[];
 			$i=0;
 			$p=0;
 			foreach($input as $k =>$vo)
 			{
 				if (substr($k, 0, 3) == "one")  
 				{
-					if(!$vo["id"])   //判断是否为新增加的记录
+					if(!$vo["id"] && !$vo['status'])   //判断是否为新增加的记录
 					{ //添加
+						dump($vo);
 					$data['tactics_key']=$vo['tactics_key'];                     //开启状态
 					$data['tactics_status']=$vo['status'];                     //开启状态
 					$data['tactics_name']='免费策略key值';                   //key
@@ -125,6 +120,7 @@ class Tactics extends Controller
                          $i++;
 					  }
 					}else{
+						dump($vo);
 						$data['tactics_key']=$vo['tactics_key'];                     //开启状态
 						$data['tactics_status']=$vo['status'];                     //开启状态
 						$data['tactics_name']='免费策略key值';                   //key
@@ -139,6 +135,7 @@ class Tactics extends Controller
 				}
               $p++;
 			}
+			die;
 			if($i==$p)
 			{
 				$this->success('添加成功',url('admin/admin/free_tactics'));
@@ -165,12 +162,30 @@ class Tactics extends Controller
 	 * lilu
 	 * 赠积分策略处理
 	 */
-	public function zpoints_tactics_do()
+	public function zpoint_tactics_do()
 	{
 		$input=input('post.');
-		halt($input);
-
-		return view('zpoints_tactics');
+		foreach($input as $k =>$vo)
+			{
+				if (substr($k, 0, 3) == "sss")  
+				{
+					if(!$vo['id'] )   //判断是否为新增加的记录
+					{ //添加
+					$data['tactics_key']=$vo['tactics_key'];                     //开启状态
+					$data['tactics_name']='红包策略key值';                   //key
+					$data['tactics_num']=$vo['tactics_num'];                   //数字
+					$res=db('tactics')->insert($data);
+					}else{
+						$data['tactics_key']=$vo['tactics_key'];                     //开启状态
+						$data['tactics_name']='红包策略key值';                   //key
+						$data['tactics_num']=$vo['tactics_num'];                   //数字
+						$res=db('tactics')->where('id',$vo['id'])->update($data);
+						
+					}
+					
+				}
+			}
+		$this->success('保存成功',url('admin/Tactics/zpoint_tactics'));
 	}
 	/**
 	 * lilu
@@ -179,9 +194,29 @@ class Tactics extends Controller
 	public function big_slam_tactics_do()
 	{
 		$input=input('post.');
-		halt($input);
+		foreach($input as $k =>$vo)
+			{
+				if (substr($k, 0, 3) == "sss")  
+				{
+					if(!$vo['id'] )   //判断是否为新增加的记录
+					{ //添加
+					$data['tactics_key']=$vo['tactics_key'];                     //开启状态
+					$data['tactics_name']='大满贯满足条件的key值';                   //key
+					$data['tactics_num']=$vo['tactics_num'];                   //数字
+					$res=db('tactics')->insert($data);
+					}else{
+						$data['tactics_key']=$vo['tactics_key'];                     //开启状态
+						$data['tactics_name']='大满贯满足条件赠送积分得key值';                   //key
+						$data['tactics_num']=$vo['tactics_num'];                   //数字
+						$res=db('tactics')->where('id',$vo['id'])->update($data);
+						
+					}
+					
+				}
+			}
+		$this->success('保存成功',url('admin/Tactics/big_slam_tactics'));
 
-		return view('bid_slam_tactics');
+		// return view('bid_slam_tactics');
 
 
 	}
@@ -192,9 +227,29 @@ class Tactics extends Controller
 	public function new_man_tactics_do()
 	{
 		$input=input('post.');
-		halt($input);
+		foreach($input as $k =>$vo)
+			{
+				if (substr($k, 0, 3) == "sss")  
+				{
+					if(!$vo['id'] )   //判断是否为新增加的记录
+					{ //添加
+					$data['tactics_key']=$vo['tactics_key'];                   //key键
+					$data['tactics_name']='新人帮甩策略key值';                      //key值
+					$data['tactics_num']=$vo['tactics_num'];                   //新人帮甩限制次数
+					$res=db('tactics')->insert($data);
+					}else{
+						$data['tactics_key']=$vo['tactics_key'];                 //key键
+						$data['tactics_name']='新人帮甩策略key值';                    //key
+						$data['tactics_num']=$vo['tactics_num'];                 //新人帮甩限制次数
+						$res=db('tactics')->where('id',$vo['id'])->update($data);
+						
+					}
+					
+				}
+			}
+		$this->success('保存成功',url('admin/Tactics/new_man_tactics'));
 
-		return view('new_man_tactics');
+		// return view('new_man_tactics');
 	}
 	/**
 	 * lilu
@@ -203,9 +258,28 @@ class Tactics extends Controller
 	public function old_man_tactics_do()
 	{
 		$input=input('post.');
-		halt($input);
-
-		return view('old_man_tactics');
+		foreach($input as $k =>$vo)
+			{
+				if (substr($k, 0, 3) == "sss")  
+				{
+					if(!$vo['id'] )   //判断是否为新增加的记录
+					{ //添加
+					$data['tactics_key']=$vo['tactics_key'];                   //key键
+					$data['tactics_name']='旧人帮甩策略key值';                      //key值
+					$data['tactics_num']=$vo['tactics_num'];                   //新人帮甩限制次数
+					$res=db('tactics')->insert($data);
+					}else{
+						$data['tactics_key']=$vo['tactics_key'];                 //key键
+						$data['tactics_name']='旧人帮甩策略key值';                    //key
+						$data['tactics_num']=$vo['tactics_num'];                 //新人帮甩限制次数
+						$res=db('tactics')->where('id',$vo['id'])->update($data);
+						
+					}
+					
+				}
+			}
+		$this->success('保存成功',url('admin/Tactics/old_man_tactics'));
+		// return view('old_man_tactics');
 	}
 	
 }

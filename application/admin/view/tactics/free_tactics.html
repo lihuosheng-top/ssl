@@ -99,26 +99,32 @@
             <div class="form-item m_t oneself">
                 <label class="form-label" style="width:20%">自己免单金额和概率</label>
                 {volist name="$tactics1" id="vo1"}
-                <input name="one_{$key}[tactics_key]" value="free_tactics_own" style="display: none">
-                <input name="one_{$key}[id]" value="{$vo1.id}" style="display: none">
-                <div class="form-input ziji">
-                    <input type="checkbox" name="one_{$key}[status]" value="自己概率" title=" " lay-skin="gailv" checked=''>
+                {if $key=='0'}
+                <div class="form-item m_t ">
+                 {/if}   
+                        <input name="one_{$key}[tactics_key]" value="free_tactics_own" style="display: none">
+                        <input name="one_{$key}[id]" value="{$vo1.id}" style="display: none">
+                        <div class="form-input ziji">
+                            <input type="checkbox" name="one_{$key}[status]" value="自己概率" title=" " lay-skin="gailv" checked=''>
+                        </div>
+                        <div class="form-input ziji m_r">
+                            <input type="text" name="one_{$key}[percent]" value="{$vo1.tactics_pre}" lay-verify="title" autocomplete="off" placeholder=""
+                                class="layui-input">
+                            <span class="percent">%</span>
+                            <div class="tips">
+                                <span class="red">*</span>0 ~ 100,表示减免单次甩费的百分比
+                            </div>
+                        </div>
+                        <div class="form-input ziji">
+                            <input type="text" name="one_0[probability]" value="{$vo1.tactics_num}" lay-verify="title" autocomplete="off" placeholder=""
+                                class="layui-input">
+                            <div class="tips">
+                                <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                            </div>
+                        </div>
+                {if $key=='0'}
                 </div>
-                <div class="form-input ziji m_r">
-                    <input type="text" name="one_{$key}[percent]" value="{$vo1.tactics_pre}" lay-verify="title" autocomplete="off" placeholder=""
-                        class="layui-input">
-                    <span class="percent">%</span>
-                    <div class="tips">
-                        <span class="red">*</span>0 ~ 100,表示减免单次甩费的百分比
-                    </div>
-                </div>
-                <div class="form-input ziji">
-                    <input type="text" name="one_0[probability]" value="{$vo1.tactics_num}" lay-verify="title" autocomplete="off" placeholder=""
-                        class="layui-input">
-                    <div class="tips">
-                        <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
-                    </div>
-                </div>
+                 {/if}   
                 {/volist}
             </div>
             {else}
@@ -150,7 +156,7 @@
             <div class="one_more" id="one_more" @click="add_oneself">添加一档</div>
 
 
-            <div class="form-item m_t help">
+            <!-- <div class="form-item m_t help">
                 <label class="form-label" style="width:20%">帮别人甩免单金额和概率</label>
                 <div class="form-input ziji">
                     <input type="checkbox" name="help_0" value="别人概率" title=" " lay-skin="help" checked=''>
@@ -172,7 +178,7 @@
                     </div>
                 </div>
             </div>
-            <div class="one_more" id="one_help" @click="add_help">添加一档</div>
+            <div class="one_more" id="one_help" @click="add_help">添加一档</div> -->
 
             <div class="layui-form-item" style="width:100%;">
                 <div class="layui-input-block">
@@ -214,8 +220,10 @@
                         this.i = this.i + 1;
                         dhtml = `<div class="form-item clone">
                                         <label class="form-label" style="width:20%"></label>
+                                        <input name="one_${this.i}[tactics_key]" value="free_tactics_own" style="display: none">
+                                        <input name="one_${this.i}[id]" value="" style="display: none">
                                         <div class="form-input ziji">
-                                                <input type="checkbox" name="oneself_${this.i}" value="" title=" " lay-skin="gailv" >
+                                                <input type="checkbox" name="one_${this.i}[status]" value="" title=" " lay-skin="gailv" >
                                         </div>
                                         <div class="form-input ziji m_r">
                                             <input type="text" name="one_${this.i}[percent]" lay-verify="title" autocomplete="off" placeholder=""

@@ -53,7 +53,7 @@
 <body>
     {block name="content"}
     <div id="app">
-        <form class="layui-form layui-form-lists" action="{:url()}" method="post" enctype="multipart/form-data">
+        <form class="layui-form layui-form-lists" action="{:url('admin/Tactics/big_slam_tactics_do')}" method="post" enctype="multipart/form-data">
             <blockquote class="layui-elem-quote news_search">
                 <div class="seach_laber">
                     大满贯策略
@@ -65,8 +65,10 @@
                 <div class="form-input" style="margin-right:15px; padding-top: 10px;">
                     达到总积分的：
                 </div>
+                <input type="hidden" name="sss0[tactics_key]" value="big_falm_condition">
+                <input type="hidden" name="sss0[id]" value="{$tactics1['id']}">
                 <div class="form-input m_r">
-                    <input type="text" name="condition" lay-verify="title" autocomplete="off" placeholder="  请输入"
+                    <input type="text" name="sss0[tactics_num]" value="{$tactics1['tactics_num']}" lay-verify="title" autocomplete="off" placeholder="  请输入"
                     class="layui-input">
                     <span>%</span>
                     <span>（注明：填写1~100）</span>
@@ -81,8 +83,10 @@
                     <div class="form-input" style="margin-right:15px;  padding-top: 10px;">
                         剩余的积分的：
                     </div>
+                    <input type="hidden" name="sss1[tactics_key]" value="giving">
+                    <input type="hidden" name="sss1[id]" value="{$tactics2['id']}">
                     <div class="form-input m_r">
-                        <input type="text" name="give" lay-verify="title" autocomplete="off" placeholder="  请输入"
+                        <input type="text" name="sss1[tactics_num]" value="{$tactics2['tactics_num']}" lay-verify="title" autocomplete="off" placeholder="  请输入"
                         class="layui-input">
                         <span>%</span>
                         <span>（注明：填写1~100）</span>
