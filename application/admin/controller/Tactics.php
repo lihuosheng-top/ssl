@@ -21,11 +21,9 @@ class Tactics extends Controller
 	public function free_tactics()
 	{
 		$key1="free_tactics_own";                  //自己甩免单策略的信息key
-		$user =new T();
-		$value1=$user->get_tactics_info($key1);
+		$value1=db('tactics')->where('tactics_key',$key1)->select();
 		$key2="free_tactics_other";                //帮别人甩免单策略的信息key
-		$value2=$user->get_tactics_info($key2);
-
+		$value2=db('tactics')->where('tactics_key',$key2)->select();
        return  view('free_tactics',['tactics1'=>$value1,'tactics2'=>$value2]);
 	}
 
@@ -111,40 +109,48 @@ class Tactics extends Controller
 		if($input){
 			$attr=[];
 			$i=0;
+			$p=0;
 			foreach($input as $k =>$vo)
 			{
-				if (substr($kn, 0, 3) == "sss")  
+				if (substr($k, 0, 3) == "one")  
 				{
-					if(!$vo['id'])   //判断是否为新增加的记录
+					if(!$vo["id"])   //判断是否为新增加的记录
 					{ //添加
-					  $data['tactics_key']='';                   //key
-					  $data['tactics_status']='';                //开启状态
-					  $data['tactics_pre']='';                   //百分比
-					  $data['tactics_num']='';                   //数字
-					  $data['tactics_chance']='';                //计算的获奖概率  
-					  $res=db('tactics')->insert();
-					  if($res)
-					  {
-                   $i++;
+					$data['tactics_key']=$vo['tactics_key'];                     //开启状态
+					$data['tactics_status']=$vo['status'];                     //开启状态
+					$data['tactics_name']='免费策略key值';                   //key
+					$data['tactics_pre']=$vo['percent'];                       //百分比
+					$data['tactics_num']=$vo['probability'];                   //数字
+					$res=db('tactics')->insert($data);
+					if($res)
+					  {  
+                         $i++;
 					  }
 					}else{
-
+						$data['tactics_key']=$vo['tactics_key'];                     //开启状态
+						$data['tactics_status']=$vo['status'];                     //开启状态
+						$data['tactics_name']='免费策略key值';                   //key
+						$data['tactics_pre']=$vo['percent'];                       //百分比
+						$data['tactics_num']=$vo['probability'];                   //数字
+						$res=db('tactics')->where('id',$vo['id'])->update($data);
+						if($res){
+							$i++;
+						}
 					}
-					$attr[$i]['stock']=$nl['stock'];            //库存
-					$attr[$i]['coding']=$nl['coding'];          //规格
-					$attr[$i]['cost']=$nl['cost'];              //成本价
-					$attr[$i]['line']=$nl['line'];              //划线价
-					$attr[$i]['total']=$nl['total'];            //积分
-					$attr[$i]['jilt']=$nl['jilt'];              //帮甩费用
+					
 				}
-           
+              $p++;
+			}
+			if($i==$p)
+			{
+				$this->success('添加成功',url('admin/admin/free_tactics'));
+			}else{
+				$this->error();
 			}
 		}
+    
 
-
-		halt($input);
-
-		ruturn view('free_tactics');
+		return view('free_tactics');
 	}
 	/**
 	 * lilu

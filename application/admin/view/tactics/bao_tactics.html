@@ -68,15 +68,19 @@
         margin-left: 250px;
         margin-top: 80px;
     }
+
     .del_div {
         display: inline;
     }
+
     .one_more:hover {
         cursor: pointer;
     }
+
     .del_div:hover {
         cursor: pointer;
     }
+
     .layui-form-checkbox {
         margin-top: 5px;
     }
@@ -93,51 +97,52 @@
                     红包策略
                 </div>
             </blockquote>
-
-            <div class="form-item m_t oneself">
-                <label class="form-label" style="width:20%">自己甩奖励金额和概率</label>
-                <div class="form-input ziji">
-                    <input type="checkbox" name="oneself_0" value="自己概率" title=" " lay-skin="gailv" checked=''>
-                </div>
-                <div class="form-input ziji m_r">
-                    <input type="text" name="one_0[percent]" lay-verify="title" autocomplete="off" placeholder="  请输入金额"
-                        class="layui-input">
-                    <span class="percent">%</span>
-                    <div class="tips">
-                        <span class="red">*</span>奖励金额
+            <div class="oneself m_t">
+                <div class="form-item" style="margin-top: 15px;">
+                    <label class="form-label" style="width:20%">自己甩奖励金额和概率</label>
+                    <div class="form-input ziji">
+                        <input type="checkbox" name="oneself_0[status]" lay-filter="choose1" value="1" checked=''>
                     </div>
-                </div>
-                <div class="form-input ziji">
-                    <input type="text" name="one_0[probability]" lay-verify="title" autocomplete="off" placeholder="  请输入数字"
-                        class="layui-input">
-                    <div class="tips">
-                        <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                    <div class="form-input ziji m_r">
+                        <input type="text" name="one_0[percent]" lay-verify="title" autocomplete="off"
+                            placeholder="  请输入金额" class="layui-input">
+                        <span class="percent">%</span>
+                        <div class="tips">
+                            <span class="red">*</span>奖励金额
+                        </div>
                     </div>
-                </div>
+                    <div class="form-input ziji">
+                        <input type="text" name="one_0[probability]" lay-verify="title" autocomplete="off"
+                            placeholder="  请输入数字" class="layui-input">
+                        <div class="tips">
+                            <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                        </div>
+                    </div>
 
+                </div>
             </div>
-          
             <div class="one_more" @click="add_oneself">添加一档</div>
 
-
-            <div class="form-item m_t help">
-                <label class="form-label" style="width:20%">帮别人甩奖励金额和概率</label>
-                <div class="form-input ziji">
-                    <input type="checkbox" name="help_0" value="别人概率" title=" " lay-skin="help" checked=''>
-                </div>
-                <div class="form-input ziji m_r">
-                    <input type="text" name="work_0[percent]" lay-verify="title" autocomplete="off" placeholder="  请输入金额"
-                        class="layui-input">
-                    <span class="percent">%</span>
-                    <div class="tips">
-                        <span class="red">*</span>奖励金额
+            <div class="help m_t">
+                <div class="form-item" style="margin-top:15px;">
+                    <label class="form-label" style="width:20%">帮别人甩奖励金额和概率</label>
+                    <div class="form-input ziji">
+                        <input type="checkbox" name="help_0[status]" lay-filter="choose1" value="1" checked=''>
                     </div>
-                </div>
-                <div class="form-input ziji">
-                    <input type="text" name="work_0[probability]" lay-verify="title" autocomplete="off" placeholder="  请输入数字"
-                        class="layui-input">
-                    <div class="tips">
-                        <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                    <div class="form-input ziji m_r">
+                        <input type="text" name="work_0[percent]" lay-verify="title" autocomplete="off"
+                            placeholder="  请输入金额" class="layui-input">
+                        <span class="percent">%</span>
+                        <div class="tips">
+                            <span class="red">*</span>奖励金额
+                        </div>
+                    </div>
+                    <div class="form-input ziji">
+                        <input type="text" name="work_0[probability]" lay-verify="title" autocomplete="off"
+                            placeholder="  请输入数字" class="layui-input">
+                        <div class="tips">
+                            <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                        </div>
                     </div>
                 </div>
             </div>
@@ -164,31 +169,36 @@
     <script type="text/javascript">
         layui.config({
             base: "js/"
-        }).use(['form', 'layer', 'jquery', 'laypage'], () =>  {
+        }).use(['form', 'layer', 'jquery', 'laypage'], () => {
             var form = layui.form(),
                 layer = parent.layer === undefined ? layui.layer : parent.layer,
                 laypage = layui.laypage,
                 $ = layui.jquery;
 
 
-            const app = new Vue({
-                el: "#app",
-                data: {
-                    i: 0,
-                    u:0
-                },
-                methods: {
-                    //自己概率的增加
-                    add_oneself: function() {
-                        var dhtml = "";
-                        this.i = this.i + 1;
-                        dhtml = `<div class="form-item clone">
+            form.on("checkbox(choose1)", function (data) {
+
+                if (data.value == "1") {
+                    $(this).val('0');
+                    data.value = "0";
+                } else {
+                    $(this).val('1');
+                    data.value = "1";
+                }
+                form.render('checkbox');
+            })
+            let i = 0, u = 0;
+
+            $('#one_more').on('click', function () {
+                let dhtml = "";
+                i = i + 1;
+                dhtml = `<div class="form-item clone">
                                         <label class="form-label" style="width:20%"></label>
                                         <div class="form-input ziji">
-                                                <input type="checkbox" name="oneself_${this.i}" value="" title=" " lay-skin="gailv" >
+                                                <input type="checkbox" name="oneself_${i}[percent]" value="0" lay-filter="choose1">
                                         </div>
                                         <div class="form-input ziji m_r">
-                                            <input type="text" name="one_${this.i}[percent]" lay-verify="title" autocomplete="off" placeholder="  请输入金额"
+                                            <input type="text" name="one_${i}[percent]" lay-verify="title" autocomplete="off" placeholder="  请输入金额"
                                                 class="layui-input">
                                             <span class="percent">%</span>
                                             <div class="tips">
@@ -196,7 +206,7 @@
                                             </div>
                                         </div>
                                         <div class="form-input ziji">
-                                            <input type="text" name="one_${this.i}[probability]" lay-verify="title" autocomplete="off" placeholder="  请输入数字"
+                                            <input type="text" name="one_${i}[probability]" lay-verify="title" autocomplete="off" placeholder="  请输入数字"
                                                 class="layui-input" style="margin-right: 110px;">
                                             <div class="del_div" id="del_oneself"><img src="__STATIC__/admin/index/img/u1306.png" class="img_x"></div>
                                             <div class="tips">
@@ -204,23 +214,24 @@
                                             </div>
                                         </div>
                                     </div>`;
-                        $('.oneself').after(dhtml);
-                        $('#del_oneself').on('click', function() {
-                            $("#del_oneself").parents('.clone').remove();
-                        });
-                        form.render();
-                    },
-                    
-                    add_help: function() {
-                        var dhtml = "";
-                        this.u = this.u + 1;
-                        dhtml = `<div class="form-item clone">
+                $('.oneself').append(dhtml);
+                $(document).on('click', '#del_oneself', function () {
+                    $(this).parents('.clone').remove();
+                });
+                form.render();
+            });
+
+
+            $('#one_help').on('click', function () {
+                let dhtml = "";
+                u = u + 1;
+                dhtml = `<div class="form-item clone">
                                     <label class="form-label" style="width:20%"></label>
                                     <div class="form-input ziji">
-                                        <input type="checkbox" name="help_${this.u}" value="别人概率" title=" " lay-skin="help" >
+                                        <input type="checkbox" name="help_${u}[percent]" value="0" lay-filter="choose1">
                                     </div>
                                     <div class="form-input ziji m_r">
-                                        <input type="text" name="work_${this.u}[percent]" lay-verify="title" autocomplete="off" placeholder="  请输入金额"
+                                        <input type="text" name="work_${u}[percent]" lay-verify="title" autocomplete="off" placeholder="  请输入金额"
                                             class="layui-input">
                                         <span class="percent">%</span>
                                         <div class="tips">
@@ -228,7 +239,7 @@
                                         </div>
                                     </div>
                                     <div class="form-input ziji">
-                                        <input type="text" name="work_${this.u}[probability]" lay-verify="title" autocomplete="off" placeholder="  请输入数字"
+                                        <input type="text" name="work_${u}[probability]" lay-verify="title" autocomplete="off" placeholder="  请输入数字"
                                             class="layui-input"  style="margin-right: 110px;">
                                         <div class="del_div" id="del_help"><img src="__STATIC__/admin/index/img/u1306.png" class="img_x"></div>
                                         <div class="tips">
@@ -236,16 +247,15 @@
                                         </div>
                                     </div>
                                     </div>`;
-                        $('.help').after(dhtml);
-                        $('#del_help').on('click', function() {
-                            $("#del_help").parents('.clone').remove();
-                        });
-                        form.render();
-                    }
-                }
-            })
-        })
+                $('.help').append(dhtml);
+                $(document).on('click', '#del_help', function () {
+                    $(this).parents('.clone').remove();
+                });
+                form.render();
+            });
 
+
+        })
 
 
     </script>
