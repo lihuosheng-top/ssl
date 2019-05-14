@@ -13,7 +13,6 @@ use  app\admin\model\Tactics as T ;
  */
 class Tactics extends Controller
 {
-	
 	/*
 	   lilu 
 	*  免单策略
@@ -108,42 +107,56 @@ class Tactics extends Controller
 			{
 				if (substr($k, 0, 3) == "one")  
 				{
-					if(!$vo["id"] && !$vo['status'])   //判断是否为新增加的记录
+					if(!$vo['id'])  //判断是否为新增加的记录
 					{ //添加
-						dump($vo);
 					$data['tactics_key']=$vo['tactics_key'];                     //开启状态
 					$data['tactics_status']=$vo['status'];                     //开启状态
 					$data['tactics_name']='免费策略key值';                   //key
 					$data['tactics_pre']=$vo['percent'];                       //百分比
 					$data['tactics_num']=$vo['probability'];                   //数字
 					$res=db('tactics')->insert($data);
-					if($res)
-					  {  
-                         $i++;
-					  }
 					}else{
-						dump($vo);
-						$data['tactics_key']=$vo['tactics_key'];                     //开启状态
-						$data['tactics_status']=$vo['status'];                     //开启状态
-						$data['tactics_name']='免费策略key值';                   //key
-						$data['tactics_pre']=$vo['percent'];                       //百分比
-						$data['tactics_num']=$vo['probability'];                   //数字
-						$res=db('tactics')->where('id',$vo['id'])->update($data);
-						if($res){
-							$i++;
+						if(!array_key_exists('status',$input[$k])){
+							db('tactics')->delete($vo['id']);
+						}else{
+							$data['tactics_key']=$vo['tactics_key'];                     //开启状态
+							$data['tactics_status']=$vo['status'];                     //开启状态
+							$data['tactics_name']='免费策略key值';                   //key
+							$data['tactics_pre']=$vo['percent'];                       //百分比
+							$data['tactics_num']=$vo['probability'];                   //数字
+							$res=db('tactics')->where('id',$vo['id'])->update($data);
 						}
+						
 					}
 					
+				}elseif(substr($k, 0, 4) == "help"){
+					if(!$vo['id'])  //判断是否为新增加的记录
+					{ //添加
+					$data['tactics_key']=$vo['tactics_key'];                     //开启状态
+					$data['tactics_status']=$vo['status'];                     //开启状态
+					$data['tactics_name']='免费策略key值';                   //key
+					$data['tactics_pre']=$vo['percent'];                       //百分比
+					$data['tactics_num']=$vo['probability'];                   //数字
+					$res=db('tactics')->insert($data);
+					}else{
+						if(!array_key_exists('status',$input[$k])){
+							db('tactics')->delete($vo['id']);
+						}else{
+							$data['tactics_key']=$vo['tactics_key'];                     //开启状态
+							$data['tactics_status']=$vo['status'];                     //开启状态
+							$data['tactics_name']='免费策略key值';                   //key
+							$data['tactics_pre']=$vo['percent'];                       //百分比
+							$data['tactics_num']=$vo['probability'];                   //数字
+							$res=db('tactics')->where('id',$vo['id'])->update($data);
+						}
+						
+					}
+				}else{
+
 				}
-              $p++;
 			}
-			die;
-			if($i==$p)
-			{
-				$this->success('添加成功',url('admin/admin/free_tactics'));
-			}else{
-				$this->error();
-			}
+				$this->success('操作成功',url('admin/Tactics/free_tactics'));
+			
 		}
     
 
