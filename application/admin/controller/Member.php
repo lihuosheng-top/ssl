@@ -28,11 +28,4 @@ namespace app\admin\controller;
  	}
 
 
- 	/*
- 	* 会员意见反馈
- 	**/
- 	public function member_back()
- 	{
- 		return view('member_back');
- 	}
  }

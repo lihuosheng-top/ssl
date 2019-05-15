@@ -25,7 +25,8 @@ Route::group("",[
    "goods_info"=>"index/Goods/goods_info",           //商品详细信息
    
    /*订单模块*/
-   "help_record"=>"index/Order/help_record"           //生成帮甩记录
+   "help_record"=>"index/Order/help_record" ,          //生成帮甩记录
+   "help_count"=>"index/Order/help_count"    ,         //帮甩统计
 ]);
 
 
@@ -146,15 +147,15 @@ Route::group("admin",[
     /*会员管理*/
     "member_list"=>"admin/Member/member_list",               //会员列表
     "member_list_edit"=>"admin/Member/member_list_edit",     //会员列表编辑
-    "member_type"=>"admin/Member/member_type",               //会员等级
-    "member_back"=>"admin/Member/member_back",               //会员意见反馈
 
 
 
     /*资金流水*/
-    "capital"=>"admin/Capital/capital",                      //资金流水
-    "capital_details"=>"admin/Capital/capital_details",      //资金流水详情
-    "goods_bill"=>"admin/Capital/goods_bill",                //商品账单
+    "capital"=>"admin/Capital/capital",                       //资金流水
+    "capital_details"=>"admin/Capital/capital_details",       //资金流水详情
+    "goods_bill"=>"admin/Capital/goods_bill",                 //商品账单
+    "capital_search"=>"admin/Capital/capital_search",         //帮甩检索
+    "help_record_del"=>"admin/Capital/help_record_del",       //帮甩删除
 
     /*设置*/
 
