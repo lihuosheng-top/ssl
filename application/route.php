@@ -145,6 +145,7 @@ Route::group("admin",[
 
     /*会员管理*/
     "member_list"=>"admin/Member/member_list",               //会员列表
+    "member_list_edit"=>"admin/Member/member_list_edit",     //会员列表编辑
     "member_type"=>"admin/Member/member_type",               //会员等级
     "member_back"=>"admin/Member/member_back",               //会员意见反馈
 

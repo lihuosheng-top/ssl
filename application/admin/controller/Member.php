@@ -20,11 +20,11 @@ namespace app\admin\controller;
  	}
 
  	/*
- 	* 会员等级
+ 	* 会员列表编辑
  	**/
- 	public function member_type()
+ 	public function member_list_edit()
  	{
- 		return view('member_type');
+ 		return view('member_list_edit');
  	}
 
 
