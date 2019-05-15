@@ -1,0 +1,194 @@
+{include file="template/_meta" /}
+<title></title>
+</head>
+
+{block name="css"}
+
+<style type="text/css">
+    body {
+        background: #fff;
+    }
+
+    .layui-form label {
+        width: 17%;
+        text-align: left;
+    }
+
+    .layui-form .layui-input-block input {
+        width: 97%;
+    }
+
+    .layui-form-label span {
+        color: red;
+    }
+
+    .layui-form-item {
+        display: inline-block;
+        width: 40%;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        margin-left: 50px;
+    }
+
+    .layui-icon {
+        font-size: 26px;
+        color: #669900;
+        margin-right: 14px;
+    }
+
+    .title {
+        padding: 10px;
+        background: #F2F2F2;
+        color: #333;
+    }
+    
+
+    .distribution_list a {
+        font-size: 14px;
+        padding: 9px;
+        color: #5E5E5E;
+    }
+    .layui-btn {
+        border-radius: 6px;
+        height: 50px;
+    }
+
+    .layui-form-lists .layui-btn {
+        width: 170px;
+    }
+
+    .layui-btn-normal {
+        margin-right: 100px;
+    }
+
+    .layui-textarea {
+        width: 100%;
+    }
+    .form-item {
+        margin-left: 45px;
+    }
+</style>
+
+
+{/block}
+
+{block name="content"}
+
+<form class="layui-form layui-form-lists" action="{:url()}" method="post">
+    <blockquote class="layui-elem-quote news_search">
+        <div class="seach_laber1">
+            基础信息
+        </div>
+    </blockquote>
+    <div class="layui-form-item ">
+        <label class="layui-form-label">会员账号</label>
+        <div class="layui-input-block">
+            <input value="" type="text" name="member_phone_num" lay-verify="title" autocomplete="off"
+                placeholder="请输入账号" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-block">
+            <p>嬲</p>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">上级账号</label>
+        <div class="layui-input-block">
+            <input value="" type="text" name="member_phone_num" lay-verify="title" autocomplete="off"
+                placeholder="请输入账号" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">星光值</label>
+        <div class="layui-input-block">
+            <p>250</p>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">会员昵称</label>
+        <div class="layui-input-block">
+            <input value="" type="text" name="" lay-verify="title" autocomplete="off" placeholder="请输入"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">会员头像</label>
+        <div class="layui-input-block">
+            <div style="width: 100px; height: 100px; overflow: hidden;border-radius: 50%;">
+                <img src="" />
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">注册时间</label>
+        <div class="layui-input-block">
+            <input value="" type="text" name="" lay-verify="title" autocomplete="off" placeholder=" "
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">会员等级</label>
+        <div class="layui-input-block">
+            <select name="member_grade_id" lay-filter="aihao">
+                <option value="普通" selected>普通</option>
+                <option value="会员">会员</option>
+
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-block">
+            <select name="member_status" lay-filter="aihao">
+                <option value="" selected="">启用</option>
+                <option value="-1">禁用</option>
+                <option value="1">启用</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-item ">
+            <label class="layui-form-label"  style="width: 7.2%;">会员地址</label>
+            <div class="form-input">
+                <textarea placeholder="" class="layui-textarea" name="desc"></textarea>
+            </div>
+        </div>
+
+    <div class="layui-form-item" style="width:100%;margin-top: 50px;">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" type="submit" id="submit">保存</button>
+                <button type="button" class="layui-btn layui-btn-primary"
+                    onClick="javascript :history.back(-1);">返回</button>
+            </div>
+
+        </div>
+</form>
+
+{/block}
+
+<!--_footer 作为公共模版分离出去-->
+{include file="template/_footer" /}
+<!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+{block name="bottom"}
+<script type="text/javascript">
+
+    //表单依赖
+    layui.config({
+        base: "js/"
+    }).use(['form', 'layer', 'jquery', 'laypage', 'laydate'], function () {
+        var form = layui.form(),
+            laydate = layui.laydate,
+            layer = parent.layer === undefined ? layui.layer : parent.layer,
+            laypage = layui.laypage,
+            layedit = layui.layedit,
+            $ = layui.jquery;
+
+
+    });
+</script>
+
+
+{/block}

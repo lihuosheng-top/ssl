@@ -146,7 +146,8 @@ Route::group("admin",[
 
     /*会员管理*/
     "member_list"=>"admin/Member/member_list",               //会员列表
-   
+    "member_list_edit"=>"admin/Member/member_list_edit",     //会员列表编辑
+
 
 
     /*资金流水*/

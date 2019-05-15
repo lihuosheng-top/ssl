@@ -19,4 +19,13 @@ namespace app\admin\controller;
  		return view('member_list');
  	}
 
+ 	/*
+ 	* 会员列表编辑
+ 	**/
+ 	public function member_list_edit()
+ 	{
+ 		return view('member_list_edit');
+ 	}
+
+
  }
