@@ -39,7 +39,7 @@ class Tactics extends Controller
 		$key2="bao_tactics_other";                //帮别人甩红包策略的信息key
 		$value2=db('tactics')->where('tactics_key',$key2)->select();
 			
-               return  view('bao_tactics',['tactics'=>$value1,'tactics2'=>$value2]);
+        return  view('bao_tactics',['tactics'=>$value1,'tactics2'=>$value2]);
 	}
 
 	/*
@@ -160,7 +160,7 @@ class Tactics extends Controller
 		}
     
 
-		return view('free_tactics');
+		// return view('free_tactics');
 	}
 	/**
 	 * lilu
@@ -168,10 +168,66 @@ class Tactics extends Controller
 	 */
 	public function bao_tactics_do()
 	{
-		$input=input('post.');
-		halt($input);
+		$input=input('post.');  //获取表单数据
+		if($input){
+			$data=[];
+			$i=0;
+			$p=0;
+			foreach($input as $k =>$vo)
+			{
+				if (substr($k, 0, 3) == "one")  
+				{
+					if(!$vo['id'])  //判断是否为新增加的记录
+					{ //添加
+					$data['tactics_key']=$vo['tactics_key'];                     //开启状态
+					$data['tactics_status']=$vo['status'];                     //开启状态
+					$data['tactics_name']='红包策略key值';                   //key
+					$data['tactics_pre']=$vo['percent'];                       //百分比
+					$data['tactics_num']=$vo['probability'];                   //数字
+					$res=db('tactics')->insert($data);
+					}else{
+						if(!array_key_exists('status',$input[$k])){
+							db('tactics')->delete($vo['id']);
+						}else{
+							$data['tactics_key']=$vo['tactics_key'];                     //开启状态
+							$data['tactics_status']=$vo['status'];                     //开启状态
+							$data['tactics_name']='红包策略key值';                   //key
+							$data['tactics_pre']=$vo['percent'];                       //百分比
+							$data['tactics_num']=$vo['probability'];                   //数字
+							$res=db('tactics')->where('id',$vo['id'])->update($data);
+						}
+						
+					}
+					
+				}elseif(substr($k, 0, 4) == "help"){
+					if(!$vo['id'])  //判断是否为新增加的记录
+					{ //添加
+					$data['tactics_key']=$vo['tactics_key'];                     //开启状态
+					$data['tactics_status']=$vo['status'];                     //开启状态
+					$data['tactics_name']='红包策略key值';                   //key
+					$data['tactics_pre']=$vo['percent'];                       //百分比
+					$data['tactics_num']=$vo['probability'];                   //数字
+					$res=db('tactics')->insert($data);
+					}else{
+						if(!array_key_exists('status',$input[$k])){
+							db('tactics')->delete($vo['id']);
+						}else{
+							$data['tactics_key']=$vo['tactics_key'];                     //开启状态
+							$data['tactics_status']=$vo['status'];                     //开启状态
+							$data['tactics_name']='红包策略key值';                   //key
+							$data['tactics_pre']=$vo['percent'];                       //百分比
+							$data['tactics_num']=$vo['probability'];                   //数字
+							$res=db('tactics')->where('id',$vo['id'])->update($data);
+						}
+						
+					}
+				}else{
 
-		return view('bao_tactics');
+				}
+			}
+				$this->success('操作成功',url('admin/Tactics/bao_tactics'));
+			
+		}
 	}
 	/**
 	 * lilu

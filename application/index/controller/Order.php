@@ -44,4 +44,13 @@ class Order extends Controller
             return ajax_error('参数错误');
         }
     }
+
+    /**
+     * lilu
+     * Notes:帮甩统计
+     */
+    public function help_count()
+    {
+        //统计某一商品帮甩记录的前10
+    }
 }

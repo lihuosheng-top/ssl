@@ -877,7 +877,7 @@ function str_to_chinese($str){
 }
 
 /**
- **************李火生*******************
+ *
  * @param Request $request
  * Notes:
  **********************图片上传****************
@@ -914,7 +914,7 @@ function base64_upload_flie($base64) {
 
 
 /**
- **************郭杨*******************
+ *  lilu
  *  分页函数 
  */
 function paging_data($data,$url,$pag_number){
@@ -1131,6 +1131,33 @@ function pay_status($status){
          $returnStr .= $pattern {mt_rand ( 0, 61 )}; //生成php随机数
         }
        return $returnStr;
+    }
+    /**
+     * lilu
+     * 通过member_id获取用户name
+     */
+    function get_name_byid($id)
+    {
+        $name=db('member')->where('id',$id)->value('account');
+        return $name;
+    }
+    /**
+     * lilu
+     * 通过good_id获取用户goods_name
+     */
+    function get_goodname_by_id($id)
+    {
+        $goods_name=db('goods')->where('id',$id)->value('goods_name');
+        return $goods_name;
+    }
+    /**
+     * lilu
+     * 通过good_id获取用户goods_number
+     */
+    function get_goodsnumber_by_id($id)
+    {
+        $goods_number=db('goods')->where('id',$id)->value('goods_number');
+        return $goods_number;
     }
 
 

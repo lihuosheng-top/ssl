@@ -55,6 +55,7 @@
 
 <body>
     {block name="content"}
+    {if $order_type=='1'}
     <div class="all">
         <blockquote class="layui-elem-quote news_search">
             <div class="seach_laber">
@@ -69,25 +70,153 @@
             <tbody class="news_content">
                 <tr>
                     <td>会员账号：</td>
-                    <td>13922830809</td>
+                    <td>{$data['member_id']|get_name_byid=###}</td>
                     <td>流水号：</td>
-                    <td>2018062803890</td>
+                    <td>{$data['order_number']}</td>
                 </tr>
                 <tr>
                     <td>商品名称：</td>
-                    <td>法国进口 雀巢（Nestle） 金牌咖啡法式烘焙 100g</td>
+                    <td>{$data['good_id']|get_goodname_by_id=###}</td>
                     <td>甩一甩时间</td>
-                    <td>2018-06-28 17:52:49</td>
+                    <td>{$data['create_time']|date="Y-m-d H:i:s",###}</td>
                 </tr>
                 <tr>
                     <td>商品编号：</td>
-                    <td>75775757</td>
+                    <td>{$data['good_id']|get_goodsnumber_by_id=###}</td>
                     <td>订单金额：</td>
-                    <td>0.5</td>
+                    <td>{$data['income']}</td>
                 </tr>
             </tbody>
         </table>
     </div>
+    {elseif $order_type=='2'}
+    <div class="all">
+            <blockquote class="layui-elem-quote news_search">
+                <div class="seach_laber">
+                    免单
+                </div>
+            </blockquote>
+            <table class="layui-table">
+    
+                <thead>
+    
+                </thead>
+                <tbody class="news_content">
+                    <tr>
+                        <td>会员账号：</td>
+                        <td>{$data['member_id']|get_name_byid=###}</td>
+                        <td>流水号：</td>
+                        <td>{$data['order_number']}</td>
+                    </tr>
+                    <tr>
+                        <td>免单时间</td>
+                        <td>{$data['create_time']}</td>
+                        <td>免单金额</td>
+                        <td>{$data['income']}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    {elseif $order_type=='3'}
+    <div class="all">
+            <blockquote class="layui-elem-quote news_search">
+                <div class="seach_laber">
+                    奖励红包
+                </div>
+            </blockquote>
+            <table class="layui-table">
+    
+                <thead>
+    
+                </thead>
+                <tbody class="news_content">
+                    <tr>
+                        <td>会员账号：</td>
+                        <td>{$data['member_id']|get_name_byid=###}</td>
+                        <td>流水号：</td>
+                        <td>{$data['order_number']}</td>
+                    </tr>
+                    <tr>
+                        <td>奖励时间</td>
+                        <td>{$data['create_time']}</td>
+                        <td>奖励金额</td>
+                        <td>{$data['income']}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    {elseif $order_type=='4'}
+    <div class="all">
+            <blockquote class="layui-elem-quote news_search">
+                <div class="seach_laber">
+                    停甩退款
+                </div>
+            </blockquote>
+            <table class="layui-table">
+    
+                <thead>
+    
+                </thead>
+                <tbody class="news_content">
+                    <tr>
+                        <td>会员账号：</td>
+                        <td>{$data['member_id']|get_name_byid=###}</td>
+                        <td>流水号：</td>
+                        <td>{$data['order_number']}</td>
+                    </tr>
+                    <tr>
+                            <td>商品名称：</td>
+                            <td>{$data['good_id']|get_goodname_by_id=###}</td>
+                            <td>退款时间</td>
+                            <td>{$data['create_time']|date="Y-m-d H:i:s",###}</td>
+                        </tr>
+                        <tr>
+                            <td>商品编号：</td>
+                            <td>{$data['good_id']|get_goodsnumber_by_id=###}</td>
+                            <td>退款金额</td>
+                            <td>{$data['income']}</td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+    {elseif $order_type=='5'}
+    <div class="all">
+            <blockquote class="layui-elem-quote news_search">
+                <div class="seach_laber">
+                    帮甩
+                </div>
+            </blockquote>
+            <table class="layui-table">
+    
+                <thead>
+    
+                </thead>
+                <tbody class="news_content">
+                    <tr>
+                        <td>会员账号：</td>
+                        <td>{$data['member_id']|get_name_byid=###}</td>
+                        <td>流水号：</td>
+                        <td>{$data['order_number']}</td>
+                    </tr>
+                    <tr>
+                            <td>商品名称：</td>
+                            <td>{$data['good_id']|get_goodname_by_id=###}</td>
+                            <td>帮甩时间</td>
+                            <td>{$data['create_time']|date="Y-m-d H:i:s",###}</td>
+                        </tr>
+                        <tr>
+                            <td>商品编号：</td>
+                            <td>{$data['good_id']|get_goodsnumber_by_id=###}</td>
+                            <td>帮甩金额</td>
+                            <td>{$data['income']}</td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+    {/if}
+
+
+
     {/block}
     <!--_footer 作为公共模版分离出去-->
     {include file="template/_footer" /}

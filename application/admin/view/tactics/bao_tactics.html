@@ -91,7 +91,7 @@
 <body>
     {block name="content"}
     <div id="app">
-        <form class="layui-form layui-form-lists" action="{:url()}" method="post" enctype="multipart/form-data">
+        <form class="layui-form layui-form-lists" action="{:url('admin/Tactics/bao_tactics_do')}" method="post" enctype="multipart/form-data">
             <blockquote class="layui-elem-quote news_search">
                 <div class="seach_laber">
                     红包策略
@@ -135,7 +135,7 @@
                         <input name="one_0[tactics_key]" value="bao_tactics_own" style="display: none">
                         <input name="one_0[id]" value="" style="display: none">
                         <div class="form-input ziji">
-                            <input type="checkbox" name="one_0}[status]" lay-filter="choose1" value="1" checked=''>
+                            <input type="checkbox" name="one_0[status]" lay-filter="choose1" value="1" checked=''>
                         </div>
                         <div class="form-input ziji m_r">
                             <input type="text" name="one_0[percent]" lay-verify="title" autocomplete="off"
@@ -146,7 +146,7 @@
                             </div>
                         </div>
                         <div class="form-input ziji">
-                            <input type="text" name="one_[probability]" lay-verify="title" autocomplete="off"
+                            <input type="text" name="one_0[probability]" lay-verify="title" autocomplete="off"
                                 placeholder="  请输入数字" class="layui-input">
                             <div class="tips">
                                 <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
@@ -265,8 +265,10 @@
                 i = i + 1;
                 dhtml = `<div class="form-item clone">
                                         <label class="form-label" style="width:20%"></label>
+                                        <input name="one_${i}[tactics_key]" value="bao_tactics_own" style="display: none">
+                                        <input name="one_${i}[id]" value="" style="display: none">
                                         <div class="form-input ziji">
-                                                <input type="checkbox" name="oneself_${i}[percent]" value="0" lay-filter="choose1">
+                                                <input type="checkbox" name="one_${i}[status]" value="0" lay-filter="choose1">
                                         </div>
                                         <div class="form-input ziji m_r">
                                             <input type="text" name="one_${i}[percent]" lay-verify="title" autocomplete="off" placeholder="  请输入金额"
@@ -298,11 +300,13 @@
                 u = u + 1;
                 dhtml = `<div class="form-item clone">
                                     <label class="form-label" style="width:20%"></label>
+                                    <input name="help_${u}[tactics_key]" value="bao_tactics_other" style="display: none">
+                                        <input name="help_${u}[id]" value="" style="display: none">
                                     <div class="form-input ziji">
-                                        <input type="checkbox" name="help_${u}[percent]" value="0" lay-filter="choose1">
+                                        <input type="checkbox" name="help_${u}[status]" value="0" lay-filter="choose1">
                                     </div>
                                     <div class="form-input ziji m_r">
-                                        <input type="text" name="work_${u}[percent]" lay-verify="title" autocomplete="off" placeholder="  请输入金额"
+                                        <input type="text" name="help_${u}[percent]" lay-verify="title" autocomplete="off" placeholder="  请输入金额"
                                             class="layui-input">
                                         <span class="percent">%</span>
                                         <div class="tips">
@@ -310,7 +314,7 @@
                                         </div>
                                     </div>
                                     <div class="form-input ziji">
-                                        <input type="text" name="work_${u}[probability]" lay-verify="title" autocomplete="off" placeholder="  请输入数字"
+                                        <input type="text" name="help_${u}[probability]" lay-verify="title" autocomplete="off" placeholder="  请输入数字"
                                             class="layui-input"  style="margin-right: 110px;">
                                         <div class="del_div" id="del_help"><img src="__STATIC__/admin/index/img/u1306.png" class="img_x"></div>
                                         <div class="tips">
