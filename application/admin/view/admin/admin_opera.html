@@ -1,116 +1,185 @@
-{extend name="layout"}
+{include file="template/_meta" /}
+<title></title>
+</head>
 
 {block name="css"}
-
+<link rel="stylesheet" type="text/css" href="__STATIC__/admin/common/css/aaa.css" />
 <style type="text/css">
-	body {
-		background: #fff;
-	}
+    body {
+        background: #fff;
+    }
 
-	.layui-icon {
-		position: absolute;
-		right: 0;
-		top: -9px;
-	}
+    .ziji {
+        width: auto;
+    }
 
-	.on {
-		color: #21A5FA !important;
-		border-bottom: solid 3px #21A5FA;
-	}
+    .ziji>input {
+        width: 150px;
+    }
 
-	.distribution_list {
-		margin-bottom: 10px;
-		border-bottom: solid 1px #D7D7D7;
-	}
+    .layui-btn {
+        border-radius: 6px;
+        height: 50px;
+    }
 
-	.distribution_list ul {
-		display: flex;
-		align-items: center;
-	}
+    .layui-form-lists .layui-btn {
+        width: 170px;
+    }
 
-	.distribution_list a {
-		font-size: 14px;
-		padding: 9px;
-		color: #5E5E5E;
-	}
+    .layui-btn-normal {
+        margin-right: 150px;
+    }
 
-	.distribution_list ul li {}
+    .layui-form-item {
+        margin-left: 200px;
+        margin-top: 80px;
+    }
+
+    .seach_laber1 {
+        font-size: 13px;
+        width: 100px;
+        text-align: center;
+        color: #333;
+    }
+    .layui-textarea {
+        width: 100%;
+    }
+    .tips {
+        margin-top: 5px;
+    }
+    .on {
+        color: #21A5FA !important;
+        border-bottom: solid 3px #21A5FA;
+    }
+
+    .distribution_list {
+        margin-bottom: 10px;
+        border-bottom: solid 1px #D7D7D7;
+    }
+
+    .distribution_list ul {
+        display: flex;
+        align-items: center;
+    }
+
+    .distribution_list a {
+        font-size: 14px;
+        padding: 9px;
+        color: #5E5E5E;
+    }
 </style>
 
 {/block}
 
 <body>
+    {block name="content"}
+    <form class="layui-form layui-form-lists" action="{:url()}" method="post" enctype="multipart/form-data">
+        {include file="template/_top"/}
+        <blockquote class="layui-elem-quote news_search">
+            <div class="seach_laber1">
+                开机玩法视频
+            </div>
+        </blockquote>
 
-	{block name="content"}
+        <div class="form-item">
+            <label class="form-label" style="width:20%">玩法视频</label>
+            <div class="form-input">
+                <input type="text" name="" lay-verify="title" autocomplete="off" placeholder="    请输入http://"
+                    class="layui-input">
+                <div class="tips">
+                    *如何获取视频地址?<span class="tan" style="color: #0E90D2;"
+                        data-id="__STATIC__/admin/common/img/u27291.png">上传视频到七牛云存储</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-item ">
+            <label class="form-label " style="width:20%">展示次数</label>
+            <div class="form-input ziji">
+                <input type="text" name="" lay-verify="title" autocomplete="off" placeholder="    请输入"
+                    class="layui-input">
+                <span>次</span>
+                <div class="tips">
+                    *超过该次数后，视频不再展示
+                </div>
+            </div>
+        </div>
+        <div style="line-height:1px">
+            <div class="form-item">
+                <label class="form-label" style="width:20%">控制开关</label>
+                <div class="form-input">
+                    <input type="radio" name="aa" value="1" title="开启" checked="">
+                    <input type="radio" name="aa" value="0" title="关闭">
+                    <div class="tips">
+                        *关闭该功能不可展示
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <blockquote class="layui-elem-quote news_search">
+            <div class="seach_laber1">
+                商品处玩法介绍
+            </div>
+        </blockquote>
+
+        <div class="form-item ">
+            <label class="form-label" style="width:20%">玩法标题</label>
+            <div class="form-input">
+                <input type="text" name="" lay-verify="title" autocomplete="off" placeholder="    标题内容"
+                    class="layui-input">
+            </div>
+        </div>
+        <div class="form-item ">
+            <label class="form-label" style="width:20%">玩法标题</label>
+            <div class="form-input">
+                <textarea placeholder="1.去库存神应用" class="layui-textarea" name="desc"></textarea>
+            </div>
+        </div>
+
+        <div style="line-height:1px">
+            <div class="form-item layui-form-text">
+                <label class="form-label" style="width:20%">控制开关</label>
+                <div class="form-input">
+                    <input type="radio" name="bb" value="1" title="开启" checked="">
+                    <input type="radio" name="bb" value="0" title="关闭">
+                    <div class="tips">
+                        *关闭该功能不可展示
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item" style="width:100%;">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" type="submit" id="submit">保存</button>
+                <button type="button" class="layui-btn layui-btn-primary"
+                    onClick="javascript :history.back(-1);">返回</button>
+            </div>
+
+        </div>
+    </form>
+    {/block}
+    <!--_footer 作为公共模版分离出去-->
+    {include file="template/_footer" /}
+    <!--/_footer 作为公共模版分离出去-->
+
+    <!--请在下方写此页面业务相关的脚本-->
+    {block name="bottom"}
+    <script type="text/javascript">
+        layui.config({
+            base: "js/"
+        }).use(['form', 'layer', 'jquery', 'laypage'], () => {
+            var form = layui.form(),
+                layer = parent.layer === undefined ? layui.layer : parent.layer,
+                laypage = layui.laypage,
+                $ = layui.jquery;
+        })
 
 
-	<div class="childrenBody">
-		{include file="template/_top" /}
-		<!--<div class="distribution_list">-->
-		<!--<ul>-->
-		<!--<li>-->
-		<!--<a href="{:url('admin/admin/index')}" class="on">账号管理</a>-->
-		<!--</li>-->
-		<!--<li>-->
-		<!--<a href="{:url('admin/role/index')}"  >角色管理</a>-->
-		<!--</li>-->
-		<!--<li>-->
-		<!--<a href="{:url('admin/menu/index')}">菜单管理</a>-->
-		<!--</li>-->
-		<!--</ul>-->
-		<!--</div>-->
-	</div>
 
-	{/block}
+    </script>
 
-	<!--_footer 作为公共模版分离出去-->
-	{include file="template/_footer" /}
-	<!--/_footer 作为公共模版分离出去-->
-
-	<!--请在下方写此页面业务相关的脚本-->
-	{block name="bottom"}
-	<script type="text/javascript">
-		layui.config({
-			base: "js/"
-		}).use(['form', 'layer', 'jquery', 'laypage'], function () {
-			var form = layui.form(),
-				layer = parent.layer === undefined ? layui.layer : parent.layer,
-				laypage = layui.laypage,
-				$ = layui.jquery;
-			var vals = $("input").data("id");
-			//是否展示
-			form.on('switch(isShow)', function (data) {
-				if ($(this).val() == 0) {
-					$(this).val(1);
-				}
-				else {
-					$(this).val(0);
-				}
-				var vals = data.value;
-				var id = $(this).data("id");
-				var status = $(this).val();
-				console.log(status);
-				$.ajax({
-					type: "POST",
-					url: "{:url('admin/admin/status')}",
-					data: { "id": id, "status": status },
-					success: function (data) {
-						console.log("成功")
-					},
-					error: function (data) {
-						console.log("错误")
-					}
-				});
-
-
-			})
-
-
-		})
-
-	</script>
-
-	{/block}
+    {/block}
 
 </body>
 

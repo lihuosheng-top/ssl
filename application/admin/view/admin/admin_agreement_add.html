@@ -14,7 +14,7 @@
     }
 
     .ziji>input {
-        width: 150px;
+        width: 300px;
     }
 
     .layui-btn {
@@ -41,31 +41,13 @@
         text-align: center;
         color: #333;
     }
+
     .layui-textarea {
         width: 100%;
     }
+
     .tips {
         margin-top: 5px;
-    }
-    .on {
-        color: #21A5FA !important;
-        border-bottom: solid 3px #21A5FA;
-    }
-
-    .distribution_list {
-        margin-bottom: 10px;
-        border-bottom: solid 1px #D7D7D7;
-    }
-
-    .distribution_list ul {
-        display: flex;
-        align-items: center;
-    }
-
-    .distribution_list a {
-        font-size: 14px;
-        padding: 9px;
-        color: #5E5E5E;
     }
 </style>
 
@@ -74,52 +56,37 @@
 <body>
     {block name="content"}
     <form class="layui-form layui-form-lists" action="{:url()}" method="post" enctype="multipart/form-data">
-        {include file="template/_top"/}
-        <blockquote class="layui-elem-quote news_search">
-            <div class="seach_laber1">
-                待领取短信提醒
-            </div>
-        </blockquote>
-
-        <div class="form-item">
-            <label class="form-label" style="width:20%">短信</label>
+        <div class="form-item ">
+            <label class="form-label " style="width:20%"><span class="red">*</span>协议标题：</label>
             <div class="form-input">
-                <input type="text" name="" lay-verify="title" autocomplete="off" 
-                placeholder="     尊敬的用户，您好！您有一个新订单，请及时在个人中心中查询！" class="layui-input">
+                <input type="text" name="" lay-verify="title" autocomplete="off" placeholder=" " class="layui-input">
             </div>
         </div>
-        <div style="line-height:1px">
-            <div class="form-item">
-                <label class="form-label" style="width:20%">控制开关</label>
-                <div class="form-input">
-                    <input type="radio" name="aa" value="1" title="开启" checked="">
-                    <input type="radio" name="aa" value="0" title="关闭">
-                    <div class="tips">
-                        *关闭该功能不发短信
-                    </div>
-                </div>
+        <div class="form-item ">
+            <label class="form-label " style="width:20%">协议位置：</label>
+            <div class="form-input">
+                <input type="text" name="" lay-verify="title" autocomplete="off" placeholder="  " class="layui-input">
+            </div>
+        </div>
+        <div class="form-item ">
+            <label class="form-label " style="width:20%">内链地址：</label>
+            <div class="form-input">
+                <input type="text" name="" lay-verify="title" autocomplete="off" placeholder="  " class="layui-input">
             </div>
         </div>
 
         <blockquote class="layui-elem-quote news_search">
             <div class="seach_laber1">
-                待领取语音提醒
+                内容
             </div>
         </blockquote>
-
-        <div style="line-height:1px">
-            <div class="form-item layui-form-text">
-                <label class="form-label" style="width:20%">控制开关</label>
-                <div class="form-input">
-                    <input type="radio" name="bb" value="1" title="开启" checked="">
-                    <input type="radio" name="bb" value="0" title="关闭">
-                    <div class="tips">
-                        *系统已选好语音文件，如有更换请联系开发团队
-                    </div>
-                </div>
+        <div class="form-item">
+            <label class="form-label" ></label>
+            <div class="form-input">
+                <script id="editor" type="text/plain" name="goods_detail" style="width:800px;height:500px;"></script>
             </div>
         </div>
-
+        </div>
         <div class="layui-form-item" style="width:100%;">
             <div class="layui-input-block">
                 <button class="layui-btn layui-btn-normal" type="submit" id="submit">保存</button>
@@ -137,6 +104,7 @@
     <!--请在下方写此页面业务相关的脚本-->
     {block name="bottom"}
     <script type="text/javascript">
+        var ue = UE.getEditor('editor');
         layui.config({
             base: "js/"
         }).use(['form', 'layer', 'jquery', 'laypage'], () => {

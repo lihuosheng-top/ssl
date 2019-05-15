@@ -101,7 +101,11 @@
         <div class="oneself m_t">
             {volist name="$tactics1" id="vo1"}
             <div class="form-item" style="margin-top: 15px;">
+                {if $key=='0'}
                 <label class="form-label" style="width:20%">自己免单金额和概率</label>
+                {else}
+                <label class="form-label" style="width:20%"></label>
+                {/if}
                 <input name="one_{$key}[tactics_key]" value="free_tactics_own" style="display: none">
                 <input name="one_{$key}[id]" value="{$vo1.id}" style="display: none">
                 <div class="form-input ziji">
@@ -116,7 +120,7 @@
                     </div>
                 </div>
                 <div class="form-input ziji">
-                    <input type="text" name="one_0[probability]" value="{$vo1.tactics_num}" lay-verify="title"
+                    <input type="text" name="one_{$key}[probability]" value="{$vo1.tactics_num}" lay-verify="title"
                         autocomplete="off" placeholder="" class="layui-input">
                     <div class="tips">
                         <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
@@ -156,14 +160,21 @@
         <div class="one_more" id="one_more">添加一档</div>
 
         <div class="help m_t">
+            {if $tactics2}
+            {volist name="tactics2" id="vo2" }
+            <input name="help_{$key}[tactics_key]" value="free_tactics_other" style="display: none">
+            <input name="help_{$key}[id]" value="{$vo2['id']}" style="display: none">
             <div class="form-item" style="margin-top:15px;">
-                <label class="form-label" style="width:20%">帮别人甩免单金额和概率</label>
+                    {if $key=='0'}
+                    <label class="form-label" style="width:20%">自己免单金额和概率</label>
+                    {else}
+                    <label class="form-label" style="width:20%"></label>
+                    {/if}
                 <div class="form-input ziji">
-                    <input type="checkbox" name="help_0[status]" lay-filter="choose1" value="1"  checked=''>
+                    <input type="checkbox" name="help_{$key}[status]"  lay-filter="choose1" value="1"  checked=''>
                 </div>
-                <input name="tactics_key" value="free_tactics_other" style="display: none">
                 <div class="form-input ziji m_r">
-                    <input type="text" name="work_0[percent]" lay-verify="title" autocomplete="off" placeholder=""
+                    <input type="text" name="help_{$key}[percent]" value="{$vo2['tactics_pre']}" lay-verify="title" autocomplete="off" placeholder=""
                         class="layui-input">
                     <span class="percent">%</span>
                     <div class="tips">
@@ -171,13 +182,40 @@
                     </div>
                 </div>
                 <div class="form-input ziji">
-                    <input type="text" name="work_0[probability]" lay-verify="title" autocomplete="off" placeholder=""
+                    <input type="text" name="help_{$key}[probability]" value="{$vo2['tactics_num']}" lay-verify="title" autocomplete="off" placeholder=""
                         class="layui-input">
                     <div class="tips">
                         <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
                     </div>
                 </div>
             </div>
+            {/volist}
+            {else}
+            <input name="help_0[tactics_key]" value="free_tactics_other" style="display: none">
+            <input name="help_0[id]" value="" style="display: none">
+            <div class="form-item" style="margin-top:15px;">
+                    <label class="form-label" style="width:20%">帮别人甩免单金额和概率</label>
+                    <div class="form-input ziji">
+                        <input type="checkbox" name="help_0[status]" lay-filter="choose1" value="1"  checked=''>
+                    </div>
+                    <div class="form-input ziji m_r">
+                        <input type="text" name="help_0[percent]" lay-verify="title" autocomplete="off" placeholder=""
+                            class="layui-input">
+                        <span class="percent">%</span>
+                        <div class="tips">
+                            <span class="red">*</span>0 ~ 100,表示减免单次甩费的百分比
+                        </div>
+                    </div>
+                    <div class="form-input ziji">
+                        <input type="text" name="help_0[probability]" lay-verify="title" autocomplete="off" placeholder=""
+                            class="layui-input">
+                        <div class="tips">
+                            <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                        </div>
+                    </div>
+                </div>
+
+            {/if}
         </div>
         <div class="one_more" id="one_help">添加一档</div>
 
@@ -219,19 +257,18 @@
                 form.render('checkbox');
             })
 
-            
+
             var i = $('.oneself').find(":checkbox").length;
             var e = $('.help').find(":checkbox").length;
-            
             $('#one_more').on('click', function () {
                 let dhtml = "";
-                
                 dhtml = `<div class="form-item clone">
                                         <label class="form-label" style="width:20%"></label>
                                         <input name="one_${i}[tactics_key]" value="free_tactics_own" style="display: none">
                                         <input name="one_${i}[id]" value="" style="display: none">
                                         <div class="form-input ziji">
                                                 <input type="checkbox" name="one_${i}[status]" value="0" lay-filter="choose1" >
+                                                <input type="hidden" name="one_${i}[id]" value="" >
                                         </div>
                                         <div class="form-input ziji m_r">
                                             <input type="text" name="one_${i}[percent]" lay-verify="title" autocomplete="off" placeholder=""
@@ -257,17 +294,19 @@
                 });
                 form.render();
                 i = i + 1;
+
             })
             $('#one_help').on('click', function () {
                 let dhtml = "";
-                
                 dhtml = `<div class="form-item clone">
                                     <label class="form-label" style="width:20%"></label>
+                                    <input name="help_${e}[tactics_key]" value="free_tactics_other" style="display: none">
+                                        <input name="help_${e}[id]" value="" style="display: none">
                                     <div class="form-input ziji">
                                         <input type="checkbox" name="help_${e}[status]" value="0" lay-filter="choose1" >
                                     </div>
                                     <div class="form-input ziji m_r">
-                                        <input type="text" name="work_${e}[percent]" lay-verify="title" autocomplete="off" placeholder=""
+                                        <input type="text" name="help_${e}[percent]" lay-verify="title" autocomplete="off" placeholder=""
                                             class="layui-input">
                                         <span class="percent">%</span>
                                         <div class="tips">
@@ -275,7 +314,7 @@
                                         </div>
                                     </div>
                                     <div class="form-input ziji">
-                                        <input type="text" name="work_${e}[probability]" lay-verify="title" autocomplete="off" placeholder=""
+                                        <input type="text" name="help_${e}[probability]" lay-verify="title" autocomplete="off" placeholder=""
                                             class="layui-input"  style="margin-right: 110px;">
                                         <div class="del_div" id="del_help"><img src="__STATIC__/admin/index/img/u1306.png" class="img_x"></div>
                                         <div class="tips">
