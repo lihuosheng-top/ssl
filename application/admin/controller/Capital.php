@@ -143,5 +143,21 @@ class Capital extends Controller
 		}
 	}
 
+	
+	/**
+	*   商品账单
+	**/
+    public function  goods_bill()
+    {
+    	return   view('goods_bill');
+    }
 
+
+	/**
+	*   商品账单详情
+	**/
+    public function  goods_bill_details()
+    {
+    	return   view('goods_bill_details');
+    }
 }

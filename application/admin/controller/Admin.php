@@ -205,7 +205,7 @@ class Admin extends Controller
      */
     public function admin_goods_tactics()
     {
-       return view('admin_play_ad');
+       return view('admin_goods_tactics');
     }
     /**
      * lilu
@@ -214,6 +214,14 @@ class Admin extends Controller
     public function admin_agreement()
     {
        return view('admin_agreement');
+    }
+    /**
+     * lilu
+     *  Notes:设置模块--添加平台协议
+     */
+    public function admin_agreement_add()
+    {
+       return view('admin_agreement_add');
     }
     /**
      * lilu
