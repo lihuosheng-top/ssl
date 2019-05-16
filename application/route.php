@@ -129,6 +129,7 @@ Route::group("admin",[
 
     /*小游戏管理*/
     "answer_bank"=>"admin/Games/answer_bank",                //答题库
+    "answer_bank_add"=>"admin/Games/answer_bank_add",        //添加答题
     "answer_bri"=>"admin/Games/answer_bri",                  //答题阶梯
     "differ"=>"admin/Games/differ",                          //找不同
     "differ_add"=>"admin/Games/differ_add",                  //添加找不同
