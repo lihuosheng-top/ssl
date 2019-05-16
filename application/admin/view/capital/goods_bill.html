@@ -25,34 +25,46 @@
 
     <div class="childrenBody">
         <blockquote class="layui-elem-quote news_search">
-            <form class="layui-form" action="{:url('')}">
+            <form class="layui-form" action="{:url('admin/Capital/goods_bill_search')}">
                 <div class="seach">
-                    <div class="seach_list">
+                    <div class="seach_list" style="width: 230px;">
                         <div class="seach_laber">商品</div>
                         <div class="seach_input">
-                            <input type="text" name="goods_number" lay-verify="title" autocomplete="off"
-                                placeholder="商品编号/商品名称" class="layui-input">
+                            <input type="text" name="goods_name" lay-verify="title" autocomplete="off"
+                                placeholder="商品名称" class="layui-input">
                         </div>
                     </div>
-                    <div class="seach_list">
+                    <div class="seach_list" style="width: 230px;">
                         <div class="seach_laber">账号</div>
                         <div class="seach_input">
-                            <input type="text" name="goods_number" lay-verify="title" autocomplete="off"
+                            <input type="text" name="account" lay-verify="title" autocomplete="off"
                                 placeholder="用户账号" class="layui-input">
                         </div>
                     </div>
-                    <div class="seach_list">
+                    <div class="seach_list" style="width: 230px;">
                         <div class="seach_laber">帮甩账号</div>
                         <div class="seach_input">
-                            <input type="text" name="goods_number" lay-verify="title" autocomplete="off"
+                            <input type="text" name="help_account" lay-verify="title" autocomplete="off"
                                 placeholder="帮甩账号" class="layui-input">
                         </div>
                     </div>
+                    <div class="seach_list" style="width: 230px;">
+                            <div class="seach_laber">类型</div>
+                            <div class="seach_input">
+                                <select name="order_type">
+                                    <option value="0" selected="">请选择</option>
+                                    <option value="1">甩费</option>
+                                    <option value="2">甩免单</option>
+                                    <option value="4">甩停退款</option>
+                                    <option value="5">帮甩</option>
+                                </select>
+                            </div>
+                        </div>
                     <div class="seach_list" style="width:230px;">
                         <div class="seach_laber">开始时间</div>
                         <div class="seach_input">
                             <span class="time">
-                                <input name="date_min" type="text" class="text datetimepicker layui-input"
+                                <input name="start_time" type="text" class="text datetimepicker layui-input"
                                     readonly="readonly" id="beginTime" value="" style="width:150px;">
                             </span>
                         </div>
@@ -61,7 +73,7 @@
                         <div class="seach_laber">结束时间</div>
                         <div class="seach_input">
                             <span class="time">
-                                <input name="date_max" type="text" class=" text datetimepicker layui-input"
+                                <input name="end_time" type="text" class=" text datetimepicker layui-input"
                                     readonly="readonly" id="endTime" value="" style="width:150px;">
                             </span>
                         </div>
@@ -95,22 +107,48 @@
                     </tr>
                 </thead>
                 <tbody class="news_content">
+                    {volist name="data" id="vo"}
                     <tr>
-                        <td><input type="checkbox" name="" lay-skin="primary" lay-filter="choose" data-id="">
+                        <td><input type="checkbox" name="" lay-skin="primary" lay-filter="choose" data-id="{$vo['id']}">
                         </td>
-                        <td>232154325345</td>
-                        <td>鲲</td>
-                        <td>232154325345</td>
-                        <td>1231567</td>
-                        <td>9102-50-31</td>
-                        <td>1.2</td>
-                        <td>0.5</td>
-                        <td>支付宝</td>
-                        <td>甩费</td>
+                        <td>{$vo['order_number']}</td>
+                        <td>{$vo['good_id']|get_goodname_by_id=###}</td>
+                        <td>{$vo['member_id']|get_name_byid=###}</td>
                         <td>
-                            <a class=" layui-btn-mini edit" href="{:url('admin/Capital/goods_bill_details')}"> 详情</a>
+                            {if $vo['help_id']}
+                               {$vo['help_id']|get_name_byid=###}
+                            {else}
+                                N/F
+                            {/if}
+                        </td>
+                        <td>{$vo.create_time|date="Y-m-d H:i:s",###}</td>
+                        <td>{$vo.income}</td>
+                        <td>{$vo.pay}</td>
+                        <td>
+                            {if $vo.pay_type=='1'}
+                              支付宝
+                             {else}
+                              微信
+                             {/if}
+                        </td>
+                        <td>
+                            {if $vo['order_type']=='1'}
+                               甩费
+                            {elseif $vo['order_type']=='2'}
+                                甩免单
+                            {elseif $vo['order_type']=='3'}
+                                奖励红包
+                            {elseif $vo['order_type']=='4'}
+                                停甩退款
+                            {elseif $vo['order_type']=='5'}
+                                帮甩
+                            {/if}
+                        </td>
+                        <td>
+                            <a class=" layui-btn-mini edit" href="{:url('admin/Capital/goods_bill_details',['order_type'=>$vo['order_type'],'id'=>$vo['id']])}"> 详情</a>
                         </td>
                     </tr>
+                    {/volist}
                 </tbody>
             </table>
             <div id="page">
@@ -172,7 +210,7 @@
                         }
                         $.ajax({
                             type: "POST",
-                            url: "{:url('admin/Goods/goods_del')}",
+                            url: "{:url('admin/Capital/help_record_del')}",
                             data: {
                                 "id": data_id,
                             },

@@ -157,6 +157,7 @@ Route::group("admin",[
     "goods_bill"=>"admin/Capital/goods_bill",                 //商品账单
     "capital_search"=>"admin/Capital/capital_search",         //帮甩检索
     "help_record_del"=>"admin/Capital/help_record_del",       //帮甩删除
+    "goods_bill_search"=>"admin/Capital/goods_bill_search",   //商品账单检索
 
     /*设置*/
 
