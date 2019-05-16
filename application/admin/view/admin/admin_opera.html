@@ -73,7 +73,7 @@
 
 <body>
     {block name="content"}
-    <form class="layui-form layui-form-lists" action="{:url()}" method="post" enctype="multipart/form-data">
+    <form class="layui-form layui-form-lists" action="{:url('admin/Admin/admin_opera')}" method="post" enctype="multipart/form-data">
         {include file="template/_top"/}
         <blockquote class="layui-elem-quote news_search">
             <div class="seach_laber1">
@@ -82,9 +82,11 @@
         </blockquote>
 
         <div class="form-item">
+            <input type="hidden" name="one0[key]" value="video_link">
+            <input type="hidden" name="one0[id]" value="{$data2['id']}">
             <label class="form-label" style="width:20%">玩法视频</label>
             <div class="form-input">
-                <input type="text" name="" lay-verify="title" autocomplete="off" placeholder="    请输入http://"
+                <input type="text" name="one0[video_link]" value="{$data2['value']['video_link']}" lay-verify="title" autocomplete="off" placeholder="    请输入http://"
                     class="layui-input">
                 <div class="tips">
                     *如何获取视频地址?<span class="tan" style="color: #0E90D2;"
@@ -95,7 +97,7 @@
         <div class="form-item ">
             <label class="form-label " style="width:20%">展示次数</label>
             <div class="form-input ziji">
-                <input type="text" name="" lay-verify="title" autocomplete="off" placeholder="    请输入"
+                <input type="text" name="one0[number]" value="{$data2['value']['number']}" lay-verify="title" autocomplete="off" placeholder="    请输入"
                     class="layui-input">
                 <span>次</span>
                 <div class="tips">
@@ -105,10 +107,16 @@
         </div>
         <div style="line-height:1px">
             <div class="form-item">
-                <label class="form-label" style="width:20%">控制开关</label>
+                <label class="form-label" style="width:20%">控制 
+                    开关</label>
                 <div class="form-input">
-                    <input type="radio" name="aa" value="1" title="开启" checked="">
-                    <input type="radio" name="aa" value="0" title="关闭">
+                    {if $data2['status']=='1'}
+                    <input type="radio" name="one0[status]" value="1" title="开启" checked="">
+                    <input type="radio" name="one0[status]" value="0" title="关闭">
+                    {else}
+                    <input type="radio" name="one0[status]" value="1" title="开启" >
+                    <input type="radio" name="one0[status]" value="0" title="关闭" checked="">
+                    {/if}
                     <div class="tips">
                         *关闭该功能不可展示
                     </div>
@@ -123,16 +131,18 @@
         </blockquote>
 
         <div class="form-item ">
+             <input type="hidden" name="one1[key]" value="play_intro">
+             <input type="hidden" name="one1[id]" value="{$data1['id']}">
             <label class="form-label" style="width:20%">玩法标题</label>
             <div class="form-input">
-                <input type="text" name="" lay-verify="title" autocomplete="off" placeholder="    标题内容"
+                <input type="text" name="one1[title]" value="{$data1['value']['title']}" lay-verify="title" autocomplete="off" placeholder="    标题内容"
                     class="layui-input">
             </div>
         </div>
         <div class="form-item ">
-            <label class="form-label" style="width:20%">玩法标题</label>
+            <label class="form-label" style="width:20%">玩法内容</label>
             <div class="form-input">
-                <textarea placeholder="1.去库存神应用" class="layui-textarea" name="desc"></textarea>
+                <textarea placeholder="1.去库存神应用" class="layui-textarea"  name="one1[text]"> {$data1['value']['text']}</textarea>
             </div>
         </div>
 
@@ -140,8 +150,13 @@
             <div class="form-item layui-form-text">
                 <label class="form-label" style="width:20%">控制开关</label>
                 <div class="form-input">
-                    <input type="radio" name="bb" value="1" title="开启" checked="">
-                    <input type="radio" name="bb" value="0" title="关闭">
+                    {if $data1['status']==1}
+                    <input type="radio" name="one1[status]" value="1" title="开启" checked="">
+                    <input type="radio" name="one1[status]" value="0" title="关闭">
+                    {else}
+                    <input type="radio" name="one1[status]" value="1" title="开启" >
+                    <input type="radio" name="one1[status]" value="0" title="关闭" checked="">
+                    {/if}
                     <div class="tips">
                         *关闭该功能不可展示
                     </div>

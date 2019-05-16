@@ -187,25 +187,145 @@ class Admin extends Controller
      * lilu
      *  Notes:设置模块--运维
      */
-    public function admin_opera()
-    {
-       return view('admin_opera');
+    public function admin_opera(Request $request)
+    {   
+        $input=input();
+        if($input){
+            foreach($input as $k=>$v)
+            {
+              if(substr($k,0,4)=='one0'){
+                  if($v['id']){
+                    $value['video_link']=$v['video_link'];
+                    $value['number']=$v['number'];
+                    $arr['value']=json_encode($value,true);
+                    $arr['key']=$v['key'];
+                    $arr['status']=$v['status'];
+                    $re=db('sys_setting')->where('id',$v['id'])->update($arr);
+                  }else{
+                    $value['video_link']=$v['video_link'];
+                    $value['number']=$v['number'];
+                    $arr['value']=json_encode($value,true);
+                    $arr['key']=$v['key'];
+                    $arr['status']=$v['status'];
+                    $re=db('sys_setting')->insert($arr);
+                  }
+              }else{
+                if($v['id']){
+                    $value2['title']=$v['title'];
+                    $value2['text']=$v['text'];
+                    $arr2['value']=json_encode($value2,true);
+                    $arr2['key']=$v['key'];
+                    $arr2['status']=$v['status'];
+                    $re=db('sys_setting')->where('id',$v['id'])->update($arr2);
+                  }else{
+                    $value2['title']=$v['title'];
+                    $value2['text']=$v['text'];
+                    $arr2['value']=json_encode($value2,true);
+                    $arr2['key']=$v['key'];
+                    $arr2['status']=$v['status'];
+                    $re=db('sys_setting')->insert($arr2);
+                  }
+              }
+            }
+            $this->success('保存成功',url('admin/Admin/admin_opera'));
+        }else{
+            $key1='play_intro';        //玩法说明
+            $info1=db('sys_setting')->where('key',$key1)->find();
+            if($info1){
+                $info1['value']=json_decode($info1['value'],true);
+                $this->assign('data1',$info1);
+            }
+            $key2='video_link';       //视频链接
+            $info2=db('sys_setting')->where('key',$key2)->find();
+            if($info2){
+                $info2['value']=json_decode($info2['value'],true);
+                $this->assign('data2',$info2);
+            }
+            return view('admin_opera');
+        }
+
     }
-    /**
-     * lilu
-     *  Notes:设置模块--玩法广告
-     */
-    public function admin_play_ad()
-    {
-       return view('admin_play_ad');
-    }
+    
     /**
      * lilu
      *  Notes:设置模块--商品策略
      */
     public function admin_goods_tactics()
     {
-       return view('admin_goods_tactics');
+        $input=input();
+        if($input){
+            foreach($input as $k=>$v)
+            {
+              if(substr($k,0,4)=='one0'){
+                  if($v['id']){
+                    $value['limit_num']=$v['limit_num'];
+                    $arr['value']=json_encode($value,true);
+                    $arr['key']=$v['key'];
+                    $arr['status']=1;
+                    $re=db('sys_setting')->where('id',$v['id'])->update($arr);
+                  }else{
+                    $value['limit_num']=$v['limit_num'];
+                    $arr['value']=json_encode($value,true);
+                    $arr['key']=$v['key'];
+                    $arr['status']=1;
+                    $re=db('sys_setting')->insert($arr);
+                  }
+              }elseif(substr($k,0,4)=='one1'){
+                if($v['id']){
+                    $value2['person_up_num']=$v['person_up_num'];
+                    $value2['own_num']=$v['own_num'];
+                    $arr2['value']=json_encode($value2,true);
+                    $arr2['key']=$v['key'];
+                    $arr2['status']=1;
+                    $re=db('sys_setting')->where('id',$v['id'])->update($arr2);
+                  }else{
+                    $value2['person_up_num']=$v['person_up_num'];
+                    $value2['own_num']=$v['own_num'];
+                    $arr2['value']=json_encode($value2,true);
+                    $arr2['key']=$v['key'];
+                    $arr2['status']=1;
+                    $re=db('sys_setting')->insert($arr2);
+                  }
+              }else{
+                if($v['id']){
+                    $value3['goods_limit_num']=$v['goods_limit_num'];
+                    $value3['own_help_num']=$v['own_help_num'];
+                    $arr3['value']=json_encode($value3,true);
+                    $arr3['key']=$v['key'];
+                    $arr3['status']=1;
+                    $re=db('sys_setting')->where('id',$v['id'])->update($arr3);
+                  }else{
+                    $value3['goods_limit_num']=$v['goods_limit_num'];
+                    $value3['own_help_num']=$v['own_help_num'];
+                    $arr3['value']=json_encode($value3,true);
+                    $arr3['key']=$v['key'];
+                    $arr3['status']=1;
+                    $re=db('sys_setting')->insert($arr3);
+                  }
+              }
+            }
+            $this->success('保存成功',url('admin/Admin/admin_goods_tactics'));
+        }else{
+            $key1='goods_limit';        //甩品限制
+            $info1=db('sys_setting')->where('key',$key1)->find();
+            if($info1){
+                $info1['value']=json_decode($info1['value'],true);
+                $this->assign('data1',$info1);
+            }
+            $key2='goods_limit_own';       //自己甩品次数限制
+            $info2=db('sys_setting')->where('key',$key2)->find();
+            if($info2){
+                $info2['value']=json_decode($info2['value'],true);
+                $this->assign('data2',$info2);
+            }
+            $key3='help_goods_limit';       //帮甩次数限制
+            $info3=db('sys_setting')->where('key',$key3)->find();
+            if($info3){
+                $info3['value']=json_decode($info3['value'],true);
+                $this->assign('data3',$info3);
+            }
+            return view('admin_goods_tactics'); 
+        }
     }
     /**
      * lilu

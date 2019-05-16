@@ -178,7 +178,11 @@ class Capital extends Controller
 	**/
     public function  goods_bill_details()
     {
-    	return   view('goods_bill_details');
+		//获取订单类型
+		$order_type=input('order_type');
+		$id=input('id');
+		$info=db('help_record')->where('id',$id)->find();
+    	return   view('goods_bill_details',['order_type'=>$order_type,'data'=>$info]);
 	}
 	
 	/**

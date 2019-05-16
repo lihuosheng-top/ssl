@@ -73,43 +73,49 @@
 {/block}
 
 {block name="content"}
-
-<form class="layui-form layui-form-lists" action="{:url()}" method="post">
+<form class="layui-form layui-form-lists" action="{:url('admin/Member/member_list_edit_do')}" method="post">
     <blockquote class="layui-elem-quote news_search">
         <div class="seach_laber1">
             基础信息
         </div>
     </blockquote>
+    <input type="hidden" name="id" value="{$data['id']}"  />
     <div class="layui-form-item ">
         <label class="layui-form-label">会员账号</label>
         <div class="layui-input-block">
-            <input value="" type="text" name="member_phone_num" lay-verify="title" autocomplete="off"
+            <input value="{$data['account']}" type="text" name="account"  lay-verify="title" autocomplete="off"
                 placeholder="请输入账号" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">性别</label>
         <div class="layui-input-block">
-            <p>嬲</p>
+            <p>
+                {if $data['sex']=='1'}
+                  男
+                {else}
+                  女
+                {/if}
+            </p>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">上级账号</label>
         <div class="layui-input-block">
-            <input value="" type="text" name="member_phone_num" lay-verify="title" autocomplete="off"
+            <input  type="text" name="pid" value="{$data['help_account']}" lay-verify="title" autocomplete="off"
                 placeholder="请输入账号" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">星光值</label>
         <div class="layui-input-block">
-            <p>250</p>
+            <p>{$data['star_value']}</p>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">会员昵称</label>
         <div class="layui-input-block">
-            <input value="" type="text" name="" lay-verify="title" autocomplete="off" placeholder="请输入"
+            <input value="{$data['name']}" type="text" name="name" lay-verify="title" autocomplete="off" placeholder="请输入"
                 class="layui-input">
         </div>
     </div>
@@ -117,41 +123,51 @@
         <label class="layui-form-label">会员头像</label>
         <div class="layui-input-block">
             <div style="width: 100px; height: 100px; overflow: hidden;border-radius: 50%;">
-                <img src="" />
+                <img src="__STATIC__/{$data['head_pic']}" />
+                <!-- <img src="__STATIC__/admin/index/img/logo.png" /> -->
             </div>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">注册时间</label>
         <div class="layui-input-block">
-            <input value="" type="text" name="" lay-verify="title" autocomplete="off" placeholder=" "
+            <input value="{$data['join_time']}" type="text" name="join_time" lay-verify="title" autocomplete="off" placeholder=" "
                 class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">会员等级</label>
         <div class="layui-input-block">
-            <select name="member_grade_id" lay-filter="aihao">
-                <option value="普通" selected>普通</option>
-                <option value="会员">会员</option>
-
+            <select name="member_type" lay-filter="aihao">
+                {if $data['member_type']=='1'}
+                <option value="1" selected>普通</option>
+                <option value="2">vip</option>
+                {else}
+                <option value="1" >普通</option>
+                <option value="2" selected>vip</option>
+                {/if}
             </select>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">状态</label>
         <div class="layui-input-block">
-            <select name="member_status" lay-filter="aihao">
-                <option value="" selected="">启用</option>
-                <option value="-1">禁用</option>
-                <option value="1">启用</option>
+            <select name="is_use" lay-filter="aihao">
+                <!-- <option value="1" selected="">启用</option> -->
+                {if $data['is_use']==1}
+                <option value="0" >禁用</option>
+                <option value="1"  selected>启用</option>
+                {else}
+                <option value="0"  selected>禁用</option>
+                <option value="1" >启用</option>
+                {/if}
             </select>
         </div>
     </div>
     <div class="form-item ">
             <label class="layui-form-label"  style="width: 7.2%;">会员地址</label>
             <div class="form-input">
-                <textarea placeholder="" class="layui-textarea" name="desc"></textarea>
+                <textarea placeholder="" class="layui-textarea" name="address"></textarea>
             </div>
         </div>
 

@@ -28,19 +28,19 @@
 
     <div class="childrenBody">
         <blockquote class="layui-elem-quote news_search">
-            <form class="layui-form" action="{:url('')}">
+            <form class="layui-form" action="{:url('admin/Member/member_search')}">
                 <div class="seach">
                     <div class="seach_list">
                         <div class="seach_laber">用户账号</div>
                         <div class="seach_input">
-                            <input type="text" name="" lay-verify="title" autocomplete="off"
+                            <input type="text" name="account" lay-verify="title" autocomplete="off"
                                 placeholder=" 用户账号" class="layui-input">
                         </div>
                     </div>
                     <div class="seach_list">
                             <div class="seach_laber">上级邀请人</div>
                             <div class="seach_input">
-                                <input type="text" name="" lay-verify="title" autocomplete="off"
+                                <input type="text" name="help_account" lay-verify="title" autocomplete="off"
                                     placeholder=" 用户账号" class="layui-input">
                             </div>
                         </div>
@@ -48,7 +48,7 @@
 						<div class="seach_laber">开始时间</div>
 						<div class="seach_input">
 							<span class="time">
-								<input name="date_min" type="text" class="text datetimepicker layui-input"
+								<input name="start_time" type="text" class="text datetimepicker layui-input"
 									readonly="readonly" id="beginTime" value="" style="width:150px;">
 							</span>
 						</div>
@@ -57,7 +57,7 @@
 						<div class="seach_laber">结束时间</div>
 						<div class="seach_input">
 							<span class="time">
-								<input name="date_max" type="text" class=" text datetimepicker layui-input"
+								<input name="end_time" type="text" class=" text datetimepicker layui-input"
 									readonly="readonly" id="endTime" value="" style="width:150px;">
 							</span>
 						</div>
@@ -83,30 +83,62 @@
                         <th>用户昵称</th>
                         <th>头像</th>
                         <th>性别</th>
+                        <th>会员级别</th>
                         <th>星光值</th>
                         <th>地址</th>
                         <th>加入时间</th>
+                        <th>账户启用状态</th>
                         <th>操作</th>
                     </tr>
                 </thead>
                 <tbody class="news_content">
+                    {volist name="data" id="vo"}
                     <tr>
-                        <td><input type="checkbox" name="" lay-skin="primary" lay-filter="choose" data-id="">
+                        <td><input type="checkbox" name="" lay-skin="primary" lay-filter="choose" data-id="{$vo['id']}">
                         </td>
-                        <td>232154325345</td>
-                        <td>1231567</td>
-                        <td>啊鲲</td>
-                        <td>1.2</td>
-                        <td>0.5</td>
-                        <td>1</td>
-                        <td>1</td>
-                        <td>9102/50/51</td>
+                        <td>{$vo['account']}</td>
                         <td>
-                            <a class=" layui-btn-mini edit" href="{:url('admin/Member/member_list_edit')}"> 编辑</a>
-                            <a href="{:url()}" onclick="if(!confirm('确定要删除吗？')) return false"
+                            {if $vo['pid']=='0'}
+                            N/F
+                            {else}
+                            {$vo['pid']|get_upuser_by_pid=###}
+                            {/if}
+                        </td>
+                        <td>{$vo['name']}</td>
+                        <td><img  src="__STATIC__/{$vo['head_pic']}" style="width: 50px;height:50px; "/></td>
+                        <td>
+                            {if $vo['sex']=='1'}
+                              男
+                              {else}
+                              女
+                              {/if}
+                        </td>
+                        <td class="td-status">
+                                {if $vo['member_type']=='1'}
+                                   普通
+                                {else} 
+                                   vip
+                                {/if}
+                        </td>
+                        <td>{$vo['star_value']}</td>
+                        <td>{$vo['address']}</td>
+                        <td>{$vo['join_time']|date="Y-m-d H:i:s",###}</td>
+                        <td class="td-status">
+                                {if $vo.is_use == 1}
+                                <input type="checkbox" class="Status" name="status" value="{$vo.is_use}" lay-skin="switch"
+                                    lay-text="是|否" lay-filter="isShows" checked data-id="{$vo.id}">
+                                {else}
+                                <input type="checkbox" class="Status" name="status" value="{$vo.is_use}" lay-skin="switch"
+                                    lay-text="是|否" lay-filter="isShows" data-id="{$vo.id}">
+                                {/if}
+                            </td>
+                        <td>
+                            <a class=" layui-btn-mini edit" href="{:url('admin/Member/member_list_edit',['id'=>$vo['id']])}"> 编辑</a>
+                            <a href="{:url('admin/Member/member_del',['id'=>$vo['id']])}" onclick="if(!confirm('确定要删除吗？')) return false"
                                 class=" news_del" data-id="undefined"> 删除</a>
                         </td>
                     </tr>
+                    {/volist}
                 </tbody>
             </table>
             <div id="page">
@@ -168,7 +200,7 @@
                         }
                         $.ajax({
                             type: "POST",
-                            url: "{:url('admin/Goods/goods_del')}",
+                            url: "{:url('admin/Member/member_dels')}",
                             data: {
                                 "id": data_id,
                             },

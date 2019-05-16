@@ -1152,12 +1152,21 @@ function pay_status($status){
     }
     /**
      * lilu
-     * 通过good_id获取用户goods_number
+     * 通过good_id获取商品goods_number
      */
     function get_goodsnumber_by_id($id)
     {
         $goods_number=db('goods')->where('id',$id)->value('goods_number');
         return $goods_number;
+    }
+    /**
+     * lilu
+     * 通过会员pid（上级id）获取上级用户账号
+     */
+    function get_upuser_by_pid($pid)
+    {
+        $account=db('member')->where('id',$pid)->value('account');
+        return $account;
     }
 
 

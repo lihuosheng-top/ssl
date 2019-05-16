@@ -147,18 +147,25 @@ Route::group("admin",[
     /*会员管理*/
     "member_list"=>"admin/Member/member_list",               //会员列表
     "member_list_edit"=>"admin/Member/member_list_edit",     //会员列表编辑
-
+    "member_list_edit_do"=>"admin/Member/member_list_edit_do",     //会员列表编辑处理
+    "member_search"=>"admin/Member/member_search",           //会员检索
+    "member_del"=>"admin/Member/member_del",                 //会员删除
+    "member_dels"=>"admin/Member/member_dels",               //会员批量删除
+    
 
 
     /*资金流水*/
     "capital"=>"admin/Capital/capital",                       //资金流水
     "capital_details"=>"admin/Capital/capital_details",       //资金流水详情
     "goods_bill"=>"admin/Capital/goods_bill",                 //商品账单
+    "goods_bill_details"=>"admin/Capital/goods_bill_details",                 //商品账单
     "capital_search"=>"admin/Capital/capital_search",         //帮甩检索
     "help_record_del"=>"admin/Capital/help_record_del",       //帮甩删除
     "goods_bill_search"=>"admin/Capital/goods_bill_search",   //商品账单检索
 
     /*设置*/
+
+
 
 
 
