@@ -1,1 +1,126 @@
-appear_pro
+{include file="template/_meta" /}
+<title></title>
+</head>
+
+{block name="css"}
+<link rel="stylesheet" type="text/css" href="__STATIC__/admin/common/css/aaa.css" />
+<style type="text/css">
+    body {
+        background: #fff;
+    }
+
+    .ziji {
+        width: auto;
+    }
+
+    .ziji>input {
+        width: 130px;
+    }
+
+    .m_t {
+        margin-top: 50px;
+    }
+
+    .p_l {
+        padding-left: 6px;
+    }
+
+    .layui-btn {
+        border-radius: 6px;
+        height: 50px;
+    }
+
+    .layui-form-lists .layui-btn {
+        width: 170px;
+    }
+
+    .layui-btn-normal {
+        margin-right: 150px;
+    }
+
+    .layui-form-item {
+        margin-left: 200px;
+        margin-top: 80px;
+    }
+
+    .m_r {
+        margin-right: 30px;
+    }
+</style>
+
+{/block}
+
+<body>
+    {block name="content"}
+    <form class="layui-form layui-form-lists" action="{:url('admin/Tactics/new_man_tactics_do')}" method="post"
+        enctype="multipart/form-data">
+        <div class="form-item m_t">
+            <label class="form-label" style="width:20%">设置概率</label>
+            <div class="form-input ziji">
+                <input type="checkbox" name="aa" lay-skin="primary" lay-filter="choose1" value="0" title="答题">
+                <input type="text" name="sss0[tactics_num]" value="" lay-verify="title" autocomplete="off"
+                    placeholder="  请输入数字" class="layui-input">
+                <span>题</span>
+                <div class="tips"><span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和</div>
+            </div>
+        </div>
+        <div class="form-item m_t">
+            <label class="form-label" style="width:20%">找不同</label>
+            <div class="form-input ziji">
+                <input type="checkbox" name="aa" lay-skin="primary" lay-filter="choose1" value="0" title="答题">
+                <input type="text" name="sss0[tactics_num]" value="" lay-verify="title" autocomplete="off"
+                    placeholder="  请输入数字" class="layui-input">
+                <span>题</span>
+                <div class="tips"><span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和</div>
+            </div>
+        </div>
+
+
+
+        <div class="layui-form-item" style="width:100%;">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" type="submit" id="submit">保存</button>
+                <button type="button" class="layui-btn layui-btn-primary"
+                    onClick="javascript :history.back(-1);">返回</button>
+            </div>
+
+        </div>
+    </form>
+    {/block}
+    <!--_footer 作为公共模版分离出去-->
+    {include file="template/_footer" /}
+    <!--/_footer 作为公共模版分离出去-->
+
+    <!--请在下方写此页面业务相关的脚本-->
+    {block name="bottom"}
+    <script type="text/javascript">
+        layui.config({
+            base: "js/"
+        }).use(['form', 'layer', 'jquery', 'laypage'], () => {
+            var form = layui.form(),
+                layer = parent.layer === undefined ? layui.layer : parent.layer,
+                laypage = layui.laypage,
+                $ = layui.jquery;
+
+            form.on("checkbox(choose1)", function (data) {
+
+                if (data.value == "1") {
+                    $(this).val('0');
+                    data.value = "0";
+                } else {
+                    $(this).val('1');
+                    data.value = "1";
+                }
+                form.render('checkbox');
+            })
+        })
+
+
+
+    </script>
+
+    {/block}
+
+</body>
+
+</html>

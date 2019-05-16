@@ -20,6 +20,14 @@ class Games extends Controller
          return view('answer_bank');
 	}
 
+    /**
+	*  添加答题
+	*/
+	public function answer_bank_add()
+	{
+         return view('answer_bank_add');
+	}
+
 	/**
 	*  答题阶梯
 	*/
