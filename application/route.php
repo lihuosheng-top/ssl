@@ -27,6 +27,12 @@ Route::group("",[
    /*订单模块*/
    "help_record"=>"index/Order/help_record" ,          //生成帮甩记录
    "help_count"=>"index/Order/help_count"    ,         //帮甩统计
+   "goods_order"=>"index/Order/goods_order",           //商品订单生成
+
+
+   /**支付*/
+   'wxpaynotifyurl'=>"index/Wxpay/wxpaynotifyurl"  ,          
+   'ali_pay'=>"index/Alipay/ali_pay"            ,
 ]);
 
 
@@ -52,18 +58,18 @@ Route::group("admin",[
 
 
     /*后台设置*/
-    "admin_index"=>"admin/admin/index",
-    "admin_add"=>"admin/admin/add",
-    "admin_save"=>"admin/admin/save",
-    "admin_del"=>"admin/admin/del",
+    "admin_index"=>"admin/Admin/index",
+    "admin_add"=>"admin/Admin/add",
+    "admin_save"=>"admin/Admin/save",
+    "admin_del"=>"admin/adAdminmin/del",
     "admin_edit"=>"admin/admin/edit",
     "admin_updata"=>"admin/admin/updata",
     "admin_status"=>"admin/admin/status",
     "admin_passwd"=>"admin/admin/passwd",
     "admin_opera"=>"admin/admin/admin_opera",                       //玩法广告
     "admin_goods_tactics"=>"admin/admin/admin_goods_tactics",       //甩品策略
-    "admin_agreement"=>"admin/admin/admin_agreement",               //平台协议
-    "admin_agreement_add"=>"admin/admin/admin_agreement_add",       //添加平台协议
+    "admin_agreement"=>"admin/Admin/admin_agreement",               //平台协议
+    "admin_agreement_add"=>"admin/Admin/admin_agreement_add",       //添加平台协议
     "admin_message_note"=>"admin/admin/admin_message_note",         //消息提醒
     "admin_lock_time"=>"admin/admin/admin_lock_time",               //锁定时间
 

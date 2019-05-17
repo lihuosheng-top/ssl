@@ -333,7 +333,8 @@ class Admin extends Controller
      */
     public function admin_agreement()
     {
-       return view('admin_agreement');
+        
+            return view('admin_agreement');
     }
     /**
      * lilu
@@ -341,7 +342,19 @@ class Admin extends Controller
      */
     public function admin_agreement_add()
     {
-       return view('admin_agreement_add');
+        $input=input();
+        if($input)          //判断是否获取添加的表单数据
+        {
+          $re=db('agreement')->insert($input);
+          if($re)
+          {
+              $this->success('保存成功',url('admin/Admin/admin_agreement'));
+          }else{
+              $this->error('保存失败');
+          }
+        }else{
+            return view('admin_agreement_add');
+        }
     }
     /**
      * lilu

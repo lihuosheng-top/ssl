@@ -118,8 +118,8 @@ use think\Request;
      }
      /**
       * lilu
-        $parsm $id   订单id
-        return orderinfo   订单信息
+       * $parsm $id   订单id
+        *return orderinfo   订单信息
       */
       public function get_orderinfo()
       {
