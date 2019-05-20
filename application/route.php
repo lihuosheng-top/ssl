@@ -33,6 +33,9 @@ Route::group("",[
    /**支付*/
    'wxpaynotifyurl'=>"index/Wxpay/wxpaynotifyurl"  ,          
    'ali_pay'=>"index/Alipay/ali_pay"            ,
+
+   /**会员模块 */
+   'member_info'=>"index/Member/member_info"  ,         //会员信息
 ]);
 
 
