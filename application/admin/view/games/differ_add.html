@@ -274,7 +274,7 @@
                         var data_1 = data_all[i];//列 A1,B1...
                         var dhtml = '';
                         for (let u = 0; u < data_1.length; u++) {
-                            dhtml += `<div class='img_div img_div_${data_1[u].num_string}' id="${data_1[u].num_string}"><img src="${data_1[u].image_name}" style="height:46px;width:46px;"></div>`;
+                            dhtml += `<div class='img_div img_div_${data_1[u].num_string}' id="${data_1[u].num_string}"><img src="__PUBLIC__/${data_1[u].image_name}" style="height:46px;width:46px;"></div>`;
                         }
                         $(`.hang_${i}`).after().html(dhtml);
                     }

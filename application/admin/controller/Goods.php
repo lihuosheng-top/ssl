@@ -31,7 +31,7 @@ class Goods extends Controller
     public function goods_index(Request $request)
     {
         //获取商品
-        $goods = db("goods")->order("id asc")->select();
+        $goods = db("goods")->order("id desc")->select();
         $num = db("goods")->count();        //获取商品总数
         $all_idents = $goods;               //获取分页的数据
         $curPage = input('get.page') ? input('get.page') : 1;//接收前端分页传值
@@ -84,21 +84,21 @@ class Goods extends Controller
             if (!empty($imgs_one)) {
                 foreach ($imgs_one as $k=>$v) {
                     $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
-                    $goods_data['image_one'][] = str_replace("\\", "/", $info->getSaveName());
+                    $goods_data['image_one'][] = '/uploads/'.str_replace("\\", "/", $info->getSaveName());
                 }
             }
             //处理商品规格图片
             if (!empty($imgs_two)) {
                 foreach ($imgs_two as $k=>$v) {
                     $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
-                    $goods_data['image_two'][] = str_replace("\\", "/", $info->getSaveName());
+                    $goods_data['image_two'][] = '/uploads/'.str_replace("\\", "/", $info->getSaveName());
                 }
             }
             //处理商品规格图片
             if (!empty($imgs_three)) {
                 foreach ($imgs_three as $k=>$v) {
                     $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
-                    $goods_data['image_three'][] = str_replace("\\", "/", $info->getSaveName());
+                    $goods_data['image_three'][] = '/uploads/'.str_replace("\\", "/", $info->getSaveName());
                 }
             }
             $list = [];
@@ -106,7 +106,7 @@ class Goods extends Controller
             if (!empty($show_images)) {
                 foreach ($show_images as $k=>$v) {
                     $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
-                    $list[] = str_replace("\\", "/", $info->getSaveName());
+                    $list[] = '/uploads/'.str_replace("\\", "/", $info->getSaveName());
                 }
                 $goods_data["goods_show_image"] =  $list[0];
                 $goods_data["goods_show_images"] = implode(',', $list);
@@ -116,19 +116,19 @@ class Goods extends Controller
                     if (!empty($goods_images_one)) {
                         foreach ($goods_images_one as $k=>$v) {
                             $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
-                            $goods_data['goods_images_one'] = str_replace("\\", "/", $info->getSaveName());
+                            $goods_data['goods_images_one'] = '/uploads/'.str_replace("\\", "/", $info->getSaveName());
                         }
                     }
                     if (!empty($goods_images_two)) {
                         foreach ($goods_images_two as $k=>$v) {
                             $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
-                            $goods_data['goods_images_two'] = str_replace("\\", "/", $info->getSaveName());
+                            $goods_data['goods_images_two'] = '/uploads/'.str_replace("\\", "/", $info->getSaveName());
                         }
                     }
                     if (!empty($goods_images_three)) {
                         foreach ($goods_images_three as $k=>$v) {
                             $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
-                            $goods_data['goods_images_three'] = str_replace("\\", "/", $info->getSaveName());
+                            $goods_data['goods_images_three'] = '/uploads/'.str_replace("\\", "/", $info->getSaveName());
                         }
                     }
                     $goods_data['brand']=$goods_data['produce'];
@@ -245,7 +245,7 @@ class Goods extends Controller
                 if (!empty($show_images)) {
                     foreach ($show_images as $k=>$v) {
                         $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
-                        $list[] = str_replace("\\", "/", $info->getSaveName());
+                        $list[] = '/uploads/'.str_replace("\\", "/", $info->getSaveName());
                     }
                     $goods_data["goods_show_image"] =  $list[0];
                     $goods_data["goods_show_images"] = implode(',', $list);
@@ -257,19 +257,19 @@ class Goods extends Controller
                 if (!empty($goods_images_one)) {
                     foreach ($goods_images_one as $k=>$v) {
                         $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
-                        $goods_data['goods_images_one'] = str_replace("\\", "/", $info->getSaveName());
+                        $goods_data['goods_images_one'] = '/uploads/'.str_replace("\\", "/", $info->getSaveName());
                     }
                 }
                 if (!empty($goods_images_two)) {
                     foreach ($goods_images_two as $k=>$v) {
                         $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
-                        $goods_data['goods_images_two'] = str_replace("\\", "/", $info->getSaveName());
+                        $goods_data['goods_images_two'] = '/uploads/'.str_replace("\\", "/", $info->getSaveName());
                     }
                 }
                 if (!empty($goods_images_three)) {
                     foreach ($goods_images_three as $k=>$v) {
                         $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
-                        $goods_data['goods_images_three'] = str_replace("\\", "/", $info->getSaveName());
+                        $goods_data['goods_images_three'] = '/uploads/'.str_replace("\\", "/", $info->getSaveName());
                     }
                 }
                 $goods_data['start_date']=strtotime($goods_data['start_date']);
@@ -289,7 +289,7 @@ class Goods extends Controller
                 if (!empty($imgs_one)) {
                     foreach ($imgs_one as $k=>$v) {
                         $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
-                        $list1['images_one'][] = str_replace("\\", "/", $info->getSaveName());
+                        $list1['images_one'][] = '/uploads/'.str_replace("\\", "/", $info->getSaveName());
                     }
                 }
                 else{
@@ -299,7 +299,7 @@ class Goods extends Controller
                 if (!empty($imgs_two)) {
                     foreach ($imgs_two as $k=>$v) {
                         $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
-                        $list2['images_two'][] = str_replace("\\", "/", $info->getSaveName());
+                        $list2['images_two'][] = '/uploads/'.str_replace("\\", "/", $info->getSaveName());
                     }
                 }else{
                     $list2['images_two']=[];
@@ -308,7 +308,7 @@ class Goods extends Controller
                 if (!empty($imgs_three)) {
                     foreach ($imgs_three as $k=>$v) {
                         $info = $v->move(ROOT_PATH . 'public' . DS . 'uploads');
-                        $list2['imgs_three'][] = str_replace("\\", "/", $info->getSaveName());
+                        $list2['imgs_three'][] = '/uploads/'.str_replace("\\", "/", $info->getSaveName());
                     }
                 }else{
                     $list2['imgs_three']=[];
@@ -352,12 +352,12 @@ class Goods extends Controller
                                 if(array_key_exists($i,$list2['images_two'])){
                                     $attr[$i]['image_two']=$list2['images_two'][$i];
                                 }else{
-                                    $attr[$i]['image_two']=$nl['image_two'][$i];                //规格图片
+                                    $attr[$i]['image_two']=$nl['image_two'];                //规格图片
                                 }
                                 if(array_key_exists($i,$list2['imgs_three'])){
-                                    $attr[$i]['imgs_three']=$list2['imgs_three'][$i];
+                                    $attr[$i]['image_three']=$list2['imgs_three'][$i];
                                 }else{
-                                    $attr[$i]['imgs_three']=$nl['imgs_three'][$i];                //规格图片
+                                    $attr[$i]['image_three']=$nl['image_three'];                //规格图片
                                 }
                                 $res=db('special')->where('id',$nl['id'])->update($attr[$i]);
                                 $i++;
