@@ -22,4 +22,14 @@ class Member extends Controller
            return ajax_error('error');
         }
     }
+    /**
+     * lilu
+     * 会员排行榜（按照帮甩人数）
+     */
+    public function member_ranking()
+    {
+        //获取所有的会员列表-按照帮甩人数排列
+        $member_list=db('member')->order('help_num desc')->select();
+        
+    }
 }

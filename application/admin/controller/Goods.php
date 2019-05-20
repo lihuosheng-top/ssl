@@ -181,6 +181,7 @@ class Goods extends Controller
                                $attr[$i]['line']=$nl['line'];              //划线价
                                $attr[$i]['total']=$nl['total'];            //积分
                                $attr[$i]['jilt']=$nl['jilt'];              //帮甩费用
+                               db('goods')->where('id',$goods_id)->update('goods_price',$nl['jilt']);
                                $attr[$i]['status']=$nl['status'];          //上下架
                                $attr[$i]['goods_id']=$goods_id;
                                $attr[$i]['lv1']=$result;                    //规格title
