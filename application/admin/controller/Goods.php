@@ -180,8 +180,13 @@ class Goods extends Controller
                                $attr[$i]['cost']=$nl['cost'];              //成本价
                                $attr[$i]['line']=$nl['line'];              //划线价
                                $attr[$i]['total']=$nl['total'];            //积分
-                               $attr[$i]['jilt']=$nl['jilt'];              //帮甩费用
-                               db('goods')->where('id',$goods_id)->update('goods_price',$nl['jilt']);
+                               $attr[$i]['jilt']=$nl['jilt']; 
+                               $arr['goods_price'] =$nl['jilt'];            //帮甩费用
+                               $arr['goods_repertory'] =$nl['stock'];            //帮甩费用
+                               $arr['goods_cost'] =$nl['cost'];            //帮甩费用
+                               $arr['goods_bottom_money'] =$nl['line'];            //帮甩费用
+                               $arr['points'] =$nl['total'];            //帮甩费用
+                               db('goods')->where('id',$goods_id)->update($arr);
                                $attr[$i]['status']=$nl['status'];          //上下架
                                $attr[$i]['goods_id']=$goods_id;
                                $attr[$i]['lv1']=$result;                    //规格title

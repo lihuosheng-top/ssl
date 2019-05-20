@@ -33,7 +33,8 @@ class Goods extends Controller
         {
            if($v['goods_standard']=='1')
            {         //特殊规格
-              $goods[$k]['attr']=db('special')->where('goods_id',$v['id'])->select();
+             $data=db('special')->where('goods_id',$v['id'])->select();
+             $goods[$k]['attr']=$data;
            }else{
             //    $goods[$k]['attr']='';
            }
