@@ -35,7 +35,7 @@ class Goods extends Controller
            {         //特殊规格
               $goods[$k]['attr']=db('special')->where('goods_id',$v['id'])->select();
            }else{
-               $goods[$k]['attr']='';
+            //    $goods[$k]['attr']='';
            }
         }
 //        $num = db("goods")->count();        //获取商品总数
