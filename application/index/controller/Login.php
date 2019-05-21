@@ -90,7 +90,8 @@ class Login extends Controller{
      * @param Request $request
      */
     public function index_dolog(Request $request){
-       if($request->isPost()){
+    //    if($request->isPost()){
+       if(1){
             $user_mobile =$request->only(['account'])["account"];       //获取登录账号
             $code =$request->only(["code"])["code"];                    //获取验证码
             if(empty($user_mobile)){
