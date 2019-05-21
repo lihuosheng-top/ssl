@@ -41,13 +41,14 @@
         background: #F2F2F2;
         color: #333;
     }
-    
+
 
     .distribution_list a {
         font-size: 14px;
         padding: 9px;
         color: #5E5E5E;
     }
+
     .layui-btn {
         border-radius: 6px;
         height: 50px;
@@ -64,6 +65,7 @@
     .layui-textarea {
         width: 100%;
     }
+
     .form-item {
         margin-left: 45px;
     }
@@ -79,11 +81,11 @@
             基础信息
         </div>
     </blockquote>
-    <input type="hidden" name="id" value="{$data['id']}"  />
+    <input type="hidden" name="id" value="{$data['id']}" />
     <div class="layui-form-item ">
         <label class="layui-form-label">会员账号</label>
         <div class="layui-input-block">
-            <input value="{$data['account']}" type="text" name="account"  lay-verify="title" autocomplete="off"
+            <input value="{$data['account']}" type="text" name="account" lay-verify="title" autocomplete="off"
                 placeholder="请输入账号" class="layui-input">
         </div>
     </div>
@@ -92,9 +94,9 @@
         <div class="layui-input-block">
             <p>
                 {if $data['sex']=='1'}
-                  男
+                男
                 {else}
-                  女
+                女
                 {/if}
             </p>
         </div>
@@ -102,7 +104,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">上级账号</label>
         <div class="layui-input-block">
-            <input  type="text" name="pid" value="{$data['help_account']}" lay-verify="title" autocomplete="off"
+            <input type="text" name="pid" value="{$data['help_account']}" lay-verify="title" autocomplete="off"
                 placeholder="请输入账号" class="layui-input">
         </div>
     </div>
@@ -115,8 +117,8 @@
     <div class="layui-form-item">
         <label class="layui-form-label">会员昵称</label>
         <div class="layui-input-block">
-            <input value="{$data['name']}" type="text" name="name" lay-verify="title" autocomplete="off" placeholder="请输入"
-                class="layui-input">
+            <input value="{$data['name']}" type="text" name="name" lay-verify="title" autocomplete="off"
+                placeholder="请输入" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
@@ -131,8 +133,8 @@
     <div class="layui-form-item">
         <label class="layui-form-label">注册时间</label>
         <div class="layui-input-block">
-            <input value="{$data['join_time']}" type="text" name="join_time" lay-verify="title" autocomplete="off" placeholder=" "
-                class="layui-input">
+            <input value="{$data['join_time']}" type="text" name="join_time" lay-verify="title" autocomplete="off"
+                placeholder=" " class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
@@ -143,7 +145,7 @@
                 <option value="1" selected>普通</option>
                 <option value="2">vip</option>
                 {else}
-                <option value="1" >普通</option>
+                <option value="1">普通</option>
                 <option value="2" selected>vip</option>
                 {/if}
             </select>
@@ -155,30 +157,31 @@
             <select name="is_use" lay-filter="aihao">
                 <!-- <option value="1" selected="">启用</option> -->
                 {if $data['is_use']==1}
-                <option value="0" >禁用</option>
-                <option value="1"  selected>启用</option>
+                <option value="0">禁用</option>
+                <option value="1" selected>启用</option>
                 {else}
-                <option value="0"  selected>禁用</option>
-                <option value="1" >启用</option>
+                <option value="0" selected>禁用</option>
+                <option value="1">启用</option>
                 {/if}
             </select>
         </div>
     </div>
     <div class="form-item ">
-            <label class="layui-form-label"  style="width: 7.2%;">会员地址</label>
-            <div class="form-input">
-                <textarea placeholder="" class="layui-textarea" name="address"></textarea>
-            </div>
+        <label class="layui-form-label" style="width: 7%;">会员地址</label>
+        <div class="form-input" style="width: 78.5%">
+            <input value="" type="text" name="" lay-verify="title" autocomplete="off" placeholder=" "
+                class="layui-input">
         </div>
+    </div>
 
     <div class="layui-form-item" style="width:100%;margin-top: 50px;">
-            <div class="layui-input-block">
-                <button class="layui-btn layui-btn-normal" type="submit" id="submit">保存</button>
-                <button type="button" class="layui-btn layui-btn-primary"
-                    onClick="javascript :history.back(-1);">返回</button>
-            </div>
-
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" type="submit" id="submit">保存</button>
+            <button type="button" class="layui-btn layui-btn-primary"
+                onClick="javascript :history.back(-1);">返回</button>
         </div>
+
+    </div>
 </form>
 
 {/block}

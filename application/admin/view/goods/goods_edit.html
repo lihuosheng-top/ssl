@@ -411,9 +411,11 @@
     .add_biao {
         cursor: pointer;
     }
+
     .line input {
-    width: 200px;
-}
+        width: 200px;
+    }
+
     /* 包装规格 */
 </style>
 
@@ -427,14 +429,14 @@
         </div>
 
     </div>
-    <form class="layui-form layui-form-lists" action="{:url('admin/Goods/goods_edit_do',['id'=>$goods[0]['id']])}" method="post"
-          enctype="multipart/form-data">
+    <form class="layui-form layui-form-lists" action="{:url('admin/Goods/goods_edit_do',['id'=>$goods[0]['id']])}"
+        method="post" enctype="multipart/form-data">
         <div class="form-title" onclick="back()">基础信息 </div>
         <div class="form-item">
             <label class="form-label"><span class="red">*</span>商品名称</label>
             <div class="form-input">
                 <input type="text" name="goods_name" lay-verify="title" autocomplete="off" placeholder="请输入"
-                       class="layui-input" value="{$goods[0]['goods_name']}" required>
+                    class="layui-input" value="{$goods[0]['goods_name']}" required>
                 <div class="tips">
                     商品名称必须填写，最多100个字
                 </div>
@@ -444,7 +446,7 @@
             <label class="form-label"><span class="red">*</span>商品品牌</label>
             <div class="form-input">
                 <input type="text" name="brand" lay-verify="title" autocomplete="off" placeholder="请输入"
-                       class="layui-input" value="{$goods[0]['brand']}">
+                    class="layui-input" value="{$goods[0]['brand']}">
                 <div class="tips">
                     *请输入品牌名
                 </div>
@@ -453,8 +455,8 @@
         <div class="form-item">
             <label class="form-label"><span class="red">*</span>商品编号</label>
             <div class="form-input">
-                <input type="text" name="goods_number" lay-verify="title" value="{$goods[0]['goods_number']}" autocomplete="off" placeholder="自动生成"
-                       class="layui-input">
+                <input type="text" name="goods_number" lay-verify="title" value="{$goods[0]['goods_number']}"
+                    autocomplete="off" placeholder="自动生成" class="layui-input">
                 <div class="tips">
                     *系统自动生成
                 </div>
@@ -466,25 +468,34 @@
             <div class="form-input" style="display: flex; align-items: center;">
                 <div id="hot">
                     <div class="list">
-                        <input type="checkbox" name="goods_sign" lay-skin="primary" title="" checked="">
-                        <img src="__STATIC__/admin/index/img/qiang.png" />
+                        <input type="checkbox" name="sss[sell_0][check]" value="1" lay-skin="primary"
+                            lay-filter="choose1" title="" checked="">
+                        <input class="texts" type="text" name="sss[sell_0][text]" value="可存" readonly style="display: none">
+                        <img src="__STATIC__/admin/index/img/kecun.png" />
                     </div>
                     <div class="list">
-                        <input type="checkbox" name="goods_sign" lay-skin="primary" title="">
+                        <input type="checkbox" name="sss[sell_1][check]" value="0" lay-skin="primary"
+                            lay-filter="choose1" title="">
+                        <input class="texts" type="text" name="sss[sell_1][text]" value="HOT" readonly style="display: none">
                         <img src="__STATIC__/admin/index/img/hot.png" />
                     </div>
                     <div class="list">
-                        <input type="checkbox" name="goods_sign" lay-skin="primary" title="">
+                        <input type="checkbox" name="sss[sell_2][check]" value="0" lay-skin="primary"
+                            lay-filter="choose1" title="">
+                        <input class="texts" type="text" name="sss[sell_2][text]" value="促销" readonly style="display: none">
                         <img src="__STATIC__/admin/index/img/chuxiao.png" />
                     </div>
                     <div class="list">
-                        <input type="checkbox" name="goods_sign" lay-skin="primary" title="">
+                        <input type="checkbox" name="sss[sell_3][check]" value="0" lay-skin="primary"
+                            lay-filter="choose1" title="">
+                        <input class="texts" type="text" name="sss[sell_3][text]" value="清仓" readonly style="display: none">
                         <img src="__STATIC__/admin/index/img/qingchang.png" />
                     </div>
                     <div class="list">
-                        <input type="checkbox" name="goods_sign" lay-skin="primary" title="" class="biaoqian">
-                        <span class="texts">厂家正品</span>
-                        <span style="color: #0EA9E3;font-size: 12px; line-height: 20px;" class="change_text">修改</span>
+                        <input type="checkbox" name="sss[sell_4][check]" value="0" lay-skin="primary"
+                            lay-filter="choose1" title="" class="biaoqian">
+                        <input class="texts" type="text" name="sss[sell_4][text]" value="古色生香">
+                        <!-- <span style="color: #0EA9E3;font-size: 12px; line-height: 20px;" class="change_text">修改</span> -->
                     </div>
                     <div class="add_biao">
                         +添加文字标签
@@ -497,7 +508,7 @@
             <label class="form-label">分享标题</label>
             <div class="form-input">
                 <input type="text" name="goods_share_title" lay-verify="title" autocomplete="off" placeholder="请输入"
-                       class="layui-input" value="{$goods[0]['goods_share_title']}">
+                    class="layui-input" value="{$goods[0]['goods_share_title']}">
                 <div class="tips">
                     商品名称变量：{NAME}，商品编号：{NO}。使用方法，如：甩品{NO}的{NAME},大家都来甩一甩！
                 </div>
@@ -507,10 +518,10 @@
             <label class="form-label">分享描述</label>
             <div class="form-input">
                 <input type="text" name="goods_share_describe" lay-verify="title" autocomplete="off" placeholder="请输入"
-                       class="layui-input" value="{$goods[0]['goods_share_describe']}">
+                    class="layui-input" value="{$goods[0]['goods_share_describe']}">
                 <div class="tips">
                     百万红包，开甩即送，召集小伙伴，多甩多得！<span class="tan" style="color: #0E90D2;"
-                                               data-id="__STATIC__/admin/common/img/u27291.png">查看实例</span>
+                        data-id="__STATIC__/admin/common/img/u27291.png">查看实例</span>
                 </div>
             </div>
         </div>
@@ -518,10 +529,10 @@
             <label class="form-label">商品视频</label>
             <div class="form-input">
                 <input type="text" name="video_link" lay-verify="title" autocomplete="off" placeholder="请输入http://"
-                       class="layui-input" value="{$goods[0]['video_link']}">
+                    class="layui-input" value="{$goods[0]['video_link']}">
                 <div class="tips">
                     *如何获取视频地址?<span class="tan" style="color: #0E90D2;"
-                                    data-id="__STATIC__/admin/common/img/u27291.png">上传视频到七牛云存储</span>
+                        data-id="__STATIC__/admin/common/img/u27291.png">上传视频到七牛云存储</span>
                 </div>
             </div>
         </div>
@@ -535,19 +546,19 @@
                                 <span class="up-span"></span>
                                 <img class="close-upimg" src="/siring_ow/public/static/admin/common/upfile/img/a7.png">
                                 <!--图片放这里-->
-                                <img class="up-img"
-                                     src="{$goods[0]['goods_show_image']}">
+                                <img class="up-img" src="{$goods[0]['goods_show_image']}">
                                 <!--图片放这里-->
 
                                 <p class="img-name-p">u4594.png</p>
-                                <input  id="taglocation" value="{$goods[0]['goods_show_image']}" type="hidden">
-                                <input  name="goods_show_images" value="{$goods[0]['goods_show_image']}" type="hidden">
+                                <input id="taglocation" value="{$goods[0]['goods_show_image']}" type="hidden">
+                                <input name="goods_show_images" value="{$goods[0]['goods_show_image']}" type="hidden">
                                 <input id="tags" value="" type="hidden">
                             </section>
                             <section class="z_file fl">
                                 <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img">
-                                <input type="file" name="goods_show_images[]" id="file0" class="file" value="{$goods[0]['goods_show_image']}"
-                                       accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="15"  />
+                                <input type="file" name="goods_show_images[]" id="file0" class="file"
+                                    value="{$goods[0]['goods_show_image']}"
+                                    accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="15" />
                             </section>
                         </div>
                     </section>
@@ -570,7 +581,7 @@
             <div class="seach_input">
                 <span class="time">
                     <input name="start_date" type="text" class="text datetimepicker layui-input" readonly="readonly"
-                           id="beginTime" value="{$goods[0]['start_date']|date="Y-m-d",###}">
+                        id="beginTime" value="{$goods[0]['start_date']|date=" Y-m-d",###}">
                 </span>
             </div>
         </div>
@@ -580,7 +591,7 @@
             <div class="seach_input">
                 <span class="time">
                     <input name="end_date" type="text" class=" text datetimepicker layui-input" readonly="readonly"
-                           id="nextTime" value="{$goods[0]['end_date']|date="Y-m-d",###}">
+                        id="nextTime" value="{$goods[0]['end_date']|date=" Y-m-d",###}">
                 </span>
             </div>
         </div>
@@ -590,7 +601,8 @@
             <div class="form-item">
                 <label class="form-label">商品规格</label>
                 <div class="form-input">
-                    <input type="radio" name="goods_standard" value="0" title="统一规格" lay-filter="guige" checked="checked">
+                    <input type="radio" name="goods_standard" value="0" title="统一规格" lay-filter="guige"
+                        checked="checked">
                 </div>
             </div>
         </div>
@@ -599,7 +611,7 @@
                 <label class="form-label"><span class="red">*</span>商品划线价</label>
                 <div class="form-input line">
                     <input type="text" name="goods_bottom_money" lay-verify="title" autocomplete="off" placeholder="请输入"
-                           class="layui-input" required value="{$goods[0]['goods_bottom_money']}">
+                        class="layui-input" required value="{$goods[0]['goods_bottom_money']}">
                     <div class="tips">
                         必填项，显示在前端
                     </div>
@@ -609,7 +621,7 @@
                 <label class="form-label"><span class="red">*</span>商品进货价</label>
                 <div class="form-input line">
                     <input type="text" name="goods_cost" lay-verify="title" autocomplete="off" placeholder="请输入"
-                           class="layui-input" required value="{$goods[0]['goods_cost']}" id="cost">
+                        class="layui-input" required value="{$goods[0]['goods_cost']}" id="cost">
                 </div>
             </div>
 
@@ -617,14 +629,14 @@
                 <label class="form-label"><span class="red">*</span>库存</label>
                 <div class="form-input line">
                     <input type="text" name="goods_repertory" lay-verify="title" autocomplete="off" placeholder="请输入"
-                           class="layui-input" required value="{$goods[0]['goods_repertory']}">
+                        class="layui-input" required value="{$goods[0]['goods_repertory']}">
                 </div>
             </div>
             <div class="form-item">
                 <label class="form-label">总数积分</label>
                 <div class="form-input line">
                     <input type="text" name="points" lay-verify="title" autocomplete="off" placeholder="请输入"
-                           class="layui-input" required value="{$goods[0]['points']}" id="int" readonly="readonly">
+                        class="layui-input" required value="{$goods[0]['points']}" id="int" readonly="readonly">
                     <div class="tips">
                         *总积分数<span class="red">=公式??</span>
                     </div>
@@ -634,7 +646,8 @@
                 <label class="form-label">甩费</label>
                 <div class="form-input line">
                     <input type="text" name="goods_price" lay-verify="title" autocomplete="off"
-                           placeholder="  请输入                            元" class="layui-input" required value="{$goods[0]['goods_price']}">
+                        placeholder="  请输入                            元" class="layui-input" required
+                        value="{$goods[0]['goods_price']}">
                 </div>
             </div>
             <div class="form-item">
@@ -646,19 +659,21 @@
                                 {if $goods[0]['goods_images_one']}
                                 <section class="up-section fl">
                                     <span class="up-span"></span>
-                                    <img class="close-upimg" src="/siring_ow/public/static/admin/common/upfile/img/a7.png">
+                                    <img class="close-upimg"
+                                        src="/siring_ow/public/static/admin/common/upfile/img/a7.png">
                                     <img class="up-img" src="{$goods[0]['goods_images_one']}">
                                     <p class="img-name-p">u4594.png</p>
                                     <input id="taglocation" value="{$goods[0]['goods_images_one']}" type="hidden">
-                                    <input  name="goods_images_one" value="{$goods[0]['goods_images_one']}" type="hidden">
+                                    <input name="goods_images_one" value="{$goods[0]['goods_images_one']}"
+                                        type="hidden">
                                     <input id="tags" value="" type="hidden">
                                 </section>
                                 {/if}
                                 <section class="z_file fl">
                                     <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img">
-                                    <input type="file" name="goods_images_one[]" id="file" class="file" value="{$goods[0]['goods_images_one']}"
-                                           accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="15"
-                                          />
+                                    <input type="file" name="goods_images_one[]" id="file" class="file"
+                                        value="{$goods[0]['goods_images_one']}"
+                                        accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="15" />
                                 </section>
                                 <div class="tips" style="width:250px;">
                                     配图一：首页上滑，商品详情右上架图，建议尺寸：300*300像素，只有一张
@@ -682,19 +697,21 @@
                                 {if $goods[0]['goods_images_two']}
                                 <section class="up-section fl">
                                     <span class="up-span"></span>
-                                    <img class="close-upimg" src="/siring_ow/public/static/admin/common/upfile/img/a7.png">
+                                    <img class="close-upimg"
+                                        src="/siring_ow/public/static/admin/common/upfile/img/a7.png">
                                     <img class="up-img" src="{$goods[0]['goods_images_two']}">
                                     <p class="img-name-p">u4594.png</p>
                                     <input id="taglocation" value="{$goods[0]['goods_images_two']}" type="hidden">
-                                    <input id="" name="goods_images_two" value="{$goods[0]['goods_images_two']}" type="hidden">
+                                    <input id="" name="goods_images_two" value="{$goods[0]['goods_images_two']}"
+                                        type="hidden">
                                     <input id="tags" value="" type="hidden">
                                 </section>
                                 {/if}
                                 <section class="z_file fl">
                                     <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img">
-                                    <input type="file" name="goods_images_two[]" id="file2" class="file" value="{$goods[0]['goods_images_two']}"
-                                           accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="15"
-                                           />
+                                    <input type="file" name="goods_images_two[]" id="file2" class="file"
+                                        value="{$goods[0]['goods_images_two']}"
+                                        accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="15" />
                                 </section>
                                 <div class="tips" style="width:250px;">
                                     配图二：开甩界面配图，建议尺寸：720 x 1280像素，只有一张
@@ -718,19 +735,21 @@
                                 {if $goods[0]['goods_images_three']}
                                 <section class="up-section fl">
                                     <span class="up-span"></span>
-                                    <img class="close-upimg" src="/siring_ow/public/static/admin/common/upfile/img/a7.png">
+                                    <img class="close-upimg"
+                                        src="/siring_ow/public/static/admin/common/upfile/img/a7.png">
                                     <img class="up-img" src="{$goods[0]['goods_images_three']}">
                                     <p class="img-name-p">u4594.png</p>
                                     <input id="taglocation" value="{$goods[0]['goods_images_three']}" type="hidden">
-                                    <input id="" name="goods_images_three" value="{$goods[0]['goods_images_three']}" type="hidden">
+                                    <input id="" name="goods_images_three" value="{$goods[0]['goods_images_three']}"
+                                        type="hidden">
                                     <input id="tags" value="" type="hidden">
                                 </section>
                                 {/if}
                                 <section class="z_file fl">
                                     <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img">
-                                    <input type="file" name="goods_images_three[]" id="file3" class="file" value="{$goods[0]['goods_images_three']}"
-                                           accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="15"
-                                           />
+                                    <input type="file" name="goods_images_three[]" id="file3" class="file"
+                                        value="{$goods[0]['goods_images_three']}"
+                                        accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="15" />
                                 </section>
                                 <div class="tips" style="width:250px;">
                                     配图三：个人中心商品图片，建议尺寸：650 x 200像素，只有一张
@@ -753,7 +772,8 @@
         <div class="form-item">
             <label class="form-label"><span class="red">*</span>商品详情</label>
             <div class="form-input">
-                <script id="editor" type="text/plain"  name="goods_detail" style="width:800px;height:500px;">{$goods[0]["goods_detail"]}</script>
+                <script id="editor" type="text/plain" name="goods_detail"
+                    style="width:800px;height:500px;">{$goods[0]["goods_detail"]}</script>
             </div>
         </div>
 
@@ -761,16 +781,17 @@
         <div class="form-item">
             <label class="form-label">快递运费</label>
             <div class="form-input line">
-                <input type="text" name="goods_freight" lay-verify="title" autocomplete="off" placeholder="  请输入                            元"
-                       class="layui-input" required  value="{$goods[0]['goods_freight']}">
+                <input type="text" name="goods_freight" lay-verify="title" autocomplete="off"
+                    placeholder="  请输入                            元" class="layui-input" required
+                    value="{$goods[0]['goods_freight']}">
                 <div class="tips">
                     *运费直接加到总价中，主要针对体积大的商品，一般免运费
                 </div>
             </div>
         </div>
         <div class="form-item">
-                <label class="form-label">状态</label>
-                <div class="form-input">
+            <label class="form-label">状态</label>
+            <div class="form-input">
                 {if $goods[0]['label']==0}
                 <input type="radio" name="label" value="1" title="立即上架">
                 <input type="radio" name="label" value="0" title="暂不上架" checked="checked">
@@ -778,18 +799,18 @@
                 <input type="radio" name="label" value="1" title="立即上架" checked="checked">
                 <input type="radio" name="label" value="0" title="暂不上架">
                 {/if}
-             </div>
-         </div>
+            </div>
+        </div>
         <div class="form-item">
             <label class="form-label">帮甩限制</label>
             <div class="form-input">
                 {if $goods[0]['goods_setting']=='1'}
-                <input type="radio" name="goods_setting" value="0" title="不限制" lay-filter="limit" >
+                <input type="radio" name="goods_setting" value="0" title="不限制" lay-filter="limit">
                 <input type="radio" name="goods_setting" value="1" title="限制" lay-filter="limit" checked>
                 {else}
                 <input type="radio" name="goods_setting" value="0" title="不限制" lay-filter="nolimit" checked>
                 <input type="radio" name="goods_setting" value="1" title="限制" lay-filter="limit">
-            {/if}
+                {/if}
                 <div class="tips">
                     *已经在甩的商品，就不能帮别人甩同一个商品了，要弹框提示：此商品您已开甩，不能帮甩
                 </div>
@@ -799,200 +820,235 @@
             <div class="layui-input-block">
                 <button class="layui-btn layui-btn-normal" type="submit" id="submit">保存</button>
                 <button type="button" class="layui-btn layui-btn-primary"
-                        onClick="javascript :history.back(-1);">返回</button>
+                    onClick="javascript :history.back(-1);">返回</button>
             </div>
         </div>
         {else}
         <div class="form-title">价格库存 </div>
-             <div style="line-height:1px">
-                <div class="form-item">
-                     <label class="form-label">商品规格</label>
-                    <div class="form-input">
-                    <input type="radio" name="goods_standard" value="1" title="特殊规格" lay-filter="guige" checked="checked">
-                    </div>
-             </div>
-          </div>
-          <div class="general_content" style="margin-top:10px">
-                <label class="control-label">规格项目表</label>
-                <div class="controls" style="">
-                         <div id="lv_table" style="padding: 10px;">
-                              <table class="table table-bordered">
-                              	<thead>
-                                   <tr>
-                                     <th style="width:100px"><input value="规格值"  readonly style="border:0;"></th>
-                                     <th style="width:100px"><input value="库存"  readonly style="border:0;"></th>
-                                     <th style="width:100px"><input value="规格编码"  readonly style="border:0;"></th>
-                                     <th style="width:100px"><input value="成本价"  readonly style="border:0;"></th>
-                                     <th wstyle="width:100px"><input value="划线价"  readonly style="border:0;"></th>
-                                     <th style="width:100px"><input value="总积分"  readonly style="border:0;"></th>
-                                     <th style="width:100px"><input value="甩费"  readonly style="border:0;"></th>
-                                     <th style="width:100px"><input value="配图一"  readonly style="border:0;"></th>
-                                     <th style="width:100px"><input value="配图二"  readonly style="border:0;"></th>
-                                     <th style="width:100px"><input value="配图三"  readonly style="border:0;"></th>
-                                      <th style="width:100px"><input value="是否上架"  readonly style="border:0;"></th>
-                                    </tr>
-                                 </thead>
-                                 <tbody>
-                                   {volist name="$goods[0]['goods_attr']" id="vo"}
-                                     <tr>
-                                       <td style="width:100px" rowspan="" data-rc="">
-                                          <input value="{$vo['name']}"  readonly style="border:0;">
-                                      </td>
-                                      <input name="sss{$vo.name}[id]" value="{$vo.id}" style="display:none">
-                                      <td style="width:100px"><input type="text" value="{$vo['stock']}" name="sss{$vo.name}[stock]"  required /></td>
-                                      <td style="width:100px"><input type="text" value="{$vo['coding']}" name="sss{$vo.name}[coding]" class="coding" required /></td>
-                                      <td style="width:100px"><input type="text" value="{$vo['cost']}"name="sss{$vo.name}[cost]" id="cost_1" required /></td>
-                                      <td style="width:100px"><input type="text" value="{$vo.line}"  name="sss{$vo.name}[line]" required /></td>
-                                      <td style="width:100px"><input type="text" value="{$vo.total}" name="sss{$vo.name}[total]" class="offer" id="ins_1" readonly="readonly"/></td>
-                                      <td style="width:100px"><input type="text" value="{$vo.jilt}" name="sss{$vo.name}[jilt]"  /></td>
-                                      <td style="width:100px">
-                                            <div class="img-box full">
-                                              <section class=" img-section">
-                                                  <div class="z_photo upimg-div clear">
-                                                      <section class="up-section fl">
-                                                            <span class="up-span"></span>
-                                                                <img class="close-upimg" src="/siring_ow/public/static/admin/common/upfile/img/a7.png">
-                                                                <img class="up-img" src="{$vo.image_one}">
-                                                                <p class="img-name-p">u4594.png</p>
-                                                                <input id="" value="{$vo.image_one}" type="hidden">
-                                                                <input  name="sss{$vo.name}[image_one]" value="{$vo.image_one}" type="hidden">
-                                                                <input id="tags" value="" type="hidden">
-                                                      </section>
-                                                      <section class="z_file fl" style="display:none">
-                                                         <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img">
-                                                          <input type="file" name="imgs_one[]" id="goods_one{$vo['id']}" class="file" value="" accept="image/jpg,image/jpeg,image/png,image/bmp"  data-id="1"  />
-                                                      </section>
-                                                  </div>
-                                              </section>
-                                            </div>
-                                            <aside class="mask works-mask">
-                                                  <div class="mask-content">
-                                                          <p class="del-p ">您确定要删除作品图片吗？</p>
-                                                           <p class="check-p"><span class="del-com wsdel-ok"  >确定</span><span class="wsdel-no">取消</span></p>
-                                                  </div>
-                                            </aside>
-                                      </td>
-                                      <td width="100px">
-                                            <div class="img-box full">
-                                                   <section class=" img-section">
-                                                           <div class="z_photo upimg-div clear">
-                                                                <section class="up-section fl">
-                                                                    <span class="up-span"></span>
-                                                                    <img class="close-upimg" src="/siring_ow/public/static/admin/common/upfile/img/a7.png">
-                                                                    <img class="up-img" src="{$vo.image_two}">
-                                                                    <p class="img-name-p">u4594.png</p>
-                                                                    <input  value="{$vo.image_two}" type="hidden">
-                                                                    <input  name="sss{$vo.name}[image_two]" value="{$vo.image_two}" type="hidden">
-                                                                    <input id="tags" value="" type="hidden">
-                                                                </section>
-                                                              <section class="z_file fl" style="display:none">
-                                                                    <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img">
-                                                                    <input type="file" id="goods_two{$vo['id']}" name="imgs_two[]"  class="file" value="" accept="image/jpg,image/jpeg,image/png,image/bmp" data-id="1"  />';
-                                                               </section>
-                                                           </div>
-                                                    </section>
-                                             </div>
-                                             <aside class="mask works-mask">
-                                                     <div class="mask-content">
-                                                          <p class="del-p ">您确定要删除作品图片吗？</p>
-                                                           <p class="check-p"><span class="del-com wsdel-ok" data-id="{$vo.id}" data-value="image_two">确定</span><span class="wsdel-no">取消</span></p>
-                                                     </div>
-                                             </aside>
-                                      </td>
-                                      <td width="100px">
-                                            <div class="img-box full">
-                                                   <section class=" img-section">
-                                                           <div class="z_photo upimg-div clear">
-                                                                <section class="up-section fl">
-                                                                    <span class="up-span"></span>
-                                                                    <img class="close-upimg" src="/siring_ow/public/static/admin/common/upfile/img/a7.png">
-                                                                    <img class="up-img" src="{$vo.image_three}">
-                                                                    <p class="img-name-p">u4594.png</p>
-                                                                    <input  value="{$vo.image_three}" type="hidden">
-                                                                    <input  name="sss{$vo.name}[image_three]" value="{$vo.image_three}" type="hidden">
-                                                                    <input id="tags" value="" type="hidden">
-                                                                </section>
-                                                              <section class="z_file fl" style="display:none">
-                                                                    <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img">
-                                                                    <input type="file" id="goods_three{$vo['id']}" name="imgs_three[]"  class="file" value="" accept="image/jpg,image/jpeg,image/png,image/bmp" data-id="1"  />';
-                                                               </section>
-                                                           </div>
-                                                    </section>
-                                             </div>
-                                             <aside class="mask works-mask">
-                                                     <div class="mask-content">
-                                                          <p class="del-p ">您确定要删除作品图片吗？</p>
-                                                           <p class="check-p"><span class="del-com wsdel-ok" data-id="{$vo.id}" data-value="image_two">确定</span><span class="wsdel-no">取消</span></p>
-                                                     </div>
-                                             </aside>
-                                      </td>
-                                       <td width="100px">
-                                          {if $vo['status']=='0'}
-                                          <input type="checkbox" class="Status"  name="sss{$vo.name}[status]" value="{$vo['status']}" lay-skin="switch" lay-text="是|否" lay-filter="isShow" data-id="{$vo.id}" data-value="status" checked></td>
-                                          {else}
-                                           <input type="checkbox" class="Status"  name="sss{$vo.name}[status]" value="{$vo['status']}" lay-skin="switch" lay-text="是|否" lay-filter="isShow" data-id="{$vo.id}" data-value="status" checked></td>
-                                          {/if}
-                            </tr>
-                                   {/volist}
-                            </tbody></table>
-                          </div>
-                    </div>
-            </div>
+        <div style="line-height:1px">
             <div class="form-item">
-                <label class="form-label"><span class="red">*</span>商品详情</label>
+                <label class="form-label">商品规格</label>
                 <div class="form-input">
-                <script id="editor" type="text/plain"  name="goods_detail" style="width:800px;height:500px;">{$goods[0]["goods_detail"]}</script>
+                    <input type="radio" name="goods_standard" value="1" title="特殊规格" lay-filter="guige"
+                        checked="checked">
+                </div>
             </div>
         </div>
-            <div class="form-title">运费</div>
-                <div class="form-item">
-                <label class="form-label">快递运费</label>
-                <div class="form-input line">
-                <input type="text" name="goods_freight" lay-verify="title" autocomplete="off" placeholder="  请输入                            元"
-            class="layui-input" required  value="{$goods[0]['goods_freight']}">
+        <div class="general_content" style="margin-top:10px">
+            <label class="control-label">规格项目表</label>
+            <div class="controls" style="">
+                <div id="lv_table" style="padding: 10px;">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="width:100px"><input value="规格值" readonly style="border:0;"></th>
+                                <th style="width:100px"><input value="库存" readonly style="border:0;"></th>
+                                <th style="width:100px"><input value="规格编码" readonly style="border:0;"></th>
+                                <th style="width:100px"><input value="成本价" readonly style="border:0;"></th>
+                                <th wstyle="width:100px"><input value="划线价" readonly style="border:0;"></th>
+                                <th style="width:100px"><input value="总积分" readonly style="border:0;"></th>
+                                <th style="width:100px"><input value="甩费" readonly style="border:0;"></th>
+                                <th style="width:100px"><input value="配图一" readonly style="border:0;"></th>
+                                <th style="width:100px"><input value="配图二" readonly style="border:0;"></th>
+                                <th style="width:100px"><input value="配图三" readonly style="border:0;"></th>
+                                <th style="width:100px"><input value="是否上架" readonly style="border:0;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {volist name="$goods[0]['goods_attr']" id="vo"}
+                            <tr>
+                                <td style="width:100px" rowspan="" data-rc="">
+                                    <input value="{$vo['name']}" readonly style="border:0;">
+                                </td>
+                                <input name="sss{$vo.name}[id]" value="{$vo.id}" style="display:none">
+                                <td style="width:100px"><input type="text" value="{$vo['stock']}"
+                                        name="sss{$vo.name}[stock]" required /></td>
+                                <td style="width:100px"><input type="text" value="{$vo['coding']}"
+                                        name="sss{$vo.name}[coding]" class="coding" required /></td>
+                                <td style="width:100px"><input type="text" value="{$vo['cost']}"
+                                        name="sss{$vo.name}[cost]" id="cost_1" required /></td>
+                                <td style="width:100px"><input type="text" value="{$vo.line}" name="sss{$vo.name}[line]"
+                                        required /></td>
+                                <td style="width:100px"><input type="text" value="{$vo.total}"
+                                        name="sss{$vo.name}[total]" class="offer" id="ins_1" readonly="readonly" /></td>
+                                <td style="width:100px"><input type="text" value="{$vo.jilt}"
+                                        name="sss{$vo.name}[jilt]" /></td>
+                                <td style="width:100px">
+                                    <div class="img-box full">
+                                        <section class=" img-section">
+                                            <div class="z_photo upimg-div clear">
+                                                <section class="up-section fl">
+                                                    <span class="up-span"></span>
+                                                    <img class="close-upimg"
+                                                        src="/siring_ow/public/static/admin/common/upfile/img/a7.png">
+                                                    <img class="up-img" src="{$vo.image_one}">
+                                                    <p class="img-name-p">u4594.png</p>
+                                                    <input id="" value="{$vo.image_one}" type="hidden">
+                                                    <input name="sss{$vo.name}[image_one]" value="{$vo.image_one}"
+                                                        type="hidden">
+                                                    <input id="tags" value="" type="hidden">
+                                                </section>
+                                                <section class="z_file fl" style="display:none">
+                                                    <img src="__STATIC__/admin/common/upfile/img/a11.png"
+                                                        class="add-img">
+                                                    <input type="file" name="imgs_one[]" id="goods_one{$vo['id']}"
+                                                        class="file" value=""
+                                                        accept="image/jpg,image/jpeg,image/png,image/bmp" data-id="1" />
+                                                </section>
+                                            </div>
+                                        </section>
+                                    </div>
+                                    <aside class="mask works-mask">
+                                        <div class="mask-content">
+                                            <p class="del-p ">您确定要删除作品图片吗？</p>
+                                            <p class="check-p"><span class="del-com wsdel-ok">确定</span><span
+                                                    class="wsdel-no">取消</span></p>
+                                        </div>
+                                    </aside>
+                                </td>
+                                <td width="100px">
+                                    <div class="img-box full">
+                                        <section class=" img-section">
+                                            <div class="z_photo upimg-div clear">
+                                                <section class="up-section fl">
+                                                    <span class="up-span"></span>
+                                                    <img class="close-upimg"
+                                                        src="/siring_ow/public/static/admin/common/upfile/img/a7.png">
+                                                    <img class="up-img" src="{$vo.image_two}">
+                                                    <p class="img-name-p">u4594.png</p>
+                                                    <input value="{$vo.image_two}" type="hidden">
+                                                    <input name="sss{$vo.name}[image_two]" value="{$vo.image_two}"
+                                                        type="hidden">
+                                                    <input id="tags" value="" type="hidden">
+                                                </section>
+                                                <section class="z_file fl" style="display:none">
+                                                    <img src="__STATIC__/admin/common/upfile/img/a11.png"
+                                                        class="add-img">
+                                                    <input type="file" id="goods_two{$vo['id']}" name="imgs_two[]"
+                                                        class="file" value=""
+                                                        accept="image/jpg,image/jpeg,image/png,image/bmp"
+                                                        data-id="1" />';
+                                                </section>
+                                            </div>
+                                        </section>
+                                    </div>
+                                    <aside class="mask works-mask">
+                                        <div class="mask-content">
+                                            <p class="del-p ">您确定要删除作品图片吗？</p>
+                                            <p class="check-p"><span class="del-com wsdel-ok" data-id="{$vo.id}"
+                                                    data-value="image_two">确定</span><span class="wsdel-no">取消</span></p>
+                                        </div>
+                                    </aside>
+                                </td>
+                                <td width="100px">
+                                    <div class="img-box full">
+                                        <section class=" img-section">
+                                            <div class="z_photo upimg-div clear">
+                                                <section class="up-section fl">
+                                                    <span class="up-span"></span>
+                                                    <img class="close-upimg"
+                                                        src="/siring_ow/public/static/admin/common/upfile/img/a7.png">
+                                                    <img class="up-img" src="{$vo.image_three}">
+                                                    <p class="img-name-p">u4594.png</p>
+                                                    <input value="{$vo.image_three}" type="hidden">
+                                                    <input name="sss{$vo.name}[image_three]" value="{$vo.image_three}"
+                                                        type="hidden">
+                                                    <input id="tags" value="" type="hidden">
+                                                </section>
+                                                <section class="z_file fl" style="display:none">
+                                                    <img src="__STATIC__/admin/common/upfile/img/a11.png"
+                                                        class="add-img">
+                                                    <input type="file" id="goods_three{$vo['id']}" name="imgs_three[]"
+                                                        class="file" value=""
+                                                        accept="image/jpg,image/jpeg,image/png,image/bmp"
+                                                        data-id="1" />';
+                                                </section>
+                                            </div>
+                                        </section>
+                                    </div>
+                                    <aside class="mask works-mask">
+                                        <div class="mask-content">
+                                            <p class="del-p ">您确定要删除作品图片吗？</p>
+                                            <p class="check-p"><span class="del-com wsdel-ok" data-id="{$vo.id}"
+                                                    data-value="image_two">确定</span><span class="wsdel-no">取消</span></p>
+                                        </div>
+                                    </aside>
+                                </td>
+                                <td width="100px">
+                                    {if $vo['status']=='0'}
+                                    <input type="checkbox" class="Status" name="sss{$vo.name}[status]"
+                                        value="{$vo['status']}" lay-skin="switch" lay-text="是|否" lay-filter="isShow"
+                                        data-id="{$vo.id}" data-value="status" checked></td>
+                                {else}
+                                <input type="checkbox" class="Status" name="sss{$vo.name}[status]"
+                                    value="{$vo['status']}" lay-skin="switch" lay-text="是|否" lay-filter="isShow"
+                                    data-id="{$vo.id}" data-value="status" checked></td>
+                                {/if}
+                            </tr>
+                            {/volist}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="form-label"><span class="red">*</span>商品详情</label>
+            <div class="form-input">
+                <script id="editor" type="text/plain" name="goods_detail"
+                    style="width:800px;height:500px;">{$goods[0]["goods_detail"]}</script>
+            </div>
+        </div>
+        <div class="form-title">运费</div>
+        <div class="form-item">
+            <label class="form-label">快递运费</label>
+            <div class="form-input line">
+                <input type="text" name="goods_freight" lay-verify="title" autocomplete="off"
+                    placeholder="  请输入                            元" class="layui-input" required
+                    value="{$goods[0]['goods_freight']}">
                 <div class="tips">
-                *运费直接加到总价中，主要针对体积大的商品，一般免运费
-            </div>
-            </div>
-            </div>
-            <div class="form-item">
-                <label class="form-label">状态</label>
-                <div class="form-input">
-                    {if $goods[0]['label']==0}
-                    <input type="radio" name="label" value="1" title="立即上架">
-                    <input type="radio" name="label" value="0" title="暂不上架" checked="checked">
-                    {else}
-                    <input type="radio" name="label" value="1" title="立即上架" checked="checked">
-                    <input type="radio" name="label" value="0" title="暂不上架">
-                    {/if}
+                    *运费直接加到总价中，主要针对体积大的商品，一般免运费
                 </div>
             </div>
-            <div class="form-item">
-                <label class="form-label">帮甩限制</label>
-                <div class="form-input">
-                    {if $goods[0]['goods_setting']=='1'}
-                    <input type="radio" name="goods_setting" value="0" title="不限制" lay-filter="limit" >
-                    <input type="radio" name="goods_setting" value="1" title="限制" lay-filter="limit" checked>
-                    {else}
-                    <input type="radio" name="goods_setting" value="0" title="不限制" lay-filter="nolimit" checked>
-                    <input type="radio" name="goods_setting" value="1" title="限制" lay-filter="limit">
-                    {/if}
-                   <div class="tips">
-                       *已经在甩的商品，就不能帮别人甩同一个商品了，要弹框提示：此商品您已开甩，不能帮甩
-                   </div>
+        </div>
+        <div class="form-item">
+            <label class="form-label">状态</label>
+            <div class="form-input">
+                {if $goods[0]['label']==0}
+                <input type="radio" name="label" value="1" title="立即上架">
+                <input type="radio" name="label" value="0" title="暂不上架" checked="checked">
+                {else}
+                <input type="radio" name="label" value="1" title="立即上架" checked="checked">
+                <input type="radio" name="label" value="0" title="暂不上架">
+                {/if}
+            </div>
+        </div>
+        <div class="form-item">
+            <label class="form-label">帮甩限制</label>
+            <div class="form-input">
+                {if $goods[0]['goods_setting']=='1'}
+                <input type="radio" name="goods_setting" value="0" title="不限制" lay-filter="limit">
+                <input type="radio" name="goods_setting" value="1" title="限制" lay-filter="limit" checked>
+                {else}
+                <input type="radio" name="goods_setting" value="0" title="不限制" lay-filter="nolimit" checked>
+                <input type="radio" name="goods_setting" value="1" title="限制" lay-filter="limit">
+                {/if}
+                <div class="tips">
+                    *已经在甩的商品，就不能帮别人甩同一个商品了，要弹框提示：此商品您已开甩，不能帮甩
                 </div>
             </div>
-            <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <button class="layui-btn layui-btn-normal" type="submit" id="submit">保存</button>
-                        <button type="button" class="layui-btn layui-btn-primary" onClick="javascript :history.back(-1);">返回</button>
-                    </div>
-             </div>
-            {/if}
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-normal" type="submit" id="submit">保存</button>
+                <button type="button" class="layui-btn layui-btn-primary"
+                    onClick="javascript :history.back(-1);">返回</button>
+            </div>
+        </div>
+        {/if}
     </form>
     </div>
-                </div>
-            </div>
+    </div>
+    </div>
 
 
 
@@ -1121,20 +1177,41 @@
                     $(this).parent().remove();
                 })
 
+                //修改复选框的val值
+                form.on("checkbox(choose1)", function (data) {
+
+                    if (data.value == "1") {
+                        $(this).val('0');
+                        data.value = "0";
+                    } else {
+                        $(this).val('1');
+                        data.value = "1";
+                    }
+                    form.render('checkbox');
+                })
+
+                var i = $('#hot').find(":checkbox").length;
                 $(".add_biao").click(function () {
                     var dhtml = "";
-                    dhtml += '<div class="list" style="position: relative;"> <input type="checkbox" name="goods_sign" lay-skin="primary" title="" class="biaoqian"> <span class="texts">古色生香</span> <span style="color: #0EA9E3;font-size: 12px; line-height: 20px;" class="change_text">修改</span> <img src="__STATIC__/admin/index/img/X.png" alt="" class="delect_img" style="width: 14px;height: 14px;    left: 15px;top: -5px;"></div>'
+                    dhtml = `<div class="list" style="position: relative;">
+                            <input type="checkbox" name="sss[sell_${i}][check]" value="0" lay-skin="primary" lay-filter="choose1"
+                                title="" class="biaoqian">
+                            <input class="texts" type="text" name="sss[sell_${i}][text]" value="古色生香">
+                            <img src="__STATIC__/admin/index/img/X.png" alt="" class="delect_img" style="width: 14px;height: 14px;    left: 15px;top: -5px;">
+                            </div>`;
                     $(this).before(dhtml);
                     form.render();
+                    i = i + 1;
                 });
                 $("#hot").on('click', ".delect_img", function () {
                     $(this).parent().remove();
+                    i = $('#hot').find(":checkbox").length;
                 })
 
 
                 //总积分计算
-                $('#cost').on('blur', function(){
-                    if($(this).val() != '') {
+                $('#cost').on('blur', function () {
+                    if ($(this).val() != '') {
                         var a = Number($(this).val()) * 5;
                         a = Math.round(a);
                         $('#int').val(a);
@@ -1337,8 +1414,8 @@
                         $('#lv_table_con').show();
                         $('#lv_table').html(tableHTML);
                         //总积分计算_1
-                        $('#cost_1').on('blur', function(){
-                            if($(this).val() != '') {
+                        $('#cost_1').on('blur', function () {
+                            if ($(this).val() != '') {
                                 var b = Number($(this).val()) * 5;
                                 b = Math.round(b);
                                 $('#ins_1').val(b);
@@ -1615,9 +1692,9 @@
             this.value = this.value.replace(/_+/g, '');
         })
         //点击详细信息   页面刷新
-         function back(){
-               history.go(0)
-         }
+        function back() {
+            history.go(0)
+        }
 
 
     </script>
