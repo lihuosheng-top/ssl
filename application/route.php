@@ -35,7 +35,11 @@ Route::group("",[
    'ali_pay'=>"index/Alipay/ali_pay"            ,
 
    /**会员模块 */
-   'member_info'=>"index/Member/member_info"  ,         //会员信息
+   'member_info'=>"index/Member/member_info"  ,            //会员信息
+   'member_exchange_phone'=>"index/Member/member_exchange_phone"  ,  //会员信息编辑
+   'member_pic_save'=>"index/Member/member_pic_save"  ,    //会员头像路径保存
+   'member_address'=>"index/Member/member_address"  ,      //会员地址
+   'member_address_add'=>"index/Member/member_address_add"  ,   //会员地址添加
 ]);
 
 

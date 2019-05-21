@@ -5,7 +5,7 @@
 		<title>登录页面</title>
 		<link rel="stylesheet" type="text/css" href="__STATIC__/admin/loading/css/index.css"/>
 	</head>
-	<body>
+	<body onload="body_load()">
 		 <div class="J_scroll_content store-banner b1" id="theOnlyScrollPage">
                 <div id="bg">
                         <div id="grid"></div>
@@ -45,6 +45,16 @@
 		    <script type="text/javascript" src="__STATIC__/admin/common/js/jquery.js"></script>
 		     <script type="text/javascript" src="__STATIC__/admin/loading/js/EasePack.min.js"></script>
 		      <script type="text/javascript" src="__STATIC__/admin/loading/js/fi000001.72.js"></script>
-		       <script type="text/javascript" src="__STATIC__/admin/loading/js/TweenLite.min.js"></script>
+			   <script type="text/javascript" src="__STATIC__/admin/loading/js/TweenLite.min.js"></script>
+			   <script type="text/javascript"?>
+			   function body_load(){
+				if(location.href.indexOf("#reloaded")==-1){
+						location.href=location.href+"#reloaded";
+						top.location.reload();
+					}
+				//   top.location.reload();
+			   }
+			   
+			   </script>
 	</body>
 </html>

@@ -122,7 +122,7 @@
                         </td>
                         <td>{$vo['star_value']}</td>
                         <td>{$vo['address']}</td>
-                        <td>{$vo['join_time']|date="Y-m-d H:i:s",###}</td>
+                        <td>{$vo['join_time']|date="Y-m-d",###}</td>
                         <td class="td-status">
                                 {if $vo.is_use == 1}
                                 <input type="checkbox" class="Status" name="status" value="{$vo.is_use}" lay-skin="switch"

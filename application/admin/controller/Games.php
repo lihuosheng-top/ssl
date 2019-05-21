@@ -5,6 +5,7 @@ namespace app\admin\controller;
 use think\Controller;
 use think\Console;
 use think\Db;
+use think\Request;
 
 /**
  * 小游戏管理
@@ -21,11 +22,26 @@ class Games extends Controller
 	}
 
     /**
+     * lilu
 	*  添加答题
 	*/
-	public function answer_bank_add()
+	public function answer_bank_add(Request $request)
 	{
-         return view('answer_bank_add');
+        if($request->isPost())
+        {
+            $input=input();
+            if($input){
+            halt($input);
+            }else{
+
+
+            }
+            halt($input);
+
+        }else{
+            return view('answer_bank_add');
+        }
+        
 	}
 
 	/**

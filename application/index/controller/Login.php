@@ -90,8 +90,7 @@ class Login extends Controller{
      * @param Request $request
      */
     public function index_dolog(Request $request){
-//        if($request->isPost()){
-          if(1){
+       if($request->isPost()){
             $user_mobile =$request->only(['account'])["account"];       //获取登录账号
             $code =$request->only(["code"])["code"];                    //获取验证码
             if(empty($user_mobile)){
@@ -113,13 +112,25 @@ class Login extends Controller{
                     $key=$user['passwd'];          //客户秘钥--注册时生成
                     $data['time']=time();        //当前时间戳
                     $data['token']=md5($key.md5($data['time']));    //token加密
-                    return   ajax_success('登录成功',$data);
+                    //将token保存数据库
+                    $re=db('member')->where('account',$user_mobile)->update($data);
+                    if($re){
+                      return   ajax_success('登录成功',$data);
+                    }else{
+                      return   ajax_error('登录失败');
+                    }
                 }elseif($code=='000'){
                     //获取token
                     $key=$user['passwd'];          //客户秘钥--注册时生成
                     $data['time']=time();        //当前时间戳
                     $data['token']=md5($key.md5($data['time']));    //token加密
-                    return   ajax_success('登录成功',$data);
+                    //将token保存数据库
+                    $re=db('member')->where('account',$user_mobile)->update($data);
+                    if($re){
+                      return   ajax_success('登录成功',$data);
+                    }else{
+                      return   ajax_error('登录失败');
+                    }
                 }else{
                     return   ajax_error('登录失败');
 
@@ -138,7 +149,13 @@ class Login extends Controller{
                         $key=$user['passwd'];          //客户秘钥--注册时生成
                         $data['time']=time();        //当前时间戳
                         $data['token']=md5($key.md5($data['time']));    //token加密
-                        return   ajax_success('登录成功',$data);
+                        //将token保存数据库
+                        $re=db('member')->where('account',$user_mobile)->update($data);
+                        if($re){
+                             return   ajax_success('登录成功',$data);
+                        }else{
+                             return   ajax_error('登录失败');
+                        }
                 }else{
                         return   ajax_error('登录失败');
                     }

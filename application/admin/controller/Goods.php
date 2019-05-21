@@ -2,7 +2,7 @@
 
 /**
  * Created by PhpStorm.
- * User: CHEN
+ * User: lilu
  * Date: 2018/7/11
  * Time: 16:12
  */
@@ -19,8 +19,9 @@ use app\admin\model\GoodsImages;
 use think\Session;
 use think\Loader;
 use think\paginator\driver\Bootstrap;
+use app\admin\controller\Base;
 
-class Goods extends Controller
+class Goods extends Base
 {
 
 
