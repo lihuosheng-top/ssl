@@ -137,7 +137,6 @@ class Goods extends Controller
                     //随机生成商品编码（6位）
                     $goods_data['goods_number']=randomkeys();
                     $goods_data['goods_price']=$goods_data['goods_price'];
-                    halt($goods_data);
                     $bool = db("goods")->insert($goods_data);
                     if($bool){
                         $this->success("添加成功", url("admin/Goods/goods_index"));
