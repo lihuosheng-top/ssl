@@ -110,8 +110,8 @@ class Login extends Controller{
                     Session::delete('code');
                     //获取token
                     $key=$user['passwd'];          //客户秘钥--注册时生成
-                    $data['time']=time();        //当前时间戳
-                    $data['token']=md5($key.md5($data['time']));    //token加密
+                    $data['token_time']=time()+600;        //当前时间戳
+                    $data['token']=md5($key.md5($data['token_time']));    //token加密
                     //将token保存数据库
                     $re=db('member')->where('account',$user_mobile)->update($data);
                     if($re){
@@ -122,8 +122,8 @@ class Login extends Controller{
                 }elseif($code=='000'){
                     //获取token
                     $key=$user['passwd'];          //客户秘钥--注册时生成
-                    $data['time']=time();        //当前时间戳
-                    $data['token']=md5($key.md5($data['time']));    //token加密
+                    $data['token_time']=time();        //当前时间戳
+                    $data['token']=md5($key.md5($data['token_time']));    //token加密
                     //将token保存数据库
                     $re=db('member')->where('account',$user_mobile)->update($data);
                     if($re){
@@ -147,8 +147,8 @@ class Login extends Controller{
                         Session::delete('code');
                         //获取token
                         $key=$user['passwd'];          //客户秘钥--注册时生成
-                        $data['time']=time();        //当前时间戳
-                        $data['token']=md5($key.md5($data['time']));    //token加密
+                        $data['token_time']=time();        //当前时间戳
+                        $data['token']=md5($key.md5($data['token_time']));    //token加密
                         //将token保存数据库
                         $re=db('member')->where('account',$user_mobile)->update($data);
                         if($re){
