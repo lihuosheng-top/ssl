@@ -18,7 +18,113 @@ class Games extends Controller
 	*/
 	public function answer_bank()
 	{
-         return view('answer_bank');
+        //获取后台的问题库
+        $problem=db('problem_house')->order('id desc')->select();
+        foreach($problem as $k =>$v){
+            $answer=json_decode($v['answer']);
+            $problem[$k]['answer']=$answer;
+            $problem_type=json_decode($v['problem_type'],true);
+            $arr='';
+            $num=count($problem_type);
+            $i=0;
+            foreach($problem_type as $k2=>$v2){
+                if($k2=='twdl'){
+                    $problem_type[$k2]='天文地理';
+                    if($i==$num-1){
+                        $arr .=$problem_type[$k2];
+                    }else{
+                        $arr .=$problem_type[$k2].',';
+                    }
+                }
+                if($k2=='rwls'){
+                    $problem_type[$k2]='人物历史';
+                    if($i==$num-1){
+                        $arr .=$problem_type[$k2];
+                    }else{
+                        $arr .=$problem_type[$k2].',';
+                    }
+                }
+                if($k2=='shbk'){
+                    $problem_type[$k2]='生活百科';
+                    if($i==$num-1){
+                        $arr .=$problem_type[$k2];
+                    }else{
+                        $arr .=$problem_type[$k2].',';
+                    }
+                }
+                if($k2=='mxbg'){
+                    $problem_type[$k2]='明星八卦';
+                    if($i==$num-1){
+                        $arr .=$problem_type[$k2];
+                    }else{
+                        $arr .=$problem_type[$k2].',';
+                    }
+                }
+                if($k2=='wlhx'){
+                    $problem_type[$k2]='物理化学';
+                    if($i==$num-1){
+                        $arr .=$problem_type[$k2];
+                    }else{
+                        $arr .=$problem_type[$k2].',';
+                    }
+                }
+                if($k2=='keji'){
+                    $problem_type[$k2]='科技';
+                    if($i==$num-1){
+                        $arr .=$problem_type[$k2];
+                    }else{
+                        $arr .=$problem_type[$k2].',';
+                    }
+                }
+                if($k2=='politics'){
+                    $problem_type[$k2]='政治';
+                    if($i==$num-1){
+                        $arr .=$problem_type[$k2];
+                    }else{
+                        $arr .=$problem_type[$k2].',';
+                    }
+                }
+                if($k2=='history'){
+                    $problem_type[$k2]='文学';
+                    if($i==$num-1){
+                        $arr .=$problem_type[$k2];
+                    }else{
+                        $arr .=$problem_type[$k2].',';
+                    }
+                }
+                if($k2=='music'){
+                    $problem_type[$k2]='音乐';
+                    if($i==$num-1){
+                        $arr .=$problem_type[$k2];
+                    }else{
+                        $arr .=$problem_type[$k2].',';
+                    }
+                }
+                if($k2=='sport'){
+                    $problem_type[$k2]='体育';
+                    if($i==$num-1){
+                        $arr .=$problem_type[$k2];
+                    }else{
+                        $arr .=$problem_type[$k2].',';
+                    }
+                }
+                $i++;
+            }
+            $problem[$k]['problem_type']=$arr;
+            if($v['problem_status']=='1'){
+                $problem[$k]['problem_status']="简单";
+            }
+            if($v['problem_status']=='2'){
+                $problem[$k]['problem_status']="中难";
+            }
+            if($v['problem_status']=='3'){
+                $problem[$k]['problem_status']="较难";
+            }
+            if($v['problem_status']=='4'){
+                $problem[$k]['problem_status']="很难";
+            }
+        }
+         return view('answer_bank',['data'=>$problem]);
 	}
 
     /**
@@ -31,16 +137,24 @@ class Games extends Controller
         {
             $input=input();
             if($input){
-                $data['problem']=
-                
-
-            halt($input);
+                $data['problem']=$input['problem'];  //问题 
+                $answer=json_encode($input['ans']);
+                $data['answer']=$answer;                //问题选项
+                $data['true_ans']=$input['aa'];         //正确答案
+                $data['problem_status']=$input['b'];    //问题难度
+                $problem_type=json_encode($input['sss']);
+                $data['problem_type']=$problem_type;
+                $data['problem_status']=$input['b'];    //问题难度
+                $re=db('problem_house')->insert($data);
+                if($re)
+                {
+                    $this->success('添加成功',url('admin/Games/answer_bank'));
+                }else{
+                    $this->error('添加失败');
+                }
             }else{
-             $this->error('参数错误');
-
+              $this->error('参数错误');
             }
-            halt($input);
-
         }else{
             return view('answer_bank_add');
         }
@@ -180,6 +294,122 @@ class Games extends Controller
             substr ( $charid, 0, 8 ) . $hyphen . substr ( $charid, 8, 4 ) . $hyphen . substr ( $charid, 12, 4 ) . $hyphen . substr ( $charid, 16, 4 ) . $hyphen . substr ( $charid, 20, 12 );
         //.chr(125);// "}"
         return $uuid;
+    }
+    /**
+     * lilu
+     * 答题编辑
+     */
+    public function  answer_bank_edit()
+    {
+        //获取答题id
+        $input=input();
+        if($input['id']){
+            //获取后台的问题库
+            $problem=db('problem_house')->where('id',$input['id'])->select();
+            foreach($problem as $k =>$v){
+                $answer=json_decode($v['answer']);
+                $problem[$k]['answer']=$answer;
+                $problem_type=json_decode($v['problem_type'],true);
+                $arr='';
+                $num=count($problem_type);
+                $i=0;
+                foreach($problem_type as $k2=>$v2){
+                    if($k2=='twdl'){
+                        $problem_type[$k2]='天文地理';
+                    }
+                    if($k2=='rwls'){
+                        $problem_type[$k2]='人物历史';
+                    }
+                    if($k2=='shbk'){
+                        $problem_type[$k2]='生活百科';
+                    }
+                    if($k2=='mxbg'){
+                        $problem_type[$k2]='明星八卦';
+                    }
+                    if($k2=='wlhx'){
+                        $problem_type[$k2]='物理化学';
+                    }
+                    if($k2=='keji'){
+                        $problem_type[$k2]='科技';
+                    }
+                    if($k2=='politics'){
+                        $problem_type[$k2]='政治';
+                    }
+                    if($k2=='history'){
+                        $problem_type[$k2]='文学';
+                    }
+                    if($k2=='music'){
+                        $problem_type[$k2]='音乐';
+                    }
+                    if($k2=='sport'){
+                        $problem_type[$k2]='体育';
+                    }
+                }
+                $problem[$k]['problem_type']=$problem_type;
+                // if($v['problem_status']=='1'){
+                //     $problem[$k]['problem_status']="简单";
+                // }
+                // if($v['problem_status']=='2'){
+                //     $problem[$k]['problem_status']="中难";
+                // }
+                // if($v['problem_status']=='3'){
+                //     $problem[$k]['problem_status']="较难";
+                // }
+                // if($v['problem_status']=='4'){
+                //     $problem[$k]['problem_status']="很难";
+                // }
+            }
+            return view('answer_bank_edit',['data'=>$problem]);
+        }else{
+            $this->error('参数错误');
+        }
+    }
+    /**
+     * lilu
+     * 添加问题编辑处理
+     */
+    public function answer_bank_edit_do()
+    {
+        $input=input();
+        if($input){
+                $data['problem']=$input['problem'];  //问题 
+                $answer=json_encode($input['ans'],true);
+                $data['answer']=$answer;                //问题选项
+                $data['true_ans']=$input['aa'];         //正确答案
+                $data['problem_status']=$input['b'];    //问题难度
+                $problem_type=json_encode($input['sss']);
+                $data['problem_type']=$problem_type;
+                $data['problem_status']=$input['b'];    //问题难度
+                $re=db('problem_house')->where('id',$input['id'])->update($data);
+                if($re)
+                {
+                    $this->success('保存成功',url('admin/Games/answer_bank'));
+                }else{
+                    $this->error('保存失败');
+                }
+        }else{
+            $this->error('保存失败');
+        }
+    }
+    /**
+     * lilu
+     * 答题问题删除
+     */
+    public function answer_bank_del()
+    {
+        //获取所有的参数
+        $input=input();
+        if($input['id']){
+            $re=db('problem_house')->delete($input['id']);
+            if($re)
+            {
+                $this->success('删除成功',url('admin/Games/answer_bank'));
+            }else{
+                $this->error('删除失败');
+            }
+        }else{
+            $this->error('删除失败');
+        }
     }
 
 

@@ -150,6 +150,9 @@ Route::group("admin",[
     "differ_index"=>"admin/Games/differ_index",              //出现概率
     "update_images"=>"admin/Games/update_images",              //出现概率
     "answer_bank_edit"=>"admin/Games/answer_bank_edit",        //添加答题
+    "answer_bank_edit_do"=>"admin/Games/answer_bank_edit_do",        //添加答题
+    "answer_bank_del"=>"admin/Games/answer_bank_del",        //添加答题
+
     
 
 

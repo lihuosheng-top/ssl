@@ -81,20 +81,35 @@
                     </tr>
                 </thead>
                 <tbody class="news_content">
+                    {volist name="data" id="vo"}
                     <tr>
-                        <td><input type="checkbox" name="" lay-skin="primary" lay-filter="choose" data-id="">
+                        <td><input type="checkbox" name="id" lay-skin="primary" lay-filter="choose" data-id="{$vo['id']}">
                         </td>
-                        <td>01</td>
-                        <td>考古</td>
-                        <td>菜徐鲲是男还是女</td>
-                        <td>A 女</td>
-                        <td>巨难</td>
+                        <td>{$vo['id']}</td>
+                        <td>{$vo['problem_type']}</td>
+                        <td>{$vo['problem']}</td>
                         <td>
-                            <a class=" layui-btn-mini edit" href="{:url('')}"> 编辑</a>
-                            <a href="{:url()}" onclick="if(!confirm('确定要删除吗？')) return false" class=" news_del"
+                            {if $vo['true_ans']=='0'}
+                            A   {$vo['answer'][0]}
+                            {/if}
+                            {if $vo['true_ans']=='1'}
+                            B   {$vo['answer'][1]}
+                            {/if}
+                            {if $vo['true_ans']=='2'}
+                            C   {$vo['answer'][2]}
+                            {/if}
+                            {if $vo['true_ans']=='3'}
+                            D   {$vo['answer'][3]}
+                            {/if}
+                        </td>
+                        <td>{$vo['problem_status']}</td>
+                        <td>
+                            <a class=" layui-btn-mini edit" href="{:url('admin/Games/answer_bank_edit',['id'=>$vo['id']])}"> 编辑</a>
+                            <a href="{:url('admin/Games/answer_bank_del',['id'=>$vo['id']])}" onclick="if(!confirm('确定要删除吗？')) return false" class=" news_del"
                                 data-id="undefined"> 删除</a>
                         </td>
                     </tr>
+                    {/volist}
                 </tbody>
             </table>
             <div id="page">
