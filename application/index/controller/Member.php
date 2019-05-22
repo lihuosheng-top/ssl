@@ -22,6 +22,8 @@ class Member extends Base
         //获取参数信息
         $input=input('');
         $res=db('member')->where('token',$this->token)->find();
+        unset($res['token']);
+        unset($res['token_time']);
         if($res){
            return ajax_success('success',$res);
         }else{

@@ -31,9 +31,12 @@ class Games extends Controller
         {
             $input=input();
             if($input){
+                $data['problem']=
+                
+
             halt($input);
             }else{
-
+             $this->error('参数错误');
 
             }
             halt($input);
