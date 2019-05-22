@@ -149,6 +149,8 @@ Route::group("admin",[
     "appear_pro"=>"admin/Games/appear_pro",                  //出现概率
     "differ_index"=>"admin/Games/differ_index",              //出现概率
     "update_images"=>"admin/Games/update_images",              //出现概率
+    "answer_bank_edit"=>"admin/Games/answer_bank_edit",        //添加答题
+    
 
 
 
