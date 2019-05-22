@@ -3,6 +3,7 @@ namespace app\index\controller;
 
 use think\Controller;
 use app\index\controller\Base;
+use think\Session;
 
 /**
  * lilu
@@ -11,20 +12,16 @@ use app\index\controller\Base;
 class Member extends Base
 {
 
+    /**
+     * lilu
+     * 会员基本信息
+     * @parsm $this->token
+     */
     public function member_info()
     {
-        //获取token
-        $token=input('get.token');
-        if($token){
-            $map['token']=$token;
-            $map['token_time']=time()+600;
-
-        }
-        
-        //获取会员的id
-        $id=input('get.id');
-        //根据id来获取信息
-        $res=db('member')->find($id);
+        //获取参数信息
+        $input=input('');
+        $res=db('member')->where('token',$this->token)->find();
         if($res){
            return ajax_success('success',$res);
         }else{
@@ -60,14 +57,11 @@ class Member extends Base
         {
             return ajax_error('error');
         }
+        $code=Session::get('code');
         //判断code是否正确
-        if($input['code']=='123'){
-           $re=db('member')->where('account',$input['account'])->setField('account',$input['new_account']);
-           if($re){
-              return ajax_success('success');
-           }else{
-               return ajax_error('error');
-           }
+        if($input['code']==$code){
+           $re=db('member')->where('token',$this->token)->setField('account',$input['new_account']);
+           return ajax_success('success');
         }else{
             return ajax_error('code error');
         }
@@ -80,23 +74,15 @@ class Member extends Base
      */
     public function member_pic_save()
     {
-        //获取会员的信息（id，图片路径）
+        //获取会员的信息（图片路径）
         $input=input('');
         if($input){
-             if(!$input['id']){
-                 return ajax_error('error');
-             }
              if(!$input['pic_url']){
                  return ajax_error('error');
              }
              //更改头像路径
-             $re=db('member')->where('id',$input['id'])->setField('head_pic',$input['pic_url']);
-             if($re){
-                return ajax_success('success');
-             }else{
-                 return ajax_error('error');
-             }
-            
+             $re=db('member')->where('token',$this->token)->setField('head_pic',$input['pic_url']);
+             return ajax_success('success');
         }else{
             return ajax_error('error');
         }
@@ -112,8 +98,19 @@ class Member extends Base
         if(!$input['member_id']){
             return ajax_error('error');
         }
-        $re=db('member_address')->insert($input);
-        halt($re);
+        $data['member_id']=$input['member_id'];
+        $data['address']=$input['address'];
+        $data['phone']=$input['phone'];
+        $data['is_use']=$input['is_use'];
+       if($input['is_use']=='1')     //添加的是默认地址
+       {
+           $address=db('member_address')->where('member_id',$input['member_id'])->select();
+           foreach($address as $k =>$v)
+           {
+               db('member_address')->where('id',$v['id'])->setField('is_use',0);
+           }
+       }
+        $re=db('member_address')->insert($data);
         if($re){
             return ajax_success('success');
         }else{
