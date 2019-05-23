@@ -270,47 +270,56 @@ class Wxpay2 extends Controller{
  * lilu
  * 回调地址
  */
-        public function wxpaynotifyurl(){ 
-         $xml = $GLOBALS['HTTP_RAW_POST_DATA']; 
-         // 这句file_put_contents是用来查看服务器返回的XML数据 测试完可以删除了 
-         file_put_contents('../index/log.txt',$xml,FILE_APPEND); 
-         //将服务器返回的XML数据转化为数组 
-         //$data = json_decode(json_encode(simplexml_load_string($xml,'SimpleXMLElement',LIBXML_NOCDATA)),true); 
-         $data = xmlToArray($xml); 
-         // 保存微信服务器返回的签名sign 
-         $data_sign = $data['sign']; 
-         // sign不参与签名算法 
-         unset($data['sign']); 
-         $sign = $this->makeSign($data); 
-         // 判断签名是否正确 判断支付状态 
-         if ( ($sign===$data_sign) && ($data['return_code']=='SUCCESS') && ($data['result_code']=='SUCCESS') ) { 
-          $result = $data; 
-          // 这句file_put_contents是用来查看服务器返回的XML数据 测试完可以删除了 
-        //   file_put_contents('./Api/wxpay/logs/log1.txt',$xml,FILE_APPEND); 
-          //获取服务器返回的数据 
-          $order_sn = $data['out_trade_no']; //订单单号 
-        //   $order_id = $data['attach'];  //附加参数,选择传递订单ID 
-        //   $openid = $data['openid'];   //付款人openID 
-          $total_fee = $data['total_fee']; //付款金额 
-          db('order')->where('order_number',$order_sn)->setField('status','2');
-         }else{ 
-          $result = false; 
-         } 
-         // 返回状态给微信服务器 
-         if ($result) { 
-          $str='<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>'; 
-         }else{ 
-          $str='<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[签名失败]]></return_msg></xml>'; 
-         } 
-         echo $str; 
-         return $result; 
+    public function wxpaynotifyurl(){ 
+        $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
+        $xml_data = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
+        $val = json_decode(json_encode($xml_data), true);
+        if($val["result_code"] == "SUCCESS" ){
+//             file_put_contents(EXTEND_PATH."data.txt",$val);
+            $res = Db::name("order")
+                ->where("order_number",$val["out_trade_no"])
+                ->update(["status"=>2,"pay_time"=>time()]);
+            if($res){
+                // //做消费记录
+                // $information =Db::name("reward")->field("money,order_number,crowd_name,member_id")->where("order_number",$val["out_trade_no"])->find();
+                // $member_wallet =Db::name("member")
+                //     ->where("member_id",$information["member_id"])
+                //     ->value('member_wallet');
+                // $datas= [
+                //     "user_id"=>$information["member_id"],//用户ID
+                //     "wallet_operation"=> $information["money"],//消费金额
+                //     "wallet_type"=>-1,//消费操作(1入，-1出)
+                //     "operation_time"=> date("Y-m-d H:i:s"),//操作时间
+                //     "operation_linux_time"=>time(), //操作时间
+                //     "wallet_remarks"=>"订单号：".$val["out_trade_no"]."众筹打赏".$information["money"]."元",//消费备注
+                //     "wallet_img"=>" ",//图标
+                //     "title"=>$information["crowd_name"],//标题（消费内容）
+                //     "order_nums"=>$val["out_trade_no"],//订单编号
+                //     "pay_type"=>"小程序", //支付方式/
+                //     "wallet_balance"=>$member_wallet,//此刻钱包余额
+                // ];
+                // Db::name("wallet")->insert($datas); //存入消费记录表
+                echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
+            }else{
+                echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[签名失败]]></return_msg></xml>';
+                return ajax_error("失败");
+            }
+        }
+        //  // 返回状态给微信服务器 
+        //  if ($result) { 
+        //   $str='<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>'; 
+        //  }else{ 
+        //   $str='<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[签名失败]]></return_msg></xml>'; 
+        //  } 
+        //  echo $str; 
+        //  return $result; 
         }
         /** 
          * LILU
         * 生成签名 
         * @return 签名，本函数不覆盖sign成员变量 
         */
-        protected function makeSign($data){ 
+         function makeSign($data){ 
             //获取微信支付秘钥 
             include('../extend/WxpayAll/lib/WxPay.Api.php');
             // require_once APP_ROOT."/Api/wxpay/lib/WxPay.Api.php"; 

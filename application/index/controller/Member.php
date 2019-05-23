@@ -105,13 +105,15 @@ class Member extends Base
         if(!$input['member_id']){
             return ajax_error('error');
         }
-        $data['member_id']=$input['member_id'];
+        $member=db('member')->where('token',$this->token)->find();
+        $data['member_id']=$member['id'];
         $data['address']=$input['address'];
         $data['phone']=$input['phone'];
         $data['is_use']=$input['is_use'];
+        $data['name']=$input['name'];
        if($input['is_use']=='1')     //添加的是默认地址
        {
-           $address=db('member_address')->where('member_id',$input['member_id'])->select();
+           $address=db('member_address')->where('member_id',$member['id'])->select();
            foreach($address as $k =>$v)
            {
                db('member_address')->where('id',$v['id'])->setField('is_use',0);
@@ -119,9 +121,9 @@ class Member extends Base
        }
         $re=db('member_address')->insert($data);
         if($re){
-            return ajax_success('success');
+            return ajax_success('添加成功');
         }else{
-            return ajax_error('error');
+            return ajax_error('添加失败');
         }
     }
     /**
@@ -136,12 +138,41 @@ class Member extends Base
            $member_id=db('member')->where('token',$this->token)->find();
            $re=db('member_address')->where('member_id',$member_id['id'])->select();
            if($re){
-               return ajax_success('success',$re);
+               return ajax_success('获取成功',$re);
            }else{
-               return ajax_error('error');
+               return ajax_error('获取失败');
            }
         }else{
-            return ajax_error('error');
+            return ajax_error('获取失败');
+        }
+    }
+    /**
+     * lilu
+     * Notes:会员地址编辑
+     */
+    public function member_address_edit()
+    {
+        //获取会员的ID
+        $input=input();
+        $member=db('member')->where('token',$this->token)->find(); //会员信息
+        $data['member_id']=$member['id'];
+        $data['address']=$input['address'];
+        $data['phone']=$input['phone'];
+        $data['is_use']=$input['is_use'];
+        $data['name']=$input['name'];
+       if($input['is_use']=='1')     //添加的是默认地址
+       {
+           $address=db('member_address')->where('member_id',$member['id'])->select();
+           foreach($address as $k =>$v)
+           {
+               db('member_address')->where('id',$v['id'])->setField('is_use',0);
+           }
+       }
+        $re=db('member_address')->where('id',$input['id'])->update($data);
+        if($re){
+            return ajax_success('编辑成功');
+        }else{
+            return ajax_error('编辑失败');
         }
     }
 }

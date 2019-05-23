@@ -66,7 +66,7 @@ class Order extends Base
             $data['order_number']=date('YmdHis',time());    //自定义生成订单号
             //根据token获取会员id
             $member_id=db('member')->where('token',$this->token)->field('id')->find();
-            $data['member_id']=$member_id['member_id'];         //会员id
+            $data['member_id']=$member_id['id'];         //会员id
             $data['goods_id']=$input['goods_id'];            //甩品、商品id
             $data['order_amount']=$input['income'];               //甩费、收入
             // $data['pay_type']=$input['pay_type'];           //支付类型

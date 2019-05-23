@@ -40,6 +40,7 @@ Route::group("",[
    'member_pic_save'=>"index/Member/member_pic_save"  ,    //会员头像路径保存
    'member_address'=>"index/Member/member_address"  ,      //会员地址
    'member_address_add'=>"index/Member/member_address_add"  ,   //会员地址添加
+   'member_address_edit'=>"index/Member/member_address_edit"  ,   //会员地址添加
 ]);
 
 
