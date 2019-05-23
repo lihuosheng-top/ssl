@@ -13,7 +13,7 @@
         width: auto;
     }
 
-    .form-input > input {
+    .form-input>input {
         width: 100px;
     }
 
@@ -24,6 +24,7 @@
     .m_t {
         margin-top: 50px;
     }
+
     .p_l {
         padding-left: 6px;
     }
@@ -45,10 +46,10 @@
         margin-left: 250px;
         margin-top: 80px;
     }
+
     .one {
         font-size: 23px;
     }
-   
 </style>
 
 {/block}
@@ -56,7 +57,8 @@
 <body>
     {block name="content"}
     <div id="app">
-        <form class="layui-form layui-form-lists" action="{:url('admin/Tactics/zpoint_tactics_do')}" method="post" enctype="multipart/form-data">
+        <form class="layui-form layui-form-lists" action="{:url('admin/Tactics/zpoint_tactics_do')}" method="post"
+            enctype="multipart/form-data">
             <blockquote class="layui-elem-quote news_search">
                 <div class="seach_laber">
                     赠甩策略
@@ -66,45 +68,45 @@
             <div class="form-item m_t">
                 <label class="form-label" style="width:20%">答对奖励</label>
                 <div class="form-input" style="margin-right:15px;">
-                    <input type="radio" name="oneself" value="自己概率" title="自己甩奖励积分" lay-filter="gailv" checked =''>
+                    <input type="radio" name="oneself" value="自己概率" title="自己甩奖励积分" lay-filter="gailv" checked=''>
                 </div>
                 <div class="form-input m_r">
                     <span class="one">1~</span>
                     <input type="hidden" name="sss0[tactics_key]" value="zpoints_own">
                     <input type="hidden" name="sss0[id]" value="{$tactics1['id']}">
-                    <input type="text" name="sss0[tactics_num]" lay-verify="title"  value="{$tactics1['tactics_num']}" autocomplete="off" placeholder="  请输入"
-                    class="layui-input">
+                    <input type="text" name="sss0[tactics_num]" lay-verify="title" value="{$tactics1['tactics_num']}"
+                        autocomplete="off" placeholder="  请输入" class="layui-input">
                     <span>积分</span>
                     <div class="tips">
                         <span class="red">*</span>1.奖励积分
                     </div>
-                    <div class="tips p_l" >
-                         2.随机奖励，例如设为4，则随机奖励给用户1到4之间的积分
+                    <div class="tips p_l">
+                        2.随机奖励，例如设为4，则随机奖励给用户1到4之间的积分
                     </div>
                 </div>
             </div>
 
             <div class="form-item m_t">
-                    <label class="form-label" style="width:20%"></label>
-                    <div class="form-input">
-                        <input type="radio" name="help" value="帮甩概率" title="帮别人甩奖励积分" lay-filter="help" checked =''>
+                <label class="form-label" style="width:20%"></label>
+                <div class="form-input">
+                    <input type="radio" name="help" value="帮甩概率" title="帮别人甩奖励积分" lay-filter="help" checked=''>
+                </div>
+                <div class="form-input m_r">
+                    <span class="one">1~</span>
+                    <input type="hidden" name="sss1[tactics_key]" value="zpoints_other">
+                    <input type="hidden" name="sss1[id]" value="{$tactics2['id']}">
+                    <input type="text" name="sss1[tactics_num]" lay-verify="title" value="{$tactics2['tactics_num']}"
+                        autocomplete="off" placeholder="  请输入" class="layui-input">
+                    <span>积分</span>
+                    <div class="tips">
+                        <span class="red">*</span>1.奖励积分
                     </div>
-                    <div class="form-input m_r">
-                        <span class="one">1~</span>
-                        <input type="hidden" name="sss1[tactics_key]" value="zpoints_other">
-                        <input type="hidden" name="sss1[id]" value="{$tactics2['id']}">
-                        <input type="text" name="sss1[tactics_num]" lay-verify="title" value="{$tactics2['tactics_num']}" autocomplete="off" placeholder="  请输入"
-                        class="layui-input">
-                        <span>积分</span>
-                        <div class="tips">
-                            <span class="red">*</span>1.奖励积分
-                        </div>
-                        <div class="tips p_l" >
-                             2.随机奖励，例如设为4，则随机奖励给用户1到4之间的积分
-                        </div>
+                    <div class="tips p_l">
+                        2.随机奖励，例如设为4，则随机奖励给用户1到4之间的积分
                     </div>
                 </div>
-            
+            </div>
+
 
             <div class="layui-form-item" style="width:100%;">
                 <div class="layui-input-block">
@@ -126,7 +128,7 @@
     <script type="text/javascript">
         layui.config({
             base: "js/"
-        }).use(['form', 'layer', 'jquery', 'laypage'], () =>  {
+        }).use(['form', 'layer', 'jquery', 'laypage'], () => {
             var form = layui.form(),
                 layer = parent.layer === undefined ? layui.layer : parent.layer,
                 laypage = layui.laypage,
