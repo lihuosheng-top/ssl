@@ -13,7 +13,7 @@
         width: auto;
     }
 
-    .form-input > input {
+    .form-input>input {
         width: 100px;
     }
 
@@ -24,6 +24,7 @@
     .m_t {
         margin-top: 50px;
     }
+
     .p_l {
         padding-left: 6px;
     }
@@ -45,7 +46,6 @@
         margin-left: 250px;
         margin-top: 80px;
     }
-   
 </style>
 
 {/block}
@@ -53,7 +53,8 @@
 <body>
     {block name="content"}
     <div id="app">
-        <form class="layui-form layui-form-lists" action="{:url('admin/Tactics/big_slam_tactics_do')}" method="post" enctype="multipart/form-data">
+        <form class="layui-form layui-form-lists" action="{:url('admin/Tactics/big_slam_tactics_do')}" method="post"
+            enctype="multipart/form-data">
             <blockquote class="layui-elem-quote news_search">
                 <div class="seach_laber">
                     大满贯策略
@@ -68,31 +69,31 @@
                 <input type="hidden" name="sss0[tactics_key]" value="big_falm_condition">
                 <input type="hidden" name="sss0[id]" value="{$tactics1['id']}">
                 <div class="form-input m_r">
-                    <input type="text" name="sss0[tactics_num]" value="{$tactics1['tactics_num']}" lay-verify="title" autocomplete="off" placeholder="  请输入"
-                    class="layui-input">
+                    <input type="text" name="sss0[tactics_num]" value="{$tactics1['tactics_num']}" lay-verify="title"
+                        autocomplete="off" placeholder="  请输入" class="layui-input">
                     <span>%</span>
                     <span>（注明：填写1~100）</span>
-                    <div class="tips p_l" >
-                         <span class="red">*</span>实际总的付款（自己甩+别人帮甩）要大于商品进货价+运费，才能触发以上条件
+                    <div class="tips p_l">
+                        <span class="red">*</span>实际总的付款（自己甩+别人帮甩）要大于商品进货价+运费，才能触发以上条件
                     </div>
                 </div>
             </div>
 
             <div class="form-item m_t">
-                    <label class="form-label" style="width:20%">赠送</label>
-                    <div class="form-input" style="margin-right:15px;  padding-top: 10px;">
-                        剩余的积分的：
-                    </div>
-                    <input type="hidden" name="sss1[tactics_key]" value="giving">
-                    <input type="hidden" name="sss1[id]" value="{$tactics2['id']}">
-                    <div class="form-input m_r">
-                        <input type="text" name="sss1[tactics_num]" value="{$tactics2['tactics_num']}" lay-verify="title" autocomplete="off" placeholder="  请输入"
-                        class="layui-input">
-                        <span>%</span>
-                        <span>（注明：填写1~100）</span>
-                    </div>
+                <label class="form-label" style="width:20%">赠送</label>
+                <div class="form-input" style="margin-right:15px;  padding-top: 10px;">
+                    剩余的积分的：
                 </div>
-            
+                <input type="hidden" name="sss1[tactics_key]" value="giving">
+                <input type="hidden" name="sss1[id]" value="{$tactics2['id']}">
+                <div class="form-input m_r">
+                    <input type="text" name="sss1[tactics_num]" value="{$tactics2['tactics_num']}" lay-verify="title"
+                        autocomplete="off" placeholder="  请输入" class="layui-input">
+                    <span>%</span>
+                    <span>（注明：填写1~100）</span>
+                </div>
+            </div>
+
 
             <div class="layui-form-item" style="width:100%;">
                 <div class="layui-input-block">
@@ -114,7 +115,7 @@
     <script type="text/javascript">
         layui.config({
             base: "js/"
-        }).use(['form', 'layer', 'jquery', 'laypage'], () =>  {
+        }).use(['form', 'layer', 'jquery', 'laypage'], () => {
             var form = layui.form(),
                 layer = parent.layer === undefined ? layui.layer : parent.layer,
                 laypage = layui.laypage,

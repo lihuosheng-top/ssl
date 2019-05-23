@@ -1,0 +1,677 @@
+{include file="template/_meta" /}
+<title></title>
+</head>
+
+{block name="css"}
+<link rel="stylesheet" type="text/css" href="__STATIC__/admin/common/css/aaa.css" />
+<style type="text/css">
+    body {
+        background: #fff;
+    }
+
+    .ziji {
+        width: auto;
+    }
+
+    .ziji>input {
+        width: 300px;
+    }
+
+    .layui-btn {
+        border-radius: 6px;
+        height: 50px;
+    }
+
+    .layui-form-lists .layui-btn {
+        width: 170px;
+    }
+
+    .layui-btn-normal {
+        margin-right: 150px;
+    }
+
+    .layui-form-item {
+        margin-left: 200px;
+        margin-top: 650px;
+    }
+
+    .seach_laber1 {
+        font-size: 13px;
+        width: 100px;
+        text-align: center;
+        color: #333;
+    }
+
+    .layui-textarea {
+        width: 100%;
+    }
+
+    .tips {
+        margin-top: 5px;
+    }
+
+    .m_t {
+        margin-top: 10px;
+    }
+
+    .title {
+        border-radius: 15px;
+        border: 1px solid rgb(188, 188, 188);
+        text-align: center;
+        width: 70px;
+        height: 20px;
+        margin: 10px 25px 0 10px;
+    }
+
+    .layui-textarea {
+        width: 100%;
+    }
+
+    .p_t {
+        padding-top: 8px;
+    }
+
+    .add_btn {
+        width: 500px;
+        border: 1px solid rgb(14, 144, 210);
+        text-align: center;
+        color: rgb(14, 144, 210);
+        margin: 20px 0 20px 350px;
+    }
+
+    .add_btn:hover {
+        cursor: pointer;
+    }
+
+    .img_x {
+        width: 20px;
+        height: 20px;
+    }
+
+    .del_div {
+        display: inline;
+    }
+
+    .del_div:hover {
+        cursor: pointer;
+    }
+
+    .ziji {
+        width: auto;
+    }
+
+    .ziji>input {
+        width: 150px;
+    }
+
+    .m_r {
+        margin-right: 50px;
+    }
+
+    .m_t {
+        margin-top: 50px;
+    }
+
+    .clone {
+        display: flex;
+        margin-top: 15px;
+    }
+
+    .percent {
+        font-size: 23px;
+        font-weight: 800;
+    }
+
+    .one_more {
+        padding: 0;
+        width: 500px;
+        text-align: center;
+        line-height: 30px;
+        color: rgb(14, 144, 210);
+        border: 1px solid rgb(14, 144, 210);
+        margin-top: 20px;
+        margin-left: 360px;
+    }
+
+    /* .layui-form-item {
+        margin-left: 250px;
+        margin-top: 80px;
+    } */
+
+    .one_more:hover {
+        cursor: pointer;
+    }
+
+    .layui-form-checkbox {
+        margin-top: 5px;
+    }
+
+    .p_l {
+        padding-left: 6px;
+    }
+
+    .one {
+        font-size: 23px;
+    }
+
+    .zpoint {
+        width: auto;
+    }
+
+    .zpoint>input {
+        width: 100px;
+    }
+</style>
+
+{/block}
+
+<body>
+    <form class="layui-form layui-form-lists" action="{:url('')}" method="post" enctype="multipart/form-data">
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">免单策略</li>
+                <li>红包策略</li>
+                <li>增积分策略</li>
+                <li>大满贯策略</li>
+                <li>新人帮甩策略</li>
+                <li>老人帮甩策略</li>
+            </ul>
+            <div class="layui-tab-content" style="height: 100px;">
+                <!-- 免单策略 -->
+                <div class="layui-tab-item layui-show">
+                    <div class="oneself m_t">
+                        <div class="form-item" style="margin-top: 15px;">
+                            <label class="form-label" style="width:20%">自己免单金额和概率</label>
+                            <div class="form-input ziji">
+                                <input type="checkbox" name="one_[status]" value="1" lay-filter="choose1" checked=''>
+                            </div>
+                            <div class="form-input ziji m_r">
+                                <input type="text" name="one_[percent]" value=" " lay-verify="title" autocomplete="off"
+                                    placeholder="" class="layui-input">
+                                <span class="percent">%</span>
+                                <div class="tips">
+                                    <span class="red">*</span>0 ~ 100,表示减免单次甩费的百分比
+                                </div>
+                            </div>
+                            <div class="form-input ziji">
+                                <input type="text" name="one_[probability]" value=" " lay-verify="title"
+                                    autocomplete="off" placeholder="" class="layui-input">
+                                <div class="tips">
+                                    <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="one_more" id="one_more">添加一档</div>
+                    <div class="help m_t">
+                        <div class="form-item" style="margin-top:15px;">
+                            <label class="form-label" style="width:20%">自己免单金额和概率</label>
+                            <div class="form-input ziji">
+                                <input type="checkbox" name="help_[status]" lay-filter="choose1" value="1" checked=''>
+                            </div>
+                            <div class="form-input ziji m_r">
+                                <input type="text" name="help_[percent]" value="" lay-verify="title" autocomplete="off"
+                                    placeholder="" class="layui-input">
+                                <span class="percent">%</span>
+                                <div class="tips">
+                                    <span class="red">*</span>0 ~ 100,表示减免单次甩费的百分比
+                                </div>
+                            </div>
+                            <div class="form-input ziji">
+                                <input type="text" name="help_[probability]" value="" lay-verify="title"
+                                    autocomplete="off" placeholder="" class="layui-input">
+                                <div class="tips">
+                                    <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="one_more" id="one_help">添加一档</div>
+
+                    <div class="form-item" style="margin-top:15px;">
+                        <label class="form-label" style="width:20%">策略是否开启</label>
+                        <div class="form-input ziji">
+                            <input type="radio" name="free" title="开启" checked=''>
+                            <input type="radio" name="free" title="关闭">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 红包策略 -->
+                <div class="layui-tab-item">
+                    <div class=" m_t pack">
+                        <div class="form-item" style="margin-top: 15px;">
+                            <label class="form-label" style="width:20%">自己甩奖励金额和概率</label>
+                            <div class="form-input ziji">
+                                <input type="checkbox" name="pack_[status]" lay-filter="choose1" value="1" checked=''>
+                            </div>
+                            <div class="form-input ziji m_r">
+                                <input type="text" name="pack_[percent]" value="" lay-verify="title" autocomplete="off"
+                                    placeholder="  请输入金额" class="layui-input">
+                                <span class="percent">%</span>
+                                <div class="tips">
+                                    <span class="red">*</span>奖励金额
+                                </div>
+                            </div>
+                            <div class="form-input ziji">
+                                <input type="text" name="pack_[probability]" value="" lay-verify="title"
+                                    autocomplete="off" placeholder="  请输入数字" class="layui-input">
+                                <div class="tips">
+                                    <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="one_more" id="pack_one">添加一档</div>
+                    <div class=" m_t pack_t">
+                        <div class="form-item" style="margin-top:15px;">
+                            <label class="form-label" style="width:20%">自己甩奖励金额和概率</label>
+                            <div class="form-input ziji">
+                                <input type="checkbox" name="other_[status]" lay-filter="choose1" value="1" checked=''>
+                            </div>
+                            <div class="form-input ziji m_r">
+                                <input type="text" name="other_[percent]" value="" lay-verify="title" autocomplete="off"
+                                    placeholder="  请输入金额" class="layui-input">
+                                <span class="percent">%</span>
+                                <div class="tips">
+                                    <span class="red">*</span>奖励金额
+                                </div>
+                            </div>
+                            <div class="form-input ziji">
+                                <input type="text" name="other_[probability]" value="" lay-verify="title"
+                                    autocomplete="off" placeholder="  请输入数字" class="layui-input">
+                                <div class="tips">
+                                    <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="one_more" id="pack_two">添加一档</div>
+
+                    <div class="form-item" style="margin-top:15px;">
+                        <label class="form-label" style="width:20%">策略是否开启</label>
+                        <div class="form-input ziji">
+                            <input type="radio" name="bao" title="开启" checked=''>
+                            <input type="radio" name="bao" title="关闭">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 增积分策略 -->
+                <div class="layui-tab-item">
+                    <div class="form-item m_t">
+                        <label class="form-label" style="width:20%">答对奖励</label>
+                        <div class="form-input zpoint" style="margin-right:15px;">
+                            <input type="radio" name="oneself" value="自己概率" title="自己甩奖励积分" lay-filter="gailv"
+                                checked=''>
+                        </div>
+                        <div class="form-input zpoint">
+                            <span class="one">1~</span>
+                            <input type="text" name="sss0[tactics_num]" lay-verify="title" value="" autocomplete="off"
+                                placeholder="  请输入" class="layui-input">
+                            <span>积分</span>
+                            <div class="tips">
+                                <span class="red">*</span>1.奖励积分
+                            </div>
+                            <div class="tips p_l">
+                                2.随机奖励，例如设为4，则随机奖励给用户1到4之间的积分
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-item m_t">
+                        <label class="form-label" style="width:20%"></label>
+                        <div class="form-input zpoint">
+                            <input type="radio" name="help" value="帮甩概率" title="帮别人甩奖励积分" lay-filter="help" checked=''>
+                        </div>
+                        <div class="form-input zpoint ">
+                            <span class="one">1~</span>
+                            <input type="text" name="sss1[tactics_num]" lay-verify="title" value="" autocomplete="off"
+                                placeholder="  请输入" class="layui-input">
+                            <span>积分</span>
+                            <div class="tips">
+                                <span class="red">*</span>1.奖励积分
+                            </div>
+                            <div class="tips p_l">
+                                2.随机奖励，例如设为4，则随机奖励给用户1到4之间的积分
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-item" style="margin-top:15px;">
+                        <label class="form-label" style="width:20%">策略是否开启</label>
+                        <div class="form-input ziji">
+                            <input type="radio" name="zpoint" title="开启" checked=''>
+                            <input type="radio" name="zpoint" title="关闭">
+                        </div>
+                    </div>
+                </div>
+                <!-- 大满贯策略 -->
+                <div class="layui-tab-item">
+                    <div class="form-item m_t">
+                        <label class="form-label" style="width:20%">触发条件</label>
+                        <div class="form-input zpoint" style="margin-right:15px; padding-top: 10px;">
+                            达到总积分的：
+                        </div>
+                        <div class="form-input m_r zpoint">
+                            <input type="text" name="sss0[tactics_num]" value="" lay-verify="title" autocomplete="off"
+                                placeholder="  请输入" class="layui-input">
+                            <span>%</span>
+                            <span>（注明：填写1~100）</span>
+                            <div class="tips p_l">
+                                <span class="red">*</span>实际总的付款（自己甩+别人帮甩）要大于商品进货价+运费，才能触发以上条件
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-item m_t">
+                        <label class="form-label" style="width:20%">赠送</label>
+                        <div class="form-input zpoint" style="margin-right:15px;  padding-top: 10px;">
+                            剩余的积分的：
+                        </div>
+                        <input type="hidden" name="sss1[tactics_key]" value="giving">
+                        <input type="hidden" name="sss1[id]" value="">
+                        <div class="form-input m_r zpoint">
+                            <input type="text" name="sss1[tactics_num]" value="" lay-verify="title" autocomplete="off"
+                                placeholder="  请输入" class="layui-input">
+                            <span>%</span>
+                            <span>（注明：填写1~100）</span>
+                        </div>
+                    </div>
+
+                    <div class="form-item" style="margin-top:15px;">
+                        <label class="form-label" style="width:20%">策略是否开启</label>
+                        <div class="form-input ziji">
+                            <input type="radio" name="big" title="开启" checked=''>
+                            <input type="radio" name="big" title="关闭">
+                        </div>
+                    </div>
+                </div>
+                <!-- 新人帮甩策略 -->
+                <div class="layui-tab-item">
+                    <div class="form-item m_t">
+                        <label class="form-label" style="width:20%">新人帮甩</label>
+                        <div class="form-input m_r zpoint">
+                            <input type="text" name="sss0[tactics_num]" value="" lay-verify="title" autocomplete="off"
+                                placeholder=" 请输入次数" class="layui-input">
+                            <span class="red">/每天</span>
+                            <div class="tips"><span class="red">*</span>该用户拉来一个新人（有开甩记录就算老客，没有记录的就是新客），帮他甩，每拉一个新人，他<span
+                                    class="red">每天</span>针对该商品可多甩次数</div>
+                        </div>
+                    </div>
+
+                    <div class="form-item" style="margin-top:15px;">
+                        <label class="form-label" style="width:20%">策略是否开启</label>
+                        <div class="form-input ziji">
+                            <input type="radio" name="new" title="开启" checked=''>
+                            <input type="radio" name="new" title="关闭">
+                        </div>
+                    </div>
+                </div>
+                <!-- 老人帮甩策略 -->
+                <div class="layui-tab-item">
+                    <div class="form-item m_t">
+                        <label class="form-label" style="width:20%">老人帮甩</label>
+                        <div class="form-input m_r zpoint">
+                            <input type="text" name="sss0[tactics_num]" value="" lay-verify="title" autocomplete="off"
+                                placeholder=" 请输入次数" class="layui-input">
+                            <span class="red">/每天</span>
+                            <div class="tips"><span class="red">*</span>该用户拉来一个老人（有开甩记录就算老客，没有记录的就是新客），帮他甩，每拉一个老人，他
+                                <span class="red">每天</span>针对该商品可多甩次数</div>
+                        </div>
+                    </div>
+
+                    <div class="form-item" style="margin-top:15px;">
+                        <label class="form-label" style="width:20%">策略是否开启</label>
+                        <div class="form-input ziji">
+                            <input type="radio" name="old" title="开启" checked=''>
+                            <input type="radio" name="old" title="关闭">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" style="width:100%;">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal" type="submit" id="submit">保存</button>
+                    <button type="button" class="layui-btn layui-btn-primary"
+                        onClick="javascript :history.back(-1);">返回</button>
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+    <!--_footer 作为公共模版分离出去-->
+    {include file="template/_footer" /}
+    <!--/_footer 作为公共模版分离出去-->
+
+    <!--请在下方写此页面业务相关的脚本-->
+    {block name="bottom"}
+    <script type="text/javascript">
+        var ue = UE.getEditor('editor');
+        layui.config({
+            base: "js/"
+        }).use(['form', 'layer', 'jquery', 'laypage', 'element'], () => {
+            var form = layui.form(),
+                layer = parent.layer === undefined ? layui.layer : parent.layer,
+                laypage = layui.laypage,
+                $ = layui.jquery,
+                element = layui.element;
+
+            //触发事件
+            var active = {
+                tabAdd: function () {
+                    //新增一个Tab项
+                    element.tabAdd('demo', {
+                        title: '新选项' + (Math.random() * 1000 | 0) //用于演示
+                        , content: '内容' + (Math.random() * 1000 | 0)
+                        , id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
+                    })
+                }
+                , tabDelete: function (othis) {
+                    //删除指定Tab项
+                    element.tabDelete('demo', '44'); //删除：“商品管理”
+
+
+                    othis.addClass('layui-btn-disabled');
+                }
+                , tabChange: function () {
+                    //切换到指定Tab项
+                    element.tabChange('demo', '22'); //切换到：用户管理
+                }
+            };
+
+            form.on("checkbox(choose1)", function (data) {
+
+                if (data.value == "1") {
+                    $(this).val('0');
+                    data.value = "0";
+                } else {
+                    $(this).val('1');
+                    data.value = "1";
+                }
+                form.render('checkbox');
+            })
+            //免单添加一档
+            var i = $('.oneself').find(":checkbox").length;
+            var e = $('.help').find(":checkbox").length;
+            $('#one_more').on('click', function () {
+                let dhtml = "";
+                dhtml = `<div class="form-item clone">
+                                        <label class="form-label" style="width:20%"></label>
+                                        <input name="one_${i}[tactics_key]" value="free_tactics_own" style="display: none">
+                                        <input name="one_${i}[id]" value="" style="display: none">
+                                        <div class="form-input ziji">
+                                                <input type="checkbox" name="one_${i}[status]" value="0" lay-filter="choose1" >
+                                                <input type="hidden" name="one_${i}[id]" value="" >
+                                        </div>
+                                        <div class="form-input ziji m_r">
+                                            <input type="text" name="one_${i}[percent]" lay-verify="title" autocomplete="off" placeholder=""
+                                                class="layui-input">
+                                            <span class="percent">%</span>
+                                            <div class="tips">
+                                                <span class="red">*</span>0 ~ 100,表示减免单次甩费的百分比
+                                            </div>
+                                        </div>
+                                        <div class="form-input ziji">
+                                            <input type="text" name="one_${i}[probability]" lay-verify="title" autocomplete="off" placeholder=""
+                                                class="layui-input" style="margin-right: 110px;">
+                                            <div class="del_div" id="del_oneself"><img src="__STATIC__/admin/index/img/u1306.png" class="img_x"></div>
+                                            <div class="tips">
+                                                <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                                            </div>
+                                        </div>
+                                    </div>`;
+                $('.oneself').append(dhtml);
+
+                $(document).on('click', '#del_oneself', function () {
+                    $(this).parents('.clone').remove();
+                });
+                form.render();
+                i = i + 1;
+
+            })
+            $('#one_help').on('click', function () {
+                let dhtml = "";
+                dhtml = `<div class="form-item clone">
+                                    <label class="form-label" style="width:20%"></label>
+                                    <input name="help_${e}[tactics_key]" value="free_tactics_other" style="display: none">
+                                        <input name="help_${e}[id]" value="" style="display: none">
+                                    <div class="form-input ziji">
+                                        <input type="checkbox" name="help_${e}[status]" value="0" lay-filter="choose1" >
+                                    </div>
+                                    <div class="form-input ziji m_r">
+                                        <input type="text" name="help_${e}[percent]" lay-verify="title" autocomplete="off" placeholder=""
+                                            class="layui-input">
+                                        <span class="percent">%</span>
+                                        <div class="tips">
+                                            <span class="red">*</span>0 ~ 100,表示减免单次甩费的百分比
+                                        </div>
+                                    </div>
+                                    <div class="form-input ziji">
+                                        <input type="text" name="help_${e}[probability]" lay-verify="title" autocomplete="off" placeholder=""
+                                            class="layui-input"  style="margin-right: 110px;">
+                                        <div class="del_div" id="del_help"><img src="__STATIC__/admin/index/img/u1306.png" class="img_x"></div>
+                                        <div class="tips">
+                                            <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                                        </div>
+                                    </div>
+                                    </div>`;
+                $('.help').append(dhtml);
+                $(document).on('click', '#del_help', function () {
+                    $(this).parents('.clone').remove();
+                });
+                form.render();
+                e = e + 1;
+            })
+
+            // 红包策略
+            var y = $('.pack').find(":checkbox").length;
+            var u = $('.pack_t').find(":checkbox").length;
+
+            $('#pack_one').on('click', function () {
+                let dhtml = "";
+
+                dhtml = `<div class="form-item clone">
+                                        <label class="form-label" style="width:20%"></label>
+                                        <input name="pack_${y}[tactics_key]" value="bao_tactics_own" style="display: none">
+                                        <input name="pack_${y}[id]" value="" style="display: none">
+                                        <div class="form-input ziji">
+                                                <input type="checkbox" name="pack_${y}[status]" value="0" lay-filter="choose1">
+                                        </div>
+                                        <div class="form-input ziji m_r">
+                                            <input type="text" name="pack_${y}[percent]" lay-verify="title" autocomplete="off" placeholder="  请输入金额"
+                                                class="layui-input">
+                                            <span class="percent">%</span>
+                                            <div class="tips">
+                                                <span class="red">*</span>奖励金额
+                                            </div>
+                                        </div>
+                                        <div class="form-input ziji">
+                                            <input type="text" name="pack_${y}[probability]" lay-verify="title" autocomplete="off" placeholder="  请输入数字"
+                                                class="layui-input" style="margin-right: 110px;">
+                                            <div class="del_div" id="del_oneself1"><img src="__STATIC__/admin/index/img/u1306.png" class="img_x"></div>
+                                            <div class="tips">
+                                                <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                                            </div>
+                                        </div>
+                                    </div>`;
+                $('.pack').append(dhtml);
+                $(document).on('click', '#del_oneself1', function () {
+                    $(this).parents('.clone').remove();
+                });
+                form.render();
+                y = y + 1;
+            });
+
+
+            $('#pack_two').on('click', function () {
+                let dhtml = "";
+                dhtml = `<div class="form-item clone">
+                                    <label class="form-label" style="width:20%"></label>
+                                    <input name="other_${u}[tactics_key]" value="bao_tactics_other" style="display: none">
+                                        <input name="other_${u}[id]" value="" style="display: none">
+                                    <div class="form-input ziji">
+                                        <input type="checkbox" name="other_${u}[status]" value="0" lay-filter="choose1">
+                                    </div>
+                                    <div class="form-input ziji m_r">
+                                        <input type="text" name="other_${u}[percent]" lay-verify="title" autocomplete="off" placeholder="  请输入金额"
+                                            class="layui-input">
+                                        <span class="percent">%</span>
+                                        <div class="tips">
+                                            <span class="red">*</span>奖励金额
+                                        </div>
+                                    </div>
+                                    <div class="form-input ziji">
+                                        <input type="text" name="other_${u}[probability]" lay-verify="title" autocomplete="off" placeholder="  请输入数字"
+                                            class="layui-input"  style="margin-right: 110px;">
+                                        <div class="del_div" id="del_help2"><img src="__STATIC__/admin/index/img/u1306.png" class="img_x"></div>
+                                        <div class="tips">
+                                            <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                                        </div>
+                                    </div>
+                                    </div>`;
+                $('.pack_t').append(dhtml);
+                $(document).on('click', '#del_help2', function () {
+                    $(this).parents('.clone').remove();
+                });
+                form.render();
+                u = u + 1;
+            });
+
+
+
+
+            $('.add_btn').on('click', function () {
+                var e = $('.answer').find(".form-item").length;
+                var letter;
+                //答案对应的字母
+                letter = String.fromCharCode((65 + e))
+                var dhtml = '';
+                dhtml = `<div class="form-item clone">
+                            <label class="form-label" style="width:20%"></label>
+                            <div class="p_t">${letter}：</div>
+                            <div class="form-input">
+                                <input type="text" name="ans[${e}]" lay-verify="title" autocomplete="off" placeholder=" "
+                                    class="layui-input" style="width:500px;">
+                                <input type="radio" name="aa" value="${e}" title="设为正确答案">
+                                <div class="del_div" id="del_oneself"><img src="__STATIC__/admin/index/img/u1306.png" class="img_x"></div>
+                            </div>
+                         </div>`;
+                $('.answer').append(dhtml);
+                $(document).on('click', '#del_oneself', function () {
+                    $(this).parents('.clone').remove();
+                });
+                form.render();
+            })
+        })
+
+
+
+    </script>
+
+    {/block}
+
+</body>
+
+</html>

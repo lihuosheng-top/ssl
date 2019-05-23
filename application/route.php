@@ -113,6 +113,7 @@ Route::group("admin",[
     "goods_add_do"   =>"admin/Goods/goods_add_do",           //商品添加处理
     "goods_edit_do"   =>"admin/Goods/goods_edit_do",           //商品编辑处理
     "goods_del"   =>"admin/Goods/goods_del",           //商品编辑处理
+    "goods_strategy"   =>"admin/Goods/goods_strategy",           //商品编辑处理
 
 
     /*订单列表*/

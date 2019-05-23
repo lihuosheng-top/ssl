@@ -271,8 +271,8 @@
                         <td>{$vo.start_date|date="Y-m-d",###}</td>
                         <td>{$vo.end_date|date="Y-m-d ",###}</td>
                         <td>
-                            <div class="layui-btn layui-btn-mini edit change" > 配置策略
-                            </div>
+                            <a class="layui-btn layui-btn-mini edit change" href="{:url('admin/Goods/goods_strategy')}"> 配置策略
+                            </a>
                             <a class="layui-btn layui-btn-mini edit" href="{:url('admin/Goods/goods_edit' ,['id'=>$vo.id])}"> 编辑
                             </a>
 
@@ -315,9 +315,9 @@
     <!--请在下方写此页面业务相关的脚本-->
     {block name="bottom"}
     <script type="text/javascript">
-        $(".change").on("click", function () {
-            $(".popup").removeClass("noshow");
-        });
+        // $(".change").on("click", function () {
+        //     $(".popup").removeClass("noshow");
+        // });
         $(".popup_x").click(function () {
             $(".popup").addClass("noshow");
         });

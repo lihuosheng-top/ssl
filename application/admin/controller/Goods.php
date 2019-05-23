@@ -1315,6 +1315,13 @@ class Goods extends Base
 
     /**
      * [专属定制商品显示]
+     * ZJP
+     */    
+    public function goods_strategy(){     
+        return view("goods_strategy");
+    }
+    /**
+     * [专属定制商品显示]
      * 郭杨
      */    
     public function exclusive_index(){     
