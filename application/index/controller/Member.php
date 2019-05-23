@@ -130,12 +130,11 @@ class Member extends Base
      */
     public function member_address()
     {
-        //获取会员的id
-        $input=input('');
-        if($input)
+        if($this->token)
         {
            //根据会员id获取用户的地址列表
-           $re=db('member_address')->where('member_id',$input['member_id'])->select();
+           $member_id=db('member')->where('token',$this->token)->find();
+           $re=db('member_address')->where('member_id',$member_id['id'])->select();
            if($re){
                return ajax_success('success',$re);
            }else{

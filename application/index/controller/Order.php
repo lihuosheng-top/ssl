@@ -59,7 +59,7 @@ class Order extends Controller
     }
     /**
      * lilu
-     * 商品订单生成
+     * 商品订单生成----支付
      */
     public function goods_order()
     {
@@ -74,12 +74,11 @@ class Order extends Controller
             $data['goods_name']=db('goods')->where('id',$data['goods_id'])->value('goods_name');
             $data['create_time']=time();                    //订单创建时间
            if($input['special_id']){
-            $data['special_id']=$input['special_id'];
+                $data['special_id']=$input['special_id'];
            }else{
-            $data['special_id']='0';
+                $data['special_id']='0';
            }
            $data['order_quantity']=$input['order_quantity'];   //商品数量
-        //    $data['goods_money']=$input['order_quantity'];   //商品数量
             $re=db('order')->insert($data);
             if($re)
             {
