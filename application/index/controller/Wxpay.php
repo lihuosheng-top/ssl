@@ -27,8 +27,6 @@ class Wxpay extends Controller
         include('../extend/WxpayAll/example/log.php');
         $notify = new \NativePay();
         $input = new \WxPayUnifiedOrder();//统一下单
-//        $config = new \WxPayConfig();//配置参数
-        //$paymoney = input('post.paymoney'); //支付金额
         $paymoney = $object['paymoney']; //测试写死
         $out_trade_no = 'w' . date("YmdHis"); //商户订单号(自定义)
         $goods_name = $object['goods_name']; //商品名称(自定义)
@@ -45,8 +43,7 @@ class Wxpay extends Controller
         $input->SetProduct_id($goods_id);//设置trade_type=NATIVE，此参数必传。此id为二维码中包含的商品ID，商户自行定义。
         $result = $notify->GetPayUrl($input);
         $url2 = $result["code_url"];
-       
-       return view("index",["url2"=>$url2]);
+        return view("index",["url2"=>$url2]);
     }
 
     /**
