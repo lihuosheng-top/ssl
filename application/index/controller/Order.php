@@ -4,10 +4,7 @@ namespace  app\index\controller;
 use think\Controller;
 use think\Console;
 use think\Db;
-use app\index\controller\Wxpay as pay;
-include('../extend/WxpayAll/lib/WxPay.Api.php');
-include('../extend/WxpayAll/example/WxPay.NativePay.php');
-include('../extend/WxpayAll/example/log.php');
+use app\index\controller\Wxpay2 as pay;
 
 /*
  * @Author: lilu 
@@ -78,18 +75,26 @@ class Order extends Controller
            }else{
                 $data['special_id']='0';
            }
-           $data['order_quantity']=$input['order_quantity'];   //商品数量
+            $data['order_quantity']=$input['order_quantity'];   //商品数量
             $re=db('order')->insert($data);
             if($re)
             {
-                $object['paymoney']=$data['order_amount'];
-                $object['goods_name']=$data['goods_name'];
-                $object['goods_id']=$data['goods_id'];
-                
+                // $body, $out_trade_no, $total_fee
+                $body='微信测试';
+                $out_trade_no=$data['order_number']; //商户订单号(自定义)
+                $total_fee=$data['order_amount']*100;
                 $pay = new pay();//统一下单
-                $pay->index($object);
-                die;
-               return ajax_success('订单生成成功');
+                $order= $pay->getPrePayOrder($body, $out_trade_no, $total_fee);
+                if ($order['prepay_id']){//判断返回参数中是否有prepay_id
+                    
+                    $order1 = $pay->getOrder($order['prepay_id']);//执行二次签名返回参数
+                    return ajax_success('新建订单成功',$order1);
+                    // echo json_encode(array('status' => 1, 'prepay_order' => no_null($order1)));
+                } else {
+                    return ajax_error('新建订单失败',$order['err_code_des']);
+                    // echo json_encode(array('status' => 0, 'msg' => $order['err_code_des']));
+                }
+                break;
             }else{
                return ajax_error('订单生成失败');
             }
