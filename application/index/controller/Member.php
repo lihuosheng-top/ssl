@@ -102,9 +102,6 @@ class Member extends Base
     {
         //获取会员的ID
         $input=input();
-        if(!$input['member_id']){
-            return ajax_error('error');
-        }
         $member=db('member')->where('token',$this->token)->find();
         $data['member_id']=$member['id'];
         $data['phone']=$input['phone'];
@@ -183,7 +180,10 @@ class Member extends Base
      */
     public function shuai_start()
     {
-
+       //获取信息
+       $input=input();   //商品id
+       //获取当前甩客信息
+       
     }
 
 }
