@@ -107,8 +107,9 @@ class Member extends Base
         }
         $member=db('member')->where('token',$this->token)->find();
         $data['member_id']=$member['id'];
-        $data['address']=$input['address'];
         $data['phone']=$input['phone'];
+        $data['address']=$input['address'];
+        $data['detail_address']=$input['detail_address'];
         $data['is_use']=$input['is_use'];
         $data['name']=$input['name'];
        if($input['is_use']=='1')     //添加的是默认地址
@@ -157,6 +158,7 @@ class Member extends Base
         $member=db('member')->where('token',$this->token)->find(); //会员信息
         $data['member_id']=$member['id'];
         $data['address']=$input['address'];
+        $data['detail_address']=$input['detail_address'];
         $data['phone']=$input['phone'];
         $data['is_use']=$input['is_use'];
         $data['name']=$input['name'];
@@ -175,4 +177,13 @@ class Member extends Base
             return ajax_error('编辑失败');
         }
     }
+    /**
+     * lilu 
+     * 开甩界面
+     */
+    public function shuai_start()
+    {
+
+    }
+
 }
