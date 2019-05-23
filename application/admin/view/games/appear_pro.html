@@ -52,14 +52,14 @@
 
 <body>
     {block name="content"}
-    <form class="layui-form layui-form-lists" action="{:url('admin/Tactics/new_man_tactics_do')}" method="post"
+    <form class="layui-form layui-form-lists" action="{:url('admin/Games/appear_pro_do')}" method="post"
         enctype="multipart/form-data">
         <div class="form-item m_t">
             <label class="form-label" style="width:20%">设置概率</label>
             <div class="form-input ziji">
-                <input type="checkbox" name="aa" lay-skin="primary" lay-filter="choose1" value="0" title="答题">
-                <input type="text" name="sss0[tactics_num]" value="" lay-verify="title" autocomplete="off"
-                    placeholder="  请输入数字" class="layui-input">
+                <input type="checkbox" name="answer[0]" lay-skin="primary" lay-filter="choose1" value="0" title="答题">
+                <input type="text" name="" value="" lay-verify="title" autocomplete="off"
+                    placeholder="请输入数字" class="layui-input">
                 <span>题</span>
                 <div class="tips"><span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和</div>
             </div>
@@ -67,7 +67,7 @@
         <div class="form-item m_t">
             <label class="form-label" style="width:20%">找不同</label>
             <div class="form-input ziji">
-                <input type="checkbox" name="aa" lay-skin="primary" lay-filter="choose1" value="0" title="答题">
+                <input type="checkbox" name="differ" lay-skin="primary" lay-filter="choose1" value="0" title="找不同">
                 <input type="text" name="sss0[tactics_num]" value="" lay-verify="title" autocomplete="off"
                     placeholder="  请输入数字" class="layui-input">
                 <span>题</span>

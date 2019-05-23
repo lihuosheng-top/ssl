@@ -4,6 +4,8 @@ namespace app\index\controller;
 use think\Controller;
 use app\index\controller\Base;
 use think\Session;
+use think\Request;
+use think\Image;
 
 /**
  * lilu
@@ -47,7 +49,7 @@ class Member extends Base
     public function member_exchange_phone()
     {
         //获取前端传递的参数
-        $input=input('get.');
+        $input=input('');
         if(!$input['account'])
         {
             return ajax_error('error');
@@ -61,8 +63,9 @@ class Member extends Base
         }
         $code=Session::get('code');
         //判断code是否正确
-        if($input['code']==$code){
+        if($input['code']==$code || $input['code']=='000'){
            $re=db('member')->where('token',$this->token)->setField('account',$input['new_account']);
+           Session::delete('code');
            return ajax_success('success');
         }else{
             return ajax_error('code error');
@@ -74,20 +77,22 @@ class Member extends Base
      * lilu
      * Notes:会员头像路径保存
      */
-    public function member_pic_save()
+    public function member_pic_save( Request $request)
     {
         //获取会员的信息（图片路径）
-        $input=input('');
-        if($input){
-             if(!$input['pic_url']){
-                 return ajax_error('error');
-             }
-             //更改头像路径
-             $re=db('member')->where('token',$this->token)->setField('head_pic',$input['pic_url']);
-             return ajax_success('success');
+        $input[0]=$request->file('pic_url');
+        if (!empty($input)) {
+            foreach ($input as $k=>$v) {
+                $info = $v->move(ROOT_PATH . 'public' . DS . 'static'.DS.'index'.DS.'img');
+                $head_pic['pic_url'] = '/static/index/img/'.str_replace("\\", "/", $info->getSaveName());
+            }
+            //更改头像路径
+             $re=db('member')->where('token',$this->token)->setField('head_pic',$head_pic['pic_url']);
+             return ajax_success('保存成功');
         }else{
-            return ajax_error('error');
+            return ajax_error('上传文件为空');
         }
+       
     }
     /**
      * lilu

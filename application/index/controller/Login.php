@@ -26,9 +26,6 @@ class Login extends Controller{
      */
     public function index_login()
     {
-        //获取app配置信息
-//        $app_info=Config::get('app_info');
-//        $post['account'] = '15729016523';               //获取前端提交数据
          $post = input('');              //获取前端提交数据
         if($post){
             $re=DB::name('member')
@@ -114,6 +111,8 @@ class Login extends Controller{
                     //将token保存数据库
                     $re=db('member')->where('account',$user_mobile)->update($data);
                     if($re){
+                        //清空code缓存
+                      Session::delete('code');
                       return   ajax_success('登录成功',$data);
                     }else{
                       return   ajax_error('登录失败');
@@ -126,6 +125,8 @@ class Login extends Controller{
                     //将token保存数据库
                     $re=db('member')->where('account',$user_mobile)->update($data);
                     if($re){
+                        //清空code缓存
+                      Session::delete('code');
                       return   ajax_success('登录成功',$data);
                     }else{
                       return   ajax_error('登录失败');

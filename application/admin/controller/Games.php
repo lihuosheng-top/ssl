@@ -148,9 +148,9 @@ class Games extends Controller
                 $re=db('problem_house')->insert($data);
                 if($re)
                 {
-                    $this->success('添加成功',url('admin/Games/answer_bank'));
+                     $this->success('添加成功',url('admin/Games/answer_bank'));
                 }else{
-                    $this->error('添加失败');
+                     $this->error('添加失败');
                 }
             }else{
               $this->error('参数错误');
