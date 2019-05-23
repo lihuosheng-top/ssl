@@ -31,7 +31,7 @@ Route::group("",[
 
 
    /**支付*/
-   'wxpaynotifyurl'=>"index/Wxpay/wxpaynotifyurl"  ,          
+   'wxpaynotifyurl'=>"index/Wxpay2/wxpaynotifyurl"  ,          
    'ali_pay'=>"index/Alipay/ali_pay"            ,
 
    /**会员模块 */
