@@ -280,8 +280,14 @@ class Member extends Base
                     $data[]=$v;
                   }
              }
-             if($data){
-                 return ajax_success('获取成功',$data);
+             foreach($data as $k=>$v){
+                $res[$k]['id']=$v['help_id'];
+                $res[$k]['head_pic']=$v['head_pic'];
+                $res[$k]['num']=$v['num'];
+                $res[$k]['order_type']=$v['order_type'];   //帮甩类型    1    自己甩  2帮甩  3帮答题
+             }
+             if($res){
+                 return ajax_success('获取成功',$res);
              }else{
                  return ajax_error('获取失败');
              }
