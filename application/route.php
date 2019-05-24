@@ -46,6 +46,9 @@ Route::group("",[
    'shuai_start'=>"index/Member/shuai_start"  ,                 //开甩界面
    'member_name_edit'=>"index/Member/member_name_edit"  ,                 //开甩界面
    'get_helper_record'=>"index/Member/get_helper_record"  ,                 //开甩界面
+
+   /**游戏 */
+   'game'=>"index/Game/game"  ,                 //游戏
 ]);
 
 
