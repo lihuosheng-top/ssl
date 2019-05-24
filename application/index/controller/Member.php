@@ -80,15 +80,17 @@ class Member extends Base
     public function member_pic_save( Request $request)
     {
         //获取会员的信息（图片路径）
-        $input[0]=$request->file('pic_url');
+        $input=$request->file('pic_url');
         if (!empty($input)) {
-            foreach ($input as $k=>$v) {
-                $info = $v->move(ROOT_PATH . 'public' . DS . 'static'.DS.'index'.DS.'img');
-                $head_pic['pic_url'] = '/static/index/img/'.str_replace("\\", "/", $info->getSaveName());
-            }
+            $info = $input->move(ROOT_PATH . 'public' . DS . 'static'.DS.'index'.DS.'img');
+            $head_pic['pic_url'] = '/static/index/img/'.str_replace("\\", "/", $info->getSaveName());
             //更改头像路径
              $re=db('member')->where('token',$this->token)->setField('head_pic',$head_pic['pic_url']);
-             return ajax_success('保存成功');
+             if($re){
+                 return ajax_success('保存成功');
+             }else{
+                 return ajax_error('上传失败');
+             }
         }else{
             return ajax_error('上传文件为空');
         }
