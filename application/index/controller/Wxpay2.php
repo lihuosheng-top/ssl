@@ -10,6 +10,7 @@ class Wxpay2 extends Controller{
         'appid' => "wxd3bc655771a1e376",//"wxcf1dded808489e2c",    /*微信开放平台上的应用id*/
         'mch_id' => "1536319261",//"1440493402",   /*微信申请成功之后邮件中的商户id*/
         'api_key' => "dTkOKWah1BpiEpabmyZtig4vxu7jrmht"    /*在微信商户平台上自己设定的api密钥 32位*/
+        // 'api_key' => "d3dc3b56623ba9d8cf933351825ce349"    /*在微信商户平台上自己设定的api密钥 32位*/
     );
 
 
@@ -227,12 +228,12 @@ class Wxpay2 extends Controller{
         }
         return $output;
     }
-    function xmlToArray($xml)
-    {
-        $arr = $this->xml_to_array($xml);
-        $key = array_keys($arr);
-        return $arr[$key[0]];
-    }
+    // function xmlToArray($xml)
+    // {
+    //     $arr = $this->xml_to_array($xml);
+    //     $key = array_keys($arr);
+    //     return $arr[$key[0]];
+    // }
 
     function xml_to_array($xml)
 {
@@ -265,6 +266,14 @@ class Wxpay2 extends Controller{
     }else{
         return $xml;
     }
+}
+
+function xmlToArray($xml)
+{
+    //禁止引用外部xml实体
+    libxml_disable_entity_loader(true);
+    $values = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+    return $values;
 }
 /**
  * lilu

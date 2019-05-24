@@ -610,6 +610,18 @@ class Goods extends Base
              return view('goods_strategy');
           }
     }
+    
+    /**
+     * lilu
+     * 商品策略配置处理
+     */
+    public function  goods_strategy_do()
+    {
+        //获取后台参数
+             $input=input();
+             halt($input);
+           
+    }
 
     
    
