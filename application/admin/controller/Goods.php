@@ -54,7 +54,7 @@ class Goods extends Base
 
     /**
      * [商品列表添加组]
-     * GY
+     * lilu
      */
     public function goods_add()
     {
@@ -65,7 +65,7 @@ class Goods extends Base
 
     /**
      * [商品列表组保存]
-     * GY
+     * lilu
      * 
      */
     public function goods_add_do(Request $request)
@@ -596,7 +596,20 @@ class Goods extends Base
             }
         }
     }
-
+     
+    /**
+     * lilu
+     * 商品策略配置
+     */
+    public function  goods_strategy(Request $request)
+    {
+          if($request->isPost()){
+             $input=input();
+             halt($input);
+          }else{
+             return view('goods_strategy');
+          }
+    }
 
     
    

@@ -52,23 +52,23 @@ class Member extends Base
         $input=input('');
         if(!$input['account'])
         {
-            return ajax_error('error');
+            return ajax_error('保存失败');
         }
         if(!$input['code']){
-             return ajax_error('error');
+             return ajax_error('保存失败');
         }
         if(!$input['new_account'])
         {
-            return ajax_error('error');
+            return ajax_error('保存失败');
         }
         $code=Session::get('code');
         //判断code是否正确
         if($input['code']==$code || $input['code']=='000'){
            $re=db('member')->where('token',$this->token)->setField('account',$input['new_account']);
            Session::delete('code');
-           return ajax_success('success');
+           return ajax_success('保存成功');
         }else{
-            return ajax_error('code error');
+            return ajax_error('验证码错误');
         }
 
 
@@ -192,22 +192,22 @@ class Member extends Base
        $data['member_type']=$info['member_type'];
        $data['goods_num']=$info['goods_num'];    //客户甩品数量
        $data['member_type']=$info['member_type'];  //会员等级
-       $repertory=db('goods')->where('id',$input['good_id'])->find();
+       $repertory=db('goods')->where('id',$input['goods_id'])->find();
        $data['image']=$repertory['goods_images_two'];
        $data['goods_repertory']=$repertory['goods_repertory'];    //商品库存
        //当前商品帮甩人数
-       $helper_num=db('help_record')->where('good_id',$input['good_id'])->group('member_id')->count();
+       $helper_num=db('help_record')->where('goods_id',$input['goods_id'])->group('member_id')->count();
        $data['helper_num']=$helper_num;
        $data['end_date']=$repertory['end_date'];    //商品结束日期
        $data['shuai_num']=$repertory['points'];     //商品甩次
        //当前商品已甩次数
-       $goods_num=db('help_record')->where(['good_id'=>$input['good_id'],'member_id'=>$info['id']])->count();
+       $goods_num=db('help_record')->where(['goods_id'=>$input['goods_id'],'member_id'=>$info['id']])->count();
        $data['yi_goods_num']=$goods_num;
        //获取当前用户当前甩品的免单金额
-       $free_money=db('help_record')->where(['member_id'=>$info['id'],'good_id'=>$input['good_id']])->sum('income');
+       $free_money=db('help_record')->where(['member_id'=>$info['id'],'goods_id'=>$input['goods_id']])->sum('income');
        $data['free_money']=$free_money;
        //获取当前用户当前甩品的红包金额
-       $bao_money=db('help_record')->where(['member_id'=>$info['id'],'good_id'=>$input['good_id']])->sum('income');
+       $bao_money=db('help_record')->where(['member_id'=>$info['id'],'goods_id'=>$input['goods_id']])->sum('income');
        $data['bao_money']=$bao_money;
        if($data)
        {
@@ -266,16 +266,16 @@ class Member extends Base
      */
     public function get_helper_record()
     {
-        //获取参数   token,good_id
+        //获取参数   token,goods_id
         $input=input();
         if($input){
              $re=db('member')->where('token',$this->token)->find();
-             $list=db('help_record')->where(['member_id'=>$re['id'],'good_id'=>$input['good_id']])->group('help_id')->select();
+             $list=db('help_record')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id']])->group('help_id')->select();
              foreach($list as $k=>$v){
                   if($v['help_id']=='0'){
 
                   }else{
-                    $num=db('help_record')->where(['member_id'=>$re['id'],'good_id'=>$input['good_id'],'help_id'=>$v['help_id']])->count();
+                    $num=db('help_record')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id'],'help_id'=>$v['help_id']])->count();
                     $v['num']=$num;
                     $head_pic=db('member')->where('id',$v['help_id'])->value('head_pic');
                     $v['head_pic']=$head_pic;

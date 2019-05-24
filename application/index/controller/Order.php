@@ -68,17 +68,22 @@ class Order extends Base
             $member_id=db('member')->where('token',$this->token)->field('id')->find();
             $data['member_id']=$member_id['id'];         //会员id
             $data['goods_id']=$input['goods_id'];            //甩品、商品id
-            $data['order_amount']=$input['income'];               //甩费、收入
+            //根据goods_id获取
+            if($input['special_id']=='0'){
+                $data['special_id']='0';
+                $price=db('goods')->where('id',$input['goods_id'])->find();
+                $data['goods_money']=$price['goods_price'];
+            }else{
+                $data['special_id']=$input['special_id'];
+                $price=db('special')->where('id',$input['special_id'])->find();
+                $data['goods_money']=$price['jilt'];
+           }
+            $data['order_amount']=$data['goods_money'];               //甩费、收入
             // $data['pay_type']=$input['pay_type'];           //支付类型
             // $data['order_type']=$input['order_type'];       //订单类型
             $data['goods_name']=db('goods')->where('id',$data['goods_id'])->value('goods_name');
             $data['create_time']=time();                    //订单创建时间
-           if($input['special_id']){
-                $data['special_id']=$input['special_id'];
-           }else{
-                $data['special_id']='0';
-           }
-            $data['order_quantity']=$input['order_quantity'];   //商品数量
+            $data['order_quantity']='1';   //商品数量
             $re=db('order')->insert($data);
             if($re)
             {
