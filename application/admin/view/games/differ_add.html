@@ -52,11 +52,14 @@
         align-items: stretch;
         text-align: right;
     }
-
-    .num_1 {
+    .num_y {
         width: 50px;
         display: flex;
         flex-direction: column;
+    }
+    .num_1 {
+        width: 50px;
+        display: flex;
     }
 
     .num_2 {
@@ -70,7 +73,8 @@
         height: 550px;
         border: 1px solid red;
         display: flex;
-        align-items: stretch;
+        align-content: stretch;
+        flex-direction: column;
     }
 
     .img_div {
@@ -123,7 +127,7 @@
             <div class="form-item hidden_all noshow">
                 <label class="form-label" style="width:20%">添加图片</label>
                 <div class="num">
-                    <div class="num_1">
+                    <div class="num_y">
                         <div class="num_2">1</div>
                         <div class="num_2">2</div>
                         <div class="num_2">3</div>
@@ -267,14 +271,14 @@
                     console.log("正在进行，请稍候");
                 },
                 success: function (data) {
-
+                    console.log(data)
                     //遍历切割后的图片
                     var data_all = data[0];///全部
                     for (let i = 0; i < data_all.length; i++) {
                         var data_1 = data_all[i];//列 A1,B1...
                         var dhtml = '';
                         for (let u = 0; u < data_1.length; u++) {
-                            dhtml += `<div class='img_div img_div_${data_1[u].num_string}' id="${data_1[u].num_string}"><img src="__PUBLIC__/${data_1[u].image_name}" style="height:46px;width:46px;"></div>`;
+                            dhtml += `<div class='img_div img_div_${data_1[u].num_string}' id="${data_1[u].num_string}"><img src="__PUBLIC__/${data_1[u].image_name}" style="height:48px;width:48px;"></div>`;
                         }
                         $(`.hang_${i}`).after().html(dhtml);
                     }
