@@ -4,10 +4,8 @@ namespace  app\index\controller;
 use think\Controller;
 use think\Console;
 use think\Db;
-use app\index\controller\Wxpay as pay;
-include('../extend/WxpayAll/lib/WxPay.Api.php');
-include('../extend/WxpayAll/example/WxPay.NativePay.php');
-include('../extend/WxpayAll/example/log.php');
+use app\index\controller\Wxpay2 as pay;
+use app\index\controller\Base ;
 
 /*
  * @Author: lilu 
@@ -15,7 +13,7 @@ include('../extend/WxpayAll/example/log.php');
  * @Last Modified by: lilu
  * @Last Modified time: 2019-05-14 16:09:50
  */
-class Order extends Controller
+class Order extends Base
 {
     /**
      * lilu
@@ -66,30 +64,45 @@ class Order extends Controller
         $input=input();   //获取传递的参数
         if($input){
             $data['order_number']=date('YmdHis',time());    //自定义生成订单号
-            $data['member_id']=$input['member_id'];         //会员id
+            //根据token获取会员id
+            $member_id=db('member')->where('token',$this->token)->field('id')->find();
+            $data['member_id']=$member_id['id'];         //会员id
             $data['goods_id']=$input['goods_id'];            //甩品、商品id
-            $data['order_amount']=$input['income'];               //甩费、收入
+            //根据goods_id获取
+            if($input['special_id']=='0'){
+                $data['special_id']='0';
+                $price=db('goods')->where('id',$input['goods_id'])->find();
+                $data['goods_money']=$price['goods_price'];
+            }else{
+                $data['special_id']=$input['special_id'];
+                $price=db('special')->where('id',$input['special_id'])->find();
+                $data['goods_money']=$price['jilt'];
+           }
+            $data['order_amount']=$data['goods_money'];               //甩费、收入
             // $data['pay_type']=$input['pay_type'];           //支付类型
             // $data['order_type']=$input['order_type'];       //订单类型
             $data['goods_name']=db('goods')->where('id',$data['goods_id'])->value('goods_name');
             $data['create_time']=time();                    //订单创建时间
-           if($input['special_id']){
-                $data['special_id']=$input['special_id'];
-           }else{
-                $data['special_id']='0';
-           }
-           $data['order_quantity']=$input['order_quantity'];   //商品数量
+            $data['order_quantity']='1';   //商品数量
             $re=db('order')->insert($data);
             if($re)
             {
-                $object['paymoney']=$data['order_amount'];
-                $object['goods_name']=$data['goods_name'];
-                $object['goods_id']=$data['goods_id'];
-                
+                // $body, $out_trade_no, $total_fee
+                $body='微信测试';
+                $out_trade_no=$data['order_number']; //商户订单号(自定义)
+                $total_fee=$data['order_amount']*100;
                 $pay = new pay();//统一下单
-                $pay->index($object);
-                die;
-               return ajax_success('订单生成成功');
+                $order= $pay->getPrePayOrder($body, $out_trade_no, $total_fee);
+                if ($order['prepay_id']){//判断返回参数中是否有prepay_id
+                    
+                    $order1 = $pay->getOrder($order['prepay_id']);//执行二次签名返回参数
+                    return ajax_success('新建订单成功',$order1);
+                    // echo json_encode(array('status' => 1, 'prepay_order' => no_null($order1)));
+                } else {
+                    return ajax_error('新建订单失败',$order['err_code_des']);
+                    // echo json_encode(array('status' => 0, 'msg' => $order['err_code_des']));
+                }
+                break;
             }else{
                return ajax_error('订单生成失败');
             }

@@ -30,8 +30,9 @@ Route::group("",[
    "goods_order"=>"index/Order/goods_order",           //商品订单生成
 
 
+
    /**支付*/
-   'wxpaynotifyurl'=>"index/Wxpay/wxpaynotifyurl"  ,          
+   'wxpaynotifyurl'=>"index/Wxpay2/wxpaynotifyurl"  ,          
    'ali_pay'=>"index/Alipay/ali_pay"            ,
 
    /**会员模块 */
@@ -40,6 +41,14 @@ Route::group("",[
    'member_pic_save'=>"index/Member/member_pic_save"  ,    //会员头像路径保存
    'member_address'=>"index/Member/member_address"  ,      //会员地址
    'member_address_add'=>"index/Member/member_address_add"  ,   //会员地址添加
+   'member_address_edit'=>"index/Member/member_address_edit"  ,   //会员地址添加
+   'member_address_del'=>"index/Member/member_address_del"  ,   //会员地址添加
+   'shuai_start'=>"index/Member/shuai_start"  ,                 //开甩界面
+   'member_name_edit'=>"index/Member/member_name_edit"  ,                 //开甩界面
+   'get_helper_record'=>"index/Member/get_helper_record"  ,                 //开甩界面
+
+   /**游戏 */
+   'game'=>"index/Game/game"  ,                 //游戏
 ]);
 
 
@@ -112,8 +121,9 @@ Route::group("admin",[
     "goods_label_edit"   =>"admin/Goods/goods_label_edit",   //商品上下架设置
     "goods_add_do"   =>"admin/Goods/goods_add_do",           //商品添加处理
     "goods_edit_do"   =>"admin/Goods/goods_edit_do",           //商品编辑处理
-    "goods_del"   =>"admin/Goods/goods_del",           //商品编辑处理
-    "goods_strategy"   =>"admin/Goods/goods_strategy",           //商品编辑处理
+    "goods_del"   =>"admin/Goods/goods_del",                  //商品删除
+    "goods_strategy"   =>"admin/Goods/goods_strategy",        //商品策略配置
+    "goods_strategy_do"   =>"admin/Goods/goods_strategy_do",        //商品策略配置处理
 
 
     /*订单列表*/

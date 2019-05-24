@@ -166,7 +166,7 @@
 {/block}
 
 <body>
-    <form class="layui-form layui-form-lists" action="{:url('')}" method="post" enctype="multipart/form-data">
+    <form class="layui-form layui-form-lists" action="{:url('admin/Goods/goods_strategy_do')}" method="post" enctype="multipart/form-data">
         <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
             <ul class="layui-tab-title">
                 <li class="layui-this">免单策略</li>
@@ -341,8 +341,8 @@
                     <div class="form-item" style="margin-top:15px;">
                         <label class="form-label" style="width:20%">策略是否开启</label>
                         <div class="form-input ziji">
-                            <input type="radio" name="zpoint" title="开启" checked=''>
-                            <input type="radio" name="zpoint" title="关闭">
+                            <input type="radio" name="zpoint" title="开启" value="1" checked=''>
+                            <input type="radio" name="zpoint" title="关闭" value="0">
                         </div>
                     </div>
                 </div>
