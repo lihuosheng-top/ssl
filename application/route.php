@@ -30,6 +30,7 @@ Route::group("",[
    "goods_order"=>"index/Order/goods_order",           //商品订单生成
 
 
+
    /**支付*/
    'wxpaynotifyurl'=>"index/Wxpay2/wxpaynotifyurl"  ,          
    'ali_pay'=>"index/Alipay/ali_pay"            ,
@@ -41,6 +42,10 @@ Route::group("",[
    'member_address'=>"index/Member/member_address"  ,      //会员地址
    'member_address_add'=>"index/Member/member_address_add"  ,   //会员地址添加
    'member_address_edit'=>"index/Member/member_address_edit"  ,   //会员地址添加
+   'member_address_del'=>"index/Member/member_address_del"  ,   //会员地址添加
+   'shuai_start'=>"index/Member/shuai_start"  ,                 //开甩界面
+   'member_name_edit'=>"index/Member/member_name_edit"  ,                 //开甩界面
+   'get_helper_record'=>"index/Member/get_helper_record"  ,                 //开甩界面
 ]);
 
 

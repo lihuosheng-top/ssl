@@ -183,7 +183,111 @@ class Member extends Base
        //获取信息
        $input=input();   //商品id
        //获取当前甩客信息
-       
+       $info=db('member')->where('token',$this->token)->find();
+       $data['id']=$info['id'];
+       $data['name']=$info['name'];
+       $data['head_pic']=$info['head_pic'];
+       $data['member_type']=$info['member_type'];
+       $data['goods_num']=$info['goods_num'];    //客户甩品数量
+       $data['member_type']=$info['member_type'];  //会员等级
+       $repertory=db('goods')->where('id',$input['good_id'])->find();
+       $data['image']=$repertory['goods_images_two'];
+       $data['goods_repertory']=$repertory['goods_repertory'];    //商品库存
+       //当前商品帮甩人数
+       $helper_num=db('help_record')->where('good_id',$input['good_id'])->group('member_id')->count();
+       $data['helper_num']=$helper_num;
+       $data['end_date']=$repertory['end_date'];    //商品结束日期
+       $data['shuai_num']=$repertory['points'];     //商品甩次
+       //当前商品已甩次数
+       $goods_num=db('help_record')->where(['good_id'=>$input['good_id'],'member_id'=>$info['id']])->count();
+       $data['yi_goods_num']=$goods_num;
+       //获取当前用户当前甩品的免单金额
+       $free_money=db('help_record')->where(['member_id'=>$info['id'],'good_id'=>$input['good_id']])->sum('income');
+       $data['free_money']=$free_money;
+       //获取当前用户当前甩品的红包金额
+       $bao_money=db('help_record')->where(['member_id'=>$info['id'],'good_id'=>$input['good_id']])->sum('income');
+       $data['bao_money']=$bao_money;
+       if($data)
+       {
+           return ajax_success('获取成功',$data);
+       }else{
+           return ajax_error('获取信息失败');
+       }
+    }
+    /**
+     * lilu
+     * Notes:会员地址删除
+     */
+    public function member_address_del()
+    {
+        //获取会员的ID
+        $input=input();
+        if($input['id']){
+            $member=db('member_address')->delete($input['id']); //会员信息
+            if($member){
+                $id=db('member')->where('token',$this->token)->find();
+                $list=db('member_address')->where(['member_id'=>$id['id'],'is_use'=>1])->select();
+                if(!$list){
+                    $re=db('member_address')->where('member_id',$id['id'])->select();
+                    if($re){
+                        $re=db('member_address')->where('member_id',$id['id'])->find();
+                        $re2=db('member_address')->where('member_id',$re['member_id'])->setField('is_use','1');
+                    }
+                }
+                return ajax_success('编辑成功');
+            }else{
+                return ajax_error('编辑失败');
+            }
+        }
+        
+    }
+    /**
+     * lilu
+     * 会员昵称修改
+     */
+    public function member_name_edit()
+    {
+        //获取修改的新昵称
+        $input=input();
+        $data['name']=$input['name'];
+        $re=db('member')->where('token',$this->token)->update($data);
+        if($re)
+        {
+           return ajax_success('昵称修改成功');
+        }else{
+            return ajac_eror('昵称修改失败');
+        }
+    }
+    /**
+     * lilu
+     * 获取当前客户当前商品的帮甩记录
+     */
+    public function get_helper_record()
+    {
+        //获取参数   token,good_id
+        $input=input();
+        if($input){
+             $re=db('member')->where('token',$this->token)->find();
+             $list=db('help_record')->where(['member_id'=>$re['id'],'good_id'=>$input['good_id']])->group('help_id')->select();
+             foreach($list as $k=>$v){
+                  if($v['help_id']=='0'){
+
+                  }else{
+                    $num=db('help_record')->where(['member_id'=>$re['id'],'good_id'=>$input['good_id'],'help_id'=>$v['help_id']])->count();
+                    $v['num']=$num;
+                    $head_pic=db('member')->where('id',$v['help_id'])->value('head_pic');
+                    $v['head_pic']=$head_pic;
+                    $data[]=$v;
+                  }
+             }
+             if($data){
+                 return ajax_success('获取成功',$data);
+             }else{
+                 return ajax_error('获取失败');
+             }
+        }else{
+            return ajax_error('获取失败');
+        }
     }
 
 }
