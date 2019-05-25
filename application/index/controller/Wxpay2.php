@@ -302,7 +302,7 @@ function xmlToArray($xml)
             //     ->update(["status"=>2,"pay_time"=>time()]);
             $map['status']='2';
             $map['pay_time']=time();
-            $res=Db::name('order')->where('order_number',$val['out_trade_no'])->update($map);
+            $res=db('order')->where('order_number',$val['out_trade_no'])->update($map);
             if($res){
                 // //做消费记录
                 // $information =Db::name("reward")->field("money,order_number,crowd_name,member_id")->where("order_number",$val["out_trade_no"])->find();
