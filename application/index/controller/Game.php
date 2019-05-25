@@ -133,7 +133,7 @@ class Game extends Base
         $member=db('member')->where('token',$this->token)->find();
         $data['member_id']=$member['id'];
         $data['goods_id']=$input['goods_id'];
-        $re=db('answer_record')->where($data)->setField('answer_id',1);
+        $re=db('answer_record')->where($data)->setField('answer_id',$list[0]['id']);
         $list2=$list[0];
         unset($list2['true_ans']);
         if($list2){
@@ -184,6 +184,8 @@ class Game extends Base
         //获取参数
         $input=input();
         $info=db('problem_house')->where('id',$input['answer_id'])->find();
+        //插入答题列表
+
         if($info['true_ans']==$input['true_ans'])
         {
             //答题正确
