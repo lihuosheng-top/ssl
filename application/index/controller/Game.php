@@ -11,7 +11,7 @@ use think\Db;
  * lilu
  * 游戏模块
  */
-class Game extends Controller
+class Game extends Base
 {
 
     /**
@@ -30,6 +30,7 @@ class Game extends Controller
             $arr='';
             $num=count($problem_type);
             $i=0;
+            
             foreach($problem_type as $k2=>$v2){
                 if($k2=='twdl'){
                     $problem_type[$k2]='天文地理';
@@ -127,11 +128,43 @@ class Game extends Controller
                 $list[$k]['problem_status']="很难";
             }
         }
+        //获取参数 member_id  goods_id
+        $input=input();
+        $member=db('member')->where('token',$this->token)->find();
+        $data['member_id']=$member['id'];
+        $data['goods_id']=$input['goods_id'];
+        $re=db('answer_record')->where($data)->setField('answer_id',1);
+        unset($list[0]['true_ans']);
         if($list){
               return  ajax_success('获取成功',$list);
         }else{
              return   ajax_error('获取失败');
         }
+    }
+    /**
+     * lilu
+     * 判断用户是否答题
+     */
+    public function is_answer()
+    {
+        //获取参数
+        $input=input();
+        $member=db('member')->where('token',$this->token)->find();
+        $data['member_id']=$member['id'];
+        $data['goods_id']=$input['goods_id'];
+        $re=db('answer_record')->where($data)->find();
+        if($re['status']==2){
+             //客户该商品没有答题
+             return ajax_success('用户没有答题',2);
+        }elseif($re['status']=='0'){
+            return ajax_success('用户答题错误',0);
+        }elseif($re['status']=='1'){
+            return ajax_success('答题成功',1);
+        }else{
+            return ajax_error('数据错误');
+        }
+
+
     }
 
 }

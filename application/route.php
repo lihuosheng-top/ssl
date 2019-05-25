@@ -48,7 +48,9 @@ Route::group("",[
    'get_helper_record'=>"index/Member/get_helper_record"  ,                 //开甩界面
 
    /**游戏 */
-   'game'=>"index/Game/game"  ,                 //游戏
+   'game'=>"index/Game/game"  ,                          //游戏
+   'is_answer'=>"index/Game/is_answer"  ,                 //判断是否答题
+
 ]);
 
 

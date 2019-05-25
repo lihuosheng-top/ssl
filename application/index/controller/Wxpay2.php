@@ -296,7 +296,7 @@ function xmlToArray($xml)
             $info=db('order')->where('order_number',$val['out_trade_no'])->find();
             $where['goods_id']=$info['goods_id'];
             $where['member_id']=$info['member_id'];
-            $where['status']=0;
+            $where['status']=2;
             $re=db('answer_record')->insert($where);
             if($res && $re){
                 // //做消费记录
