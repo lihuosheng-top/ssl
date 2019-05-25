@@ -288,10 +288,17 @@ function xmlToArray($xml)
             db('text')->insert($data2);
         }
         if($val["result_code"] == "SUCCESS" ){
+            //修改订单的状态
             $map['status']='2';
             $map['pay_time']=time();
             $res=db('order')->where('order_number',$val['out_trade_no'])->update($map);
-            if($res){
+            //新增加答题记录
+            $info=db('order')->where('order_number',$val['out_trade_no'])->find();
+            $where['goods_id']=$info['goods_id'];
+            $where['member_id']=$info['member_id'];
+            $where['status']=0;
+            $re=db('answer_record')->insert($where);
+            if($res && $re){
                 // //做消费记录
                 // $information =Db::name("reward")->field("money,order_number,crowd_name,member_id")->where("order_number",$val["out_trade_no"])->find();
                 // $member_wallet =Db::name("member")
