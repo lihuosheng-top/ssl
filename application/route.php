@@ -50,6 +50,7 @@ Route::group("",[
    /**游戏 */
    'game'=>"index/Game/game"  ,                          //游戏
    'is_answer'=>"index/Game/is_answer"  ,                 //判断是否答题
+   'is_right'=>"index/Game/is_right"  ,                 //判断是否答题
 
 ]);
 

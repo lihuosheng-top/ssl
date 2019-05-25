@@ -163,7 +163,25 @@ class Game extends Base
         }else{
             return ajax_error('数据错误');
         }
-
+    }
+    /**
+     * lilu
+     * 判断答案是否正确
+     * 问题id
+     * 答案
+     */
+    public function is_right()
+    {
+        //获取参数
+        $input=input();
+        $info=db('problem_house')->where('id',$input['answer_id'])->find();
+        if($info['true_ans']==$input['true_ans'])
+        {
+            //答题正确
+            return ajax_success('答题正确');
+        }else{
+            return ajax_error('答题失败');
+        }
 
     }
 
