@@ -24,7 +24,7 @@ class Wxpay2 extends Controller{
         $data["body"] = $body;
         $data["mch_id"] = $this->config['mch_id'];
         $data["nonce_str"] = $onoce_str;
-        $data["notify_url"] = "http://ssl.siring.com.cn/wxpaynotifyurl";
+        $data["notify_url"] = "https://ssl.siring.com.cn/wxpaynotifyurl";
         $data["out_trade_no"] = $out_trade_no;
         $data["spbill_create_ip"] = $this->get_client_ip();
         $data["total_fee"] = $total_fee;
@@ -280,11 +280,15 @@ function xmlToArray($xml)
  * 回调地址
  */
     public function wxpaynotifyurl(){ 
-        $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
-        $xml_data = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
-        $val = json_decode(json_encode($xml_data), true);
+        // $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
+        // $xml_data = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
+        // $val = json_decode(json_encode($xml_data), true);
+
+        $testxml  = file_get_contents("php://input");
+        $jsonxml = json_encode(simplexml_load_string($testxml, 'SimpleXMLElement', LIBXML_NOCDATA));
+        $val = json_decode($jsonxml, true);//转成数组，
         if($val["result_code"] == "SUCCESS" ){
-            file_put_contents(EXTEND_PATH."data.txt",$val);
+            file_get_contents(EXTEND_PATH."data.txt",$val);
             // $res = Db::name("order")
             //     ->where("order_number",$val["out_trade_no"])
             //     ->update(["status"=>2,"pay_time"=>time()]);
