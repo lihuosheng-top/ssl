@@ -612,9 +612,9 @@ class Goods extends Base
                     $data['free']=[];
                 }
                 if($goods_info['bao_tactics']){
-                    $data['bao']=json_decode($goods_info['bao_tactics'],true);
+                    $data['bao_tactics']=json_decode($goods_info['bao_tactics'],true);
                 }else{
-                    $data['bao']=[];
+                    $data['bao_tactics']=[];
                 }
                 if($goods_info['point_tactics']){
                     $data['point_tactics']=json_decode($goods_info['point_tactics'],true);
@@ -667,9 +667,9 @@ class Goods extends Base
             $data['old_tactics']=json_encode($input['old']);
         }
         if($data){
-            $re=db('goods')->where('id',$input['id'])->update($data);
+            $re=db('goods')->where('id',$input['id'])->setField('free_tactics',$data['free_tactics']);
             if($re){
-                $this->success('保存成功');
+                $this->success('保存成功',url('admin/Goods/goods_index'));
             }else{
                 $this->error('保存失败');
             }

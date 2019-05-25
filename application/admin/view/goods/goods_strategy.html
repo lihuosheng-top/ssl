@@ -179,9 +179,9 @@
             </ul>
             <div class="layui-tab-content" style="height: 100px;">
                 <!-- 免单策略 -->
-                {if $data['free']}
                 <div class="layui-tab-item layui-show">
                     <div class="oneself m_t">
+                        {if $data['free']['own']}
                         {volist name="data['free']['own']" id="vo" }
                         <div class="form-item" style="margin-top: 15px;">
                             {if $key=='0'}
@@ -209,21 +209,46 @@
                             </div>
                         </div>
                         {/volist}
+                        {else}
+                        <div class="form-item" style="margin-top: 15px;">
+                                <label class="form-label" style="width:20%">自己免单金额和概率</label>
+                                <div class="form-input ziji">
+                                    <input type="checkbox" name="free[own][0][status]" value="1" lay-filter="choose1" checked=''>
+                                </div>
+                                <div class="form-input ziji m_r">
+                                    <input type="text" name="free[own][0][percent]" value=" " lay-verify="title" autocomplete="off"
+                                        placeholder="" class="layui-input">
+                                    <span class="percent">%</span>
+                                    <div class="tips">
+                                        <span class="red">*</span>0 ~ 100,表示减免单次甩费的百分比
+                                    </div>
+                                </div>
+                                <div class="form-input ziji">
+                                    <input type="text" name="free[own][0][probability]" value=" " lay-verify="title"
+                                        autocomplete="off" placeholder="" class="layui-input">
+                                    <div class="tips">
+                                        <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                                    </div>
+                                </div>
+                            </div>
+                        {/if}
                     </div>
                     <div class="one_more" id="one_more">添加一档</div>
                     <div class="help m_t">
-                        {volist name="data['free']['other']" id="vo" }
+                        {if $data['free']['other']}
+                        {volist name="data['free']['other']" id="vo"  }
+                        <?php $i=0; ?>
                         <div class="form-item" style="margin-top:15px;">
-                            {if $key=='0'}
-                                <label class="form-label" style="width:20%">自己免单金额和概率</label>
+                            {if $i=='0'}
+                                <label class="form-label" style="width:20%">帮甩免单金额和概率</label>
                             {else}
                                 <label class="form-label" style="width:20%"></label>
                              {/if}
                             <div class="form-input ziji">
-                                <input type="checkbox" name="free[other][{$key}][status]" lay-filter="choose1" value="1" checked=''>
+                                <input type="checkbox" name="free[other][{$i}][status]" lay-filter="choose1" value="1" checked=''>
                             </div>
                             <div class="form-input ziji m_r">
-                                <input type="text" name="free[other][0][{$key}]" value="{$vo['percent']}" lay-verify="title" autocomplete="off"
+                                <input type="text" name="free[other][{$i}][percent]" value="{$vo['percent']}" lay-verify="title" autocomplete="off"
                                     placeholder="" class="layui-input">
                                 <span class="percent">%</span>
                                 <div class="tips">
@@ -231,14 +256,39 @@
                                 </div>
                             </div>
                             <div class="form-input ziji">
-                                <input type="text" name="free[other]{$key}][probability]" value="{$vo['probability']}" lay-verify="title"
+                                <input type="text" name="free[other]{$i}][probability]" value="{$vo['probability']}" lay-verify="title"
                                     autocomplete="off" placeholder="" class="layui-input">
                                 <div class="tips">
                                     <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
                                 </div>
                             </div>
                         </div>
+                        <?php $i++; ?>
                         {/volist}
+                        {else}
+                        <div class="form-item" style="margin-top:15px;">
+                                <label class="form-label" style="width:20%">自己免单金额和概率</label>
+                                <div class="form-input ziji">
+                                    <input type="checkbox" name="free[other][0][status]" lay-filter="choose1" value="1" checked=''>
+                                </div>
+                                <div class="form-input ziji m_r">
+                                    <input type="text" name="free[other][0][percent]" value="" lay-verify="title" autocomplete="off"
+                                        placeholder="" class="layui-input">
+                                    <span class="percent">%</span>
+                                    <div class="tips">
+                                        <span class="red">*</span>0 ~ 100,表示减免单次甩费的百分比
+                                    </div>
+                                </div>
+                                <div class="form-input ziji">
+                                    <input type="text" name="free[other][0][probability]" value="" lay-verify="title"
+                                        autocomplete="off" placeholder="" class="layui-input">
+                                    <div class="tips">
+                                        <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                                    </div>
+                                </div>
+                            </div>
+
+                        {/if}
                     </div>
                     <div class="one_more" id="one_help">添加一档</div>
 
@@ -255,72 +305,14 @@
                         </div>
                     </div>
                 </div>
-                {else}
-                <div class="layui-tab-item layui-show">
-                    <div class="oneself m_t">
-                        <div class="form-item" style="margin-top: 15px;">
-                            <label class="form-label" style="width:20%">自己免单金额和概率</label>
-                            <div class="form-input ziji">
-                                <input type="checkbox" name="free[own][0][status]" value="1" lay-filter="choose1" checked=''>
-                            </div>
-                            <div class="form-input ziji m_r">
-                                <input type="text" name="free[own][0][percent]" value=" " lay-verify="title" autocomplete="off"
-                                    placeholder="" class="layui-input">
-                                <span class="percent">%</span>
-                                <div class="tips">
-                                    <span class="red">*</span>0 ~ 100,表示减免单次甩费的百分比
-                                </div>
-                            </div>
-                            <div class="form-input ziji">
-                                <input type="text" name="free[own][0][probability]" value=" " lay-verify="title"
-                                    autocomplete="off" placeholder="" class="layui-input">
-                                <div class="tips">
-                                    <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="one_more" id="one_more">添加一档</div>
-                    <div class="help m_t">
-                        <div class="form-item" style="margin-top:15px;">
-                            <label class="form-label" style="width:20%">自己免单金额和概率</label>
-                            <div class="form-input ziji">
-                                <input type="checkbox" name="free[other][0][status]" lay-filter="choose1" value="1" checked=''>
-                            </div>
-                            <div class="form-input ziji m_r">
-                                <input type="text" name="free[other][0][percent]" value="" lay-verify="title" autocomplete="off"
-                                    placeholder="" class="layui-input">
-                                <span class="percent">%</span>
-                                <div class="tips">
-                                    <span class="red">*</span>0 ~ 100,表示减免单次甩费的百分比
-                                </div>
-                            </div>
-                            <div class="form-input ziji">
-                                <input type="text" name="free[other][0][probability]" value="" lay-verify="title"
-                                    autocomplete="off" placeholder="" class="layui-input">
-                                <div class="tips">
-                                    <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="one_more" id="one_help">添加一档</div>
 
-                    <div class="form-item" style="margin-top:15px;">
-                        <label class="form-label" style="width:20%">策略是否开启</label>
-                        <div class="form-input ziji">
-                            <input type="radio" name="free[free]" title="开启" value="1"checked=''>
-                            <input type="radio" name="free[free]" title="关闭" value="0">
-                        </div>
-                    </div>
-                </div>
-                {/if}
+
 
                 <!-- 红包策略 -->
                 {if $data['bao_tactics']}
                 <div class="layui-tab-item">
                     <div class=" m_t pack">
-                        {volist name="data['bao_tactics']['own']" id="vo"}
+                        {volist name="data['bao_tactics']['own']" id="vo" }
                         <div class="form-item" style="margin-top: 15px;">
                             {if $key=='0'}
                             <label class="form-label" style="width:20%">自己甩奖励金额和概率</label>
@@ -350,18 +342,19 @@
                     </div>
                     <div class="one_more" id="pack_one">添加一档</div>
                     <div class=" m_t pack_t">
-                        {volist name="data['bao_tactics']['own']" id="vo"}
+                        {volist name="data['bao_tactics']['own']" id="vo" }
+                        <?php  $p=0;  ?>
                         <div class="form-item" style="margin-top:15px;">
-                            {if $key=='0'}
+                            {if $p=='0'}
                             <label class="form-label" style="width:20%">别人甩奖励金额和概率</label>
                             {else}
                             <label class="form-label" style="width:20%"></label>
                             {/if}
                             <div class="form-input ziji">
-                                <input type="checkbox" name="bao[other][{$key}][status]" lay-filter="choose1" value="1" checked=''>
+                                <input type="checkbox" name="bao[other][{$p}][status]" lay-filter="choose1" value="1" checked=''>
                             </div>
                             <div class="form-input ziji m_r">
-                                <input type="text" name="bao[other][{$key}][percent]" value="{$vo['percent']}" lay-verify="title" autocomplete="off"
+                                <input type="text" name="bao[other][{$p}][percent]" value="{$vo['percent']}" lay-verify="title" autocomplete="off"
                                     placeholder="  请输入金额" class="layui-input">
                                 <span class="percent">%</span>
                                 <div class="tips">
@@ -369,13 +362,14 @@
                                 </div>
                             </div>
                             <div class="form-input ziji">
-                                <input type="text" name="bao[other][{$key}][probability]" value="{$vo['probability']}" lay-verify="title"
+                                <input type="text" name="bao[other][{$p}][probability]" value="{$vo['probability']}" lay-verify="title"
                                     autocomplete="off" placeholder="  请输入数字" class="layui-input">
                                 <div class="tips">
                                     <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
                                 </div>
                             </div>
                         </div>
+                        <?php   $p++;   ?>
                         {/volist}
                     </div>
                     <div class="one_more" id="pack_two">添加一档</div>
@@ -455,7 +449,7 @@
                 {/if}
 
                 <!-- 增积分策略 -->
-                {if $data['zpoint_tactics']}
+                {if $data['point_tactics']}
                 <div class="layui-tab-item">
                     <div class="form-item m_t">
                         <label class="form-label" style="width:20%">答对奖励</label>
@@ -465,7 +459,7 @@
                         </div>
                         <div class="form-input zpoint">
                             <span class="one">1~</span>
-                            <input type="text" name="zpoint[own]" lay-verify="title" value="{$data['zpoint_tactics']['own']}" autocomplete="off"
+                            <input type="text" name="zpoint[own]" lay-verify="title" value="{$data['point_tactics']['own']}" autocomplete="off"
                                 placeholder="  请输入" class="layui-input">
                             <span>积分</span>
                             <div class="tips">
@@ -484,7 +478,7 @@
                         </div>
                         <div class="form-input zpoint ">
                             <span class="one">1~</span>
-                            <input type="text" name="zpoint[other]" lay-verify="title" value="{$data['zpoint_tactics']['other']}" autocomplete="off"
+                            <input type="text" name="zpoint[other]" lay-verify="title" value="{$data['point_tactics']['other']}" autocomplete="off"
                                 placeholder="  请输入" class="layui-input">
                             <span>积分</span>
                             <div class="tips">
@@ -499,7 +493,7 @@
                     <div class="form-item" style="margin-top:15px;">
                         <label class="form-label" style="width:20%">策略是否开启</label>
                         <div class="form-input ziji">
-                            {if $data['zpoint_tactics']['zpoint']=='1'}
+                            {if $data['point_tactics']['zpoint']=='1'}
                             <input type="radio" name="zpoint[zpoint]" title="开启" value="1" checked=''>
                             <input type="radio" name="zpoint[zpoint]" title="关闭" value="0">
                             {else}
@@ -563,7 +557,7 @@
 
                 {/if}
                 <!-- 大满贯策略 -->
-                {if $data['big_tactics']['tactics']}
+                {if $data['big_tactics']}
                 <div class="layui-tab-item">
                     <div class="form-item m_t">
                         <label class="form-label" style="width:20%">触发条件</label>
@@ -665,7 +659,7 @@
                     <div class="form-item" style="margin-top:15px;">
                         <label class="form-label" style="width:20%">策略是否开启</label>
                         <div class="form-input ziji">
-                            {if $date['new_tactics']['new']=='1'}
+                            {if $data['new_tactics']['new']=='1'}
                             <input type="radio" name="new[new]" title="开启" value="1" checked=''>
                             <input type="radio" name="new[new]" title="关闭" value="0">
                             {else}
@@ -699,12 +693,12 @@
                     </div>
                 {/if}
                 <!-- 老人帮甩策略 -->
-                {if $data['old']}
+                {if $data['old_tactics']}
                 <div class="layui-tab-item">
                     <div class="form-item m_t">
                         <label class="form-label" style="width:20%">老人帮甩</label>
                         <div class="form-input m_r zpoint">
-                            <input type="text" name="old[help_num]" value="{$data['old']['help_num']}" lay-verify="title" autocomplete="off"
+                            <input type="text" name="old[help_num]" value="{$data['old_tactics']['help_num']}" lay-verify="title" autocomplete="off"
                                 placeholder=" 请输入次数" class="layui-input">
                             <span class="red">/每天</span>
                             <div class="tips"><span class="red">*</span>该用户拉来一个老人（有开甩记录就算老客，没有记录的就是新客），帮他甩，每拉一个老人，他
@@ -714,7 +708,7 @@
                     <div class="form-item" style="margin-top:15px;">
                         <label class="form-label" style="width:20%">策略是否开启</label>
                         <div class="form-input ziji">
-                            {if $data['old']['old']=='1'}
+                            {if $data['old_tactics']['old']=='1'}
                             <input type="radio" name="old[old]" title="开启" value="1" checked=''>
                             <input type="radio" name="old[old]" title="关闭" value="0">
                             {else}

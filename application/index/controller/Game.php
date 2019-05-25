@@ -154,16 +154,24 @@ class Game extends Base
         $data['member_id']=$member['id'];
         $data['goods_id']=$input['goods_id'];
         $re=db('answer_record')->where($data)->find();
-        if($re['status']==2){
-             //客户该商品没有答题
-             return ajax_success('用户没有答题',2);
-        }elseif($re['status']=='0'){
-            return ajax_success('用户答题错误',0);
-        }elseif($re['status']=='1'){
-            return ajax_success('答题成功',1);
+        if($re){
+            if($re['status']==2){
+                //客户该商品没有答题
+                return ajax_success('用户没有答题',2);
+           }elseif($re['status']=='0'){
+               return ajax_success('用户答题错误',0);
+           }elseif($re['status']=='1'){
+               return ajax_success('答题成功',1);
+           }elseif($re['status']=='-1'){
+            return ajax_success('答题超时',-1);
+           }else
+            {
+               return ajax_error('数据错误');
+           }
         }else{
-            return ajax_error('数据错误');
+            return ajax_success('商品未开甩',3);
         }
+        
     }
     /**
      * lilu
