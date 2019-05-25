@@ -280,26 +280,29 @@ function xmlToArray($xml)
  * 回调地址
  */
     public function wxpaynotifyurl(){ 
-        $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
+        // $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
         // $xml_data = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
         // $val = json_decode(json_encode($xml_data), true);
-        if($xml){
-            $data['txt']=$xml;
-            db('text')->insert($data);
-        }
+        // if($xml){
+        //     $data['txt']=$xml;
+        //     db('text')->insert($data);
+        // }
         $testxml  = file_get_contents("php://input");
-        if($testxml){
-            $data2['txt']=$xml;
-            db('text')->insert($data2);
-        }
+        
         $jsonxml = json_encode(simplexml_load_string($testxml, 'SimpleXMLElement', LIBXML_NOCDATA));
         $val = json_decode($jsonxml, true);//转成数组
+        if($val){
+            $data2['txt']=$val;
+            db('text')->insert($data2);
+        }
         if($val["result_code"] == "SUCCESS" ){
-            file_get_contents(EXTEND_PATH."data.txt",$val);
+            //file_get_contents(EXTEND_PATH."data.txt",$val);
             // $res = Db::name("order")
             //     ->where("order_number",$val["out_trade_no"])
             //     ->update(["status"=>2,"pay_time"=>time()]);
-            $res=db('order')->where('order_number',$val['out_trade_no'])->setField('status','2');
+            $map['status']='2';
+            $map['pay_time']=time();
+            $res=Db::name('order')->where('order_number',$val['out_trade_no'])->update($map);
             if($res){
                 // //做消费记录
                 // $information =Db::name("reward")->field("money,order_number,crowd_name,member_id")->where("order_number",$val["out_trade_no"])->find();
