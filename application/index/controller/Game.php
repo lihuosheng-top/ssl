@@ -134,9 +134,10 @@ class Game extends Base
         $data['member_id']=$member['id'];
         $data['goods_id']=$input['goods_id'];
         $re=db('answer_record')->where($data)->setField('answer_id',1);
-        unset($list[0]['true_ans']);
-        if($list){
-              return  ajax_success('获取成功',$list);
+        $list2=$list[0];
+        unset($list2['true_ans']);
+        if($list2){
+              return  ajax_success('获取成功',$list2);
         }else{
              return   ajax_error('获取失败');
         }
