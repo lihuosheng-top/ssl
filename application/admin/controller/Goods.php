@@ -603,12 +603,41 @@ class Goods extends Base
      */
     public function  goods_strategy(Request $request)
     {
-          if($request->isPost()){
-             $input=input();
-             halt($input);
-          }else{
-             return view('goods_strategy');
-          }
+              //获取参数信息
+                $id=input();
+                $goods_info=db('goods')->where('id',$id['id'])->field('free_tactics,bao_tactics,point_tactics,big_tactics,new_tactics,old_tactics')->find();
+                if($goods_info['free_tactics']){
+                    $data['free']=json_decode($goods_info['free_tactics'],true);
+                }else{
+                    $data['free']=[];
+                }
+                if($goods_info['bao_tactics']){
+                    $data['bao']=json_decode($goods_info['bao_tactics'],true);
+                }else{
+                    $data['bao']=[];
+                }
+                if($goods_info['point_tactics']){
+                    $data['point_tactics']=json_decode($goods_info['point_tactics'],true);
+                }else{
+                    $data['point_tactics']=[];
+                }
+                if($goods_info['big_tactics']){
+                    $data['big_tactics']=json_decode($goods_info['big_tactics'],true);
+                }else{
+                    $data['big_tactics']=[];
+                }
+                if($goods_info['new_tactics']){
+                    $data['new_tactics']=json_decode($goods_info['new_tactics'],true);
+                }else{
+                    $data['new_tactics']=[];
+                }
+                if($goods_info['old_tactics']){
+                    $data['old_tactics']=json_decode($goods_info['old_tactics'],true);
+                }else{
+                    $data['old_tactics']=[];
+                }
+                return view('goods_strategy',['id'=>$id['id'],'data'=>$data ]);
+        
     }
     
     /**
@@ -618,8 +647,35 @@ class Goods extends Base
     public function  goods_strategy_do()
     {
         //获取后台参数
-             $input=input();
-             halt($input);
+        $input=input();
+        if($input['free']){
+            $data['free_tactics']=json_encode($input['free']);
+        }
+        if($input['bao']){
+            $data['bao_tactics']=json_encode($input['bao']);
+        }
+        if($input['zpoint']){
+            $data['point_tactics']=json_encode($input['zpoint']);
+        }
+        if($input['big']){
+            $data['big_tactics']=json_encode($input['big']);
+        }
+        if($input['new']){
+            $data['new_tactics']=json_encode($input['new']);
+        }
+        if($input['old']){
+            $data['old_tactics']=json_encode($input['old']);
+        }
+        if($data){
+            $re=db('goods')->where('id',$input['id'])->update($data);
+            if($re){
+                $this->success('保存成功');
+            }else{
+                $this->error('保存失败');
+            }
+
+        }
+        
            
     }
 

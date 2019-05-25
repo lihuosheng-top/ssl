@@ -271,7 +271,7 @@
                         <td>{$vo.start_date|date="Y-m-d",###}</td>
                         <td>{$vo.end_date|date="Y-m-d ",###}</td>
                         <td>
-                            <a class="layui-btn layui-btn-mini edit change" href="{:url('admin/Goods/goods_strategy')}"> 配置策略
+                            <a class="layui-btn layui-btn-mini edit change" href="{:url('admin/Goods/goods_strategy',['id'=>$vo.id])}"> 配置策略
                             </a>
                             <a class="layui-btn layui-btn-mini edit" href="{:url('admin/Goods/goods_edit' ,['id'=>$vo.id])}"> 编辑
                             </a>

@@ -284,10 +284,11 @@ function xmlToArray($xml)
         $xml_data = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
         $val = json_decode(json_encode($xml_data), true);
         if($val["result_code"] == "SUCCESS" ){
-//             file_put_contents(EXTEND_PATH."data.txt",$val);
-            $res = Db::name("order")
-                ->where("order_number",$val["out_trade_no"])
-                ->update(["status"=>2,"pay_time"=>time()]);
+            file_put_contents(EXTEND_PATH."data.txt",$val);
+            // $res = Db::name("order")
+            //     ->where("order_number",$val["out_trade_no"])
+            //     ->update(["status"=>2,"pay_time"=>time()]);
+            $res=db('order')->where('order_number',$val['out_trade_no'])->setField('status','2');
             if($res){
                 // //做消费记录
                 // $information =Db::name("reward")->field("money,order_number,crowd_name,member_id")->where("order_number",$val["out_trade_no"])->find();

@@ -167,6 +167,7 @@
 
 <body>
     <form class="layui-form layui-form-lists" action="{:url('admin/Goods/goods_strategy_do')}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name='id' value="{$id}">
         <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
             <ul class="layui-tab-title">
                 <li class="layui-this">免单策略</li>
@@ -178,15 +179,21 @@
             </ul>
             <div class="layui-tab-content" style="height: 100px;">
                 <!-- 免单策略 -->
+                {if $data['free']}
                 <div class="layui-tab-item layui-show">
                     <div class="oneself m_t">
+                        {volist name="data['free']['own']" id="vo" }
                         <div class="form-item" style="margin-top: 15px;">
+                            {if $key=='0'}
                             <label class="form-label" style="width:20%">自己免单金额和概率</label>
+                            {else}
+                            <label class="form-label" style="width:20%"></label>
+                            {/if}
                             <div class="form-input ziji">
-                                <input type="checkbox" name="one_[status]" value="1" lay-filter="choose1" checked=''>
+                                <input type="checkbox" name="free[own][{$key}][status]" value="1" lay-filter="choose1" checked=''>
                             </div>
                             <div class="form-input ziji m_r">
-                                <input type="text" name="one_[percent]" value=" " lay-verify="title" autocomplete="off"
+                                <input type="text" name="free[own][{$key}][percent]" value="{$vo['percent']}" lay-verify="title" autocomplete="off"
                                     placeholder="" class="layui-input">
                                 <span class="percent">%</span>
                                 <div class="tips">
@@ -194,7 +201,78 @@
                                 </div>
                             </div>
                             <div class="form-input ziji">
-                                <input type="text" name="one_[probability]" value=" " lay-verify="title"
+                                <input type="text" name="free[own][{$key}][probability]" value="{$vo['probability']}" lay-verify="title"
+                                    autocomplete="off" placeholder="" class="layui-input">
+                                <div class="tips">
+                                    <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                                </div>
+                            </div>
+                        </div>
+                        {/volist}
+                    </div>
+                    <div class="one_more" id="one_more">添加一档</div>
+                    <div class="help m_t">
+                        {volist name="data['free']['other']" id="vo" }
+                        <div class="form-item" style="margin-top:15px;">
+                            {if $key=='0'}
+                                <label class="form-label" style="width:20%">自己免单金额和概率</label>
+                            {else}
+                                <label class="form-label" style="width:20%"></label>
+                             {/if}
+                            <div class="form-input ziji">
+                                <input type="checkbox" name="free[other][{$key}][status]" lay-filter="choose1" value="1" checked=''>
+                            </div>
+                            <div class="form-input ziji m_r">
+                                <input type="text" name="free[other][0][{$key}]" value="{$vo['percent']}" lay-verify="title" autocomplete="off"
+                                    placeholder="" class="layui-input">
+                                <span class="percent">%</span>
+                                <div class="tips">
+                                    <span class="red">*</span>0 ~ 100,表示减免单次甩费的百分比
+                                </div>
+                            </div>
+                            <div class="form-input ziji">
+                                <input type="text" name="free[other]{$key}][probability]" value="{$vo['probability']}" lay-verify="title"
+                                    autocomplete="off" placeholder="" class="layui-input">
+                                <div class="tips">
+                                    <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                                </div>
+                            </div>
+                        </div>
+                        {/volist}
+                    </div>
+                    <div class="one_more" id="one_help">添加一档</div>
+
+                    <div class="form-item" style="margin-top:15px;">
+                        <label class="form-label" style="width:20%">策略是否开启</label>
+                        <div class="form-input ziji">
+                            {if $data['free']['free']=='1'}
+                            <input type="radio" name="free[free]" title="开启" value="1"checked=''>
+                            <input type="radio" name="free[free]" title="关闭" value="0">
+                            {else}
+                            <input type="radio" name="free[free]" title="开启" value="1">
+                            <input type="radio" name="free[free]" title="关闭" value="0" checked=''>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+                {else}
+                <div class="layui-tab-item layui-show">
+                    <div class="oneself m_t">
+                        <div class="form-item" style="margin-top: 15px;">
+                            <label class="form-label" style="width:20%">自己免单金额和概率</label>
+                            <div class="form-input ziji">
+                                <input type="checkbox" name="free[own][0][status]" value="1" lay-filter="choose1" checked=''>
+                            </div>
+                            <div class="form-input ziji m_r">
+                                <input type="text" name="free[own][0][percent]" value=" " lay-verify="title" autocomplete="off"
+                                    placeholder="" class="layui-input">
+                                <span class="percent">%</span>
+                                <div class="tips">
+                                    <span class="red">*</span>0 ~ 100,表示减免单次甩费的百分比
+                                </div>
+                            </div>
+                            <div class="form-input ziji">
+                                <input type="text" name="free[own][0][probability]" value=" " lay-verify="title"
                                     autocomplete="off" placeholder="" class="layui-input">
                                 <div class="tips">
                                     <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
@@ -207,10 +285,10 @@
                         <div class="form-item" style="margin-top:15px;">
                             <label class="form-label" style="width:20%">自己免单金额和概率</label>
                             <div class="form-input ziji">
-                                <input type="checkbox" name="help_[status]" lay-filter="choose1" value="1" checked=''>
+                                <input type="checkbox" name="free[other][0][status]" lay-filter="choose1" value="1" checked=''>
                             </div>
                             <div class="form-input ziji m_r">
-                                <input type="text" name="help_[percent]" value="" lay-verify="title" autocomplete="off"
+                                <input type="text" name="free[other][0][percent]" value="" lay-verify="title" autocomplete="off"
                                     placeholder="" class="layui-input">
                                 <span class="percent">%</span>
                                 <div class="tips">
@@ -218,7 +296,7 @@
                                 </div>
                             </div>
                             <div class="form-input ziji">
-                                <input type="text" name="help_[probability]" value="" lay-verify="title"
+                                <input type="text" name="free[other][0][probability]" value="" lay-verify="title"
                                     autocomplete="off" placeholder="" class="layui-input">
                                 <div class="tips">
                                     <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
@@ -231,22 +309,29 @@
                     <div class="form-item" style="margin-top:15px;">
                         <label class="form-label" style="width:20%">策略是否开启</label>
                         <div class="form-input ziji">
-                            <input type="radio" name="free" title="开启" checked=''>
-                            <input type="radio" name="free" title="关闭">
+                            <input type="radio" name="free[free]" title="开启" value="1"checked=''>
+                            <input type="radio" name="free[free]" title="关闭" value="0">
                         </div>
                     </div>
                 </div>
+                {/if}
 
                 <!-- 红包策略 -->
+                {if $data['bao_tactics']}
                 <div class="layui-tab-item">
                     <div class=" m_t pack">
+                        {volist name="data['bao_tactics']['own']" id="vo"}
                         <div class="form-item" style="margin-top: 15px;">
+                            {if $key=='0'}
                             <label class="form-label" style="width:20%">自己甩奖励金额和概率</label>
+                            {else}
+                            <label class="form-label" style="width:20%"></label>
+                            {/if}
                             <div class="form-input ziji">
-                                <input type="checkbox" name="pack_[status]" lay-filter="choose1" value="1" checked=''>
+                                <input type="checkbox" name="bao[own][{$key}][status]" lay-filter="choose1" value="1" checked=''>
                             </div>
                             <div class="form-input ziji m_r">
-                                <input type="text" name="pack_[percent]" value="" lay-verify="title" autocomplete="off"
+                                <input type="text" name="bao[own][{$key}][percent]" value="{$vo['percent']}" lay-verify="title" autocomplete="off"
                                     placeholder="  请输入金额" class="layui-input">
                                 <span class="percent">%</span>
                                 <div class="tips">
@@ -254,23 +339,29 @@
                                 </div>
                             </div>
                             <div class="form-input ziji">
-                                <input type="text" name="pack_[probability]" value="" lay-verify="title"
+                                <input type="text" name="bao[own][{$key}][probability]" value="{$vo['probability']}" lay-verify="title"
                                     autocomplete="off" placeholder="  请输入数字" class="layui-input">
                                 <div class="tips">
                                     <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
                                 </div>
                             </div>
                         </div>
+                        {/volist}
                     </div>
                     <div class="one_more" id="pack_one">添加一档</div>
                     <div class=" m_t pack_t">
+                        {volist name="data['bao_tactics']['own']" id="vo"}
                         <div class="form-item" style="margin-top:15px;">
-                            <label class="form-label" style="width:20%">自己甩奖励金额和概率</label>
+                            {if $key=='0'}
+                            <label class="form-label" style="width:20%">别人甩奖励金额和概率</label>
+                            {else}
+                            <label class="form-label" style="width:20%"></label>
+                            {/if}
                             <div class="form-input ziji">
-                                <input type="checkbox" name="other_[status]" lay-filter="choose1" value="1" checked=''>
+                                <input type="checkbox" name="bao[other][{$key}][status]" lay-filter="choose1" value="1" checked=''>
                             </div>
                             <div class="form-input ziji m_r">
-                                <input type="text" name="other_[percent]" value="" lay-verify="title" autocomplete="off"
+                                <input type="text" name="bao[other][{$key}][percent]" value="{$vo['percent']}" lay-verify="title" autocomplete="off"
                                     placeholder="  请输入金额" class="layui-input">
                                 <span class="percent">%</span>
                                 <div class="tips">
@@ -278,36 +369,103 @@
                                 </div>
                             </div>
                             <div class="form-input ziji">
-                                <input type="text" name="other_[probability]" value="" lay-verify="title"
+                                <input type="text" name="bao[other][{$key}][probability]" value="{$vo['probability']}" lay-verify="title"
                                     autocomplete="off" placeholder="  请输入数字" class="layui-input">
                                 <div class="tips">
                                     <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
                                 </div>
                             </div>
                         </div>
+                        {/volist}
                     </div>
                     <div class="one_more" id="pack_two">添加一档</div>
 
                     <div class="form-item" style="margin-top:15px;">
                         <label class="form-label" style="width:20%">策略是否开启</label>
                         <div class="form-input ziji">
-                            <input type="radio" name="bao" title="开启" checked=''>
-                            <input type="radio" name="bao" title="关闭">
+                            {if $data['bao_tactics']['bao']=='1'}
+                            <input type="radio" name="bao[bao]" title="开启" value="1" checked=''>
+                            <input type="radio" name="bao[bao]" title="关闭" value="0">
+                            {else}
+                            <input type="radio" name="bao[bao]" title="开启" value="1" >
+                            <input type="radio" name="bao[bao]" title="关闭" value="0" checked=''>
+                            {/if}
                         </div>
                     </div>
                 </div>
+                {else}
+                <div class="layui-tab-item">
+                        <div class=" m_t pack">
+                            <div class="form-item" style="margin-top: 15px;">
+                                <label class="form-label" style="width:20%">自己甩奖励金额和概率</label>
+                                <div class="form-input ziji">
+                                    <input type="checkbox" name="bao[own][0][status]" lay-filter="choose1" value="1" checked=''>
+                                </div>
+                                <div class="form-input ziji m_r">
+                                    <input type="text" name="bao[own][0][percent]" value="" lay-verify="title" autocomplete="off"
+                                        placeholder="  请输入金额" class="layui-input">
+                                    <span class="percent">%</span>
+                                    <div class="tips">
+                                        <span class="red">*</span>奖励金额
+                                    </div>
+                                </div>
+                                <div class="form-input ziji">
+                                    <input type="text" name="bao[own][0][probability]" value="" lay-verify="title"
+                                        autocomplete="off" placeholder="  请输入数字" class="layui-input">
+                                    <div class="tips">
+                                        <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="one_more" id="pack_one">添加一档</div>
+                        <div class=" m_t pack_t">
+                            <div class="form-item" style="margin-top:15px;">
+                                <label class="form-label" style="width:20%">别人甩奖励金额和概率</label>
+                                <div class="form-input ziji">
+                                    <input type="checkbox" name="bao[other][0][status]" lay-filter="choose1" value="1" checked=''>
+                                </div>
+                                <div class="form-input ziji m_r">
+                                    <input type="text" name="bao[other][0][percent]" value="" lay-verify="title" autocomplete="off"
+                                        placeholder="  请输入金额" class="layui-input">
+                                    <span class="percent">%</span>
+                                    <div class="tips">
+                                        <span class="red">*</span>奖励金额
+                                    </div>
+                                </div>
+                                <div class="form-input ziji">
+                                    <input type="text" name="bao[other][0][probability]" value="" lay-verify="title"
+                                        autocomplete="off" placeholder="  请输入数字" class="layui-input">
+                                    <div class="tips">
+                                        <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="one_more" id="pack_two">添加一档</div>
+    
+                        <div class="form-item" style="margin-top:15px;">
+                            <label class="form-label" style="width:20%">策略是否开启</label>
+                            <div class="form-input ziji">
+                                <input type="radio" name="bao[bao]" title="开启" value="1" checked=''>
+                                <input type="radio" name="bao[bao]" title="关闭" value="0">
+                            </div>
+                        </div>
+                    </div>
+                {/if}
 
                 <!-- 增积分策略 -->
+                {if $data['zpoint_tactics']}
                 <div class="layui-tab-item">
                     <div class="form-item m_t">
                         <label class="form-label" style="width:20%">答对奖励</label>
                         <div class="form-input zpoint" style="margin-right:15px;">
-                            <input type="radio" name="oneself" value="自己概率" title="自己甩奖励积分" lay-filter="gailv"
+                            <input type="radio" name="" value="自己概率" title="自己甩奖励积分" lay-filter="gailv"
                                 checked=''>
                         </div>
                         <div class="form-input zpoint">
                             <span class="one">1~</span>
-                            <input type="text" name="sss0[tactics_num]" lay-verify="title" value="" autocomplete="off"
+                            <input type="text" name="zpoint[own]" lay-verify="title" value="{$data['zpoint_tactics']['own']}" autocomplete="off"
                                 placeholder="  请输入" class="layui-input">
                             <span>积分</span>
                             <div class="tips">
@@ -322,11 +480,11 @@
                     <div class="form-item m_t">
                         <label class="form-label" style="width:20%"></label>
                         <div class="form-input zpoint">
-                            <input type="radio" name="help" value="帮甩概率" title="帮别人甩奖励积分" lay-filter="help" checked=''>
+                            <input type="radio" name="" value="帮甩概率" title="帮别人甩奖励积分" lay-filter="help" checked=''>
                         </div>
                         <div class="form-input zpoint ">
                             <span class="one">1~</span>
-                            <input type="text" name="sss1[tactics_num]" lay-verify="title" value="" autocomplete="off"
+                            <input type="text" name="zpoint[other]" lay-verify="title" value="{$data['zpoint_tactics']['other']}" autocomplete="off"
                                 placeholder="  请输入" class="layui-input">
                             <span>积分</span>
                             <div class="tips">
@@ -341,12 +499,71 @@
                     <div class="form-item" style="margin-top:15px;">
                         <label class="form-label" style="width:20%">策略是否开启</label>
                         <div class="form-input ziji">
-                            <input type="radio" name="zpoint" title="开启" value="1" checked=''>
-                            <input type="radio" name="zpoint" title="关闭" value="0">
+                            {if $data['zpoint_tactics']['zpoint']=='1'}
+                            <input type="radio" name="zpoint[zpoint]" title="开启" value="1" checked=''>
+                            <input type="radio" name="zpoint[zpoint]" title="关闭" value="0">
+                            {else}
+                            <input type="radio" name="zpoint[zpoint]" title="开启" value="1" >
+                            <input type="radio" name="zpoint[zpoint]" title="关闭" value="0" checked=''>
+
+                            {/if}
                         </div>
                     </div>
                 </div>
+                {else}
+                <div class="layui-tab-item">
+                        <div class="form-item m_t">
+                            <label class="form-label" style="width:20%">答对奖励</label>
+                            <div class="form-input zpoint" style="margin-right:15px;">
+                                <input type="radio" name="" value="自己概率" title="自己甩奖励积分" lay-filter="gailv"
+                                    checked=''>
+                            </div>
+                            <div class="form-input zpoint">
+                                <span class="one">1~</span>
+                                <input type="text" name="zpoint[own]" lay-verify="title" value="" autocomplete="off"
+                                    placeholder="  请输入" class="layui-input">
+                                <span>积分</span>
+                                <div class="tips">
+                                    <span class="red">*</span>1.奖励积分
+                                </div>
+                                <div class="tips p_l">
+                                    2.随机奖励，例如设为4，则随机奖励给用户1到4之间的积分
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="form-item m_t">
+                            <label class="form-label" style="width:20%"></label>
+                            <div class="form-input zpoint">
+                                <input type="radio" name="" value="帮甩概率" title="帮别人甩奖励积分" lay-filter="help" checked=''>
+                            </div>
+                            <div class="form-input zpoint ">
+                                <span class="one">1~</span>
+                                <input type="text" name="zpoint[other]" lay-verify="title" value="" autocomplete="off"
+                                    placeholder="  请输入" class="layui-input">
+                                <span>积分</span>
+                                <div class="tips">
+                                    <span class="red">*</span>1.奖励积分
+                                </div>
+                                <div class="tips p_l">
+                                    2.随机奖励，例如设为4，则随机奖励给用户1到4之间的积分
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="form-item" style="margin-top:15px;">
+                            <label class="form-label" style="width:20%">策略是否开启</label>
+                            <div class="form-input ziji">
+                                <input type="radio" name="zpoint[zpoint]" title="开启" value="1" checked=''>
+                                <input type="radio" name="zpoint[zpoint]" title="关闭" value="0">
+                            </div>
+                        </div>
+                    </div>
+
+
+                {/if}
                 <!-- 大满贯策略 -->
+                {if $data['big_tactics']['tactics']}
                 <div class="layui-tab-item">
                     <div class="form-item m_t">
                         <label class="form-label" style="width:20%">触发条件</label>
@@ -354,7 +571,7 @@
                             达到总积分的：
                         </div>
                         <div class="form-input m_r zpoint">
-                            <input type="text" name="sss0[tactics_num]" value="" lay-verify="title" autocomplete="off"
+                            <input type="text" name="big[condition]" value="{$data['big_tactics']['condition']}" lay-verify="title" autocomplete="off"
                                 placeholder="  请输入" class="layui-input">
                             <span>%</span>
                             <span>（注明：填写1~100）</span>
@@ -369,10 +586,8 @@
                         <div class="form-input zpoint" style="margin-right:15px;  padding-top: 10px;">
                             剩余的积分的：
                         </div>
-                        <input type="hidden" name="sss1[tactics_key]" value="giving">
-                        <input type="hidden" name="sss1[id]" value="">
                         <div class="form-input m_r zpoint">
-                            <input type="text" name="sss1[tactics_num]" value="" lay-verify="title" autocomplete="off"
+                            <input type="text" name="big[zpoint]" value="{$data['big_tactics']['zpoint']}" lay-verify="title" autocomplete="off"
                                 placeholder="  请输入" class="layui-input">
                             <span>%</span>
                             <span>（注明：填写1~100）</span>
@@ -382,17 +597,64 @@
                     <div class="form-item" style="margin-top:15px;">
                         <label class="form-label" style="width:20%">策略是否开启</label>
                         <div class="form-input ziji">
-                            <input type="radio" name="big" title="开启" checked=''>
-                            <input type="radio" name="big" title="关闭">
+                            {if $data['big_tactics']['big']=='1'}
+                            <input type="radio" name="big[big]" title="开启" value="1" checked=''>
+                            <input type="radio" name="big[big]" title="关闭" value="0">
+                            {else}
+                            <input type="radio" name="big[big]" title="开启" value="1" >
+                            <input type="radio" name="big[big]" title="关闭" value="0" checked=''>
+                            {/if}
                         </div>
                     </div>
                 </div>
+                {else}
+                <div class="layui-tab-item">
+                        <div class="form-item m_t">
+                            <label class="form-label" style="width:20%">触发条件</label>
+                            <div class="form-input zpoint" style="margin-right:15px; padding-top: 10px;">
+                                达到总积分的：
+                            </div>
+                            <div class="form-input m_r zpoint">
+                                <input type="text" name="big[condition]" value="" lay-verify="title" autocomplete="off"
+                                    placeholder="  请输入" class="layui-input">
+                                <span>%</span>
+                                <span>（注明：填写1~100）</span>
+                                <div class="tips p_l">
+                                    <span class="red">*</span>实际总的付款（自己甩+别人帮甩）要大于商品进货价+运费，才能触发以上条件
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="form-item m_t">
+                            <label class="form-label" style="width:20%">赠送</label>
+                            <div class="form-input zpoint" style="margin-right:15px;  padding-top: 10px;">
+                                剩余的积分的：
+                            </div>
+                            <div class="form-input m_r zpoint">
+                                <input type="text" name="big[zpoint]" value="" lay-verify="title" autocomplete="off"
+                                    placeholder="  请输入" class="layui-input">
+                                <span>%</span>
+                                <span>（注明：填写1~100）</span>
+                            </div>
+                        </div>
+    
+                        <div class="form-item" style="margin-top:15px;">
+                            <label class="form-label" style="width:20%">策略是否开启</label>
+                            <div class="form-input ziji">
+                                <input type="radio" name="big[big]" title="开启" value="1" checked=''>
+                                <input type="radio" name="big[big]" title="关闭" value="0">
+                            </div>
+                        </div>
+                    </div>
+
+                {/if}
                 <!-- 新人帮甩策略 -->
+                {if $data['new_tactics']}
                 <div class="layui-tab-item">
                     <div class="form-item m_t">
                         <label class="form-label" style="width:20%">新人帮甩</label>
                         <div class="form-input m_r zpoint">
-                            <input type="text" name="sss0[tactics_num]" value="" lay-verify="title" autocomplete="off"
+                            <input type="text" name="new[help_num]" value="{$data['new_tactics']['help_num']}" lay-verify="title" autocomplete="off"
                                 placeholder=" 请输入次数" class="layui-input">
                             <span class="red">/每天</span>
                             <div class="tips"><span class="red">*</span>该用户拉来一个新人（有开甩记录就算老客，没有记录的就是新客），帮他甩，每拉一个新人，他<span
@@ -403,32 +665,86 @@
                     <div class="form-item" style="margin-top:15px;">
                         <label class="form-label" style="width:20%">策略是否开启</label>
                         <div class="form-input ziji">
-                            <input type="radio" name="new" title="开启" checked=''>
-                            <input type="radio" name="new" title="关闭">
+                            {if $date['new_tactics']['new']=='1'}
+                            <input type="radio" name="new[new]" title="开启" value="1" checked=''>
+                            <input type="radio" name="new[new]" title="关闭" value="0">
+                            {else}
+                            <input type="radio" name="new[new]" title="开启" value="1" >
+                            <input type="radio" name="new[new]" title="关闭" value="0" checked=''>
+
+                            {/if}
                         </div>
                     </div>
                 </div>
+                {else}
+                <div class="layui-tab-item">
+                        <div class="form-item m_t">
+                            <label class="form-label" style="width:20%">新人帮甩</label>
+                            <div class="form-input m_r zpoint">
+                                <input type="text" name="new[help_num]" value="" lay-verify="title" autocomplete="off"
+                                    placeholder=" 请输入次数" class="layui-input">
+                                <span class="red">/每天</span>
+                                <div class="tips"><span class="red">*</span>该用户拉来一个新人（有开甩记录就算老客，没有记录的就是新客），帮他甩，每拉一个新人，他<span
+                                        class="red">每天</span>针对该商品可多甩次数</div>
+                            </div>
+                        </div>
+    
+                        <div class="form-item" style="margin-top:15px;">
+                            <label class="form-label" style="width:20%">策略是否开启</label>
+                            <div class="form-input ziji">
+                                <input type="radio" name="new[new]" title="开启" value="1" checked=''>
+                                <input type="radio" name="new[new]" title="关闭" value="0">
+                            </div>
+                        </div>
+                    </div>
+                {/if}
                 <!-- 老人帮甩策略 -->
+                {if $data['old']}
                 <div class="layui-tab-item">
                     <div class="form-item m_t">
                         <label class="form-label" style="width:20%">老人帮甩</label>
                         <div class="form-input m_r zpoint">
-                            <input type="text" name="sss0[tactics_num]" value="" lay-verify="title" autocomplete="off"
+                            <input type="text" name="old[help_num]" value="{$data['old']['help_num']}" lay-verify="title" autocomplete="off"
                                 placeholder=" 请输入次数" class="layui-input">
                             <span class="red">/每天</span>
                             <div class="tips"><span class="red">*</span>该用户拉来一个老人（有开甩记录就算老客，没有记录的就是新客），帮他甩，每拉一个老人，他
                                 <span class="red">每天</span>针对该商品可多甩次数</div>
                         </div>
                     </div>
-
                     <div class="form-item" style="margin-top:15px;">
                         <label class="form-label" style="width:20%">策略是否开启</label>
                         <div class="form-input ziji">
-                            <input type="radio" name="old" title="开启" checked=''>
-                            <input type="radio" name="old" title="关闭">
+                            {if $data['old']['old']=='1'}
+                            <input type="radio" name="old[old]" title="开启" value="1" checked=''>
+                            <input type="radio" name="old[old]" title="关闭" value="0">
+                            {else}
+                            <input type="radio" name="old[old]" title="开启" value="1" >
+                            <input type="radio" name="old[old]" title="关闭" value="0" checked=''>
+                            {/if}
                         </div>
                     </div>
                 </div>
+                {else}
+                <div class="layui-tab-item">
+                        <div class="form-item m_t">
+                            <label class="form-label" style="width:20%">老人帮甩</label>
+                            <div class="form-input m_r zpoint">
+                                <input type="text" name="old[help_num]" value="" lay-verify="title" autocomplete="off"
+                                    placeholder=" 请输入次数" class="layui-input">
+                                <span class="red">/每天</span>
+                                <div class="tips"><span class="red">*</span>该用户拉来一个老人（有开甩记录就算老客，没有记录的就是新客），帮他甩，每拉一个老人，他
+                                    <span class="red">每天</span>针对该商品可多甩次数</div>
+                            </div>
+                        </div>
+                        <div class="form-item" style="margin-top:15px;">
+                            <label class="form-label" style="width:20%">策略是否开启</label>
+                            <div class="form-input ziji">
+                                <input type="radio" name="old[old]" title="开启" value="1" checked=''>
+                                <input type="radio" name="old[old]" title="关闭" value="0">
+                            </div>
+                        </div>
+                    </div>
+                {/if}
             </div>
             <div class="layui-form-item" style="width:100%;">
                 <div class="layui-input-block">
@@ -499,14 +815,11 @@
                 let dhtml = "";
                 dhtml = `<div class="form-item clone">
                                         <label class="form-label" style="width:20%"></label>
-                                        <input name="one_${i}[tactics_key]" value="free_tactics_own" style="display: none">
-                                        <input name="one_${i}[id]" value="" style="display: none">
                                         <div class="form-input ziji">
-                                                <input type="checkbox" name="one_${i}[status]" value="0" lay-filter="choose1" >
-                                                <input type="hidden" name="one_${i}[id]" value="" >
+                                                <input type="checkbox" name="free[own][${i}][status]" value="0" lay-filter="choose1" >
                                         </div>
                                         <div class="form-input ziji m_r">
-                                            <input type="text" name="one_${i}[percent]" lay-verify="title" autocomplete="off" placeholder=""
+                                            <input type="text" name="free[own][${i}][percent]" lay-verify="title" autocomplete="off" placeholder=""
                                                 class="layui-input">
                                             <span class="percent">%</span>
                                             <div class="tips">
@@ -514,7 +827,7 @@
                                             </div>
                                         </div>
                                         <div class="form-input ziji">
-                                            <input type="text" name="one_${i}[probability]" lay-verify="title" autocomplete="off" placeholder=""
+                                            <input type="text" name="free[own][${i}][probability]" lay-verify="title" autocomplete="off" placeholder=""
                                                 class="layui-input" style="margin-right: 110px;">
                                             <div class="del_div" id="del_oneself"><img src="__STATIC__/admin/index/img/u1306.png" class="img_x"></div>
                                             <div class="tips">
@@ -535,13 +848,11 @@
                 let dhtml = "";
                 dhtml = `<div class="form-item clone">
                                     <label class="form-label" style="width:20%"></label>
-                                    <input name="help_${e}[tactics_key]" value="free_tactics_other" style="display: none">
-                                        <input name="help_${e}[id]" value="" style="display: none">
-                                    <div class="form-input ziji">
-                                        <input type="checkbox" name="help_${e}[status]" value="0" lay-filter="choose1" >
+                                     <div class="form-input ziji">
+                                        <input type="checkbox" name="free[other][${e}][status]" value="0" lay-filter="choose1" >
                                     </div>
                                     <div class="form-input ziji m_r">
-                                        <input type="text" name="help_${e}[percent]" lay-verify="title" autocomplete="off" placeholder=""
+                                        <input type="text" name="free[other][${e}][percent]" lay-verify="title" autocomplete="off" placeholder=""
                                             class="layui-input">
                                         <span class="percent">%</span>
                                         <div class="tips">
@@ -549,7 +860,7 @@
                                         </div>
                                     </div>
                                     <div class="form-input ziji">
-                                        <input type="text" name="help_${e}[probability]" lay-verify="title" autocomplete="off" placeholder=""
+                                        <input type="text" name="free[other][${e}][probability]" lay-verify="title" autocomplete="off" placeholder=""
                                             class="layui-input"  style="margin-right: 110px;">
                                         <div class="del_div" id="del_help"><img src="__STATIC__/admin/index/img/u1306.png" class="img_x"></div>
                                         <div class="tips">
@@ -574,13 +885,11 @@
 
                 dhtml = `<div class="form-item clone">
                                         <label class="form-label" style="width:20%"></label>
-                                        <input name="pack_${y}[tactics_key]" value="bao_tactics_own" style="display: none">
-                                        <input name="pack_${y}[id]" value="" style="display: none">
                                         <div class="form-input ziji">
-                                                <input type="checkbox" name="pack_${y}[status]" value="0" lay-filter="choose1">
+                                                <input type="checkbox" name="bao[own][${y}][status]" value="0" lay-filter="choose1">
                                         </div>
                                         <div class="form-input ziji m_r">
-                                            <input type="text" name="pack_${y}[percent]" lay-verify="title" autocomplete="off" placeholder="  请输入金额"
+                                            <input type="text" name="bao[own][${y}][percent]" lay-verify="title" autocomplete="off" placeholder="  请输入金额"
                                                 class="layui-input">
                                             <span class="percent">%</span>
                                             <div class="tips">
@@ -588,7 +897,7 @@
                                             </div>
                                         </div>
                                         <div class="form-input ziji">
-                                            <input type="text" name="pack_${y}[probability]" lay-verify="title" autocomplete="off" placeholder="  请输入数字"
+                                            <input type="text" name="bao[own][${y}][probability]" lay-verify="title" autocomplete="off" placeholder="  请输入数字"
                                                 class="layui-input" style="margin-right: 110px;">
                                             <div class="del_div" id="del_oneself1"><img src="__STATIC__/admin/index/img/u1306.png" class="img_x"></div>
                                             <div class="tips">
@@ -609,13 +918,11 @@
                 let dhtml = "";
                 dhtml = `<div class="form-item clone">
                                     <label class="form-label" style="width:20%"></label>
-                                    <input name="other_${u}[tactics_key]" value="bao_tactics_other" style="display: none">
-                                        <input name="other_${u}[id]" value="" style="display: none">
                                     <div class="form-input ziji">
-                                        <input type="checkbox" name="other_${u}[status]" value="0" lay-filter="choose1">
+                                        <input type="checkbox" name="bao[other][${u}][status]" value="0" lay-filter="choose1">
                                     </div>
                                     <div class="form-input ziji m_r">
-                                        <input type="text" name="other_${u}[percent]" lay-verify="title" autocomplete="off" placeholder="  请输入金额"
+                                        <input type="text" name="bao[other][${u}][percent]" lay-verify="title" autocomplete="off" placeholder="  请输入金额"
                                             class="layui-input">
                                         <span class="percent">%</span>
                                         <div class="tips">
@@ -623,7 +930,7 @@
                                         </div>
                                     </div>
                                     <div class="form-input ziji">
-                                        <input type="text" name="other_${u}[probability]" lay-verify="title" autocomplete="off" placeholder="  请输入数字"
+                                        <input type="text" name="bao[other][${u}][probability]" lay-verify="title" autocomplete="off" placeholder="  请输入数字"
                                             class="layui-input"  style="margin-right: 110px;">
                                         <div class="del_div" id="del_help2"><img src="__STATIC__/admin/index/img/u1306.png" class="img_x"></div>
                                         <div class="tips">
