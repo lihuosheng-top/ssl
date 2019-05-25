@@ -184,13 +184,18 @@ class Game extends Base
         //获取参数
         $input=input();
         $info=db('problem_house')->where('id',$input['answer_id'])->find();
+        $member=db('member')->where('token',$this->token)->find();
+        $data['member_id']=$member['id'];
+        $data['goods_id']=$input['goods_id'];
         //插入答题列表
 
         if($info['true_ans']==$input['true_ans'])
         {
             //答题正确
+            $re=db('answer_record')->where($data)->setField('status','1');
             return ajax_success('答题正确');
         }else{
+            $re=db('answer_record')->where($data)->setField('status','0');
             return ajax_error('答题失败');
         }
 
