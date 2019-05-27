@@ -138,6 +138,8 @@ class Goods extends Base
                     //随机生成商品编码（6位）
                     $goods_data['goods_number']=randomkeys();
                     $goods_data['goods_price']=$goods_data['goods_price'];
+                    $goods_data['goods_sign']=json_encode($goods_data['sss']);
+                    unset($goods_data['sss']);
                     $bool = db("goods")->insert($goods_data);
                     if($bool){
                         $this->success("添加成功", url("admin/Goods/goods_index"));
@@ -281,6 +283,7 @@ class Goods extends Base
                 }
                 $goods_data['start_date']=strtotime($goods_data['start_date']);
                 $goods_data['end_date']=strtotime($goods_data['end_date']);
+                $goods_data['goods_sign']=json_encode($goods_data['goods_sign']);
                 $re=db('goods')->where('id',$goods_data['id'])->update($goods_data);
                 if($re){
                     $this->success("编辑成功", url("admin/Goods/goods_index"));
