@@ -51,6 +51,7 @@ class Login extends Controller{
                 //注册用户信息
                 $user['account']=$post['account'];       //用户手机号
                 $user['passwd']=md5($post['account'].time());
+                $user['join_time']=time();
                 $re2=DB::name('member')
                     ->insert($user);                //添加用户信息
                 if($re2){
@@ -139,6 +140,7 @@ class Login extends Controller{
                 //注册新用户
                 $member['account']=$user_mobile;
                 $member['passwd']=md5($member['account'].time());
+                $member['join_time']=time();
                 $re=DB::name('member')->insert($member);
                 if($re){
                     //验证码判断

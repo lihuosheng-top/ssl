@@ -162,11 +162,71 @@ class Games extends Controller
 	}
 
 	/**
+     * lilu
 	*  答题阶梯
 	*/
 	public function answer_bri()
 	{
-      return view('answer_bri');
+        //获取已配置的信息
+        $key="answer_bri";
+        $info=db('sys_setting')->where('key',$key)->find();
+        if($info){
+            $value=json_decode($info['value'],true);
+            $id=$info['id'];
+        }else{
+            $value=[];
+            $id='';
+        }
+      return view('answer_bri',['data'=>$value,'id'=>$info['id']]);
+	}
+	/**
+     * lilu
+	*  答题阶梯处理
+	*/
+	public function answer_bri_do()
+	{
+        $key='answer_bri';    //答题阶梯的key值
+        //获取后台配置参数
+        $input=input();
+        foreach($input as $k=>$v){
+            if (substr($k, 0, 3) == "sss") { 
+                foreach($v as $k2=>$v2)
+                {
+                    if(!array_key_exists('status',$v[$k2])){
+                          $input[$k][$k2]['status']='0';
+                    }
+
+                } 
+                  
+            }
+        }
+        if($input){
+            if($input['id']){
+                $data['value']=json_encode($input);
+                $data['key']='answer_bri';
+                $data['status']='1';
+                $re=db('sys_setting')->where('id',$input['id'])->update($data);
+                if($re){
+                   $this->success('保存成功',url('admin/Games/answer_bri'));
+                }else{
+                   $this->error('保存失败');
+                }
+            }else{
+                $data['value']=json_encode($input);
+                $data['key']='answer_bri';
+                $data['status']='1';
+                $re=db('sys_setting')->insert($data);
+                if($re){
+                   $this->success('保存成功',url('admin/Games/answer_bri'));
+                }else{
+                   $this->error('保存失败');
+                }
+
+            }
+        }else{
+            $this->error('保存失败');
+
+        }
 	}
 
 	/**

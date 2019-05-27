@@ -167,6 +167,7 @@ Route::group("admin",[
     "answer_bank_edit_do"=>"admin/Games/answer_bank_edit_do",   //答题编辑处理
     "answer_bank_del"=>"admin/Games/answer_bank_del",        //答题删除
     "appear_pro_do"=>"admin/Games/appear_pro_do",            //出现概率处理
+    "answer_bri_do"=>"admin/Games/answer_bri_do",            //答题阶梯处理
 
     
 
