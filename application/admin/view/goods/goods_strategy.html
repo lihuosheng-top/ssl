@@ -181,8 +181,8 @@
                 <!-- 免单策略 -->
                 <div class="layui-tab-item layui-show">
                     <div class="oneself m_t">
-                        {if $data['free']['own']}
-                        {volist name="data['free']['own']" id="vo" }
+                        {if $data['free_tactics']['own']}
+                        {volist name="data['free_tactics']['own']" id="vo" }
                         <div class="form-item" style="margin-top: 15px;">
                             {if $key=='0'}
                             <label class="form-label" style="width:20%">自己免单金额和概率</label>
@@ -235,20 +235,19 @@
                     </div>
                     <div class="one_more" id="one_more">添加一档</div>
                     <div class="help m_t">
-                        {if $data['free']['other']}
-                        {volist name="data['free']['other']" id="vo"  }
-                        <?php $i=0; ?>
+                        {if $data['free_tactics']['other']}
+                        {volist name="data['free_tactics']['other']" id="vo" }
                         <div class="form-item" style="margin-top:15px;">
-                            {if $i=='0'}
+                            {if $key=='0'}
                                 <label class="form-label" style="width:20%">帮甩免单金额和概率</label>
                             {else}
                                 <label class="form-label" style="width:20%"></label>
                              {/if}
                             <div class="form-input ziji">
-                                <input type="checkbox" name="free[other][{$i}][status]" lay-filter="choose1" value="1" checked=''>
+                                <input type="checkbox" name="free[other][{$key}][status]" lay-filter="choose1" value="1" checked=''>
                             </div>
                             <div class="form-input ziji m_r">
-                                <input type="text" name="free[other][{$i}][percent]" value="{$vo['percent']}" lay-verify="title" autocomplete="off"
+                                <input type="text" name="free[other][{$key}][percent]" value="{$vo['percent']}" lay-verify="title" autocomplete="off"
                                     placeholder="" class="layui-input">
                                 <span class="percent">%</span>
                                 <div class="tips">
@@ -256,14 +255,13 @@
                                 </div>
                             </div>
                             <div class="form-input ziji">
-                                <input type="text" name="free[other]{$i}][probability]" value="{$vo['probability']}" lay-verify="title"
+                                <input type="text" name="free[other][{$key}][probability]" value="{$vo['probability']}" lay-verify="title"
                                     autocomplete="off" placeholder="" class="layui-input">
                                 <div class="tips">
                                     <span class="red">*</span>输入数字后计算出出现的概率；0 ~ 99999,概率=此处数字÷所有添加档数字之和
                                 </div>
                             </div>
                         </div>
-                        <?php $i++; ?>
                         {/volist}
                         {else}
                         <div class="form-item" style="margin-top:15px;">
@@ -295,13 +293,14 @@
                     <div class="form-item" style="margin-top:15px;">
                         <label class="form-label" style="width:20%">策略是否开启</label>
                         <div class="form-input ziji">
-                            {if $data['free']['free']=='1'}
+                            <input type="radio" name="free[free]" title="开启" value="1"checked>
+                            <!-- {if $data['free_tactics']['free']=='1'}
                             <input type="radio" name="free[free]" title="开启" value="1"checked=''>
                             <input type="radio" name="free[free]" title="关闭" value="0">
                             {else}
-                            <input type="radio" name="free[free]" title="开启" value="1">
-                            <input type="radio" name="free[free]" title="关闭" value="0" checked=''>
-                            {/if}
+                            <input type="radio" name="free[free]" title="开启" value="1"  checked=''>
+                            <input type="radio" name="free[free]" title="关闭" value="0">
+                            {/if} -->
                         </div>
                     </div>
                 </div>

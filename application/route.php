@@ -162,10 +162,11 @@ Route::group("admin",[
     "differ_add"=>"admin/Games/differ_add",                  //添加找不同
     "appear_pro"=>"admin/Games/appear_pro",                  //出现概率
     "differ_index"=>"admin/Games/differ_index",              //出现概率
-    "update_images"=>"admin/Games/update_images",              //出现概率
-    "answer_bank_edit"=>"admin/Games/answer_bank_edit",        //添加答题
-    "answer_bank_edit_do"=>"admin/Games/answer_bank_edit_do",        //添加答题
-    "answer_bank_del"=>"admin/Games/answer_bank_del",        //添加答题
+    "update_images"=>"admin/Games/update_images",              //更新图片
+    "answer_bank_edit"=>"admin/Games/answer_bank_edit",        //答题编辑
+    "answer_bank_edit_do"=>"admin/Games/answer_bank_edit_do",   //答题编辑处理
+    "answer_bank_del"=>"admin/Games/answer_bank_del",        //答题删除
+    "appear_pro_do"=>"admin/Games/appear_pro_do",            //出现概率处理
 
     
 

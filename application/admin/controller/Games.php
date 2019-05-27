@@ -181,9 +181,56 @@ class Games extends Controller
 	*  出现概率
 	*/
 	public function appear_pro()
-	{
-        return view('appear_pro');
+	{   
+        //获取已有的配置
+        $key='game_chance';
+        $re=db('sys_setting')->where('key',$key)->find();
+        if($re){
+            $data['sss']=json_decode($re['value'],true);
+            $data['id']=$re['id'];
+        }else{
+            $data['sss']=[];
+            $data['id']='';
+        }
+        return view('appear_pro',['data'=>$data]);
 	}
+	/**
+     * lilu
+	*  出现概率处理
+	*/
+	public function appear_pro_do()
+	{
+        //获取数据
+        $input=input();
+        if($input){
+            if($input['id'])
+            {
+                $data['key']='game_chance';
+                $value=json_encode($input['sss']);
+                $data['value']=$value;
+                $data['status']='1';
+                $re=db('sys_setting')->where('id',$input['id'])->update($data);
+                if($re){
+                    $this->success('保存成功');
+                }else{
+                    $this->error('保存失败');
+                }
+            }else{
+                $data['key']='game_chance';
+                $value=json_encode($input['sss']);
+                $data['value']=$value;
+                $data['status']='1';
+                $re=db('sys_setting')->insert($data);
+                if($re){
+                    $this->success('保存成功',url('admin/Game/appear_pro'));
+                }else{
+                    $this->error('保存失败');
+                }
+            }
+        }else{
+            $this->error('保存失败');
+        }
+}
     public function differ_add()
 	{
         return view('differ_add');

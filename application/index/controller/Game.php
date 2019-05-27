@@ -3,6 +3,7 @@ namespace app\index\controller;
 
 use think\Controller;
 use app\index\controller\Base;
+use app\index\Model\Game as Game2;
 use think\Session;
 use think\Request;
 use think\Db;
@@ -178,6 +179,8 @@ class Game extends Base
      * 判断答案是否正确
      * 问题id
      * 答案
+     * token
+     * 商品id
      */
     public function is_right()
     {
@@ -188,12 +191,83 @@ class Game extends Base
         $data['member_id']=$member['id'];
         $data['goods_id']=$input['goods_id'];
         //插入答题列表
-
         if($info['true_ans']==$input['true_ans'])
         {
-            //答题正确
+            //答题正确,修改客户答题记录
             $re=db('answer_record')->where($data)->setField('status','1');
-            return ajax_success('答题正确');
+            //根据商品设置，获取甩免单和红包的金额以及概率
+            $goods_info=db('goods')->where('id',$input['goods_id'])->find();
+            if($goods_info['free_tactics'])      //商品免单策略是否配置
+            {
+                $value=json_decode($goods_info['free_tactics'],true);
+                $free_percent_own=$value['own'][0]['percent']/100;
+                $free_percent_other=$value['other'][0]['percent']/100;
+            }else{
+                $map['status']='0';
+            }
+             //获取订单金额
+             $res=db('order')->where('order_number',$input['order_number'])->find();
+
+            //获取红包的概率以及金额
+            if($goods_info['bao_tactics'])
+            {
+                $value2=json_decode($goods_info['bao_tactics'],true);
+                ////////自己甩
+                $zong=0;
+                foreach($value2['own'] as $k=>$v)
+                {
+                   $zong +=$v['probability'];
+                }
+                //按照probability排序
+                $last_names = array_column($value2['own'],'probability');
+                array_multisort($last_names,SORT_ASC,$value2['own']);
+                $num=mt_rand(1,$zong);   //随机数
+                $pro=0;
+                foreach($value2['own'] as $k2=>$v2)
+                {
+                    $pro +=$v2['probability'];
+                    if($num<=$pro){
+                        $map1['free_bao_own']=$res['order_amount']*$v2['percent']/100;
+                        break;
+                    }
+                }
+                //帮甩红包---other
+                $zong2=0;
+                $pro2=0;
+                foreach($value2['other'] as $k3=>$v3)
+                {
+                   $zong2 +=$v3['probability'];
+                }
+                //按照probability排序
+                $last_names2 = array_column($value2['other'],'probability');
+                array_multisort($last_names2,SORT_ASC,$value2['other']);
+                $num2=mt_rand(1,$zong2);   //随机数
+                foreach($value2['other'] as $k4=>$v4)
+                {
+                    $pro2 +=$v4['probability'];
+                    if($num2<=$pro2){
+                        $map2['free_bao_other']=$res['order_amount']*$v4['percent']/100;
+                        break;
+                    }
+                }
+             //根据甩的类型获取免单金额
+            if($re['help_id']!='0')     
+            {    //帮甩
+               $map['free_money']=$res['order_amount']*$free_percent_other;
+               $map['free_bao']=$map2['free_bao_other'];
+            }else{    //自己甩
+                $map['free_money']=$res['order_amount']*$free_percent_own;
+                $map['free_bao']=$map1['free_bao_own'];
+            }
+            }else{
+                $map['status']='1';
+            }
+            // //根据概率，判断小游戏的种类
+            // $youxi =new Game2();
+            // $game=$youxi->get_games_chance();
+            // $data=$game;
+
+            return ajax_success('答题正确',$map);
         }else{
             $re=db('answer_record')->where($data)->setField('status','0');
             return ajax_error('答题失败');
