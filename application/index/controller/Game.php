@@ -224,7 +224,6 @@ class Game extends Base
         //获取用户信息
         $member=db('member')->where('token',$this->token)->find();
         $data['order_number']=$input['order_number'];
-        $re=db('help_record')->where($data)->find();
       //根据商品设置，获取甩免单和红包的金额以及概率
       $goods_info=db('goods')->where('id',$input['goods_id'])->find();
       if($goods_info['free_tactics'])      //商品免单策略是否配置
@@ -237,87 +236,39 @@ class Game extends Base
       }
        //获取订单金额
        $res=db('order')->where('order_number',$input['order_number'])->find();
-
-      //获取红包的概率以及金额
-      if($goods_info['bao_tactics'])
-      {
-          $value2=json_decode($goods_info['bao_tactics'],true);
-          ////////自己甩
-          $zong=0;
-          foreach($value2['own'] as $k=>$v)
-          {
-             $zong +=$v['probability'];
-          }
-          //按照probability排序
-          $last_names = array_column($value2['own'],'probability');
-          array_multisort($last_names,SORT_ASC,$value2['own']);
-          $num=mt_rand(1,$zong);   //随机数
-          $pro=0;
-          foreach($value2['own'] as $k2=>$v2)
-          {
-              $pro +=$v2['probability'];
-              if($num<=$pro){
-                  $map1['free_bao_own']=$res['order_amount']*$v2['percent']/100;
-                  break;
-              }
-          }
-          //帮甩红包---other
-          $zong2=0;
-          $pro2=0;
-          foreach($value2['other'] as $k3=>$v3)
-          {
-             $zong2 +=$v3['probability'];
-          }
-          //按照probability排序
-          $last_names2 = array_column($value2['other'],'probability');
-          array_multisort($last_names2,SORT_ASC,$value2['other']);
-          $num2=mt_rand(1,$zong2);   //随机数
-          foreach($value2['other'] as $k4=>$v4)
-          {
-              $pro2 +=$v4['probability'];
-              if($num2<=$pro2){
-                  $map2['free_bao_other']=$res['order_amount']*$v4['percent']/100;
-                  break;
-              }
-          }
-            //根据甩的类型获取免单金额
-            if($re['help_id']!='0')     
-            {    //帮甩
-                $map['free_money']=$res['order_amount']*$free_percent_other;
-                // $map['free_bao']=$map2['free_bao_other'];
-            }else{    //自己甩
-                $map['free_money']=$res['order_amount']*$free_percent_own;
-                // $map['free_bao']=$map1['free_bao_own'];
-            }
-        }else{
-            $map['status']='1';
+       $re=db('help_record')->where($data)->find();
+        if($re['help_id']!='0')     
+        {    //帮甩
+            $map['free_money']=$res['order_amount']*$free_percent_other;
+        }else{    //自己甩
+            $map['free_money']=$res['order_amount']*$free_percent_own;
         }
         //免单金额返还客户（$map['free_money]）
         $openid=$input['openid'];
         $money=$map['free_money'];
         db('member')->where('id',$member['id'])->setField('openid',$openid);
         $pay=new pay();
-        // $data=$pay->back_free_money($openid,$money,$member['name']);
-        // if($data){
-        //     $pp['txt']=$data;
-        //     db('text')->insert($pp);
-        // }
-        // $xml_data = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
-        // $val = json_decode(json_encode($xml_data), true);
-        // if($val["result_code"] == "SUCCESS" && $val["result_code"]=="SUCCESS" ){
-        //     //红包记录
-        //     $info=db('order')->where('order_number',$input['order_number'])->find();
-        //     $where['member_id']=$member['id'];
-        //     $where['help_id']='0';   //帮甩用户id
-        //     $where['goods_id']=$info['goods_id'];
-        //     $where['order_number']= $input['order_number'];
-        //     $where['income']=$input['bao_money'];
-        //     $where['pay']='0';
-        //     $where['pay_type']='2';   //weixin   
-        //     $where['order_type']='3';   //奖励红包
-        //     $where['order_status']='0';   //自己甩
-        //     $re=db('captical_record')->insert($where);
-        // }
+        $data=$pay->back_free_money($openid,$money,$member['name']);
+        if($data){
+            $pp['txt']=$data;
+            db('text')->insert($pp);
+        }
+        $xml_data = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
+        $val = json_decode(json_encode($xml_data), true);
+        if($val["result_code"] == "SUCCESS" && $val["result_code"]=="SUCCESS" ){
+            //红包记录
+            $info=db('order')->where('order_number',$input['order_number'])->find();
+            $where['member_id']=$member['id'];
+            $where['help_id']='0';   //帮甩用户id
+            $where['goods_id']=$info['goods_id'];
+            $where['order_number']= $input['order_number'];
+            $where['income']=$input['bao_money'];
+            $where['pay']='0';
+            $where['pay_type']='2';   //weixin   
+            $where['order_type']='3';   //奖励红包
+            $where['order_status']='0';   //自己甩
+            $re=db('captical_record')->insert($where);
+        }
         if($map)
         {
           return ajax_success('获取成功',$map);
@@ -342,15 +293,6 @@ class Game extends Base
           $re=db('help_record')->where($data)->find();
           $res=db('order')->where('order_number',$input['order_number'])->find();
           //根据商品设置，获取甩免单和红包的金额以及概率
-    //   $goods_info=db('goods')->where('id',$res['goods_id'])->find();
-    //   if($goods_info['free_tactics'])      //商品免单策略是否配置
-    //   {
-    //       $value=json_decode($goods_info['free_tactics'],true);
-    //       $free_percent_own=$value['own'][0]['percent']/100;
-    //       $free_percent_other=$value['other'][0]['percent']/100;
-    //   }else{
-    //       $map['status']='0';
-    //   }
         $goods_info=db('goods')->where('id',$res['goods_id'])->find();
         //获取红包的概率以及金额
         if($goods_info['bao_tactics'])
@@ -396,10 +338,8 @@ class Game extends Base
             }
             if($re['help_id']!='0')     
             {    //帮甩
-                // $map['free_money']=$res['order_amount']*$free_percent_other;
                 $map['free_bao']=$map1['free_bao_other'];
             }else{    //自己甩
-                // $map['free_money']=$res['order_amount']*$free_percent_own;
                 $map['free_bao']=$map1['free_bao_own'];
             }
          //获取用户信息
@@ -407,28 +347,27 @@ class Game extends Base
         $pay=new pay();
         $openid=$input['openid'];
         $money=$map['free_bao'];
-        // $data=$pay->back_free_money($openid,$money,$member['name']);
-        // if($data){
-        //     $pp['txt']=$data;
-        //     db('text')->insert($pp);
-        // }
-        // $xml_data = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
-        // $val = json_decode(json_encode($xml_data), true);
-        // if($val["result_code"] == "SUCCESS" && $val["result_code"]=="SUCCESS" ){
-        //     //红包记录
-        //     $info=db('order')->where('order_number',$input['order_number'])->find();
-        //     $where['member_id']=$member['id'];
-        //     $where['help_id']='0';   //帮甩用户id
-        //     $where['goods_id']=$info['goods_id'];
-        //     $where['order_number']= $input['order_number'];
-        //     $where['income']=$input['bao_money'];
-        //     $where['pay']='0';
-        //     $where['pay_type']='2';   //weixin   
-        //     $where['order_type']='3';   //奖励红包
-        //     $where['order_status']='0';   //自己甩
-        //     $re=db('captical_record')->insert($where);
-        //     return ajax_success('发放成功');
-        // }
+        $data=$pay->back_free_money($openid,$money,$member['name']);
+        if($data){
+            $pp['txt']=$data;
+            db('text')->insert($pp);
+            $xml_data = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
+            $val = json_decode(json_encode($xml_data), true);
+            if($val["result_code"] == "SUCCESS" && $val["result_code"]=="SUCCESS" ){
+                //红包记录
+                $info=db('order')->where('order_number',$input['order_number'])->find();
+                $where['member_id']=$member['id'];
+                $where['help_id']='0';   //帮甩用户id
+                $where['goods_id']=$info['goods_id'];
+                $where['order_number']= $input['order_number'];
+                $where['income']=$input['bao_money'];
+                $where['pay']='0';
+                $where['pay_type']='2';   //weixin   
+                $where['order_type']='3';   //奖励红包
+                $where['order_status']='0';   //自己甩
+                $re=db('captical_record')->insert($where);
+            }
+        }
           return ajax_success('获取成功',$map);
       }else{
          return ajax_ERROR('参数错误');

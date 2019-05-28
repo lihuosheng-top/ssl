@@ -136,8 +136,8 @@ class Wxpay2 extends Controller{
         else
         {
             $error = curl_errno($ch);
-            echo "curl出错，错误码:$error"."<br>";
-            echo "<a href='http://curl.haxx.se/libcurl/c/libcurl-errors.html'>错误原因查询</a></br>";
+            // echo "curl出错，错误码:$error"."<br>";
+            // echo "<a href='http://curl.haxx.se/libcurl/c/libcurl-errors.html'>错误原因查询</a></br>";
             curl_close($ch);
             return false;
         }
@@ -414,8 +414,8 @@ function xmlToArray($xml)
         else
         {
             $error = curl_errno($ch);
-            echo "curl出错，错误码:$error"."<br>";
-            echo "<a href='http://curl.haxx.se/libcurl/c/libcurl-errors.html'>错误原因查询</a></br>";
+            // echo "curl出错，错误码:$error"."<br>";
+            // echo "<a href='http://curl.haxx.se/libcurl/c/libcurl-errors.html'>错误原因查询</a></br>";
             curl_close($ch);
             return false;
         }
