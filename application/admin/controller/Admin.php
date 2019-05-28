@@ -371,6 +371,19 @@ class Admin extends Controller
      */
     public function admin_lock_time()
     {
+        //
+        $key="lock_time";
+        
+       return view('admin_lock_time');
+    }
+    /**
+     * lilu
+     *  Notes:设置模块--锁定时间处理
+     */
+    public function admin_lock_time_do()
+    {
+        //
+        $key="lock_time";
        return view('admin_lock_time');
     }
 

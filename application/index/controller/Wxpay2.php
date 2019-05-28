@@ -420,5 +420,34 @@ function xmlToArray($xml)
             return false;
         }
      }
+      /**
+         * lilu
+         * 免单反钱给用户---退款流程
+         */
+        public function back_money()
+        {
+            $url = "https://api.mch.weixin.qq.com/secapi/pay/refund";
+
+            $onoce_str = $this->getRandChar(32);
+            $out_trade_no=time().rand(10000, 99999);//商户订单号
+            $data["appid"] = $this->config["appid"];
+            $data["mch_id"] = $this->config['mch_id'];
+            $data["nonce_str"] = $onoce_str;
+            $data["out_trade_no"] = $out_trade_no;
+            $data["out_refund_no"] = $out_refund_no;    //退款单号
+            $data["spbill_create_ip"] = $this->get_client_ip();
+            $data['openid']=$openid;
+            $data['check_name']='NO_CHECK';   //真实姓名验证
+            $data["total_free"] = $money*100;
+            $data["free_free"] = $money*100;
+            $data["refund_desc"] = "免单红包";
+            $s = $this->getSign($data, false);
+            $data["sign"] = $s;
+            $xml = $this->arrayToXml($data);
+            $response = $this->postXmlCurl2($xml, $url);
+            //将微信返回的结果xml转成数组
+        //    return $this->xmlstr_to_array($response);
+            return $this->xmlToArray($response);
+        }
 
 }

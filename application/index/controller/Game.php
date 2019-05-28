@@ -197,7 +197,8 @@ class Game extends Base
         if($info['true_ans']==$input['true_ans'])
         {
             //答题正确,修改客户答题记录
-            $re=db('answer_record')->where($data)->setField('status','1');
+            $map['status']='1';
+            $re=db('answer_record')->where($data)->update($map);
             // //根据概率，判断小游戏的种类
             // $youxi =new Game2();
             // $game=$youxi->get_games_chance();
@@ -205,7 +206,8 @@ class Game extends Base
 
             return ajax_success('答题正确');
         }else{
-            $re=db('answer_record')->where($data)->setField('status','0');
+            $map2['status']='0';
+            $re=db('answer_record')->where($data)->update($map2);
             return ajax_error('答题失败');
         }
 
