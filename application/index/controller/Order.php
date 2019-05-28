@@ -95,7 +95,7 @@ class Order extends Base
                 $order= $pay->getPrePayOrder($body, $out_trade_no, $total_fee);
                 if ($order['prepay_id']){//判断返回参数中是否有prepay_id
                     
-                    $order1 = $pay->getOrder($order['prepay_id']);//执行二次签名返回参数
+                    $order1 = $pay->getOrder($order['prepay_id'],$data['order_number']);//执行二次签名返回参数
                     return ajax_success('新建订单成功',$order1);
                     // echo json_encode(array('status' => 1, 'prepay_order' => no_null($order1)));
                 } else {

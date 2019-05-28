@@ -53,6 +53,7 @@ Route::group("",[
    'game'=>"index/Game/game"  ,                           //游戏
    'is_answer'=>"index/Game/is_answer"  ,                 //判断是否答题
    'is_right'=>"index/Game/is_right"  ,                   //判断是否答题
+   'get_money'=>"index/Game/get_money"  ,                   //获取免单金额和红包金额
 
 ]);
 

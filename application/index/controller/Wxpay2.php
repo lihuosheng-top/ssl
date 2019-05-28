@@ -39,13 +39,14 @@ class Wxpay2 extends Controller{
     }
 
     //执行第二次签名，才能返回给客户端使用
-    public function getOrder($prepayId){
+    public function getOrder($prepayId,$orderid){
         $data["appid"] = $this->config["appid"];
         $data["noncestr"] = $this->getRandChar(32);;
         $data["package"] = "Sign=WXPay";
         $data["partnerid"] = $this->config['mch_id'];
         $data["prepayid"] = $prepayId;
         $data["timestamp"] = time();
+        $data["order_number"] = $orderid;
         $s = $this->getSign($data, false);
         $data["sign"] = $s;
 
@@ -297,6 +298,7 @@ function xmlToArray($xml)
             $where['goods_id']=$info['goods_id'];
             $where['member_id']=$info['member_id'];
             $where['status']=2;
+            $where['order_number']=$val['out_trade_no'];
             $re=db('answer_record')->insert($where);
             if($res && $re){
                 // //做消费记录
