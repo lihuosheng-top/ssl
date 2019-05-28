@@ -2,6 +2,11 @@
 namespace app\index\controller;
 use think\Controller;
 use think\Db;
+
+include('../extend/WxpayAPI/lib/WxPay.Api.php');
+include('../extend/WxpayAPI/example/WxPay.NativePay.php');
+include('../extend/WxpayAPI/lib/WxPay.Notify.php');
+include('../extend/WxpayAPI/example/log.php');
 class Wxpay2 extends Controller{
     /*
     配置参数
@@ -398,8 +403,8 @@ function xmlToArray($xml)
            curl_setopt($ch, CURLOPT_URL, $url);
            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST" );
            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-           curl_setopt($ch, CURLOPT_SSLCERT, "../extend/WxpayAll/cert/apiclient_cert.pem");
-           curl_setopt($ch, CURLOPT_SSLKEY, "../extend/WxpayAll/cert/apiclient_key.pem");
+           curl_setopt($ch, CURLOPT_SSLCERT, "/data/wwwroot/ssl.siring.com.cn/ssl/extend/WxpayAll/cert/apiclient_cert.pem");
+           curl_setopt($ch, CURLOPT_SSLKEY, "/data/wwwroot/ssl.siring.com.cn/ssl/extend/WxpayAll/cert/apiclient_key.pem");
            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
            curl_setopt($ch, CURLOPT_AUTOREFERER, 1);
            curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
@@ -424,30 +429,64 @@ function xmlToArray($xml)
          * lilu
          * 免单反钱给用户---退款流程
          */
-        public function back_money()
+        public function back_money($orderid,$money,$total_fee)
         {
             $url = "https://api.mch.weixin.qq.com/secapi/pay/refund";
 
             $onoce_str = $this->getRandChar(32);
-            $out_trade_no=time().rand(10000, 99999);//商户订单号
+            $out_trade_no=$orderid;//商户订单号
             $data["appid"] = $this->config["appid"];
             $data["mch_id"] = $this->config['mch_id'];
             $data["nonce_str"] = $onoce_str;
             $data["out_trade_no"] = $out_trade_no;
-            $data["out_refund_no"] = $out_refund_no;    //退款单号
-            $data["spbill_create_ip"] = $this->get_client_ip();
-            $data['openid']=$openid;
-            $data['check_name']='NO_CHECK';   //真实姓名验证
-            $data["total_free"] = $money*100;
+            $data["out_refund_no"] = time().rand(10000, 99999);    //退款单号
+            $data["total_free"] = $total_fee*100;
             $data["free_free"] = $money*100;
+            $data["op_user_id"] = '01';
             $data["refund_desc"] = "免单红包";
             $s = $this->getSign($data, false);
             $data["sign"] = $s;
             $xml = $this->arrayToXml($data);
-            $response = $this->postXmlCurl2($xml, $url);
+            $response = $this->postXmlCurl($xml, $url);
             //将微信返回的结果xml转成数组
         //    return $this->xmlstr_to_array($response);
+        halt($response);
             return $this->xmlToArray($response);
+        }
+        public function order_refunds($orderid,$money,$total_fee){
+            
+            $map = array(
+                'order_number'=>$orderid
+            );
+            $refund_amount =Db::name("order")
+                ->where($map)
+                ->find();
+            if(!$refund_amount){
+                return ajax_error("未找到该订单信息");
+            }
+            $out_trade_no=$orderid;
+            $total_fee=$total_fee *100;
+            $refund_fee= $money *100;
+            $input = new \WxPayRefund();
+            $input->SetOut_trade_no($out_trade_no);
+            $input->SetTotal_fee($total_fee);
+            $input->SetRefund_fee($refund_fee);
+            $input->SetOut_refund_no(\WxPayConfig::MCHID.date("YmdHis"));
+            $input->SetOp_user_id(\WxPayConfig::MCHID);
+            $result =\WxPayApi::refund($input);
+            halt($result);
+            file_put_contents(EXTEND_PATH."refund.txt",$result);
+            if ($result['result_code'] == 'SUCCESS' && $result['return_code'] == 'SUCCESS') {
+                $result['code'] = 1;
+                $result['data'] =  $result['transaction_id'];
+              return ajax_success("成功",$result);
+            }
+            else {
+                $result['code'] = 0;
+                $result['msg'] =  $result['err_code'];
+              return ajax_error("失败",$result);
+            }
+    
         }
 
 }
