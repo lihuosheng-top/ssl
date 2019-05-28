@@ -39,14 +39,13 @@ class Wxpay2 extends Controller{
     }
 
     //执行第二次签名，才能返回给客户端使用
-    public function getOrder($prepayId,$orderid){
+    public function getOrder($prepayId){
         $data["appid"] = $this->config["appid"];
         $data["noncestr"] = $this->getRandChar(32);;
         $data["package"] = "Sign=WXPay";
         $data["partnerid"] = $this->config['mch_id'];
         $data["prepayid"] = $prepayId;
         $data["timestamp"] = time();
-        $data["order_number"] = $orderid;
         $s = $this->getSign($data, false);
         $data["sign"] = $s;
 
@@ -359,6 +358,81 @@ function xmlToArray($xml)
             // 签名步骤四：所有字符转为大写 
             $result=strtoupper($sign); 
             return $result; 
+        }
+        /**
+         * lilu
+         * 免单反钱给用户
+         */
+        public function back_free_money($openid,$money,$name)
+        {
+            $url = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
+
+            $onoce_str = $this->getRandChar(32);
+            $out_trade_no=time().rand(10000, 99999);//商户订单号
+            $data["mch_appid"] = $this->config["appid"];
+            $data["body"] = $body;
+            $data["mchid"] = $this->config['mch_id'];
+            $data["nonce_str"] = $onoce_str;
+            $data["partner_trade_no"] = $out_trade_no;
+            $data["spbill_create_ip"] = $this->get_client_ip();
+            $data['openid']=$openid;
+            $data['check_name']='NO_CHECK';   //真实姓名验证
+            $data["amount"] = $money*100;
+            $data['re_user_name']=$name;      //用户姓名
+            $data["desc"] = "免单红包";
+            $s = $this->getSign($data, false);
+            $data["sign"] = $s;
+            $xml = $this->arrayToXml($data);
+            $response = $this->postXmlCurl2($xml, $url);
+            //将微信返回的结果xml转成数组
+        //    return $this->xmlstr_to_array($response);
+            return $this->xmlToArray($response);
+        }
+        /**
+         * lilu
+         * 免单发送post请求
+         */
+        public function postXmlCurl2($xml,$url)
+        {
+            $ch = curl_init();
+        // 　　$url="https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
+
+        　　curl_setopt ( $ch, CURLOPT_URL, $url );
+
+        　　curl_setopt ( $ch, CURLOPT_CUSTOMREQUEST, "POST" );
+
+        　　curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, FALSE );
+
+        　　curl_setopt ( $ch, CURLOPT_SSL_VERIFYHOST, FALSE );
+
+        　　//两个证书(必填，请求需要双向证书。)
+
+        　　$zs1="../extend/WxpayAll/cert/apiclient_cert.pem";
+        　　$zs2="../extend/WxpayAll/cert/apiclient_key.pem";
+
+        // 　　$zs2="/apiclient_key.pem";
+
+        　　curl_setopt($ch,CURLOPT_SSLCERT,$zs1);
+
+        　　curl_setopt($ch,CURLOPT_SSLKEY,$zs2);
+
+        　　curl_setopt ( $ch, CURLOPT_FOLLOWLOCATION, 1 );
+
+        　　curl_setopt ( $ch, CURLOPT_AUTOREFERER, 1 );
+
+        　　curl_setopt ( $ch, CURLOPT_POSTFIELDS, $data );
+
+        　　curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+
+        　　$info = curl_exec ( $ch );
+
+        　　if (curl_errno ( $ch )) {
+
+        　　echo 'Errno' . curl_error ( $ch );
+
+        　　}
+
+        　　curl_close ( $ch );
         }
 
 }

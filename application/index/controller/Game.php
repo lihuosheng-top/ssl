@@ -182,6 +182,7 @@ class Game extends Base
      * 答案
      * token
      * goods_id
+     * order_number
      */
     public function is_right()
     {
@@ -191,6 +192,7 @@ class Game extends Base
         $member=db('member')->where('token',$this->token)->find();
         $data['member_id']=$member['id'];
         $data['goods_id']=$input['goods_id'];
+        $data['order_number']=$input['order_number'];
         //插入答题列表
         if($info['true_ans']==$input['true_ans'])
         {
@@ -212,7 +214,7 @@ class Game extends Base
      * lilu
      * 获取红包的金额和免甩单的金额
      * token
-     * goodS_id
+     * goods_id
      * order_number
      */
     public function get_money()
@@ -291,11 +293,30 @@ class Game extends Base
         }
         //免单金额返还客户（$map['free_money]）
         $openid=$input['openid'];
+        $money=$map['free_money'];
         db('member')->where('id',$member['id'])->setField('openid',$openid);
         $pay=new pay();
-        // $data=$pay->back_free_money();
-        // halt($data);
-        
+        $data=$pay->back_free_money($openid,$money,$member['name']);
+        if($data){
+            $pp['txt']=$data;
+            db('text')->insert($pp);
+        }
+        $xml_data = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
+        $val = json_decode(json_encode($xml_data), true);
+        if($val["result_code"] == "SUCCESS" && $val["result_code"]=="SUCCESS" ){
+            //红包记录
+            $info=db('order')->where('order_number',$input['order_number'])->find();
+            $where['member_id']=$member['id'];
+            $where['help_id']='0';   //帮甩用户id
+            $where['goods_id']=$info['goods_id'];
+            $where['order_number']= $input['order_number'];
+            $where['income']=$input['bao_money'];
+            $where['pay']='0';
+            $where['pay_type']='2';   //weixin   
+            $where['order_type']='3';   //奖励红包
+            $where['order_status']='0';   //自己甩
+            $re=db('captical_record')->insert($where);
+            return ajax_success('发放成功');
         if($map)
         {
           return ajax_success('获取成功',$map);
@@ -303,6 +324,52 @@ class Game extends Base
           return ajax_error('获取失败');
         }
 
+    }
+  }
+  /**
+   * lilu
+   * 点击红包，返还红包
+   * token
+   * bao_money
+   * openid
+   * order_number
+   */
+  public function back_bao_money()
+  {
+      //获取参数
+      $input=input();
+      if($input){
+         //获取用户信息
+        $member=db('member')->where('token',$this->token)->find();
+        $pay=new pay();
+        $openid=$input['openid'];
+        $money=$input['bao_money'];
+        $data=$pay->back_free_money($openid,$money,$member['name']);
+        if($data){
+            $pp['txt']=$data;
+            db('text')->insert($pp);
+        }
+        $xml_data = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
+        $val = json_decode(json_encode($xml_data), true);
+        if($val["result_code"] == "SUCCESS" && $val["result_code"]=="SUCCESS" ){
+            //红包记录
+            $info=db('order')->where('order_number',$input['order_number'])->find();
+            $where['member_id']=$member['id'];
+            $where['help_id']='0';   //帮甩用户id
+            $where['goods_id']=$info['goods_id'];
+            $where['order_number']= $input['order_number'];
+            $where['income']=$input['bao_money'];
+            $where['pay']='0';
+            $where['pay_type']='2';   //weixin   
+            $where['order_type']='3';   //奖励红包
+            $where['order_status']='0';   //自己甩
+            $re=db('captical_record')->insert($where);
+            return ajax_success('发放成功');
+        }
+
+      }else{
+         return ajax_ERROR('参数错误');
+      }
   }
 
 }
