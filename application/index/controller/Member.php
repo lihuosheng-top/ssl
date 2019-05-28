@@ -35,13 +35,50 @@ class Member extends Base
     /**
      * lilu
      * 会员排行榜（按照帮甩人数）
+     * token
      */
     public function member_ranking()
     {
         //获取所有的会员列表-按照帮甩人数排列
         $member_list=db('member')->order('help_num desc')->select();
-        
+        $info=[];
+        foreach($member_list as $k =>$v){
+            $info[$k]['name']=$v['name'];
+            $info[$k]['head_pic']=$v['head_pic'];
+            $info[$k]['help_num']=$v['help_num'];
+            $info[$k]['star_value']=$v['star_value'];
+        }
+        if($info){
+            return ajax_success('获取成功',$info);
+        }else{
+            return ajax_error('获取失败');
+        }
     }
+    /**
+     * lilu
+     * 排行榜界面---个人信息
+     * token
+     */
+    public function rank_member_info()
+    {
+        //根据token获取会员的信息
+        $info=db('member')->where('token',$this->token)->find();
+        $where['help_num']=array('gt',$info['help_num']);
+        $member_num=db('member')->where($where)->count();
+        $data['rank']=$member_num+1;    //排名
+        $data['id']=$info['id'];
+        $data['head_pic']=$info['head_pic'];
+        $data['star_value']=$info['star_value'];
+        $data['exchange_star_value']=$info['exchange_star_value'];
+       if($data)
+       { 
+          return ajax_success('获取成功',$data);
+       }else{
+          return ajax_error('获取失败');
+       }
+
+    }
+
     /**
      * lilu
      * Notes:前端会员修改手机号

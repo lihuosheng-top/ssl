@@ -195,9 +195,7 @@ class Games extends Controller
                     if(!array_key_exists('status',$v[$k2])){
                           $input[$k][$k2]['status']='0';
                     }
-
                 } 
-                  
             }
         }
         if($input){

@@ -16,13 +16,13 @@ use think\Route;
 Route::group("",[
 
     /*登录*/
-    "index"      =>"index/Index/index",             //前端登录页面
-    "index_login"=>"index/Login/index_login",       //前端登录--获取验证码
-    "index_dolog"=>"index/Login/index_dolog",       //前端登录处理
+    "index"      =>"index/Index/index",               //前端登录页面
+    "index_login"=>"index/Login/index_login",         //前端登录--获取验证码
+    "index_dolog"=>"index/Login/index_dolog",         //前端登录处理
 
 
    /*商品*/
-   "goods_info"=>"index/Goods/goods_info",           //商品详细信息
+   "goods_info"=>"index/Goods/goods_info",            //商品详细信息
    
    /*订单模块*/
    "help_record"=>"index/Order/help_record" ,          //生成帮甩记录
@@ -44,13 +44,15 @@ Route::group("",[
    'member_address_edit'=>"index/Member/member_address_edit"  ,   //会员地址添加
    'member_address_del'=>"index/Member/member_address_del"  ,   //会员地址添加
    'shuai_start'=>"index/Member/shuai_start"  ,                 //开甩界面
-   'member_name_edit'=>"index/Member/member_name_edit"  ,                 //开甩界面
-   'get_helper_record'=>"index/Member/get_helper_record"  ,                 //开甩界面
+   'member_name_edit'=>"index/Member/member_name_edit"  ,       //昵称编辑
+   'get_helper_record'=>"index/Member/get_helper_record"  ,     //获取帮甩记录
+   'member_ranking'=>"index/Member/member_ranking"  ,           //排行榜
+   'rank_member_info'=>"index/Member/rank_member_info"  ,       //排行榜界面--个人信息
 
    /**游戏 */
-   'game'=>"index/Game/game"  ,                          //游戏
+   'game'=>"index/Game/game"  ,                           //游戏
    'is_answer'=>"index/Game/is_answer"  ,                 //判断是否答题
-   'is_right'=>"index/Game/is_right"  ,                 //判断是否答题
+   'is_right'=>"index/Game/is_right"  ,                   //判断是否答题
 
 ]);
 

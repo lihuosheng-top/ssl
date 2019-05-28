@@ -140,7 +140,15 @@ class Goods extends Base
                     $goods_data['goods_price']=$goods_data['goods_price'];
                     $goods_data['goods_sign']=json_encode($goods_data['sss']);
                     unset($goods_data['sss']);
-                    $bool = db("goods")->insert($goods_data);
+                    //判断商品名称是否存在
+                    $name=db('goods')->where('goods_name',$goods_data['goods_name'])->find();
+                    if($name)
+                    {
+                        $this->error("商品名称已存在");
+                    }else{
+
+                        $bool = db("goods")->insert($goods_data);
+                    }
                     if($bool){
                         $this->success("添加成功", url("admin/Goods/goods_index"));
                     }else{
@@ -171,6 +179,15 @@ class Goods extends Base
                 $goods_special["goods_detail"] = $goods_data["goods_detail"];  //商品详情
                 $goods_special["goods_show_images"] = $goods_data["goods_show_images"];
                 $goods_special["goods_show_image"] = $goods_data["goods_show_image"];
+                //判断商品名称是否存在
+                $name2=db('goods')->where('goods_name',$goods_special['goods_name'])->find();
+                if($name2)
+                {
+                    $this->error("商品名称已存在");
+                }else{
+
+                    $bool = db("goods")->insert($goods_data);
+                }
                 $goods_id = db('goods')->insertGetId($goods_special);       //添加商品数据,返回商品id
                 $result = implode(",", $goods_data["lv1"]);         //商品规格title
                 if (!empty($goods_data)) {
