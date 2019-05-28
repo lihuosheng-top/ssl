@@ -405,34 +405,27 @@ function xmlToArray($xml)
 
         　　curl_setopt ( $ch, CURLOPT_SSL_VERIFYHOST, FALSE );
 
-        　　//两个证书(必填，请求需要双向证书。)
-
-        　　$zs1="../extend/WxpayAll/cert/apiclient_cert.pem";
-        　　$zs2="../extend/WxpayAll/cert/apiclient_key.pem";
-
-        // 　　$zs2="/apiclient_key.pem";
-
-        　　curl_setopt($ch,CURLOPT_SSLCERT,$zs1);
-
-        　　curl_setopt($ch,CURLOPT_SSLKEY,$zs2);
-
+        　　curl_setopt ( $ch, CURLOPT_SSLCERT, "../extend/WxpayAll/cert/apiclient_cert.pem" );
+        　　curl_setopt ( $ch, CURLOPT_SSLKEY, "../extend/WxpayAll/cert/apiclient_key.pem" );
         　　curl_setopt ( $ch, CURLOPT_FOLLOWLOCATION, 1 );
-
         　　curl_setopt ( $ch, CURLOPT_AUTOREFERER, 1 );
-
-        　　curl_setopt ( $ch, CURLOPT_POSTFIELDS, $data );
-
+        　　curl_setopt ( $ch, CURLOPT_POSTFIELDS, $xml );
         　　curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
-
-        　　$info = curl_exec ( $ch );
-
-        　　if (curl_errno ( $ch )) {
-
-        　　echo 'Errno' . curl_error ( $ch );
-
-        　　}
-
-        　　curl_close ( $ch );
+        $data=curl_exec($ch);
+        //返回结果
+        if($data)
+        {
+            curl_close($ch);
+            return $data;
         }
+        else
+        {
+            $error = curl_errno($ch);
+            echo "curl出错，错误码:$error"."<br>";
+            echo "<a href='http://curl.haxx.se/libcurl/c/libcurl-errors.html'>错误原因查询</a></br>";
+            curl_close($ch);
+            return false;
+        }
+     }
 
 }
