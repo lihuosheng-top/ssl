@@ -39,7 +39,7 @@ class Wxpay2 extends Controller{
     }
 
     //执行第二次签名，才能返回给客户端使用
-    public function getOrder($prepayId){
+    public function getOrder($prepayId,$orderid){
         $data["appid"] = $this->config["appid"];
         $data["noncestr"] = $this->getRandChar(32);;
         $data["package"] = "Sign=WXPay";
@@ -47,6 +47,7 @@ class Wxpay2 extends Controller{
         $data["prepayid"] = $prepayId;
         $data["timestamp"] = time();
         $s = $this->getSign($data, false);
+        $data["order_number"] = $orderid;
         $data["sign"] = $s;
 
         return $data;
@@ -411,7 +412,7 @@ function xmlToArray($xml)
         　　curl_setopt ( $ch, CURLOPT_AUTOREFERER, 1 );
         　　curl_setopt ( $ch, CURLOPT_POSTFIELDS, $xml );
         　　curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
-        $data=curl_exec($ch);
+             $data=curl_exec($ch);
         //返回结果
         if($data)
         {
