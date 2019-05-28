@@ -6,4 +6,3 @@ vendor
 runtime
 tmp
 database.php
-extend
