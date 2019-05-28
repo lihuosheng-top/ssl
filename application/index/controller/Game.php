@@ -190,24 +190,24 @@ class Game extends Base
         $input=input();
         $info=db('problem_house')->where('id',$input['answer_id'])->find();
         $member=db('member')->where('token',$this->token)->find();
-        $data['member_id']=$member['id'];
-        $data['goods_id']=$input['goods_id'];
-        $data['order_number']=$input['order_number'];
+        $order_number = $input['order_number'];
         //插入答题列表
         if($info['true_ans']==$input['true_ans'])
         {
             //答题正确,修改客户答题记录
             $map['status']='1';
-            $re=db('answer_record')->where($data)->update($map);
+            $re=db('answer_record')->where('order_number',$order_number)->update($map);
+            if($re){
+                return ajax_success('答题正确');
+            }
             // //根据概率，判断小游戏的种类
             // $youxi =new Game2();
             // $game=$youxi->get_games_chance();
             // $data=$game;
 
-            return ajax_success('答题正确');
         }else{
             $map2['status']='0';
-            $re=db('answer_record')->where($data)->update($map2);
+            $re=db('answer_record')->where('order_number',$order_number)->update($map2);
             return ajax_error('答题失败');
         }
 
