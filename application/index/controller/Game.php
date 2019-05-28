@@ -7,6 +7,7 @@ use app\index\Model\Game as Game2;
 use think\Session;
 use think\Request;
 use think\Db;
+use app\index\controller\Wxpay2 as pay;
 
 /**
  * lilu
@@ -18,10 +19,11 @@ class Game extends Base
     /**
      * lilu
      * 根据概率获取游戏种类及游戏接口
+     * token
      */
     public function game()
     {
-          //随机取出9条数据
+          //随机取出1条数据
           $sql='SELECT * FROM tb_problem_house WHERE id >= ((SELECT MAX(id) FROM tb_problem_house)-(SELECT MIN(id) FROM tb_problem_house)) * RAND() + (SELECT MIN(id) FROM tb_problem_house) LIMIT 1';
           $list=DB::query($sql);
           foreach($list as $k =>$v){
@@ -146,32 +148,31 @@ class Game extends Base
     /**
      * lilu
      * 判断用户是否答题
+     * token
+     * goods_id
      */
     public function is_answer()
     {
         //获取参数
         $input=input();
         $member=db('member')->where('token',$this->token)->find();
+        //没有答题判断
         $data['member_id']=$member['id'];
         $data['goods_id']=$input['goods_id'];
+        $data['status']='2';
         $re=db('answer_record')->where($data)->find();
+        //答错题
+        $data2['member_id']=$member['id'];
+        $data2['goods_id']=$input['goods_id'];
+        $data2['status']='0';
+        $re2=db('answer_record')->where($data2)->find();
         if($re){
-            if($re['status']==2){
-                //客户该商品没有答题
-                return ajax_success('用户没有答题',2);
-           }elseif($re['status']=='0'){
-               return ajax_success('用户答题错误',0);
-           }elseif($re['status']=='1'){
-               return ajax_success('答题成功',1);
-           }elseif($re['status']=='-1'){
-            return ajax_success('答题超时',-1);
-           }else
-            {
-               return ajax_error('数据错误');
-           }
-        }else{
-            return ajax_success('商品未开甩',3);
+            return ajax_success('用户没有答题',2);
         }
+        if($re2){
+            return ajax_success('用户答题错误',0);
+        }
+        return ajax_success('答题成功',1);
         
     }
     /**
@@ -217,10 +218,10 @@ class Game extends Base
     public function get_money()
     {
         $input=input();
+        //获取用户信息
         $member=db('member')->where('token',$this->token)->find();
-        $data['member_id']=$member['id'];
-        $data['goods_id']=$input['goods_id'];
-        $re=db('answer_record')->where($data)->find();
+        $data['order_number']=$input['order_number'];
+        $re=db('help_record')->where($data)->find();
       //根据商品设置，获取甩免单和红包的金额以及概率
       $goods_info=db('goods')->where('id',$input['goods_id'])->find();
       if($goods_info['free_tactics'])      //商品免单策略是否配置
@@ -288,6 +289,13 @@ class Game extends Base
         }else{
             $map['status']='1';
         }
+        //免单金额返还客户（$map['free_money]）
+        $openid=$input['openid'];
+        db('member')->where('id',$member['id'])->setField('openid',$openid);
+        $pay=new pay();
+        // $data=$pay->back_free_money();
+        // halt($data);
+        
         if($map)
         {
           return ajax_success('获取成功',$map);
