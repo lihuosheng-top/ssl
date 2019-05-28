@@ -371,7 +371,6 @@ function xmlToArray($xml)
             $onoce_str = $this->getRandChar(32);
             $out_trade_no=time().rand(10000, 99999);//商户订单号
             $data["mch_appid"] = $this->config["appid"];
-            $data["body"] = $body;
             $data["mchid"] = $this->config['mch_id'];
             $data["nonce_str"] = $onoce_str;
             $data["partner_trade_no"] = $out_trade_no;
@@ -396,22 +395,15 @@ function xmlToArray($xml)
         public function postXmlCurl2($xml,$url)
         {
             $ch = curl_init();
-        // 　　$url="https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
-
-        　　curl_setopt ( $ch, CURLOPT_URL, $url );
-
-        　　curl_setopt ( $ch, CURLOPT_CUSTOMREQUEST, "POST" );
-
-        　　curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, FALSE );
-
-        　　curl_setopt ( $ch, CURLOPT_SSL_VERIFYHOST, FALSE );
-
-        　　curl_setopt ( $ch, CURLOPT_SSLCERT, "../extend/WxpayAll/cert/apiclient_cert.pem" );
-        　　curl_setopt ( $ch, CURLOPT_SSLKEY, "../extend/WxpayAll/cert/apiclient_key.pem" );
-        　　curl_setopt ( $ch, CURLOPT_FOLLOWLOCATION, 1 );
-        　　curl_setopt ( $ch, CURLOPT_AUTOREFERER, 1 );
-        　　curl_setopt ( $ch, CURLOPT_POSTFIELDS, $xml );
-        　　curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+           curl_setopt($ch, CURLOPT_URL, $url);
+           curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST" );
+           curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+           curl_setopt($ch, CURLOPT_SSLCERT, "../extend/WxpayAll/cert/apiclient_cert.pem");
+           curl_setopt($ch, CURLOPT_SSLKEY, "../extend/WxpayAll/cert/apiclient_key.pem");
+           curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+           curl_setopt($ch, CURLOPT_AUTOREFERER, 1);
+           curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+           curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
              $data=curl_exec($ch);
         //返回结果
         if($data)
