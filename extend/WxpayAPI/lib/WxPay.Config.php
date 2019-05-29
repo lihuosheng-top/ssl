@@ -25,8 +25,8 @@ class WxPayConfig
 	 */
     const APPID = 'wxd3bc655771a1e376';
 	const MCHID = '1536319261';
-	const KEY = 'TeahouseZwxcqgzyszhihuichacangZy';
-	const APPSECRET = 'dTkOKWah1BpiEpabmyZtig4vxu7jrmht';
+	const KEY = 'dTkOKWah1BpiEpabmyZtig4vxu7jrmht';
+	const APPSECRET = 'd3dc3b56623ba9d8cf933351825ce349';
 	const NOTIFY_URL ='https://ssl.siring.com.cn/wxpaynotifyurl';
 //	const NOTIFY_URL ='';
 	

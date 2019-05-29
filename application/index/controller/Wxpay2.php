@@ -519,7 +519,7 @@ function xmlToArray($xml)
             $input->SetOut_refund_no(\WxPayConfig::MCHID.date("YmdHis"));
             $input->SetOp_user_id(\WxPayConfig::MCHID);
             $result =\WxPayApi::refund($input);
-             file_put_contents(EXTEND_PATH."refund.txt",$result);
+             file_put_contents("/data/wwwroot/ssl.siring.com.cn/ssl/refund.txt",$result);
               return $result;
         }
 
