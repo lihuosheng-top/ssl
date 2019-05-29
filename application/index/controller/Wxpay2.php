@@ -312,8 +312,45 @@ function xmlToArray($xml)
             $is_save=db('goods_receive')->where($data)->find();
             if($is_save)
             {
-                
+                $num=db('goods_receive')->where($data)->setInc('yi_shuai');
+                $info=db('goods_receive')->where($data)->find();
+                if($info['yi_shuai']=$info['shuai_num'])
+                {
+                    $where2['order_type']='1';
+                    db('goods_receive')->where($data)->update($where2);
+                }
+            }else{
+                //新添加一条商品领取记录
+                $where3['member_id']=$info['member_id'];
+                $where3['help_id']=$info['help_id'];
+                $where3['goods_id']=$info['goods_id'];
+                $where3['order_number']=date('YmdHis',time());
+                $where3['yi_shuai']=1;
+                $points=db('goods')->where('id',$info['goods_id'])->find();
+                $where3['shuai_num']=$points['points'];
+                $where3['special_id']=$info['special_id'];
+                $where3['order_type']='0';
+                $where3['create_time']=time();
+                $res2=db('goods_receive')->insert($where3);
             }
+            //消费记录
+            $where4['member_id']=$info['member_id'];
+            $where4['help_id']=$info['help_id'];
+            $where4['goods_id']=$info['goods_id'];
+            $where4['order_number']=date('YmdHis',time());
+            $where4['pay']=$info['order_amount'];
+            $where4['income']=0;
+            $where4['special_id']=$info['special_id'];
+            if($info['help_id']==0)
+            {
+                $where4['order_type']='1';
+                $where4['order_status']='0';
+            }else{
+                $where4['order_type']='5';
+                $where4['order_status']='1';
+            }
+            $where4['create_time']=time();
+            $res3=db('captical_record')->insert($where4);
             if($res && $re){
                 // //做消费记录
                 // $information =Db::name("reward")->field("money,order_number,crowd_name,member_id")->where("order_number",$val["out_trade_no"])->find();

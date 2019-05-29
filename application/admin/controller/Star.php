@@ -27,6 +27,15 @@ class Star extends Controller
 	{
        return  view('prize_add');
 	}
+	
+	/**
+	 * lilu
+	*   奖品添加处理
+	**/
+	public function prize_add_do()
+	{
+       
+	}
 
 
 	

@@ -57,19 +57,36 @@ class Goods extends Controller
      }
      /**
       * lilu
-      * 判断商品是否满足领取条件
+      * 领取商品列表
       * goods_id
+      * member_id
+      */
+      public function goods_receive_list()
+      {
+        //获取参数
+        $input=input();    //goods_id  member_id
+        $where['status']=array(gt,0);
+        $re=db('goods_reveive')->where($where)->select();
+        if($re){
+            return ajax_success('获取成功',$re);
+        }else{
+            return  ajax_error('获取失败');
+        }
+      }
+     /**
+      * lilu
+      * 领取商品
+      * id    记录id
       */
       public function is_goods_receive()
       {
         //获取参数
         $input=input();    //goods_id  member_id
-        $goods_info=db('goods')->where('id',$input['goods_id'])->find();   //获取商品信息
-        $data['goods_id']=$goods_info['id'];
-        $data['goods_name']=$goods_info['goods_name'];
-        $data['goods_image']=$goods_info['goods_show_image'];
-        $data['order_number']=date('YmdHis',time());           //订单号
-        $data['status']='1';                                   //商品领取状态   1 已领取   0未领取
-
+        $re=db('goods_reveive')->where('id',$input['id'])->setField('status',2);
+        if($re){
+          return    ajax_success('获取成功');
+        }else{
+            return  ajax_error('获取失败');
+        }
       }
 }

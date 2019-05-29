@@ -93,7 +93,7 @@ class Order extends Base
             // $data['order_type']=$input['order_type'];       //订单类型
             $data['goods_name']=db('goods')->where('id',$data['goods_id'])->value('goods_name');
             $data['create_time']=time();                    //订单创建时间
-            $data['order_quantity']='1';   //商品数量
+            // $data['order_quantity']='1';   //商品数量
             $data['help_id']=0;
             $re=db('order')->insert($data);
             if($re)
