@@ -305,6 +305,15 @@ function xmlToArray($xml)
             $where['status']=2;
             $where['order_number']=$val['out_trade_no'];
             $re=db('answer_record')->insert($where);
+            //判断用户是否为第一次甩该商品
+            $order_info=db('order')->where('order_number',$val['out_trade_no'])->find();
+            $data['goods_id']=$order_info['goods_id'];
+            $data['member_id']=$order_info['member_id'];
+            $is_save=db('goods_receive')->where($data)->find();
+            if($is_save)
+            {
+                
+            }
             if($res && $re){
                 // //做消费记录
                 // $information =Db::name("reward")->field("money,order_number,crowd_name,member_id")->where("order_number",$val["out_trade_no"])->find();

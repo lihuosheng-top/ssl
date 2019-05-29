@@ -58,16 +58,24 @@ class Order extends Base
     /**
      * lilu
      * 帮甩订单生成----支付
+     * goods_id
+     * token
+     * help_id
      */
     public function goods_order()
     {   
-        //判断甩商品订单帮甩数量
-          
         $input=input();   //获取传递的参数
+        //根据token获取会员id
+        $member_id=db('member')->where('token',$this->token)->field('id')->find();
+        //判断甩商品订单帮甩数量
+        $re=db('goods_receive')->where(['goods_id'=>$input['goods_id'],'member_id'=>$member_id['id']])->find();
+        if($re){     //商品已开甩
+            if($re['order_type']=='1'){
+                return    ajax_error('商品已甩，不能开甩');
+            }
+        }
         if($input){
             $data['order_number']=date('YmdHis',time());    //自定义生成订单号
-            //根据token获取会员id
-            $member_id=db('member')->where('token',$this->token)->field('id')->find();
             $data['member_id']=$member_id['id'];         //会员id
             $data['goods_id']=$input['goods_id'];            //甩品、商品id
             //根据goods_id获取
@@ -86,6 +94,7 @@ class Order extends Base
             $data['goods_name']=db('goods')->where('id',$data['goods_id'])->value('goods_name');
             $data['create_time']=time();                    //订单创建时间
             $data['order_quantity']='1';   //商品数量
+            $data['help_id']=0;
             $re=db('order')->insert($data);
             if($re)
             {

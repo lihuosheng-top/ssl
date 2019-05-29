@@ -178,9 +178,9 @@ class Game extends Base
             $info=db('sys_setting')->where('key',$key)->find();
             $info['value']=json_decode($info['value'],true);
             if($re2['help_id']=='0'){
-                $lock_time=time()+$info['value']['lock_time']['own']*60;
+                $lock_time=$re2['lock_time'];
             }else{
-                $lock_time=time()+$info['value']['lock_time']['other']*60;
+                $lock_time=$re2['lock_time'];
             }
             $map['lock_time']=$lock_time;
             $map['answer_status']='0';
@@ -233,8 +233,12 @@ class Game extends Base
             if($res['help_id']==0)
             {
                  $lock_time=time()+$info['value']['lock_time']['own']*60;
+                 $lock['lock_time']=$lock_time;
+                 db('answer_record')->where('order_number',$order_number)->update($lock);
             }else{
                  $lock_time=time()+$info['value']['lock_time']['other']*60;
+                 $lock['lock_time']=$lock_time;
+                 db('answer_record')->where('order_number',$order_number)->update($lock);
             }
             return ajax_error('答题失败',$lock_time);
         }
