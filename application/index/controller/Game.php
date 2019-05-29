@@ -376,6 +376,7 @@ class Game extends Base
             //记录
             // $xml_data = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
             // $val = json_decode(json_encode($xml_data), true);
+            db('text')->insert($data);
          if($data["return_code"] == "SUCCESS" ){  //成功
                 //红包记录
                 $info=db('order')->where('order_number',$input['order_number'])->find();
