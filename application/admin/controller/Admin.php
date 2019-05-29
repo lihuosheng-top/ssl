@@ -373,8 +373,13 @@ class Admin extends Controller
     {
         //
         $key="lock_time";
-        
-       return view('admin_lock_time');
+        $info=db('sys_setting')->where('key',$key)->find();
+        $info['value']=json_decode($info['value'],true);
+        if($info){
+            return view('admin_lock_time',['data'=>$info,'msg'=>1]);
+        }else{
+            return view('admin_lock_time');
+        }
     }
     /**
      * lilu
@@ -382,9 +387,31 @@ class Admin extends Controller
      */
     public function admin_lock_time_do()
     {
-        //
-        $key="lock_time";
-       return view('admin_lock_time');
+        $key="lock_time";    //锁定时间字段
+        $input=input();      //获取参数
+        if($input){
+            $res=db('sys_setting')->where('key',$key)->find();
+            if($res)
+            {
+                $data['id']=$res['id'];
+                $data['value']=json_encode($input);
+                $data['key']=$key;
+                $data['status']='1';
+                $re=db('sys_setting')->update($data);
+            }else{
+                $data['value']=json_encode($input);
+                $data['key']=$key;
+                $data['status']='1';
+                $re=db('sys_setting')->insert($data);
+            }
+        }
+       
+        if($re)
+        {
+          $this->success('保存成功',url('admin/Admin/admin_lock_time'));
+        }else{
+          $this->error('保存失败');
+        }
     }
 
 

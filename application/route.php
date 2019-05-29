@@ -95,6 +95,7 @@ Route::group("admin",[
     "admin_agreement_add"=>"admin/Admin/admin_agreement_add",       //添加平台协议
     "admin_message_note"=>"admin/admin/admin_message_note",         //消息提醒
     "admin_lock_time"=>"admin/admin/admin_lock_time",               //锁定时间
+    "admin_lock_time_do"=>"admin/admin/admin_lock_time_do",               //锁定时间
 
 
 

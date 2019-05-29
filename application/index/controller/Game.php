@@ -208,7 +208,17 @@ class Game extends Base
         }else{
             $map2['status']='0';
             $re=db('answer_record')->where('order_number',$order_number)->update($map2);
-            return ajax_error('答题失败');
+            //根据配置获取锁定时间
+            $key="lock_time";
+            $info=db('sys_setting')->where('key',$key)->find();
+            $info['value']=json_decode($info['value'],true);
+            if($re['help_id']==0)
+            {
+                 $lock_time=time()+$info['value']['lock_time']['own']*60;
+            }else{
+                 $lock_time=time()+$info['value']['lock_time']['other']*60;
+            }
+            return ajax_error('答题失败',$lock_time);
         }
 
     }
