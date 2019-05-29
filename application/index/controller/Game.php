@@ -215,7 +215,8 @@ class Game extends Base
             $map['status']='1';
             $re=db('answer_record')->where('order_number',$order_number)->update($map);
             if($re){
-                return ajax_success('答题正确');
+                $lock['lock_time']='';
+                return ajax_success('答题正确',$lock);
             }
             // //根据概率，判断小游戏的种类
             // $youxi =new Game2();
@@ -240,7 +241,7 @@ class Game extends Base
                  $lock['lock_time']=$lock_time;
                  db('answer_record')->where('order_number',$order_number)->update($lock);
             }
-            return ajax_error('答题失败',$lock_time);
+            return ajax_error('答题失败',$lock);
         }
 
     }
