@@ -450,7 +450,6 @@ function xmlToArray($xml)
             $response = $this->postXmlCurl($xml, $url);
             //将微信返回的结果xml转成数组
         //    return $this->xmlstr_to_array($response);
-        halt($response);
             return $this->xmlToArray($response);
         }
         public function order_refunds($orderid,$money,$total_fee){
@@ -474,19 +473,8 @@ function xmlToArray($xml)
             $input->SetOut_refund_no(\WxPayConfig::MCHID.date("YmdHis"));
             $input->SetOp_user_id(\WxPayConfig::MCHID);
             $result =\WxPayApi::refund($input);
-            halt($result);
-            file_put_contents(EXTEND_PATH."refund.txt",$result);
-            if ($result['result_code'] == 'SUCCESS' && $result['return_code'] == 'SUCCESS') {
-                $result['code'] = 1;
-                $result['data'] =  $result['transaction_id'];
-              return ajax_success("成功",$result);
-            }
-            else {
-                $result['code'] = 0;
-                $result['msg'] =  $result['err_code'];
-              return ajax_error("失败",$result);
-            }
-    
+            // file_put_contents(EXTEND_PATH."refund.txt",$result);
+              return $result;
         }
 
 }

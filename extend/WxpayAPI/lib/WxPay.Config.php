@@ -23,11 +23,11 @@ class WxPayConfig
 	 * 获取地址：https://mp.weixin.qq.com/advanced/advanced?action=dev&t=advanced/dev&token=2005451881&lang=zh_CN
 	 * @var string
 	 */
-    const APPID = 'wx301c1368929fdba8';
-	const MCHID = '1522110351';
+    const APPID = 'wxd3bc655771a1e376';
+	const MCHID = '1536319261';
 	const KEY = 'TeahouseZwxcqgzyszhihuichacangZy';
-	const APPSECRET = '94477ab333493c79f806f948f036f1e3';
-	const NOTIFY_URL ='https://teahouse.siring.com.cn/notify';
+	const APPSECRET = 'dTkOKWah1BpiEpabmyZtig4vxu7jrmht';
+	const NOTIFY_URL ='https://ssl.siring.com.cn/wxpaynotifyurl';
 //	const NOTIFY_URL ='';
 	
 	//=======【证书路径设置】=====================================
@@ -37,10 +37,10 @@ class WxPayConfig
 	 * API证书下载地址：https://pay.weixin.qq.com/index.php/account/api_cert，下载之前需要安装商户操作证书）
 	 * @var path
 	 */
-	// const SSLCERT_PATH = '../cert/apiclient_cert.pem';
-	// const SSLKEY_PATH = '../cert/apiclient_key.pem';
-	const SSLCERT_PATH ='/data/wwwroot/ssl.siring.com.cn/teahouse/extend/WxpayAPI/cert/apiclient_cert.pem';
-	const SSLKEY_PATH = '/data/wwwroot/ssl.siring.com.cn/teahouse/extend/WxpayAPI/cert/apiclient_key.pem';	
+	const SSLCERT_PATH = '\cert\apiclient_cert.pem';
+	const SSLKEY_PATH = '\cert\apiclient_key.pem';
+	// const SSLCERT_PATH ='/data/wwwroot/ssl.siring.com.cn/teahouse/extend/WxpayAPI/cert/apiclient_cert.pem';
+	// const SSLKEY_PATH = '/data/wwwroot/ssl.siring.com.cn/teahouse/extend/WxpayAPI/cert/apiclient_key.pem';	
 	//=======【curl代理设置】===================================
 	/**
 	 * TODO：这里设置代理机器，只有需要代理的时候才设置，不需要代理，请设置为0.0.0.0和0
