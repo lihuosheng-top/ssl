@@ -55,4 +55,21 @@ class Goods extends Controller
 //        return view("goods_index", ["goods" => $goods]);
           return ajax_success('获取成功',$goods);
      }
+     /**
+      * lilu
+      * 判断商品是否满足领取条件
+      * goods_id
+      */
+      public function is_goods_receive()
+      {
+        //获取参数
+        $input=input();    //goods_id  member_id
+        $goods_info=db('goods')->where('id',$input['goods_id'])->find();   //获取商品信息
+        $data['goods_id']=$goods_info['id'];
+        $data['goods_name']=$goods_info['goods_name'];
+        $data['goods_image']=$goods_info['goods_show_image'];
+        $data['order_number']=date('YmdHis',time());           //订单号
+        $data['status']='1';                                   //商品领取状态   1 已领取   0未领取
+
+      }
 }

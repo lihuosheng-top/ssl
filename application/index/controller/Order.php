@@ -57,10 +57,12 @@ class Order extends Base
     }
     /**
      * lilu
-     * 商品订单生成----支付
+     * 帮甩订单生成----支付
      */
     public function goods_order()
-    {
+    {   
+        //判断甩商品订单帮甩数量
+          
         $input=input();   //获取传递的参数
         if($input){
             $data['order_number']=date('YmdHis',time());    //自定义生成订单号

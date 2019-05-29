@@ -150,6 +150,7 @@ class Game extends Base
      * 判断用户是否答题
      * token
      * goods_id
+     * order_number
      */
     public function is_answer()
     {
@@ -167,11 +168,26 @@ class Game extends Base
         $data2['status']='0';
         $re2=db('answer_record')->where($data2)->find();
         if($re){
-            return ajax_success('用户没有答题',2);
+            $map['answer_status']='2';
+            $map['lock_time']='';
+            return ajax_success('用户没有答题',$map);
         }
         if($re2){
-            return ajax_success('用户答题错误',0);
+             //根据配置获取锁定时间
+            $key="lock_time";
+            $info=db('sys_setting')->where('key',$key)->find();
+            $info['value']=json_decode($info['value'],true);
+            if($re2['help_id']=='0'){
+                $lock_time=time()+$info['value']['lock_time']['own']*60;
+            }else{
+                $lock_time=time()+$info['value']['lock_time']['other']*60;
+            }
+            $map['lock_time']=$lock_time;
+            $map['answer_status']='0';
+            return ajax_success('用户答题错误',$map);
         }
+        $map['answer_status']='1';
+        $map['lock_time']='';
         return ajax_success('答题成功',1);
         
     }
@@ -183,6 +199,7 @@ class Game extends Base
      * token
      * goods_id
      * order_number
+     * help_id
      */
     public function is_right()
     {
@@ -208,11 +225,12 @@ class Game extends Base
         }else{
             $map2['status']='0';
             $re=db('answer_record')->where('order_number',$order_number)->update($map2);
+            $res=db('answer_record')->where('order_number',$order_number)->find();
             //根据配置获取锁定时间
             $key="lock_time";
             $info=db('sys_setting')->where('key',$key)->find();
             $info['value']=json_decode($info['value'],true);
-            if($re['help_id']==0)
+            if($res['help_id']==0)
             {
                  $lock_time=time()+$info['value']['lock_time']['own']*60;
             }else{
