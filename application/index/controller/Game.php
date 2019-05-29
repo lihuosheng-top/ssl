@@ -316,7 +316,7 @@ class Game extends Base
       $input=input();
       if($input){
           $data['order_number']=$input['order_number'];
-          $re=db('help_record')->where($data)->find();
+        //   $re=db('order')->where($data)->find();
           $res=db('order')->where('order_number',$input['order_number'])->find();
           //根据商品设置，获取甩免单和红包的金额以及概率
         $goods_info=db('goods')->where('id',$res['goods_id'])->find();
@@ -362,7 +362,7 @@ class Game extends Base
                     break;
                 }
             }
-            if($re['help_id']!='0')     
+            if($res['help_id']!='0')     
             {    //帮甩
                 $map['free_bao']=$map1['free_bao_other'];
             }else{    //自己甩
