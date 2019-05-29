@@ -280,8 +280,8 @@ class Game extends Base
         //免单金额返还客户（$map['free_money]）
         $money=$map['free_money'];
         $pay=new pay();
-        $data=$pay->order_refunds($data['order_number'],$money,$res['order_amount']);
-        if($data["return_code"] == "SUCCESS"  ){
+        $data2=$pay->order_refunds($data['order_number'],$money,$res['order_amount']);
+        if($data2["return_code"] == "SUCCESS"  ){
             //红包记录
             $info=db('order')->where('order_number',$input['order_number'])->find();
             $where['member_id']=$member['id'];
@@ -372,12 +372,13 @@ class Game extends Base
         $member=db('member')->where('token',$this->token)->find();
         $pay=new pay();
         $money=$map['free_bao'];
-        $data=$pay->order_refunds($input['order_number'],$money,$res['order_amount']);
+        $data2=$pay->order_refunds($input['order_number'],$money,$res['order_amount']);
             //记录
             // $xml_data = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
             // $val = json_decode(json_encode($xml_data), true);
-            db('text')->insert($data);
-         if($data["return_code"] == "SUCCESS" ){  //成功
+            db('text')->insert($data2);
+            halt($data2);
+         if($data2["return_code"] == "SUCCESS" ){  //成功
                 //红包记录
                 $info=db('order')->where('order_number',$input['order_number'])->find();
                 $where['member_id']=$member['id'];
