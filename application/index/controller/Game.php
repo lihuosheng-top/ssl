@@ -251,7 +251,6 @@ class Game extends Base
      * token
      * goods_id
      * order_number
-     * openid
      */
     public function get_money()
     {
@@ -279,9 +278,7 @@ class Game extends Base
             $map['free_money']=$res['order_amount']*$free_percent_own;
         }
         //免单金额返还客户（$map['free_money]）
-        $openid=$input['openid'];
         $money=$map['free_money'];
-        db('member')->where('id',$member['id'])->setField('openid',$openid);
         $pay=new pay();
         $data=$pay->order_refunds($data['order_number'],$money,$res['order_amount']);
         if($data["return_code"] == "SUCCESS"  ){
