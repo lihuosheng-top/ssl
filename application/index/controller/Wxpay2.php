@@ -351,40 +351,15 @@ function xmlToArray($xml)
             }
             $where4['create_time']=time();
             $res3=db('captical_record')->insert($where4);
-            if(1){
-                // //做消费记录
-                // $information =Db::name("reward")->field("money,order_number,crowd_name,member_id")->where("order_number",$val["out_trade_no"])->find();
-                // $member_wallet =Db::name("member")
-                //     ->where("member_id",$information["member_id"])
-                //     ->value('member_wallet');
-                // $datas= [
-                //     "user_id"=>$information["member_id"],//用户ID
-                //     "wallet_operation"=> $information["money"],//消费金额
-                //     "wallet_type"=>-1,//消费操作(1入，-1出)
-                //     "operation_time"=> date("Y-m-d H:i:s"),//操作时间
-                //     "operation_linux_time"=>time(), //操作时间
-                //     "wallet_remarks"=>"订单号：".$val["out_trade_no"]."众筹打赏".$information["money"]."元",//消费备注
-                //     "wallet_img"=>" ",//图标
-                //     "title"=>$information["crowd_name"],//标题（消费内容）
-                //     "order_nums"=>$val["out_trade_no"],//订单编号
-                //     "pay_type"=>"小程序", //支付方式/
-                //     "wallet_balance"=>$member_wallet,//此刻钱包余额
-                // ];
-                // Db::name("wallet")->insert($datas); //存入消费记录表
-                echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
-            }else{
-                echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[签名失败]]></return_msg></xml>';
-                return ajax_error("失败");
-            }
-        }
-        //  // 返回状态给微信服务器 
-        //  if ($result) { 
-        //   $str='<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>'; 
-        //  }else{ 
-        //   $str='<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[签名失败]]></return_msg></xml>'; 
-        //  } 
-        //  echo $str; 
-        //  return $result; 
+            echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
+            // else{
+            //     echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[签名失败]]></return_msg></xml>';
+            //     return ajax_error("失败");
+            // }
+         }else{
+            echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[签名失败]]></return_msg></xml>';
+            return ajax_error("失败");
+         }
         }
         /** 
          * LILU
