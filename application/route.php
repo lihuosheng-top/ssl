@@ -56,6 +56,9 @@ Route::group("",[
    'get_money'=>"index/Game/get_money"  ,                   //获取免单金额和红包金额
    'back_bao_money'=>"index/Game/back_bao_money"  ,         //红包反还
 
+   /**甩甩乐分享 */
+   'ssl_share'=>"index/Index/ssl_share"  ,         //红包反还
+
 ]);
 
 
@@ -178,9 +181,13 @@ Route::group("admin",[
 
 
 
-    /*星光值管理*/
-    "star_exchange"=>"admin/Star/star_exchange",             //星光值兑换
+    /*星光值管理*/   
+    "star_exchange"=>"admin/Star/star_exchange",                       //星光值兑换
+    "star_exchange_search"=>"admin/Star/star_exchange_search",         //星光值兑换
+    "prize_del"=>"admin/Star/prize_del",               //星光值兑换
+    "prize_edit"=>"admin/Star/prize_edit",             //星光值兑换
     "prize_add"=>"admin/Star/prize_add",                     //奖品添加
+    "prize_add_do"=>"admin/Star/prize_add_do",               //奖品添加处理
     "list_exchange"=>"admin/Star/list_exchange",             //星光值兑换列表
 
 

@@ -7,4 +7,12 @@ class Index
     {
         return '123';
     }
+    /**
+     * lilu
+     * 甩甩乐分享
+     */
+    public function ssl_share(){
+        
+        return view('ssl_share');
+    }
 }

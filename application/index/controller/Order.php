@@ -122,4 +122,13 @@ class Order extends Base
             ajax_error('参数错误');
         }
     }
+    /**
+     * lilu 
+     * 用户开甩档案
+     * token
+     */
+    public function get_user_shuai()
+    {
+        
+    }
 }

@@ -3,6 +3,7 @@
 namespace app\admin\controller;
 
 use think\Controller;
+use think\Request;
 
 
 /**
@@ -16,7 +17,27 @@ class Star extends Controller
 	**/
 	public function star_exchange()
 	{
-       return  view('star_exchange');
+		//获取星光值奖品的商品
+		$list=db('star_goods')->select();
+		if($list)
+		{
+			return  view('star_exchange',['data'=>$list]);
+		}else{
+
+			return  view('star_exchange');
+		}
+	}
+	/**
+	 * lilu
+	*  商品编辑
+	**/
+	public function prize_edit()
+	{
+		//获取商品id
+		$input=input();
+        //获取星光值奖品的商品
+		$list=db('star_goods')->where('id',$input['id'])->find();
+		return  view('prize_edit',['data'=>$list]);
 	}
 
 
@@ -32,9 +53,22 @@ class Star extends Controller
 	 * lilu
 	*   奖品添加处理
 	**/
-	public function prize_add_do()
+	public function prize_add_do(Request $request)
 	{
-       
+	   //获取参数
+	   $input=input();
+	   $goods_data=$input;
+	   $show_images = $request->file("goods_show_images");
+	   if($show_images){
+		   $info = $show_images->move(ROOT_PATH . 'public' . DS . 'uploads');
+		   $goods_data['goods_image'] = '/uploads/'.str_replace("\\", "/", $info->getSaveName()); 
+	   }
+	   $re=db('star_goods')->insert($goods_data);
+	   if($re){
+            $this->success('添加成功',url('admin/Star/star_exchange'));
+	   }else{
+             $this->error('添加失败');
+	   }
 	}
 
 

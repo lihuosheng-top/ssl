@@ -25,13 +25,13 @@
 
     <div class="childrenBody">
         <blockquote class="layui-elem-quote news_search">
-            <form class="layui-form" action="{:url('')}">
+            <form class="layui-form" action="{:url('admin/Star/star_exchange_search')}">
                 <div class="seach">
                     <div class="seach_list">
                         <div class="seach_laber">输入搜索：</div>
                         <div class="seach_input">
-                            <input type="text" name="goods_number" lay-verify="title" autocomplete="off"
-                                placeholder="奖品名称/奖品编号" class="layui-input">
+                            <input type="text" name="goods_name" lay-verify="title" autocomplete="off"
+                                placeholder="奖品名称" class="layui-input">
                         </div>
                     </div>
 
@@ -51,41 +51,82 @@
                 <thead>
                     <tr>
                         <th><input type="checkbox" sname="" lay-skin="primary" lay-filter="allChoose" id="id"></th>
-                        <th>奖品编号</th>
-                        <th>种类</th>
+                        <th>商品名称</th>
                         <th>奖品图片</th>
-                        <th>商品描述</th>
+                        <th>商品类型</th>
                         <th>消耗量光值</th>
-                        <th>标签</th>
-                        <th>排序</th>
-                        <th width="200px">操作</th>
+                        <th>操作</th>
                     </tr>
                 </thead>
                 <tbody class="news_content">
+                    {if $data}
+                    {volist name="data" id="vo"}
                     <tr>
-                        <td><input type="checkbox" name="" lay-skin="primary" lay-filter="choose" data-id="">
+                        <td><input type="checkbox" name="" lay-skin="primary" lay-filter="choose" data-id="{$vo['id']}">
                         </td>
-                        <td>100001</td>
-                        <td>远古巨鲲</td>
                         <td>
-                            <div class="tdimg"><img src="" /></div>
+                            {if $vo['goods_name']}
+                            {$vo['goods_name']}
+                            {else}
+                              N/F
+                            {/if}
                         </td>
-                        <td>1</td>
-                        <td>1</td>
-                        <td class="td-status">
+                        <td>
+                                {if $vo['goods_image']}
+                                   <div class="tdimg"><img src="{$vo['goods_image']}" /></div>
+                                {else}
+                                  N/F
+                                {/if}
+                                
+                        </td>
+                        <td>
+                            {if $vo['goods_type']=='1'}
+                              实物
+                            {else}
+                               红包
+                            {/if}
+                        </td>
+                        <td>{$vo['goods_value']}</td>
+                        <!-- <td class="td-status">
                             <input type="checkbox" class="Status" name="status" value="" lay-skin="switch"
                                 lay-text="上架|下架" lay-filter="isShows" checked data-id="">
 
-                        </td>
-                        <td>1</td>
+                        </td> -->
                         <td>
-                            <a class="layui-btn layui-btn-mini edit" href="{:url()}"> 编辑
+                            <a class="layui-btn layui-btn-mini edit" href="{:url('admin/Star/prize_edit',['id'=>$vo['id']])}"> 编辑
                             </a>
-                            <a href="{:url()}" onclick="if(!confirm('确定要删除吗？')) return false"
+                            <a href="{:url('admin/Star/prize_del',['id'=>$vo['id']])}" onclick="if(!confirm('确定要删除吗？')) return false"
                                 class="layui-btn layui-btn-danger layui-btn-mini news_del" data-id="undefined"><i
                                     class="layui-icon"></i> 删除</a>
                         </td>
                     </tr>
+                    {/volist}
+                    {/if}
+                    <!-- <tr>
+                            <td><input type="checkbox" name="" lay-skin="primary" lay-filter="choose" data-id="">
+                            </td>
+                            <td>100001</td>
+                            <td>远古巨鲲</td>
+                            <td>
+                                <div class="tdimg"><img src="" /></div>
+                            </td>
+                            <td>1</td>
+                            <td>1</td>
+                            <td class="td-status">
+                                <input type="checkbox" class="Status" name="status" value="" lay-skin="switch"
+                                    lay-text="上架|下架" lay-filter="isShows" checked data-id="">
+    
+                            </td>
+                            <td>1</td>
+                            <td>
+                                <a class="layui-btn layui-btn-mini edit" href="{:url()}"> 编辑
+                                </a>
+                                <a href="{:url()}" onclick="if(!confirm('确定要删除吗？')) return false"
+                                    class="layui-btn layui-btn-danger layui-btn-mini news_del" data-id="undefined"><i
+                                        class="layui-icon"></i> 删除</a>
+                            </td>
+                        </tr> -->
+
                 </tbody>
             </table>
             <div id="page">

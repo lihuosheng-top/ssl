@@ -1,0 +1,182 @@
+{include file="template/_meta" /}
+<title></title>
+</head>
+
+{block name="css"}
+<link rel="stylesheet" type="text/css" href="__STATIC__/admin/common/css/aaa.css" />
+<style type="text/css">
+    body {
+        background: #fff;
+    }
+
+    .form-input {
+        width: auto;
+    }
+
+    .form-input>input {
+        width: 200px;
+    }
+
+    .layui-btn {
+        border-radius: 6px;
+        height: 50px;
+    }
+
+    .layui-form-lists .layui-btn {
+        width: 170px;
+    }
+
+    .layui-btn-normal {
+        margin-right: 100px;
+    }
+
+    .layui-form-item {
+        margin-top: 50px;
+    }
+
+    .form-item {
+        margin-top: 15px;
+    }
+
+    .upimg-div .up-section {
+        width: 200px;
+        height: 200px;
+    }
+
+    .noshow {
+        display: none;
+    }
+</style>
+
+{/block}
+
+<body>
+    {block name="content"}
+    <form class="layui-form layui-form-lists" action="{:url('admin/Star/prize_add_do')}" method="post" enctype="multipart/form-data">
+        <blockquote class="layui-elem-quote news_search">
+            <div class="seach_laber">
+                奖品设置
+            </div>
+        </blockquote>
+        <div style="margin-left:100px;">
+            <div style="line-height:1px">
+                <div class="form-item">
+                    <label class="form-label"><span class="red">*</span>奖品选择</label>
+                    <div class="form-input">
+                        {if $data['goods_type']==0}
+                        <input type="radio" name="goods_type" value="0" title="红包" lay-filter="prize" checked="">
+                        {else}
+                        <input type="radio" name="goods_type" value="1" title="实物" lay-filter="prize" checked>
+                        {/if}
+                    </div>
+
+                </div>
+            </div>
+            <!-- 红包 -->
+            <div class="nomal">
+                <div class="form-item">
+                    <label class="form-label"><span class="red">*</span>红包金额</label>
+                    <div class="form-input">
+                        <input type="text" name="red_bao" lay-verify="title" autocomplete="off"
+                            placeholder="  请输入                             元" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <!-- 实物 -->
+            <div class="general_content noshow">
+                <div class="form-item">
+                    <label class="form-label"><span class="red">*</span>奖品名称</label>
+                    <div class="form-input" style="width:734px;">
+                        <input type="text" name="goods_name" lay-verify="title" autocomplete="off"
+                            placeholder="  IPhone x 一部" class="layui-input" style="width:100%;">
+                        <div class="tips">奖品名称必须填写，最多10个字</div>
+                    </div>
+
+                </div>
+                <div class="form-item">
+                    <label class="form-label"><span class="red">*</span>商品图</label>
+                    <div class="form-input">
+                        <div class="img-box full">
+                            <section class=" img-section">
+                                <div class="z_photo upimg-div clear">
+                                    <section class="z_file fl">
+                                        <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img">
+                                        <input type="file" name="goods_show_images" id="file" class="file" value=""
+                                            accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="1" />
+                                    </section>
+                                </div>
+                            </section>
+                        </div>
+                        <aside class="mask works-mask">
+                            <div class="mask-content">
+                                <p class="del-p ">您确定要删除作品图片吗？</p>
+                                <p class="check-p"><span class="del-com wsdel-ok">确定</span><span
+                                        class="wsdel-no">取消</span></p>
+                            </div>
+                        </aside>
+                        <div class="tips">
+                            只有1张图片
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="form-item">
+                <label class="form-label"><span class="red">*</span>消耗星光值</label>
+                <div class="form-input">
+                    <input type="text" name="goods_value" lay-verify="title" autocomplete="off"
+                        placeholder="  请输入                             P" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" style="width:100%;">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal" type="submit" id="submit">保存</button>
+                    <button type="button" class="layui-btn layui-btn-primary"
+                        onClick="javascript :history.back(-1);">返回</button>
+                </div>
+
+            </div>
+
+        </div>
+    </form>
+    {/block}
+    <!--_footer 作为公共模版分离出去-->
+    {include file="template/_footer" /}
+    <!--/_footer 作为公共模版分离出去-->
+
+    <!--请在下方写此页面业务相关的脚本-->
+    {block name="bottom"}
+    <script type="text/javascript">
+        layui.config({
+            base: "js/"
+        }).use(['form', 'layer', 'jquery', 'laypage'], () => {
+            var form = layui.form(),
+                layer = parent.layer === undefined ? layui.layer : parent.layer,
+                laypage = layui.laypage,
+                $ = layui.jquery;
+
+            // TODO商品规格变化
+            form.on('radio(prize)', function (data) {
+                var checkval = data.value;
+                if (checkval == "0") { //红包
+                    $(".general_content").addClass("noshow");
+                    $(".nomal").removeClass("noshow");
+                } else {
+                    $(".nomal").addClass("noshow");
+                    $(".general_content ").removeClass("noshow");
+                }
+
+            });
+        })
+
+
+
+    </script>
+
+    {/block}
+
+</body>
+
+</html>

@@ -336,7 +336,6 @@ function xmlToArray($xml)
                     $res2=db('goods_receive')->insert($where3);
                 }
                 //消费记录
-                $info=db('order')->where('order_number',$input['order_number'])->find();
                 $where5['member_id']=$member['id'];
                 $where5['help_id']='0';   //帮甩用户id
                 $where5['goods_id']=$info['goods_id'];
