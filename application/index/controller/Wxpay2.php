@@ -312,8 +312,8 @@ function xmlToArray($xml)
             $is_save=db('goods_receive')->where($data)->find();
             if($is_save)
             {    $yi_shuai=$is_save['yi_shuai'];
-                $num=db('goods_receive')->where($data)->setField('yi_shuai',$yi_shuai+1);
-                $info=db('goods_receive')->where($data)->find();
+                $num= db('goods_receive')->where($data)->setField('yi_shuai',$yi_shuai+1);
+                $info= db('goods_receive')->where($data)->find();
                 if($info['yi_shuai']==$info['shuai_num'])
                 {
                     $where2['order_type']='1';
@@ -334,23 +334,23 @@ function xmlToArray($xml)
                 $res2=db('goods_receive')->insert($where3);
             }
             //消费记录
-            $where4['member_id']=$info['member_id'];
-            $where4['help_id']=$info['help_id'];
-            $where4['goods_id']=$info['goods_id'];
-            $where4['order_number']=date('YmdHis',time());
-            $where4['pay']=$info['order_amount'];
-            $where4['income']=0;
-            $where4['special_id']=$info['special_id'];
-            if($info['help_id']==0)
-            {
-                $where4['order_type']='1';
-                $where4['order_status']='0';
-            }else{
-                $where4['order_type']='5';
-                $where4['order_status']='1';
-            }
-            $where4['create_time']=time();
-            $res3=db('captical_record')->insert($where4);
+            // $where4['member_id']=$info['member_id'];
+            // $where4['help_id']=$info['help_id'];
+            // $where4['goods_id']=$info['goods_id'];
+            // $where4['order_number']=date('YmdHis',time());
+            // $where4['pay']=$info['order_amount'];
+            // $where4['income']=0;
+            // $where4['special_id']=$info['special_id'];
+            // if($info['help_id']==0)
+            // {
+            //     $where4['order_type']='1';
+            //     $where4['order_status']='0';
+            // }else{
+            //     $where4['order_type']='5';
+            //     $where4['order_status']='1';
+            // }
+            // $where4['create_time']=time();
+            // $res3=db('captical_record')->insert($where4);
             echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
             // else{
             //     echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[签名失败]]></return_msg></xml>';
