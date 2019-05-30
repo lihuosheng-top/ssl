@@ -70,8 +70,49 @@ class Star extends Controller
              $this->error('添加失败');
 	   }
 	}
+	/**
+	 * lilu
+	*   奖品添加处理
+	**/
+	public function prize_edit_do(Request $request)
+	{
+	   //获取参数
+	   $input=input();
+	   $goods_data=$input;
+	   $show_images = $request->file("goods_show_images");
+	   if($show_images){
+		   $info = $show_images->move(ROOT_PATH . 'public' . DS . 'uploads');
+		   $goods_data['goods_image'] = '/uploads/'.str_replace("\\", "/", $info->getSaveName()); 
+	   }
+	   $re=db('star_goods')->where('id',$goods_data['id'])->update($goods_data);
+	   if($re){
+            $this->success('编辑成功',url('admin/Star/star_exchange'));
+	   }else{
+             $this->error('编辑失败');
+	   }
+	}
 
-
+  /**
+   * lilu
+   * 商品删除
+   */
+  public function prize_del()
+  {
+	  //获取id
+	  $input=input();
+	  if($input){
+		  $re=db('star_goods')->where('id',$input['id'])->delete();
+		  if($re)
+		  {
+             $this->success('删除成功',url('admin/Star/star_exchange'));
+		  }else{
+			  $this->error('删除失败');
+			  
+		  }
+	  }else{
+		  $this->error('获取参数失败');
+	  }
+  }
 	
 	/**
 	*   星光值兑换记录

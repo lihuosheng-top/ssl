@@ -60,7 +60,8 @@ class Order extends Base
      * 帮甩订单生成----支付
      * goods_id
      * token
-     * help_id
+     * token_help
+     * special_id
      */
     public function goods_order()
     {   
@@ -76,7 +77,6 @@ class Order extends Base
         }
         if($input){
             $data['order_number']=date('YmdHis',time());    //自定义生成订单号
-            $data['member_id']=$member_id['id'];         //会员id
             $data['goods_id']=$input['goods_id'];            //甩品、商品id
             //根据goods_id获取
             if($input['special_id']=='0'){
@@ -94,7 +94,15 @@ class Order extends Base
             $data['goods_name']=db('goods')->where('id',$data['goods_id'])->value('goods_name');
             $data['create_time']=time();                    //订单创建时间
             // $data['order_quantity']='1';   //商品数量
-            $data['help_id']=0;
+            if($input['token_help']==0)
+            {
+                $data['help_id']=0;
+                $data['member_id']=$member_id['id'];         //会员id
+            }else{
+                $data['help_id']=$member_id['id'];
+                $re=db('member')->where('token',$input['token_help'])->field('id')->find();
+                $data['member_id']=$re['id'];         //会员id
+            }
             $re=db('order')->insert($data);
             if($re)
             {

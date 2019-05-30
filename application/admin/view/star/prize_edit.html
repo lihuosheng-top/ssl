@@ -52,12 +52,13 @@
 
 <body>
     {block name="content"}
-    <form class="layui-form layui-form-lists" action="{:url('admin/Star/prize_add_do')}" method="post" enctype="multipart/form-data">
+    <form class="layui-form layui-form-lists" action="{:url('admin/Star/prize_edit_do')}" method="post" enctype="multipart/form-data">
         <blockquote class="layui-elem-quote news_search">
             <div class="seach_laber">
                 奖品设置
             </div>
         </blockquote>
+        <input type="hidden" name="id" value="{$data['id']}">
         <div style="margin-left:100px;">
             <div style="line-height:1px">
                 <div class="form-item">
@@ -73,21 +74,24 @@
                 </div>
             </div>
             <!-- 红包 -->
+            {if $data['goods_type']=='0'}
             <div class="nomal">
                 <div class="form-item">
                     <label class="form-label"><span class="red">*</span>红包金额</label>
                     <div class="form-input">
-                        <input type="text" name="red_bao" lay-verify="title" autocomplete="off"
+                        <input type="text" name="red_bao" lay-verify="title" value="{$data['red_bao']}" autocomplete="off"
                             placeholder="  请输入                             元" class="layui-input">
                     </div>
                 </div>
             </div>
+            {/if}
             <!-- 实物 -->
-            <div class="general_content noshow">
+            {if $data['goods_type']=='1'}
+            <div class="general_content ">
                 <div class="form-item">
                     <label class="form-label"><span class="red">*</span>奖品名称</label>
                     <div class="form-input" style="width:734px;">
-                        <input type="text" name="goods_name" lay-verify="title" autocomplete="off"
+                        <input type="text" name="goods_name" lay-verify="title" value="{$data['goods_name']}" autocomplete="off"
                             placeholder="  IPhone x 一部" class="layui-input" style="width:100%;">
                         <div class="tips">奖品名称必须填写，最多10个字</div>
                     </div>
@@ -99,12 +103,25 @@
                         <div class="img-box full">
                             <section class=" img-section">
                                 <div class="z_photo upimg-div clear">
-                                    <section class="z_file fl">
-                                        <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img">
-                                        <input type="file" name="goods_show_images" id="file" class="file" value=""
-                                            accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="1" />
-                                    </section>
-                                </div>
+                                            <section class="up-section fl">
+                                                <span class="up-span"></span>
+                                                <img class="close-upimg" src="/siring_ow/public/static/admin/common/upfile/img/a7.png">
+                                                <!--图片放这里-->
+                                                <img class="up-img" src="{$data['goods_image']}">
+                                                <!--图片放这里-->
+
+                                                <p class="img-name-p">u4594.png</p>
+                                                <input id="taglocation" value="{$data['goods_image']}" type="hidden">
+                                                <input name="goods_image" value="{$data['goods_image']}" type="hidden">
+                                                <input id="tags" value="" type="hidden">
+                                            </section>
+                                            <section class="z_file fl">
+                                                <img src="__STATIC__/admin/common/upfile/img/a11.png" class="add-img">
+                                                <input type="file" name="goods_show_images" id="file0" class="file"
+                                                    value="{$data['goods_image']}"
+                                                    accept="image/jpg,image/jpeg,image/png,image/bmp" multiple data-id="15" />
+                                            </section>
+                                 </div>
                             </section>
                         </div>
                         <aside class="mask works-mask">
@@ -119,14 +136,13 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
+           {/if}
 
             <div class="form-item">
                 <label class="form-label"><span class="red">*</span>消耗星光值</label>
                 <div class="form-input">
-                    <input type="text" name="goods_value" lay-verify="title" autocomplete="off"
+                    <input type="text" name="goods_value" value="{$data['goods_value']}" lay-verify="title" autocomplete="off"
                         placeholder="  请输入                             P" class="layui-input">
                 </div>
             </div>

@@ -304,6 +304,7 @@ function xmlToArray($xml)
                 $info=db('order')->where('order_number',$val['out_trade_no'])->find();
                 $where['goods_id']=$info['goods_id'];
                 $where['member_id']=$info['member_id'];
+                $where['help_id']=$info['help_id'];
                 $where['status']=2;
                 $where['order_number']=$val['out_trade_no'];
                 $re=db('answer_record')->insert($where);

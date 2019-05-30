@@ -20,9 +20,20 @@ class Game extends Base
      * lilu
      * 根据概率获取游戏种类及游戏接口
      * token
+     * token_help
      */
     public function game()
     {
+          //判断用户是否有未答的题或锁定的题
+          $input2=input();
+          $memb=db('member')->where('token',$input2['token_help'])->find();
+           $map['member_id']=$memb['id'];
+           $map['status']='0';
+           $rr=db('answer_record')->where($map)->find();
+           if(!$rr){
+               $info['status']=2;
+               return   ajax_error('用户已解锁',$info);
+           }
           //随机取出1条数据
           $sql='SELECT * FROM tb_problem_house WHERE id >= ((SELECT MAX(id) FROM tb_problem_house)-(SELECT MIN(id) FROM tb_problem_house)) * RAND() + (SELECT MIN(id) FROM tb_problem_house) LIMIT 1';
           $list=DB::query($sql);
@@ -199,49 +210,75 @@ class Game extends Base
      * token
      * goods_id
      * order_number
-     * help_id
+     * token_help
      */
     public function is_right()
     {
         //获取参数
         $input=input();
-        $info=db('problem_house')->where('id',$input['answer_id'])->find();
-        $member=db('member')->where('token',$this->token)->find();
-        $order_number = $input['order_number'];
-        //插入答题列表
-        if($info['true_ans']==$input['true_ans'])
-        {
-            //答题正确,修改客户答题记录
-            $map['status']='1';
-            $re=db('answer_record')->where('order_number',$order_number)->update($map);
-            if($re){
-                $lock['lock_time']='';
-                return ajax_success('答题正确',$lock);
-            }
-            // //根据概率，判断小游戏的种类
-            // $youxi =new Game2();
-            // $game=$youxi->get_games_chance();
-            // $data=$game;
-
-        }else{
-            $map2['status']='0';
-            $re=db('answer_record')->where('order_number',$order_number)->update($map2);
-            $res=db('answer_record')->where('order_number',$order_number)->find();
-            //根据配置获取锁定时间
-            $key="lock_time";
-            $info=db('sys_setting')->where('key',$key)->find();
-            $info['value']=json_decode($info['value'],true);
-            if($res['help_id']==0)
+        if($input['token_help']=='0'){        //自己答题
+            $info=db('problem_house')->where('id',$input['answer_id'])->find();
+            $order_number = $input['order_number'];
+            //插入答题列表
+            if($info['true_ans']==$input['true_ans'])
             {
-                 $lock_time=time()+$info['value']['lock_time']['own']*60;
-                 $lock['lock_time']=$lock_time;
-                 db('answer_record')->where('order_number',$order_number)->update($lock);
+                //答题正确,修改客户答题记录
+                $map['status']='1';
+                $re=db('answer_record')->where('order_number',$order_number)->update($map);
+                if($re){
+                    $lock['lock_time']='';
+                    return ajax_success('答题正确',$lock);
+                }
+                // //根据概率，判断小游戏的种类
+                // $youxi =new Game2();
+                // $game=$youxi->get_games_chance();
+                // $data=$game;
+    
             }else{
-                 $lock_time=time()+$info['value']['lock_time']['other']*60;
-                 $lock['lock_time']=$lock_time;
-                 db('answer_record')->where('order_number',$order_number)->update($lock);
+                $map2['status']='0';
+                $re=db('answer_record')->where('order_number',$order_number)->update($map2);
+                $res=db('answer_record')->where('order_number',$order_number)->find();
+                //根据配置获取锁定时间
+                $key="lock_time";
+                $info=db('sys_setting')->where('key',$key)->find();
+                $info['value']=json_decode($info['value'],true);
+                if($res['help_id']==0)
+                {
+                     $lock_time=time()+$info['value']['lock_time']['own']*60;
+                     $lock['lock_time']=$lock_time;
+                     db('answer_record')->where('order_number',$order_number)->update($lock);
+                }else{
+                     $lock_time=time()+$info['value']['lock_time']['other']*60;
+                     $lock['lock_time']=$lock_time;
+                     db('answer_record')->where('order_number',$order_number)->update($lock);
+                }
+                return ajax_error('答题失败',$lock);
             }
-            return ajax_error('答题失败',$lock);
+        }else{     //帮答题
+            $info=db('problem_house')->where('id',$input['answer_id'])->find();
+            $order_number = $input['order_number'];
+            //插入答题列表
+            if($info['true_ans']==$input['true_ans'])
+            {
+                //答题正确,修改客户答题记录
+                $map['status']='1';
+                $re=db('answer_record')->where('order_number',$order_number)->update($map);
+                if($re){
+                    $lock['lock_time']='';
+                    return ajax_success('答题正确',$lock);
+                }
+                // //根据概率，判断小游戏的种类
+                // $youxi =new Game2();
+                // $game=$youxi->get_games_chance();
+                // $data=$game;
+    
+            }else{
+                
+                     $lock_time=time()+60*60*24*30*12*10;
+                     $lock['lock_time']=$lock_time;
+                return ajax_error('答题失败',$lock);
+            }
+
         }
 
     }
