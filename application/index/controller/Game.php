@@ -247,7 +247,7 @@ class Game extends Base
     }
     /**
      * lilu
-     * 获取红包的金额和免甩单的金额
+     * 免甩单的金额
      * token
      * goods_id
      * order_number
@@ -270,8 +270,7 @@ class Game extends Base
       }
        //获取订单金额
        $res=db('order')->where('order_number',$input['order_number'])->find();
-       $re=db('help_record')->where($data)->find();
-        if($re['help_id']!='0')     
+        if($res['help_id']!='0')     
         {    //帮甩
             $map['free_money']=$res['order_amount']*$free_percent_other;
         }else{    //自己甩
@@ -339,7 +338,7 @@ class Game extends Base
             {
                 $pro +=$v2['probability'];
                 if($num<=$pro){
-                    $map1['free_bao_own']=$res['order_amount']*$v2['percent']/100;
+                    $map1['free_bao_own']=$v2['percent'];
                     break;
                 }
             }
@@ -358,7 +357,7 @@ class Game extends Base
             {
                 $pro2 +=$v4['probability'];
                 if($num2<=$pro2){
-                    $map1['free_bao_other']=$res['order_amount']*$v4['percent']/100;
+                    $map1['free_bao_other']=$v4['percent'];
                     break;
                 }
             }
