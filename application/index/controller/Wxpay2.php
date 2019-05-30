@@ -313,12 +313,12 @@ function xmlToArray($xml)
             if($is_save)
             {
                 $num=db('goods_receive')->where($data)->setInc('yi_shuai',1);
-                // $info=db('goods_receive')->where($data)->find();
-                // if($info['yi_shuai']=$info['shuai_num'])
-                // {
-                //     $where2['order_type']='1';
-                //     db('goods_receive')->where($data)->update($where2);
-                // }
+                $info=db('goods_receive')->where($data)->find();
+                if($info['yi_shuai']==$info['shuai_num'])
+                {
+                    $where2['order_type']='1';
+                    db('goods_receive')->where($data)->update($where2);
+                }
             }else{
                 //新添加一条商品领取记录
                 $where3['member_id']=$info['member_id'];
@@ -351,7 +351,7 @@ function xmlToArray($xml)
             }
             $where4['create_time']=time();
             $res3=db('captical_record')->insert($where4);
-            if($re){
+            if(1){
                 // //做消费记录
                 // $information =Db::name("reward")->field("money,order_number,crowd_name,member_id")->where("order_number",$val["out_trade_no"])->find();
                 // $member_wallet =Db::name("member")
@@ -372,7 +372,6 @@ function xmlToArray($xml)
                 // ];
                 // Db::name("wallet")->insert($datas); //存入消费记录表
                 echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
-                echo "SUCCESS";
             }else{
                 echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[签名失败]]></return_msg></xml>';
                 return ajax_error("失败");
