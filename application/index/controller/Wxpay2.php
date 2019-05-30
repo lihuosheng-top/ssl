@@ -297,7 +297,8 @@ function xmlToArray($xml)
             //修改订单的状态
             $map['status']='2';
             $map['pay_time']=time();
-            $res=db('order')->where('order_number',$val['out_trade_no'])->update($map);
+            $res=db('order')->where('order_number',$val['out_trade_no'])->find();
+            $res2=db('order')->where('order_number',$val['out_trade_no'])->update($map);
             if($res['status']=='1'){
                 //新增加答题记录
                 $info=db('order')->where('order_number',$val['out_trade_no'])->find();
@@ -354,10 +355,6 @@ function xmlToArray($xml)
                 $res3=db('captical_record')->insert($where4);
             }
             echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
-            // else{
-            //     echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[签名失败]]></return_msg></xml>';
-            //     return ajax_error("失败");
-            // }
          }else{
             echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[签名失败]]></return_msg></xml>';
             return ajax_error("失败");
