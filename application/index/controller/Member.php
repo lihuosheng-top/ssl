@@ -340,5 +340,24 @@ class Member extends Base
             return ajax_error('获取失败');
         }
     }
+    /**
+     * lilu
+     * 获取openid
+     * token
+     */
+    public function get_openid()
+    {
+        //获取参数
+        $input=input();
+        $re=$member=db('member')->where('token',$this->token)->update($input);
+        if($re)
+        {
+          return  ajax_success('获取成功');
+        }else
+        {
+           return ajax_error('获取失败');
+        }
+
+    }
 
 }

@@ -48,6 +48,7 @@ Route::group("",[
    'get_helper_record'=>"index/Member/get_helper_record"  ,     //获取帮甩记录
    'member_ranking'=>"index/Member/member_ranking"  ,           //排行榜
    'rank_member_info'=>"index/Member/rank_member_info"  ,       //排行榜界面--个人信息
+   'get_openid'=>"index/Member/get_openid"  ,       //排行榜界面--个人信息
 
    /**游戏 */
    'game'=>"index/Game/game"  ,                           //游戏
@@ -58,6 +59,14 @@ Route::group("",[
 
    /**甩甩乐分享 */
    'ssl_share'=>"index/Index/ssl_share"  ,         //红包反还
+
+
+   /**星光值管理 */
+   'prize_list'=>"index/Star/prize_list"  ,         //红包反还
+
+
+
+
 
 ]);
 

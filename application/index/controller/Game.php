@@ -162,44 +162,81 @@ class Game extends Base
      * token
      * goods_id
      * order_number
+     * token_help
      */
     public function is_answer()
     {
         //获取参数
         $input=input();
-        $member=db('member')->where('token',$this->token)->find();
-        //没有答题判断
-        $data['member_id']=$member['id'];
-        $data['goods_id']=$input['goods_id'];
-        $data['status']='2';
-        $re=db('answer_record')->where($data)->find();
-        //答错题
-        $data2['member_id']=$member['id'];
-        $data2['goods_id']=$input['goods_id'];
-        $data2['status']='0';
-        $re2=db('answer_record')->where($data2)->find();
-        if($re){
-            $map['answer_status']='2';
-            $map['lock_time']='';
-            return ajax_success('用户没有答题',$map);
-        }
-        if($re2){
-             //根据配置获取锁定时间
-            $key="lock_time";
-            $info=db('sys_setting')->where('key',$key)->find();
-            $info['value']=json_decode($info['value'],true);
-            if($re2['help_id']=='0'){
-                $lock_time=$re2['lock_time'];
-            }else{
-                $lock_time=$re2['lock_time'];
+        if($input['token_help']=='0'){     //自己答
+            $member=db('member')->where('token',$this->token)->find();
+            //没有答题判断
+            $data['member_id']=$member['id'];
+            $data['goods_id']=$input['goods_id'];
+            $data['status']='2';
+            $re=db('answer_record')->where($data)->find();
+            //答错题
+            $data2['member_id']=$member['id'];
+            $data2['goods_id']=$input['goods_id'];
+            $data2['status']='0';
+            $re2=db('answer_record')->where($data2)->find();
+            if($re){
+                $map['answer_status']='2';
+                $map['lock_time']='';
+                return ajax_success('用户没有答题',$map);
             }
-            $map['lock_time']=$lock_time;
-            $map['answer_status']='0';
-            return ajax_success('用户答题错误',$map);
+            if($re2){
+                 //根据配置获取锁定时间
+                $key="lock_time";
+                $info=db('sys_setting')->where('key',$key)->find();
+                $info['value']=json_decode($info['value'],true);
+                if($re2['help_id']=='0'){
+                    $lock_time=$re2['lock_time'];
+                }else{
+                    $lock_time=$re2['lock_time'];
+                }
+                $map['lock_time']=$lock_time;
+                $map['answer_status']='0';
+                return ajax_success('用户答题错误',$map);
+            }
+            $map['answer_status']='1';
+            $map['lock_time']='';
+            return ajax_success('答题成功',$map);
+        }else{        //帮答题
+            $member=db('member')->where('token',$this->token)->find();
+            //没有答题判断
+            $data['member_id']=$member['id'];
+            $data['goods_id']=$input['goods_id'];
+            $data['status']='2';
+            $re=db('answer_record')->where($data)->find();
+            //答错题
+            $data2['member_id']=$member['id'];
+            $data2['goods_id']=$input['goods_id'];
+            $data2['status']='0';
+            $re2=db('answer_record')->where($data2)->find();
+            if($re){
+                $map['answer_status']='2';
+                $map['lock_time']='';
+                return ajax_success('用户没有答题',$map);
+            }
+            if($re2){
+                 //根据配置获取锁定时间
+                $key="lock_time";
+                $info=db('sys_setting')->where('key',$key)->find();
+                $info['value']=json_decode($info['value'],true);
+                if($re2['help_id']=='0'){
+                    $lock_time=$re2['lock_time'];
+                }else{
+                    $lock_time=$re2['lock_time'];
+                }
+                $map['lock_time']=$lock_time;
+                $map['answer_status']='0';
+                return ajax_success('用户答题错误',$map);
+            }
+            $map['answer_status']='1';
+            $map['lock_time']='';
+            return ajax_success('答题成功',$map);
         }
-        $map['answer_status']='1';
-        $map['lock_time']='';
-        return ajax_success('答题成功',$map);
         
     }
     /**
@@ -273,9 +310,13 @@ class Game extends Base
                 // $data=$game;
     
             }else{
-                
+                     $res=db('answer_record')->where('order_number',$order_number)->find();
                      $lock_time=time()+60*60*24*30*12*10;
                      $lock['lock_time']=$lock_time;
+                     $lock['goods_id']=$res['goods_id'];
+                     $mem=db('member')->where('token',$input['token_help'])->find();
+                     $lock['help_id']=$member['member_id'];
+                     $re=db('help_record')->insert($lock);
                 return ajax_error('答题失败',$lock);
             }
 
