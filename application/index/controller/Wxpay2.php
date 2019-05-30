@@ -342,7 +342,6 @@ function xmlToArray($xml)
                 $where4['order_number']=date('YmdHis',time());
                 $where4['pay']=$info['order_amount'];
                 $where4['income']=0;
-                $where4['special_id']=$info['special_id'];
                 if($info['help_id']==0)
                 {
                     $where4['order_type']='1';
