@@ -20,20 +20,19 @@ class Game extends Base
      * lilu
      * 根据概率获取游戏种类及游戏接口
      * token
-     * token_help
      */
     public function game()
     {
           //判断用户是否有未答的题或锁定的题
-          $input2=input();
-          $memb=db('member')->where('token',$input2['token_help'])->find();
-           $map['member_id']=$memb['id'];
-           $map['status']='0';
-           $rr=db('answer_record')->where($map)->find();
-           if(!$rr){
-               $info['status']=2;
-               return   ajax_error('用户已解锁',$info);
-           }
+        //   $input2=input();
+        //   $memb=db('member')->where('token',$input2['token_help'])->find();
+        //    $map['member_id']=$memb['id'];
+        //    $map['status']='0';
+        //    $rr=db('answer_record')->where($map)->find();
+        //    if(!$rr){
+        //        $info['status']=2;
+        //        return   ajax_error('用户已解锁',$info);
+        //    }
           //随机取出1条数据
           $sql='SELECT * FROM tb_problem_house WHERE id >= ((SELECT MAX(id) FROM tb_problem_house)-(SELECT MIN(id) FROM tb_problem_house)) * RAND() + (SELECT MIN(id) FROM tb_problem_house) LIMIT 1';
           $list=DB::query($sql);
