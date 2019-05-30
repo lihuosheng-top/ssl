@@ -372,6 +372,7 @@ function xmlToArray($xml)
                 // ];
                 // Db::name("wallet")->insert($datas); //存入消费记录表
                 echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
+                echo "SUCCESS";
             }else{
                 echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[签名失败]]></return_msg></xml>';
                 return ajax_error("失败");
