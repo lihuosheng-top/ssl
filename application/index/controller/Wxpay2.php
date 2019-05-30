@@ -311,8 +311,8 @@ function xmlToArray($xml)
             $data['member_id']=$order_info['member_id'];
             $is_save=db('goods_receive')->where($data)->find();
             if($is_save)
-            {
-                $num=db('goods_receive')->where($data)->setInc('yi_shuai',1);
+            {    $yi_shuai=$is_save['yi_shuai'];
+                $num=db('goods_receive')->where($data)->setField('yi_shuai',$yi_shuai+1);
                 $info=db('goods_receive')->where($data)->find();
                 if($info['yi_shuai']==$info['shuai_num'])
                 {
