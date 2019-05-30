@@ -351,6 +351,7 @@ function xmlToArray($xml)
                     $where4['order_status']='1';
                 }
                 $where4['create_time']=time();
+                $where4['pay_type']='1';
                 $res3=db('captical_record')->insert($where4);
             }
             echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
