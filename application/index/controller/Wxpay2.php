@@ -336,23 +336,24 @@ function xmlToArray($xml)
                     $res2=db('goods_receive')->insert($where3);
                 }
                 //消费记录
-                $where4['member_id']=$info['member_id'];
-                $where4['help_id']=$info['help_id'];
-                $where4['goods_id']=$info['goods_id'];
-                $where4['order_number']=date('YmdHis',time());
-                $where4['pay']=$info['order_amount'];
-                $where4['income']=0;
+                $info=db('order')->where('order_number',$input['order_number'])->find();
+                $where5['member_id']=$member['id'];
+                $where5['help_id']='0';   //帮甩用户id
+                $where5['goods_id']=$info['goods_id'];
+                $where5['order_number']= $info['order_number'];
+                $where5['income']=0;
+                $where5['pay']=$info['order_amount'];
+                $where5['pay_type']='2';   //weixin   
                 if($info['help_id']==0)
                 {
-                    $where4['order_type']='1';
-                    $where4['order_status']='0';
+                    $where5['order_type']='1';
+                    $where5['order_status']='0';
                 }else{
-                    $where4['order_type']='5';
-                    $where4['order_status']='1';
+                    $where5['order_type']='5';
+                    $where5['order_status']='1';
                 }
-                $where4['create_time']=time();
-                $where4['pay_type']='1';
-                $res3=db('captical_record')->insert($where4);
+                $re=db('captical_record')->insert($where5);
+               
             }
             echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
          }else{
