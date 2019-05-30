@@ -312,13 +312,13 @@ function xmlToArray($xml)
             $is_save=db('goods_receive')->where($data)->find();
             if($is_save)
             {
-                $num=db('goods_receive')->where($data)->setInc('yi_shuai');
-                $info=db('goods_receive')->where($data)->find();
-                if($info['yi_shuai']=$info['shuai_num'])
-                {
-                    $where2['order_type']='1';
-                    db('goods_receive')->where($data)->update($where2);
-                }
+                $num=db('goods_receive')->where($data)->setInc('yi_shuai',1);
+                // $info=db('goods_receive')->where($data)->find();
+                // if($info['yi_shuai']=$info['shuai_num'])
+                // {
+                //     $where2['order_type']='1';
+                //     db('goods_receive')->where($data)->update($where2);
+                // }
             }else{
                 //新添加一条商品领取记录
                 $where3['member_id']=$info['member_id'];
