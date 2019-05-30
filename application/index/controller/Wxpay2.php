@@ -351,7 +351,7 @@ function xmlToArray($xml)
             }
             $where4['create_time']=time();
             $res3=db('captical_record')->insert($where4);
-            if($res && $re){
+            if($re){
                 // //做消费记录
                 // $information =Db::name("reward")->field("money,order_number,crowd_name,member_id")->where("order_number",$val["out_trade_no"])->find();
                 // $member_wallet =Db::name("member")
