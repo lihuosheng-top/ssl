@@ -413,6 +413,53 @@ class Admin extends Controller
           $this->error('保存失败');
         }
     }
+    /**
+     * lilu
+     * 星光值配置
+     */
+    public function admin_get_star()
+    {
+         //
+         $key="star_value";
+         $info=db('sys_setting')->where('key',$key)->find();
+         $info['value']=json_decode($info['value'],true);
+         if($info){
+             return view('admin_get_star',['data'=>$info,'msg'=>1]);
+         }else{
+             return view('admin_get_star');
+         }
+    }
+    /**
+     * lilu
+     * 星光值配置
+     */
+    public function admin_get_star_do()
+    {
+         $key="star_value";    //锁定时间字段
+         $input=input();      //获取参数
+         if($input){
+             $res=db('sys_setting')->where('key',$key)->find();
+             if($res)
+             {
+                 $data['id']=$res['id'];
+                 $data['value']=json_encode($input);
+                 $data['key']=$key;
+                 $data['status']='1';
+                 $re=db('sys_setting')->update($data);
+             }else{
+                 $data['value']=json_encode($input);
+                 $data['key']=$key;
+                 $data['status']='1';
+                 $re=db('sys_setting')->insert($data);
+             }
+         }
+         if($re)
+         {
+           $this->success('保存成功',url('admin/Admin/admin_get_star'));
+         }else{
+           $this->error('保存失败');
+         }
+    }
 
 
 }

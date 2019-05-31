@@ -371,7 +371,7 @@ class Game extends Base
    * lilu
    * 点击红包，返还红包
    * token
-   * 
+   * openid
    * order_number
    */
   public function back_bao_money()
@@ -436,12 +436,10 @@ class Game extends Base
         $member=db('member')->where('token',$this->token)->find();
         $pay=new pay();
         $money=$map['free_bao'];
-        $data2=$pay->order_refunds($input['order_number'],$money,$res['order_amount']);
+        $data2=$pay->back_free_money($input['openid'],$money,$member['name']);
             //记录
             // $xml_data = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
             // $val = json_decode(json_encode($xml_data), true);
-            db('text')->insert($data2);
-            halt($data2);
          if($data2["return_code"] == "SUCCESS" ){  //成功
                 //红包记录
                 $info=db('order')->where('order_number',$input['order_number'])->find();

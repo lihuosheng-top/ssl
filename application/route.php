@@ -61,11 +61,12 @@ Route::group("",[
    'back_bao_money'=>"index/Game/back_bao_money"  ,         //红包反还
 
    /**甩甩乐分享 */
-   'ssl_share'=>"index/Index/ssl_share"  ,         //红包反还
+   'ssl_share'=>"index/Index/ssl_share"  ,                  //甩甩乐分享
 
 
    /**星光值管理 */
-   'prize_list'=>"index/Star/prize_list"  ,         //红包反还
+   'prize_list'=>"index/Star/prize_list"  ,                 //星光商品列表
+   'get_star_goods'=>"index/Star/get_star_goods"  ,         //星光商品领取
 
 
 
@@ -110,7 +111,9 @@ Route::group("admin",[
     "admin_agreement_add"=>"admin/Admin/admin_agreement_add",       //添加平台协议
     "admin_message_note"=>"admin/admin/admin_message_note",         //消息提醒
     "admin_lock_time"=>"admin/admin/admin_lock_time",               //锁定时间
-    "admin_lock_time_do"=>"admin/admin/admin_lock_time_do",               //锁定时间
+    "admin_lock_time_do"=>"admin/admin/admin_lock_time_do",         //锁定时间
+    "admin_get_star"=>"admin/admin/admin_get_star",                 //星光值获取配置
+    "admin_get_star_do"=>"admin/admin/admin_get_star_do",                 //星光值获取配置
 
 
 

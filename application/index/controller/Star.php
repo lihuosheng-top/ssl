@@ -30,18 +30,40 @@ class Star extends Base
     }
     /**
      * lilu
-     * 兑换奖品
-     * id   星光值商品id
+     * 兑换奖品-领取商品
+     * goods_id   星光值商品id
      * token
      */
     public function get_star_goods()
     {
         //获取参数
         $input=input();
-        if($input['id'])
+        if($input['goods_id'])
         {
             //获取商品信息
-            $goods_info=db('star_goods')->where('id',$input['id'])->find();            
+            $goods_info=db('star_goods')->where('id',$input['goods_id'])->find();
+            $value=$goods_info['goods_value'];    //星光值商品价值（星光值） 
+            $re=db('member')->where('token',$this->token)->find();
+            $star_num['star_value']=$re['star_value']-$value;
+            $star_num['exchange_star_value']=$re['exchange_star_value']+$value;
+            $re=db('member')->where('token',$this->token)->update($star_num);
+            if($re)
+            {
+                //获取用户信息
+                $info=db('member')->where('token',$this->token)->find();
+                //生成兑换记录
+                $data['member_id']=$info['id'];
+                $data['star_goods_id']=$goods_info['id'];
+                $data['create_time']=time();
+                $data['status']='1';
+                $data['goods_value']=$goods_info['goods_value'];
+                $data['goods_image']=$goods_info['goods_image'];
+                $data['order_number']=date('YmdHis',time());
+                db('exchange_list')->insert($data);
+              return ajax_success('兑换成功');
+            }else{
+              return ajax_error('兑换失败');
+            }
         }
 
     

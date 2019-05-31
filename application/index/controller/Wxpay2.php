@@ -388,7 +388,7 @@ function xmlToArray($xml)
         }
         /**
          * lilu
-         * 免单反钱给用户
+         * 免单反钱给用户----商户->客户
          */
         public function back_free_money($openid,$money,$name)
         {
