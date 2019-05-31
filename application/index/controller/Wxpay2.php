@@ -7,6 +7,11 @@ include('../extend/WxpayAPI/lib/WxPay.Api.php');
 include('../extend/WxpayAPI/example/WxPay.NativePay.php');
 include('../extend/WxpayAPI/lib/WxPay.Notify.php');
 include('../extend/WxpayAPI/example/log.php');
+
+include('../extend/WxpayAPI/lib/WxPay.Exception.php');
+include('../extend/WxpayAPI/lib/WxPay.Config.php');
+include('../extend/WxpayAPI/lib/WxPay.Data.php');
+
 class Wxpay2 extends Controller{
     /*
     配置参数
