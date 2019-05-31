@@ -23,16 +23,7 @@ class Game extends Base
      */
     public function game()
     {
-          //判断用户是否有未答的题或锁定的题
-        //   $input2=input();
-        //   $memb=db('member')->where('token',$input2['token_help'])->find();
-        //    $map['member_id']=$memb['id'];
-        //    $map['status']='0';
-        //    $rr=db('answer_record')->where($map)->find();
-        //    if(!$rr){
-        //        $info['status']=2;
-        //        return   ajax_error('用户已解锁',$info);
-        //    }
+          
           //随机取出1条数据
           $sql='SELECT * FROM tb_problem_house WHERE id >= ((SELECT MAX(id) FROM tb_problem_house)-(SELECT MIN(id) FROM tb_problem_house)) * RAND() + (SELECT MIN(id) FROM tb_problem_house) LIMIT 1';
           $list=DB::query($sql);
@@ -157,17 +148,14 @@ class Game extends Base
     }
     /**
      * lilu
-     * 判断用户是否答题
+     * 判断用户是否答题----自己答题
      * token
      * goods_id
-     * order_number
-     * token_help
      */
     public function is_answer()
     {
         //获取参数
         $input=input();
-        if($input['token_help']=='0'){     //自己答
             $member=db('member')->where('token',$this->token)->find();
             //没有答题判断
             $data['member_id']=$member['id'];
@@ -201,58 +189,47 @@ class Game extends Base
             $map['answer_status']='1';
             $map['lock_time']='';
             return ajax_success('答题成功',$map);
-        }else{        //帮答题
-            $member=db('member')->where('token',$this->token)->find();
-            //没有答题判断
-            $data['member_id']=$member['id'];
-            $data['goods_id']=$input['goods_id'];
-            $data['status']='2';
-            $re=db('answer_record')->where($data)->find();
-            //答错题
-            $data2['member_id']=$member['id'];
-            $data2['goods_id']=$input['goods_id'];
-            $data2['status']='0';
-            $re2=db('answer_record')->where($data2)->find();
-            if($re){
-                $map['answer_status']='2';
-                $map['lock_time']='';
-                return ajax_success('用户没有答题',$map);
-            }
-            if($re2){
-                 //根据配置获取锁定时间
-                $key="lock_time";
-                $info=db('sys_setting')->where('key',$key)->find();
-                $info['value']=json_decode($info['value'],true);
-                if($re2['help_id']=='0'){
-                    $lock_time=$re2['lock_time'];
-                }else{
-                    $lock_time=$re2['lock_time'];
-                }
-                $map['lock_time']=$lock_time;
-                $map['answer_status']='0';
-                return ajax_success('用户答题错误',$map);
-            }
-            $map['answer_status']='1';
-            $map['lock_time']='';
-            return ajax_success('答题成功',$map);
-        }
-        
     }
     /**
      * lilu
-     * 判断答案是否正确
+     * 判断帮答用户是否锁定----帮答题
+     * token     帮答题的token
+     * order_number
+     */
+    public function is_answer_help()
+    {
+          //获取参数
+          $input=input();
+          //判断用户是否有未答的题或锁定的题
+          $memb=db('member')->where('token',$input['token'])->find();
+          $res=db('answer_record')->where('order_number',$input['order_number'])->find();
+          $re=db('help_answer')->where(['help_id'=>$memb['id'],'goods_id'=>$res['goods_id']])->find();
+          if($res['status']=='1'){
+              $map2['lock_time']='1';
+              return   ajax_success('用户已解锁',$map2);
+          }
+          if($re)
+          {
+              $map2['lock_time']=$re['lock_time'];
+              return ajax_success('用户帮答题已锁定',$map2);
+          }else{
+                $map2['lock_time']='0';
+                return ajax_success('用户可以帮答题',$map2);
+          }
+    }
+    /**
+     * lilu
+     * 判断答案是否正确----自己答题
      * 问题id
      * 答案
      * token
-     * goods_id
      * order_number
-     * token_help
      */
     public function is_right()
     {
         //获取参数
         $input=input();
-        if($input['token_help']=='0'){        //自己答题
+            //自己答题
             $info=db('problem_house')->where('id',$input['answer_id'])->find();
             $order_number = $input['order_number'];
             //插入答题列表
@@ -269,7 +246,6 @@ class Game extends Base
                 // $youxi =new Game2();
                 // $game=$youxi->get_games_chance();
                 // $data=$game;
-    
             }else{
                 $map2['status']='0';
                 $re=db('answer_record')->where('order_number',$order_number)->update($map2);
@@ -290,7 +266,20 @@ class Game extends Base
                 }
                 return ajax_error('答题失败',$lock);
             }
-        }else{     //帮答题
+    }
+    /**
+     * lilu
+     * 判断答案是否正确----帮答题
+     * 问题id
+     * 答案
+     * token   帮答题token
+     * order_number   
+     */
+    public function is_right_help()
+    {
+        //获取参数
+        $input=input();
+             //帮答题
             $info=db('problem_house')->where('id',$input['answer_id'])->find();
             $order_number = $input['order_number'];
             //插入答题列表
@@ -298,6 +287,7 @@ class Game extends Base
             {
                 //答题正确,修改客户答题记录
                 $map['status']='1';
+                $map['lock_time']='';
                 $re=db('answer_record')->where('order_number',$order_number)->update($map);
                 if($re){
                     $lock['lock_time']='';
@@ -307,24 +297,22 @@ class Game extends Base
                 // $youxi =new Game2();
                 // $game=$youxi->get_games_chance();
                 // $data=$game;
-    
             }else{
+                //帮答题错误，生成帮答题错误记录，以及锁定时间
                      $res=db('answer_record')->where('order_number',$order_number)->find();
                      $lock_time=time()+60*60*24*30*12*10;
                      $lock['lock_time']=$lock_time;
                      $lock['goods_id']=$res['goods_id'];
-                     $mem=db('member')->where('token',$input['token_help'])->find();
-                     $lock['help_id']=$member['member_id'];
-                     $re=db('help_record')->insert($lock);
-                return ajax_error('答题失败',$lock);
+                     $mem=db('member')->where('token',$input['token'])->find();
+                     $lock['help_id']=$mem['id'];
+                     $re=db('help_answer')->insert($lock);
+                     $map2['lock_time']=$lock_time;
+                     return ajax_error('答题失败',$map2);
             }
-
-        }
-
     }
     /**
      * lilu
-     * 免甩单的金额
+     * 免甩单的金额----自己甩
      * token
      * goods_id
      * order_number
