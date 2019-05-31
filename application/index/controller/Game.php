@@ -249,7 +249,7 @@ class Game extends Base
             //自己答题
             $info=db('problem_house')->where('id',$input['answer_id'])->find();
             // $order_number = $input['order_number'];
-            $member=db('member')->where('token',$token)->find();
+            $member=db('member')->where('token',$this->token)->find();
             $ww['member_id']=$member['id'];
             $ww['goods_id']=$input['goods_id'];
             $ww['status']=2;
