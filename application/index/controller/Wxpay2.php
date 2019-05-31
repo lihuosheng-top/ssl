@@ -405,7 +405,7 @@ function xmlToArray($xml)
             $data['check_name']='NO_CHECK';   //真实姓名验证
             $data["amount"] = $money*100;
             $data['re_user_name']=$name;      //用户姓名
-            $data["desc"] = "免单红包";
+            $data["desc"] = "123123";
             $s = $this->getSign($data, false);
             $data["sign"] = $s;
             $xml = $this->arrayToXml($data);

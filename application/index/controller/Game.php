@@ -198,12 +198,24 @@ class Game extends Base
      */
     public function is_answer_help()
     {
+       
           //获取参数
           $input=input();
           //判断用户是否有未答的题或锁定的题
           $memb=db('member')->where('token',$input['token'])->find();
           $res=db('answer_record')->where('order_number',$input['order_number'])->find();
-          $re=db('help_answer')->where(['help_id'=>$memb['id'],'goods_id'=>$res['goods_id']])->find();
+          $re=db('help_answer')->where('order_number',$input['order_number'])->find();
+          //添加好友关系
+          $member_info=db('member')->where('id',$res['member_id'])->find();
+          if(!empty($member_info['fid']))
+          {
+              $fid=json_decode($member_info['fid'],true);
+              if(!in_array($memb['id'],$fid)){
+                  $fid[]=$memb['id'];
+                  $fid2=json_encode($fid);
+                  db('member')->where('id',$res['member_id'])->setField('fid',$fid2);
+              }
+          }
           if($res['status']=='1'){
               $map2['lock_time']='1';
               return   ajax_success('用户已解锁',$map2);
@@ -305,6 +317,7 @@ class Game extends Base
                      $lock['goods_id']=$res['goods_id'];
                      $mem=db('member')->where('token',$input['token'])->find();
                      $lock['help_id']=$mem['id'];
+                     $lock['order_number']=$order_number;
                      $re=db('help_answer')->insert($lock);
                      $map2['lock_time']=$lock_time;
                      return ajax_error('答题失败',$map2);
@@ -436,7 +449,12 @@ class Game extends Base
         $member=db('member')->where('token',$this->token)->find();
         $pay=new pay();
         $money=$map['free_bao'];
+        db('member')->where('token',$this->token)->setField('openid',$input['openid']);
         $data2=$pay->back_free_money($input['openid'],$money,$member['name']);
+        if($data2)
+        {
+
+        }
             //记录
             // $xml_data = simplexml_load_string($data, 'SimpleXMLElement', LIBXML_NOCDATA);
             // $val = json_decode(json_encode($xml_data), true);

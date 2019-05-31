@@ -221,9 +221,50 @@ class Member extends Base
     }
     /**
      * lilu 
-     * 开甩界面
+     * 开甩界面----自己甩
      */
     public function shuai_start()
+    {
+       //获取信息
+       $input=input();   //商品id
+       //获取当前甩客信息
+       $info=db('member')->where('token',$this->token)->find();
+       $data['id']=$info['id'];
+       $data['name']=$info['name'];
+       $data['head_pic']=$info['head_pic'];
+       $data['member_type']=$info['member_type'];
+       $data['goods_num']=$info['goods_num'];    //客户甩品数量
+       $data['member_type']=$info['member_type'];  //会员等级
+       $repertory=db('goods')->where('id',$input['goods_id'])->find();
+       $data['image']=$repertory['goods_images_two'];
+       $data['goods_repertory']=$repertory['goods_repertory'];    //商品库存
+       //当前商品帮甩人数
+       $helper_num=db('help_record')->where('goods_id',$input['goods_id'])->group('member_id')->count();
+       $data['helper_num']=$helper_num;
+       $data['end_date']=$repertory['end_date'];    //商品结束日期
+       $data['shuai_num']=$repertory['points'];     //商品甩次
+       //当前商品已甩次数
+       $goods_num=db('help_record')->where(['goods_id'=>$input['goods_id'],'member_id'=>$info['id']])->count();
+       $data['yi_goods_num']=$goods_num;
+       //获取当前用户当前甩品的免单金额
+       $free_money=db('help_record')->where(['member_id'=>$info['id'],'goods_id'=>$input['goods_id']])->sum('income');
+       $data['free_money']=$free_money;
+       //获取当前用户当前甩品的红包金额
+       $bao_money=db('help_record')->where(['member_id'=>$info['id'],'goods_id'=>$input['goods_id']])->sum('income');
+       $data['bao_money']=$bao_money;
+       if($data)
+       {
+           return ajax_success('获取成功',$data);
+       }else{
+           return ajax_error('获取信息失败');
+       }
+    }
+    /**
+     * lilu 
+     * 开甩界面----帮甩
+     * token
+     */
+    public function shuai_start_help()
     {
        //获取信息
        $input=input();   //商品id

@@ -127,6 +127,7 @@ class Order extends Base
      * 帮甩订单生成----支付----帮甩
      * goods_id
      * token
+     * token_help
      * special_id
      */
     public function goods_order_help()
@@ -134,6 +135,7 @@ class Order extends Base
         $input=input();   //获取传递的参数
         //根据token获取会员id
         $member_id=db('member')->where('token',$this->token)->field('id')->find();
+        //判断用户是否达到
         //判断甩商品订单帮甩数量
         $re=db('goods_receive')->where(['goods_id'=>$input['goods_id'],'member_id'=>$member_id['id']])->find();
         if($re){     //商品已开甩
@@ -161,7 +163,7 @@ class Order extends Base
             $data['create_time']=time();                    //订单创建时间
             // $data['order_quantity']='1';   //商品数量
             $data['help_id']=$member_id['id'];
-            $re=db('member')->where('token',$input['token_help'])->field('id')->find();
+            $re=db('member')->where('token',$input['token_help'])->find();
             $data['member_id']=$re['id'];         //会员id
             $re2=db('order')->insert($data);
             if($re2)
@@ -173,7 +175,17 @@ class Order extends Base
                 $pay = new pay();//统一下单
                 $order= $pay->getPrePayOrder($body, $out_trade_no, $total_fee);
                 if ($order['prepay_id']){//判断返回参数中是否有prepay_id
-                    
+                    //添加好友关系
+                    $member_info=db('member')->where('id',$res['member_id'])->find();
+                    if(!empty($member_info['fid']))
+                    {
+                        $fid=json_decode($member_info['fid'],true);
+                        if(!in_array($memb['id'],$fid)){
+                            $fid[]=$memb['id'];
+                            $fid2=json_encode($fid);
+                            db('member')->where('id',$res['member_id'])->setField('fid',$fid2);
+                        }
+                    }
                     $order1 = $pay->getOrder($order['prepay_id'],$data['order_number']);//执行二次签名返回参数
                     return ajax_success('新建订单成功',$order1);
                     // echo json_encode(array('status' => 1, 'prepay_order' => no_null($order1)));
