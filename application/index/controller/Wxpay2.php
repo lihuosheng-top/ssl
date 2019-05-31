@@ -542,7 +542,7 @@ function xmlToArray($xml)
 	 * @param int $second   url执行超时时间，默认30s
 	 * @throws WxPayException
 	 */
-	private static function postXmlCurl3($xml, $url, $useCert = true, $second = 30)
+	public function postXmlCurl3($xml, $url, $useCert = true, $second = 30)
 	{		
 		$ch = curl_init();
 		//设置超时
