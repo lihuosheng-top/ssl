@@ -8,9 +8,9 @@ include('../extend/WxpayAPI/example/WxPay.NativePay.php');
 include('../extend/WxpayAPI/lib/WxPay.Notify.php');
 include('../extend/WxpayAPI/example/log.php');
 
-include('../extend/WxpayAPI/lib/WxPay.Exception.php');
-include('../extend/WxpayAPI/lib/WxPay.Config.php');
-include('../extend/WxpayAPI/lib/WxPay.Data.php');
+// include('../extend/WxpayAPI/lib/WxPay.Exception.php');
+// include('../extend/WxpayAPI/lib/WxPay.Config.php');
+// include('../extend/WxpayAPI/lib/WxPay.Data.php');
 
 class Wxpay2 extends Controller{
     /*
@@ -554,11 +554,11 @@ function xmlToArray($xml)
 		curl_setopt($ch, CURLOPT_TIMEOUT, $second);
 		
 		//如果有配置代理这里就设置代理
-		if(WxPayConfig::CURL_PROXY_HOST != "0.0.0.0" 
-			&& WxPayConfig::CURL_PROXY_PORT != 0){
-			curl_setopt($ch,CURLOPT_PROXY, WxPayConfig::CURL_PROXY_HOST);
-			curl_setopt($ch,CURLOPT_PROXYPORT, WxPayConfig::CURL_PROXY_PORT);
-		}
+		// if(WxPayConfig::CURL_PROXY_HOST != "0.0.0.0" 
+		// 	&& WxPayConfig::CURL_PROXY_PORT != 0){
+		// 	curl_setopt($ch,CURLOPT_PROXY, WxPayConfig::CURL_PROXY_HOST);
+		// 	curl_setopt($ch,CURLOPT_PROXYPORT, WxPayConfig::CURL_PROXY_PORT);
+		// }
 		curl_setopt($ch,CURLOPT_URL, $url);
 //		curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,TRUE);
 //		curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,2);//严格校验
