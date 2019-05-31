@@ -135,7 +135,6 @@ class Order extends Base
         $input=input();   //获取传递的参数
         //根据token获取会员id
         $member_id=db('member')->where('token',$this->token)->field('id')->find();
-        //判断用户是否达到
         //判断甩商品订单帮甩数量
         $re=db('goods_receive')->where(['goods_id'=>$input['goods_id'],'member_id'=>$member_id['id']])->find();
         if($re){     //商品已开甩

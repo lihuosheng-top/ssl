@@ -67,21 +67,21 @@ class Member extends Base
      */
     public function rank_member_info()
     {
-        //根据token获取会员的信息
-        $info=db('member')->where('token',$this->token)->find();
-        $where['help_num']=array('gt',$info['help_num']);
-        $member_num=db('member')->where($where)->count();
-        $data['rank']=$member_num+1;    //排名
-        $data['id']=$info['id'];
-        $data['head_pic']=$info['head_pic'];
-        $data['star_value']=$info['star_value'];
-        $data['exchange_star_value']=$info['exchange_star_value'];
-       if($data)
-       { 
-          return ajax_success('获取成功',$data);
-       }else{
-          return ajax_error('获取失败');
-       }
+            //根据token获取会员的信息
+            $info=db('member')->where('token',$this->token)->find();
+            $where['help_num']=array('gt',$info['help_num']);
+            $member_num=db('member')->where($where)->count();
+            $data['rank']=$member_num+1;    //排名
+            $data['id']=$info['id'];
+            $data['head_pic']=$info['head_pic'];
+            $data['star_value']=$info['star_value'];
+            $data['exchange_star_value']=$info['exchange_star_value'];
+            if($data)
+            { 
+                return ajax_success('获取成功',$data);
+            }else{
+                return ajax_error('获取失败');
+            }
 
     }
 

@@ -353,6 +353,37 @@ function xmlToArray($xml)
                     $where5['order_status']='1';
                 }
                 $re=db('captical_record')->insert($where5);
+             //判断用户是否达拉新人条件
+             //1.获取配置信息
+             $key="star_value";
+             $info2=db('sys_setting')->where('key',$key)->find();
+             $info2['value']=json_decode($info2['value'],true);
+             //获取用户信息
+             $member2=db('member')->where('id',$res['member_id'])->find();
+             if($member2['is_new']==1)
+             {
+               $num=db('order')->where('member_id',$res['member_id'])->count();
+               if($num>=$info2['value']['star_value']['num']){
+                   $mem_list=db('member')->order('create_time desc')->select();
+                   foreach($mem_list as $k =>$v)
+                   {
+                       if($v['fid'])
+                       {
+                           $fid=json_decode($v['fid'],true);
+                           if($fid){
+                               foreach($fid as $k2 =>$v2)
+                               {
+                                   if($v2==$res['member_id'])
+                                   {
+                                       db('member')->where('id',$v['id'])->setField('star_value',$info2['value']['star_value']['value']);
+                                   }
+                               }
+                           }
+                       }
+                   }
+               }
+
+             }
                
             }
             echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';

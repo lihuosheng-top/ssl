@@ -192,13 +192,102 @@ class Game extends Base
     }
     /**
      * lilu
+     * 判断用户是否答题----帮甩
+     * token
+     * goods_id
+     */
+    public function is_answer_help2()
+    {
+        //获取参数
+        $input=input();
+            $member=db('member')->where('token',$this->token)->find();
+            //没有答题判断
+            $data['member_id']=$member['id'];
+            $data['goods_id']=$input['goods_id'];
+            $data['status']='2';
+            $re=db('answer_record')->where($data)->find();
+            //答错题
+            $data2['member_id']=$member['id'];
+            $data2['goods_id']=$input['goods_id'];
+            $data2['status']='0';
+            $re2=db('answer_record')->where($data2)->find();
+            if($re){
+                $map['answer_status']='2';
+                $map['lock_time']='';
+                return ajax_success('用户没有答题',$map);
+            }
+            if($re2){
+                 //根据配置获取锁定时间
+                $key="lock_time";
+                $info=db('sys_setting')->where('key',$key)->find();
+                $info['value']=json_decode($info['value'],true);
+                if($re2['help_id']=='0'){
+                    $lock_time=$re2['lock_time'];
+                }else{
+                    $lock_time=$re2['lock_time'];
+                }
+                $map['lock_time']=$lock_time;
+                $map['answer_status']='0';
+                return ajax_success('用户答题错误',$map);
+            }
+            $map['answer_status']='1';
+            $map['lock_time']='';
+            return ajax_success('答题成功',$map);
+    }
+    /**
+     * lilu
+     * 判断答案是否正确--帮答题
+     * 问题id
+     * 答案
+     * token
+     * goods_id
+     */
+    public function is_right_help2()
+    {
+        //获取参数
+        $input=input();
+            //自己答题
+            $info=db('problem_house')->where('id',$input['answer_id'])->find();
+            // $order_number = $input['order_number'];
+            $member=db('member')->where('token',$token)->find();
+            $ww['member_id']=$member['id'];
+            $ww['goods_id']=$input['goods_id'];
+            $ww['status']=2;
+            //插入答题列表
+            if($info['true_ans']==$input['true_ans'])
+            {
+                //答题正确,修改客户答题记录
+                $map['status']='1';
+                $re=db('answer_record')->where($ww)->update($map);
+                $lock['lock_time']='';
+                return ajax_success('答题正确',$lock);
+                // //根据概率，判断小游戏的种类
+                // $youxi =new Game2();
+                // $game=$youxi->get_games_chance();
+                // $data=$game;
+            }else{
+                $map2['status']='0';
+                $re=db('answer_record')->where($ww)->update($map2);
+                $res=db('answer_record')->where($ww)->find();
+                //根据配置获取锁定时间
+                $key="lock_time";
+                $info=db('sys_setting')->where('key',$key)->find();
+                $info['value']=json_decode($info['value'],true);
+                $lock_time=time()+$info['value']['lock_time']['other']*60;
+                $lock['lock_time']=$lock_time;
+                db('answer_record')->where($ww)->update($lock);
+                return ajax_error('答题失败',$lock);
+            }
+    }
+    /**
+     * lilu
      * 判断帮答用户是否锁定----帮答题
      * token     帮答题的token
+     * goods_id
      * order_number
      */
     public function is_answer_help()
     {
-       
           //获取参数
           $input=input();
           //判断用户是否有未答的题或锁定的题
@@ -217,7 +306,7 @@ class Game extends Base
               }
           }
           if($res['status']=='1'){
-              $map2['lock_time']='1';
+              $map2['lock_time']='';
               return   ajax_success('用户已解锁',$map2);
           }
           if($re)
@@ -225,7 +314,7 @@ class Game extends Base
               $map2['lock_time']=$re['lock_time'];
               return ajax_success('用户帮答题已锁定',$map2);
           }else{
-                $map2['lock_time']='0';
+                $map2['lock_time']='';
                 return ajax_success('用户可以帮答题',$map2);
           }
     }
