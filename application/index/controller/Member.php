@@ -347,30 +347,29 @@ class Member extends Base
     /**
      * lilu
      * 获取当前客户当前商品的帮甩记录
+     * token
+     * goods_id
+     * 
      */
     public function get_helper_record()
     {
         //获取参数   token,goods_id
         $input=input();
         if($input){
-             $re=db('member')->where('token',$this->token)->find();
-             $list=db('help_record')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id']])->group('help_id')->select();
+             $re=db('member')->where('token',$this->token)->find();   //获取会员信息
+             $list=db('order')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id']])->group('help_id')->select();
              foreach($list as $k=>$v){
-                  if($v['help_id']=='0'){
-
-                  }else{
-                    $num=db('help_record')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id'],'help_id'=>$v['help_id']])->count();
+                    $num=db('order')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id'],'help_id'=>$v['help_id']])->count();
                     $v['num']=$num;
                     $head_pic=db('member')->where('id',$v['help_id'])->value('head_pic');
                     $v['head_pic']=$head_pic;
                     $data[]=$v;
-                  }
              }
              foreach($data as $k=>$v){
                 $res[$k]['id']=$v['help_id'];
                 $res[$k]['head_pic']=$v['head_pic'];
                 $res[$k]['num']=$v['num'];
-                $res[$k]['order_type']=$v['order_type'];   //帮甩类型    1    自己甩  2帮甩  3帮答题
+                $res[$k]['order_type']=$v['order_type'];   //帮甩类型    0  自己甩  1帮甩  2帮答题
              }
              if($res){
                  return ajax_success('获取成功',$res);
@@ -399,6 +398,35 @@ class Member extends Base
            return ajax_error('获取失败');
         }
 
+    }
+    /**
+     * lilu
+     * 获取帮甩档案配置
+     * token
+     * goods_id
+     */
+    public function help_setting()
+    {
+        //获取key
+        $key1="goods_limit";    // 商品限制
+        $key2="goods_limit_own";   //自己甩限制
+        $key3="help_goods_limit";   //帮甩限制
+        $value1=db('sys_setting')->where('key',$key1)->find();
+        $info['goods_limit']=json_decode($value1['value'],true);
+        $value2=db('sys_setting')->where('key',$key2)->find();
+        $info['goods_limit_own']=json_decode($value2['value'],true);
+        $value3=db('sys_setting')->where('key',$key3)->find();
+        $info['help_goods_limit']=json_decode($value3['value'],true);
+        $data['goods_limit']=$info['goods_limit']['limit_num'];       //商品限制
+        $data['goods_limit']=$info['goods_limit']['limit_num'];
+
+        if($info)
+        {
+           return ajax_success('获取成功',$info);
+        }else{
+            return ajax_error('获取失败');
+        }
+   
     }
 
 }

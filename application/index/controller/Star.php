@@ -21,6 +21,16 @@ class Star extends Base
     {
         //获取所有的奖励商品
         $list=db('star_goods')->select();
+        //获取用户的星光值
+        $star_value=db('member')->where('token',$this->token)->find();
+        foreach($list as $k =>$v){
+            if($v['goods_value']<=$star_value['star_value'])
+            {
+                $list[$k]['is_exchange']=1;
+            }else{
+                $list[$k]['is_exchange']=0;
+            }
+        }
         if($list)
         {
            return ajax_success('获取成功',$list);

@@ -460,6 +460,52 @@ class Admin extends Controller
            $this->error('保存失败');
          }
     }
+    /**
+     * lilu
+     * 平台手续费
+     */
+    public function admin_fei()
+    {
+        $key="admin_fei";
+        $info=db('sys_setting')->where('key',$key)->find();
+        $info['value']=json_decode($info['value'],true);
+        if($info){
+            return view('admin_fei',['data'=>$info,'msg'=>1]);
+        }else{
+            return view('admin_fei');
+        }
+    }
+    /**
+     * lilu
+     * 星光值配置
+     */
+    public function admin_fei_do()
+    {
+         $key="admin_fei";    //锁定时间字段
+         $input=input();      //获取参数
+         if($input){
+             $res=db('sys_setting')->where('key',$key)->find();
+             if($res)
+             {
+                 $data['id']=$res['id'];
+                 $data['value']=json_encode($input);
+                 $data['key']=$key;
+                 $data['status']='1';
+                 $re=db('sys_setting')->update($data);
+             }else{
+                 $data['value']=json_encode($input);
+                 $data['key']=$key;
+                 $data['status']='1';
+                 $re=db('sys_setting')->insert($data);
+             }
+         }
+         if($re)
+         {
+           $this->success('保存成功',url('admin/Admin/admin_fei'));
+         }else{
+           $this->error('保存失败');
+         }
+    }
 
 
 }

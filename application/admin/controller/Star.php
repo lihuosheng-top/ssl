@@ -4,6 +4,8 @@ namespace app\admin\controller;
 
 use think\Controller;
 use think\Request;
+use app\index\controller\Base;
+use think\paginator\driver\Bootstrap;
 
 
 /**
@@ -115,10 +117,31 @@ class Star extends Controller
   }
 	
 	/**
-	*   星光值兑换记录
+	 * lilu
+	*  星光值兑换记录
 	**/
 	public function list_exchange()
 	{
-       return  view('list_exchange');
+		//获取后台的星光值兑换记录
+		$list=db('exchange_list')->order('create_time desc')->select();
+		foreach($list as $k=>$v)
+		{
+			$goods_info=db('star_goods')->where('id',$v['star_goods_id'])->find();
+			$list[$k]['goods_name']=$goods_info['goods_name'];
+		}
+		$all_idents = $list;               //获取分页的数据
+        $curPage = input('get.page') ? input('get.page') : 1;//接收前端分页传值
+        $listRow = 10;//每页10行记录
+        $showdata = array_slice($all_idents, ($curPage - 1) * $listRow, $listRow, true);// 数组中根据条件取出一段值，并返回
+        $list = Bootstrap::make($showdata, $listRow, $curPage, count($all_idents), false, [
+            'var_page' => 'page',
+            'path' => url('admin/Star/list_exchange'),//这里根据需要修改url
+            'query' => [],
+            'fragment' => '',
+        ]);
+        $list->appends($_GET);
+        $this->assign('listpage', $list->render());
+        return  view('list_exchange',['data'=>$list]);
 	}
+	
 }

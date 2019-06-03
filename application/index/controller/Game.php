@@ -236,7 +236,7 @@ class Game extends Base
     }
     /**
      * lilu
-     * 判断答案是否正确--帮答题
+     * 判断答案是否正确--帮答题-----帮甩
      * 问题id
      * 答案
      * token
@@ -390,8 +390,16 @@ class Game extends Base
                 $map['status']='1';
                 $map['lock_time']='';
                 $re=db('answer_record')->where('order_number',$order_number)->update($map);
+                $res=db('answer_record')->where('order_number',$order_number)->find();
+                $lock['goods_id']=$res['goods_id'];
+                $mem=db('member')->where('token',$input['token'])->find();
+                $lock['help_id']=$mem['id'];
+                $lock['order_number']=$order_number;
                 $lock['lock_time']='';
-                return ajax_success('答题正确',$lock);
+                $lock['status']='1';
+                $re=db('help_answer')->insert($lock);
+                $lock2['lock_time']='';
+                return ajax_success('答题正确',$lock2);
                 // //根据概率，判断小游戏的种类
                 // $youxi =new Game2();
                 // $game=$youxi->get_games_chance();
@@ -405,6 +413,7 @@ class Game extends Base
                      $mem=db('member')->where('token',$input['token'])->find();
                      $lock['help_id']=$mem['id'];
                      $lock['order_number']=$order_number;
+                     $lock['status']='0';
                      $re=db('help_answer')->insert($lock);
                      $map2['lock_time']=$lock_time;
                      return ajax_error('答题失败',$map2);
@@ -455,7 +464,7 @@ class Game extends Base
             $where['income']=$map['free_money'];
             $where['pay']='0';
             $where['pay_type']='2';   //weixin   
-            $where['order_type']='3';   //奖励红包
+            $where['order_type']='2';   //奖励红包
             $where['order_status']='0';   //自己甩
             $re=db('captical_record')->insert($where);
         }

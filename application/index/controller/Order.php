@@ -162,8 +162,9 @@ class Order extends Base
             $data['create_time']=time();                    //订单创建时间
             // $data['order_quantity']='1';   //商品数量
             $data['help_id']=$member_id['id'];
-            $re=db('member')->where('token',$input['token_help'])->find();
-            $data['member_id']=$re['id'];         //会员id
+            $re3=db('member')->where('token',$input['token_help'])->find();
+            $data['member_id']=$re3['id'];         //会员id
+            $data['order_type']='1';         // 1   自己甩订单     2 帮甩订单
             $re2=db('order')->insert($data);
             if($re2)
             {
@@ -201,13 +202,98 @@ class Order extends Base
             ajax_error('参数错误');
         }
     }
-    // /**
-    //  * lilu 
-    //  * 用户开甩档案
-    //  * token
-    //  */
-    // public function get_user_shuai()
-    // {
+    /**
+     * lilu 
+     * 上划---退款账单
+     * token
+     * goods_id
+     */
+    public function order_refund()
+    {
+        //获取参数信息
+        $input=input();
+        //获取商品信息
+        $goods_info=db('goods')->where('id',$input['goods_id'])->find();
+        //获取用户的信息
+        $member=db('member')->where('token',$this->token)->find();
+        //获取当前用户的所有已付款甩记录
+        $list=db('order')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>'2'])->select();
+        $shuai_momey=db('order')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>'2'])->sum('order_amount');    //总甩费
+        //保留两位小数
+        $shuai_momey=sprintf("%.2f",$shuai_momey);      //总甩费
+        $num=db('order')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>'2'])->count();    //总甩数
         
-    // }
+       //获取支付平台的扣费比率
+       $key="admin_fei";
+       $info=db('sys_setting')->where('key',$key)->find();
+       $info['value']=json_decode($info['value'],true);
+       $fei=$info['value']['fei']['fei']/100;       //平台收费每笔
+       $fei2=$fei*$goods_info['goods_price'];
+       $fei2=sprintf("%.2f",$fei2);
+       $data['shuai_fei']=$shuai_momey;    //总甩费
+       $data['fei']=$fei2;
+       $data['num']=$num;                  //总帅次
+       $data['goods_fei']=$goods_info['goods_price'];                  //总帅次
+       if($data)
+       {
+        return ajax_success('获取成功',$data);
+       }else{
+        return ajax_error('获取失败');
+       }
+    }
+    /**
+     * lilu
+     * 退款处理
+     * token 
+     * goods_id
+     */
+    public function order_refund_do()
+    {
+        //获取参数
+        $input=input();
+         //获取商品信息
+        $goods_info=db('goods')->where('id',$input['goods_id'])->find();
+         //获取用户的信息
+         $member=db('member')->where('token',$this->token)->find();
+         //获取当前用户的所有已付款甩记录
+         $list=db('order')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>'2'])->group('help_id')->select();
+         //获取支付平台的扣费比率
+        $key="admin_fei";
+        $info=db('sys_setting')->where('key',$key)->find();
+        $info['value']=json_decode($info['value'],true);
+        $fei=$info['value']['fei']['fei']/100;       //平台收费每笔
+         //用户的退款信息
+         $orderid=[];
+         foreach($list as $k=>$v)
+         {
+            //  $list2=db('order')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>2,'help_id'=>$v['help_id']])->sum('order_amount');
+            //循环遍历退款操作
+           $money=$v['order_amount']*(1-$fei);
+           $pay=new pay();
+           $data2=$pay->order_refunds($v['order_number'],$money,$v['order_amount']);
+           if($data2["return_code"] == "SUCCESS"  ){
+            //退款记录
+                $info=db('order')->where('order_number',$v['order_number'])->find();
+                $where['member_id']=$member['id'];
+                $where['help_id']=$v['help'];   //帮甩用户id
+                $where['goods_id']=$info['goods_id'];
+                $where['order_number']= $v['order_number'];
+                $where['income']=$money;
+                $where['pay']='0';
+                $where['pay_type']='2';   //weixin   
+                $where['order_type']='2';   //奖励红包
+                if($v['help_id']=='0')
+                {
+                    $where['order_status']='0';   //自己甩
+                }else{
+                    $where['order_status']='1';   //帮甩
+                }
+               
+                $re=db('captical_record')->insert($where);
+           }
+        }
+        return ajax_success('已退款成功');
+
+    }
+        
 }

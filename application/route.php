@@ -29,6 +29,8 @@ Route::group("",[
    "help_count"=>"index/Order/help_count"    ,         //帮甩统计
    "goods_order"=>"index/Order/goods_order",           //商品订单生成----自己甩
    "goods_order_help"=>"index/Order/goods_order_help", //商品订单生成----帮甩
+   "order_refund"=>"index/Order/order_refund",         //商品账单展示
+   "order_refund_do"=>"index/Order/order_refund_do",   //商品退款处理
 
 
 
@@ -50,6 +52,7 @@ Route::group("",[
    'member_ranking'=>"index/Member/member_ranking"  ,           //排行榜
    'rank_member_info'=>"index/Member/rank_member_info"  ,       //排行榜界面--个人信息
    'get_openid'=>"index/Member/get_openid"  ,       //排行榜界面--个人信息
+   'help_setting'=>"index/Member/help_setting"  ,       //排行榜界面--个人信息
 
    /**游戏 */
    'game'=>"index/Game/game"  ,                           //游戏
@@ -115,7 +118,9 @@ Route::group("admin",[
     "admin_lock_time"=>"admin/admin/admin_lock_time",               //锁定时间
     "admin_lock_time_do"=>"admin/admin/admin_lock_time_do",         //锁定时间
     "admin_get_star"=>"admin/admin/admin_get_star",                 //星光值获取配置
-    "admin_get_star_do"=>"admin/admin/admin_get_star_do",                 //星光值获取配置
+    "admin_get_star_do"=>"admin/admin/admin_get_star_do",           //星光值获取配置
+    "admin_fei"=>"admin/admin/admin_fei",                           //获取平台手续费
+    "admin_fei_do"=>"admin/admin/admin_fei_do",                           //获取平台手续费DS
 
 
 
