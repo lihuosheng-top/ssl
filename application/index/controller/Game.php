@@ -290,19 +290,20 @@ class Game extends Base
     {
           //获取参数
           $input=input();
+          $order=db('order')->where('order_number',$input['order_number'])->find();
           //判断用户是否有未答的题或锁定的题
           $memb=db('member')->where('token',$input['token'])->find();
           $res=db('answer_record')->where('order_number',$input['order_number'])->find();
           $re=db('help_answer')->where('order_number',$input['order_number'])->find();
            //添加好友关系----帮答题
-           $member_info=db('member')->where('id',$res['member_id'])->find();     //
+           $member_info=db('member')->where('id',$order['member_id'])->find();     //
            //判断是否已是好友
-           $is=db($re3['id'])->where('account',$member_id['account'])->find();
+           $is=db($order['member_id'])->where('account',$memb['account'])->find();
            if($is)
            {   //已是好友关系
 
            }else{       //需添加好友关系
-               db($re3['id'])->insert($member_id);
+               db($order['member_id'])->insert($memb);
            }
         //   $member_info=db('member')->where('id',$res['member_id'])->find();
         //   if(!empty($member_info['fid']))
