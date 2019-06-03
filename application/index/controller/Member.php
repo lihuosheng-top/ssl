@@ -521,12 +521,26 @@ class Member extends Base
     {
         //获取参数信息
         $input=input();
+        if($input['token']==0)
+        {
+            return ajax_error('获取失败');
+        }
         $member=db('member')->where('token',$this->token)->find();     //获取会员信息
         $goods=db('goods_receive')->where(['member_id'=>$member['id'],'order_type'=>0])->select();
         foreach($goods as $k =>$v)
         {
             //获取商品信息
             $goods2=db('goods')->where('id',$v['goods_id'])->find();
+            if($goods2['goods_repertory']=='0')
+            {
+                $map[$k]['type']='2';         //订单状态    1  正在甩   2 已抢光    3 已发货
+            }
+            elseif($v['order_type']=='1')
+            { 
+              $map[$k]['type']='3';
+            }else{
+                $map[$k]['type']='0';
+            }
             $map[$k]['id']=$goods2['id'];
             $map[$k]['goods_image']=$goods2['goods_images_three'];
             $map[$k]['points']=$goods2['points'];
