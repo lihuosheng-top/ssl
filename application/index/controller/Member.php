@@ -367,7 +367,7 @@ class Member extends Base
             }
              $re=db('member')->where('token',$this->token)->find();   //获取会员信息
 
-             $list=db('order')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id'],'status'=>2])->group('help_id')->select();
+             $list=db('order')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id'],'status'=>2])->group('help_id')->order('create_time desc')->select();
              foreach($list as $k=>$v){
                     $num=db('order')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id'],'help_id'=>$v['help_id']])->count();
                     $v['num']=$num;
