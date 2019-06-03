@@ -356,7 +356,17 @@ class Member extends Base
         //获取参数   token,goods_id
         $input=input();
         if($input){
+            //获取用户该商品的每日增加次数
+            $goods=db('goods')->where('id',$input['goods_id'])->find();
+            if($goods['new_tactics'])
+            {
+               $tactics=json_decode($goods['new_tactics'],true);
+               $goods_num=$tactics['help_num'];
+            }else{
+                $goods_num='0';
+            }
              $re=db('member')->where('token',$this->token)->find();   //获取会员信息
+
              $list=db('order')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id']])->group('help_id')->select();
              foreach($list as $k=>$v){
                     $num=db('order')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id'],'help_id'=>$v['help_id']])->count();
@@ -370,9 +380,26 @@ class Member extends Base
                 $res[$k]['head_pic']=$v['head_pic'];
                 $res[$k]['num']=$v['num'];
                 $res[$k]['order_type']=$v['order_type'];   //帮甩类型    0  自己甩  1帮甩  2帮答题
+                $res[$k]['goods_num']=$goods_num;     //帮甩类型    帮甩机会增加次数
              }
-             if($res){
-                 return ajax_success('获取成功',$res);
+             $data2=[];
+             foreach($res as $k2=>$v2)
+             {
+                 if($v2['order_type']==1)    //帮甩
+                 {
+                    $re3['id']=$v2['id'];
+                    $re3['head_pic']=$v2['head_pic'];
+                    $re3['num']=$v2['num'];
+                    $re3['order_type']='3';   //帮甩类型    0  自己甩  1帮甩  2帮答题  3帮甩机会
+                    $re3['goods_num']=$goods_num;
+                    $data2[]=$re3;
+                    $data2[]=$v2;
+                 }else{
+                    $data2[]=$v2;
+                 }
+             }
+             if($data2){
+                 return ajax_success('获取成功',$data2);
              }else{
                  return ajax_error('获取失败');
              }
