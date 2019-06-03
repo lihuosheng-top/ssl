@@ -517,7 +517,7 @@ class Member extends Base
      * 个人中心----商品展示
      * token
      */
-    public function goods_shou()
+    public function goods_show()
     {
         //获取参数信息
         $input=input();
