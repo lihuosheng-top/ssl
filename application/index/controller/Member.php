@@ -521,10 +521,6 @@ class Member extends Base
     {
         //获取参数信息
         $input=input();
-        if($input['token']==0)
-        {
-            return ajax_error('获取失败');
-        }
         $member=db('member')->where('token',$this->token)->find();     //获取会员信息
         $goods=db('goods_receive')->where(['member_id'=>$member['id'],'order_type'=>0])->select();
         foreach($goods as $k =>$v)
