@@ -379,7 +379,7 @@ class Member extends Base
                 $res[$k]['id']=$v['help_id'];
                 $res[$k]['head_pic']=$v['head_pic'];
                 $res[$k]['num']=$v['num'];
-                $res[$k]['order_type']=$v['order_type'];   //帮甩类型    0  自己甩  1帮甩  2帮答题
+                $res[$k]['order_type']=$v['order_type'];   //帮甩类型    0  自己甩  1帮甩  2帮答题 3帮甩机会
                 $res[$k]['goods_num']=$goods_num;     //帮甩类型    帮甩机会增加次数
              }
              $data2=[];
@@ -434,6 +434,7 @@ class Member extends Base
      */
     public function help_setting()
     {
+        $input=input();
         //获取key
         $key1="goods_limit";    // 商品限制
         $key2="goods_limit_own";   //自己甩限制
@@ -444,16 +445,28 @@ class Member extends Base
         $info['goods_limit_own']=json_decode($value2['value'],true);
         $value3=db('sys_setting')->where('key',$key3)->find();
         $info['help_goods_limit']=json_decode($value3['value'],true);
-        $data['goods_limit']=$info['goods_limit']['limit_num'];       //商品限制
-        $data['goods_limit']=$info['goods_limit']['limit_num'];
-
-        if($info)
+        $data['add1']='本品甩'.$info['goods_limit']['limit_num'].'次/天';       //商品限制
+        $data['add2']='可邀请朋友帮甩';       //商品限制
+        $data['add3']='帮甩可+1次机会';       //商品限制
+        $goods=db('goods')->where('id',$input['goods_id'])->find();
+        if($goods['new_tactics'])
         {
-           return ajax_success('获取成功',$info);
+           $tactics=json_decode($goods['new_tactics'],true);
+           $goods_num=$tactics['help_num'];
+        }else{
+            $goods_num='0';
+        }
+        $data['add4']='新人帮甩可+'.$goods_num.'甩/每天';
+        $data2[]['shuai_limit']=$data['add1'];
+        $data2[]['shuai_limit']=$data['add2'];
+        $data2[]['shuai_limit']=$data['add3'];
+        $data2[]['shuai_limit']=$data['add4'];
+        if($data2)
+        {
+           return ajax_success('获取成功',$data2);
         }else{
             return ajax_error('获取失败');
         }
-   
     }
 
 }

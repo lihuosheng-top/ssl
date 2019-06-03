@@ -50,6 +50,7 @@ class Star extends Base
         $input=input();
         if($input['goods_id'])
         {
+            //查看会员信息
             //获取商品信息
             $goods_info=db('star_goods')->where('id',$input['goods_id'])->find();
             $value=$goods_info['goods_value'];    //星光值商品价值（星光值） 

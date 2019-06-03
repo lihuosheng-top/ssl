@@ -101,7 +101,7 @@ class Login extends Controller{
             $user=DB::name('member')
                 ->where('account',$user_mobile)
                 ->find();
-            if($user){
+            if($user){           //用户存在
                 //验证码判断
                 if($code==$code_se){                         //验证码通过
                     Session::delete('code');
@@ -136,14 +136,41 @@ class Login extends Controller{
                     return   ajax_error('登录失败');
 
                 }
-            }else{             //用户不存在
+            }else{             //用户不存在，注册
                 //注册新用户
                 $member['account']=$user_mobile;
                 $member['passwd']=md5($member['account'].time());
                 $member['join_time']=time();
-                $re=DB::name('member')->insert($member);
+                $re=DB::name('member')->insertGetId($member);
                 if($re){
-                    //验证码判断
+                      //新建会员表
+                      $sql="CREATE TABLE ".$re." (
+                        `id`  int NOT NULL ,
+                        `name`  varchar(255) NULL COMMENT '昵称' ,
+                        `account`  varchar(255) NULL COMMENT '账号' ,
+                        `passwd`  varchar(255) NULL COMMENT '密码' ,
+                        `star_value`  int NOT NULL DEFAULT 0 COMMENT '星光值' ,
+                        `address`  varchar(255) NULL ,
+                        `head_pic`  varchar(255) NULL ,
+                        `is_use`  tinyint NULL ,
+                        `join_time`  varchar(255) NULL ,
+                        `pid`  tinyint NOT NULL DEFAULT 1 COMMENT '上级id   好友关系' ,
+                        `member_type`  tinyint NOT NULL DEFAULT 0 ,
+                        `help_num`  int NOT NULL DEFAULT 0 COMMENT '帮' ,
+                        `token`  varchar(255) NULL ,
+                        `token_time`  varchar(255) NULL ,
+                        `exchange_star_value`  int NOT NULL DEFAULT 0 ,
+                        `income`  float NULL COMMENT '收入' ,
+                        `goods_num`  int NULL DEFAULT 0 COMMENT '甩到的商品数量' ,
+                        `openid`  varchar(255) NULL COMMENT 'openid' ,
+                        `is_new`  tinyint NULL DEFAULT 1 COMMENT '1  新人   0  不是' ,
+                        PRIMARY KEY (`id`)
+                        )
+                        ENGINE=InnoDB
+                        COMMENT='用户好友表'
+                      ";
+                      $db->jqury($sql);
+                      //验证码判断
                        $code_se=Session::get('code');
                     if($code==$code_se){                             //验证码通过
                         Session::delete('code');
