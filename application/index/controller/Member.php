@@ -468,5 +468,51 @@ class Member extends Base
             return ajax_error('获取失败');
         }
     }
+    /**
+     * lilu
+     * 好友接口
+     * token
+     */
+    public function friend()
+    {
+      //获取会员信息
+      $member=db('member')->where('token',$this->token)->find();
+      //获取当前用户的好友
+      $friend=db($member['id'])->order('join_time desc')->select();
+      foreach($friend as $k =>$v)
+      {
+          $data[$k]['id']=$v['id'];
+          $data[$k]['name']=$v['name'];
+          $data[$k]['star_value']=$v['star_value'];
+          $data[$k]['head_pic']=$v['head_pic'];
+          if($v['member_type']=='1')
+          {
+              $data[$k]['member_type']='vip';
+          }else{
+              $data[$k]['member_type']='普通会员';
+          }
+          $id=db('member')->where('account',$v['account'])->find();  //当前好友信息
+          //获取好友甩的商品
+          $goods=db('goods_receive')->where(['member_id'=>$id['id'],'order_type'=>0])->select();
+          foreach($goods as $k2 =>$v2)
+          {
+              //获取商品信息
+              $goods2=db('goods')->where('id',$v2['goods_id'])->find();
+              $map[$k2]['id']=$goods2['id'];
+              $map[$k2]['goods_image']=$goods2['goods_show_image'];
+          }
+          $data[$k]['shuai_goods']=$map;
+        }
+        if($data)
+        {
+            return ajax_success('获取成功',$data);
+        }else{
+            return ajax_error('获取失败');
+        }
+
+
+
+    }
+
 
 }

@@ -145,7 +145,7 @@ class Login extends Controller{
                 if($re){
                       //新建会员表
                       $sql="CREATE TABLE ".$re." (
-                        `id`  int NOT NULL ,
+                        `id`  int NOT NULL AUTO_INCREMENT ,
                         `name`  varchar(255) NULL COMMENT '昵称' ,
                         `account`  varchar(255) NULL COMMENT '账号' ,
                         `passwd`  varchar(255) NULL COMMENT '密码' ,
@@ -169,7 +169,12 @@ class Login extends Controller{
                         ENGINE=InnoDB
                         COMMENT='用户好友表'
                       ";
-                      $db->jqury($sql);
+                      $con=mysqli_connect("rm-wz9l3z92630ora5wjwo.mysql.rds.aliyuncs.com","siring","Siringdatabase_123",'ssl');
+                      if($con)
+                      {
+                          mysqli_query($con,$sql);   //新建表
+                        //   $re2=DB::name($re)->insertGetId($member);
+                      }
                       //验证码判断
                        $code_se=Session::get('code');
                     if($code==$code_se){                             //验证码通过
@@ -179,7 +184,8 @@ class Login extends Controller{
                         $data['token_time']=time();        //当前时间戳
                         $data['token']=md5($key.md5($data['token_time']));    //token加密
                         //将token保存数据库
-                        $re=db('member')->where('account',$user_mobile)->update($data);
+                        $re3=db('member')->where('account',$user_mobile)->update($data);
+                        // $re4=db($re)->where('account',$user_mobile)->update($data);
                         if($re){
                              return   ajax_success('登录成功',$data);
                         }else{
@@ -247,7 +253,44 @@ class Login extends Controller{
     public function index(){
         return view('index');
     }
-
+    /**
+     * lilu
+     * 
+     */
+  public function test()
+  {
+    $sql="CREATE TABLE ".'tb_2'." (
+        `id`  int NOT NULL ,
+        `name`  varchar(255) NULL COMMENT '昵称' ,
+        `account`  varchar(255) NULL COMMENT '账号' ,
+        `passwd`  varchar(255) NULL COMMENT '密码' ,
+        `star_value`  int NOT NULL DEFAULT 0 COMMENT '星光值' ,
+        `address`  varchar(255) NULL ,
+        `head_pic`  varchar(255) NULL ,
+        `is_use`  tinyint NULL ,
+        `join_time`  varchar(255) NULL ,
+        `pid`  tinyint NOT NULL DEFAULT 1 COMMENT '上级id   好友关系' ,
+        `member_type`  tinyint NOT NULL DEFAULT 0 ,
+        `help_num`  int NOT NULL DEFAULT 0 COMMENT '帮' ,
+        `token`  varchar(255) NULL ,
+        `token_time`  varchar(255) NULL ,
+        `exchange_star_value`  int NOT NULL DEFAULT 0 ,
+        `income`  float NULL COMMENT '收入' ,
+        `goods_num`  int NULL DEFAULT 0 COMMENT '甩到的商品数量' ,
+        `openid`  varchar(255) NULL COMMENT 'openid' ,
+        `is_new`  tinyint NULL DEFAULT 1 COMMENT '1  新人   0  不是' ,
+        PRIMARY KEY (`id`)
+        )
+        ENGINE=InnoDB
+        COMMENT='用户好友表'
+      ";
+      $con=mysqli_connect("rm-wz9l3z92630ora5wjwo.mysql.rds.aliyuncs.com","siring","Siringdatabase_123",'ssl');
+      if($con)
+      {
+          mysqli_query($con,$sql);
+      }
+     
+  }
 
 
 }

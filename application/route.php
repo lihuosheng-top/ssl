@@ -53,6 +53,7 @@ Route::group("",[
    'rank_member_info'=>"index/Member/rank_member_info"  ,       //排行榜界面--个人信息
    'get_openid'=>"index/Member/get_openid"  ,       //排行榜界面--个人信息
    'help_setting'=>"index/Member/help_setting"  ,       //排行榜界面--个人信息
+   'friend'=>"index/Member/friend"  ,       //排行榜界面--个人信息
 
    /**游戏 */
    'game'=>"index/Game/game"  ,                           //游戏
@@ -73,8 +74,9 @@ Route::group("",[
    'prize_list'=>"index/Star/prize_list"  ,                 //星光商品列表
    'get_star_goods'=>"index/Star/get_star_goods"  ,         //星光商品领取
 
-
-
+  /**测试 */
+  'test'=>"index/Login/test"  ,         //星光商品领取
+ 
 
 
 ]);

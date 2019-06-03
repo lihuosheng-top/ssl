@@ -16,10 +16,14 @@ class Goods extends Controller
      **************lilu*******************
      * @param Request $request
      * Notes:前端获取商品信息
+     * token
+     * goods_id
      **************************************
      */
      public  function goods_info()
      {
+       //获取参数
+       $input=input();
          //检索条件
          $where['label']=1;          //上架
          $where['goods_setting']=0;  //帮甩不限制
@@ -31,6 +35,15 @@ class Goods extends Controller
         $goods = db("goods")->where($where)->order("id asc")->select();
         foreach ($goods as $k=>$v)
         {
+          //判断token是否存在
+          if($input['token']=='0')
+          { 
+
+          }else{
+             $member=db('member')->where('token',$input['token'])->find();
+             $num=db('order')->where(['goods_id'=>$v['id'],'member_id'=>$member['id']])->count();
+             $goods[$k]['goods_shuai_num']=$num;
+          }
            if($v['goods_standard']=='1')
            {         //特殊规格
              $data=db('special')->where('goods_id',$v['id'])->select();

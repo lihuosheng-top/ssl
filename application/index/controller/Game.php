@@ -294,17 +294,26 @@ class Game extends Base
           $memb=db('member')->where('token',$input['token'])->find();
           $res=db('answer_record')->where('order_number',$input['order_number'])->find();
           $re=db('help_answer')->where('order_number',$input['order_number'])->find();
-          //添加好友关系
-          $member_info=db('member')->where('id',$res['member_id'])->find();
-          if(!empty($member_info['fid']))
-          {
-              $fid=json_decode($member_info['fid'],true);
-              if(!in_array($memb['id'],$fid)){
-                  $fid[]=$memb['id'];
-                  $fid2=json_encode($fid);
-                  db('member')->where('id',$res['member_id'])->setField('fid',$fid2);
-              }
-          }
+           //添加好友关系----帮答题
+           $member_info=db('member')->where('id',$res['member_id'])->find();     //
+           //判断是否已是好友
+           $is=db($re3['id'])->where('account',$member_id['account'])->find();
+           if($is)
+           {   //已是好友关系
+
+           }else{       //需添加好友关系
+               db($re3['id'])->insert($member_id);
+           }
+        //   $member_info=db('member')->where('id',$res['member_id'])->find();
+        //   if(!empty($member_info['fid']))
+        //   {
+        //       $fid=json_decode($member_info['fid'],true);
+        //       if(!in_array($memb['id'],$fid)){
+        //           $fid[]=$memb['id'];
+        //           $fid2=json_encode($fid);
+        //           db('member')->where('id',$res['member_id'])->setField('fid',$fid2);
+        //       }
+        //   }
           if($res['status']=='1'){
               $map2['lock_time']='';
               return   ajax_success('用户已解锁',$map2);

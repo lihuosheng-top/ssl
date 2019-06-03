@@ -174,17 +174,16 @@ class Order extends Base
                 $total_fee=$data['order_amount']*100;
                 $pay = new pay();//统一下单
                 $order= $pay->getPrePayOrder($body, $out_trade_no, $total_fee);
-                if ($order['prepay_id']){//判断返回参数中是否有prepay_id
-                    //添加好友关系
-                    $member_info=db('member')->where('id',$res['member_id'])->find();
-                    if(!empty($member_info['fid']))
-                    {
-                        $fid=json_decode($member_info['fid'],true);
-                        if(!in_array($memb['id'],$fid)){
-                            $fid[]=$memb['id'];
-                            $fid2=json_encode($fid);
-                            db('member')->where('id',$res['member_id'])->setField('fid',$fid2);
-                        }
+                if ($order['prepay_id']){    //判断返回参数中是否有prepay_id
+                    //添加好友关系----帮甩
+                    $member_info=db('member')->where('id',$re3['id'])->find();     //
+                    //判断是否已是好友
+                    $is=db($re3['id'])->where('account',$member_id['account'])->find();
+                    if($is)
+                    {   //已是好友关系
+
+                    }else{       //需添加好友关系
+                        db($re3['id'])->insert($member_id);
                     }
                     $order1 = $pay->getOrder($order['prepay_id'],$data['order_number']);//执行二次签名返回参数
                     return ajax_success('新建订单成功',$order1);
