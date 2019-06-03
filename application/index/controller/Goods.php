@@ -31,6 +31,7 @@ class Goods extends Controller
          if($id){
              $where['id']=$id;
          }
+         $where['end_date']=array('gt',time());
         //获取商品
         $goods = db("goods")->where($where)->order("id asc")->select();
         foreach ($goods as $k=>$v)

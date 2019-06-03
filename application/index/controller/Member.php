@@ -367,7 +367,7 @@ class Member extends Base
             }
              $re=db('member')->where('token',$this->token)->find();   //获取会员信息
 
-             $list=db('order')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id']])->group('help_id')->select();
+             $list=db('order')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id'],'status'=>2])->group('help_id')->select();
              foreach($list as $k=>$v){
                     $num=db('order')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id'],'help_id'=>$v['help_id']])->count();
                     $v['num']=$num;
@@ -381,6 +381,7 @@ class Member extends Base
                 $res[$k]['num']=$v['num'];
                 $res[$k]['order_type']=$v['order_type'];   //帮甩类型    0  自己甩  1帮甩  2帮答题 3帮甩机会
                 $res[$k]['goods_num']=$goods_num;     //帮甩类型    帮甩机会增加次数
+                $res[$k]['create_time']=$v['create_time'];     //帮甩类型    帮甩机会增加次数
              }
              $data2=[];
              foreach($res as $k2=>$v2)
@@ -510,9 +511,37 @@ class Member extends Base
             return ajax_error('获取失败');
         }
 
-
-
     }
+    /**
+     * lilu
+     * 个人中心----商品展示
+     * token
+     */
+    public function goods_shou()
+    {
+        //获取参数信息
+        $input=input();
+        $member=db('member')->where('token',$this->token)->find();     //获取会员信息
+        $goods=db('goods_receive')->where(['member_id'=>$member['id'],'order_type'=>0])->select();
+        foreach($goods as $k =>$v)
+        {
+            //获取商品信息
+            $goods2=db('goods')->where('id',$v['goods_id'])->find();
+            $map[$k]['id']=$goods2['id'];
+            $map[$k]['goods_image']=$goods2['goods_images_three'];
+            $map[$k]['points']=$goods2['points'];
+            $map[$k]['goods_name']=$goods2['goods_name'];
+            //当前商品的帅次
+             $num=db('order')->where(['goods_id'=>$v['goods_id'],'member_id'=>$member['id']])->count();
+             $map[$k]['goods_shuai_num']=$num;
+        }
+        if($map)
+        {
+           return ajax_success('获取成功',$map);
+        }else{
+           return ajax_error('获取失败');
+        }
+    } 
 
 
 }

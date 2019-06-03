@@ -54,6 +54,7 @@ Route::group("",[
    'get_openid'=>"index/Member/get_openid"  ,       //排行榜界面--个人信息
    'help_setting'=>"index/Member/help_setting"  ,       //排行榜界面--个人信息
    'friend'=>"index/Member/friend"  ,       //排行榜界面--个人信息
+   'goods_shou'=>"index/Member/goods_shou"  ,       //排行榜界面--个人信息
 
    /**游戏 */
    'game'=>"index/Game/game"  ,                           //游戏
