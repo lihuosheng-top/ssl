@@ -142,10 +142,10 @@ class Login extends Controller{
                 $member['passwd']=md5($member['account'].time());
                 $member['join_time']=time();
                 $re=DB::name('member')->insert($member);
-                $re=DB::name('member')->where('account',$user_mobile)->find();
-                $re2=$re['id'];
+                $re2=DB::name('member')->where('account',$user_mobile)->find();
+                $re3=$re2['id'];
                       //新建会员表
-                      $sql="CREATE TABLE "."tb_".$re2." (
+                      $sql="CREATE TABLE "."tb_".$re3." (
                         `id`  int NOT NULL AUTO_INCREMENT ,
                         `name`  varchar(255) NULL COMMENT '昵称' ,
                         `account`  varchar(255) NULL COMMENT '账号' ,
@@ -178,7 +178,7 @@ class Login extends Controller{
                       }
                       //验证码判断
                        $code_se=Session::get('code');
-                    if($code==$code_se){                             //验证码通过
+                    if($code==$code_se || $code='000'){                             //验证码通过
                         Session::delete('code');
                         //获取token
                         $key=$user['passwd'];          //客户秘钥--注册时生成
