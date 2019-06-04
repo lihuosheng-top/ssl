@@ -141,9 +141,11 @@ class Login extends Controller{
                 $member['account']=$user_mobile;
                 $member['passwd']=md5($member['account'].time());
                 $member['join_time']=time();
-                $re=DB::name('member')->insertGetId($member);
+                $re=DB::name('member')->insert($member);
+                $re=DB::name('member')->where('account',$user_mobile)->find();
+                $re2=$re['id'];
                       //新建会员表
-                      $sql="CREATE TABLE "."tb_".$re." (
+                      $sql="CREATE TABLE "."tb_".$re2." (
                         `id`  int NOT NULL AUTO_INCREMENT ,
                         `name`  varchar(255) NULL COMMENT '昵称' ,
                         `account`  varchar(255) NULL COMMENT '账号' ,
