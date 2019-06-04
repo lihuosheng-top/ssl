@@ -150,6 +150,7 @@ class Login extends Controller{
                         `name`  varchar(255) NULL COMMENT '昵称' ,
                         `account`  varchar(255) NULL COMMENT '账号' ,
                         `passwd`  varchar(255) NULL COMMENT '密码' ,
+                        `sex`  tinyint NULL COMMENT '性别' ,
                         `star_value`  int NOT NULL DEFAULT 0 COMMENT '星光值' ,
                         `address`  varchar(255) NULL ,
                         `head_pic`  varchar(255) NULL ,
@@ -178,7 +179,7 @@ class Login extends Controller{
                       }
                       //验证码判断
                        $code_se=Session::get('code');
-                    if($code==$code_se || $code='000'){                             //验证码通过
+                    // if($code==$code_se || $code=='000'){                             //验证码通过
                         Session::delete('code');
                         //获取token
                         $key=$user['passwd'];          //客户秘钥--注册时生成
@@ -192,9 +193,9 @@ class Login extends Controller{
                             }else{
                                 return   ajax_error('登录失败');
                             }
-                      }else{
-                                return   ajax_error('登录失败');
-                      }
+                    //   }else{
+                    //             return   ajax_error('登录失败');
+                    //   }
             }
     }
 

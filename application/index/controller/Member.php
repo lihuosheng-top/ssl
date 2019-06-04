@@ -499,14 +499,18 @@ class Member extends Base
           $id=db('member')->where('account',$v['account'])->find();  //当前好友信息
           //获取好友甩的商品
           $goods=db('goods_receive')->where(['member_id'=>$id['id'],'order_type'=>0])->select();
-          foreach($goods as $k2 =>$v2)
-          {
-              //获取商品信息
-              $goods2=db('goods')->where('id',$v2['goods_id'])->find();
-              $map[$k2]['id']=$goods2['id'];
-              $map[$k2]['goods_image']=$goods2['goods_show_image'];
+          if($goods){
+              foreach($goods as $k2 =>$v2)
+              {
+                  //获取商品信息
+                  $goods2=db('goods')->where('id',$v2['goods_id'])->find();
+                  $map[$k2]['id']=$goods2['id'];
+                  $map[$k2]['goods_image']=$goods2['goods_show_image'];
+              }
+              $data[$k]['shuai_goods']=$map;
+          }else{
+              
           }
-          $data[$k]['shuai_goods']=$map;
         }
         if($data)
         {
