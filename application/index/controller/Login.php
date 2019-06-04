@@ -144,7 +144,7 @@ class Login extends Controller{
                 $re=DB::name('member')->insertGetId($member);
                 if($re){
                       //新建会员表
-                      $sql="CREATE TABLE tb_".$re." (
+                      $sql="CREATE TABLE "."tb_".$re." (
                         `id`  int NOT NULL AUTO_INCREMENT ,
                         `name`  varchar(255) NULL COMMENT '昵称' ,
                         `account`  varchar(255) NULL COMMENT '账号' ,
