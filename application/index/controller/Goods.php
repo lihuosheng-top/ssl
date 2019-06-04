@@ -17,7 +17,7 @@ class Goods extends Controller
      * @param Request $request
      * Notes:前端获取商品信息
      * token
-     * goods_id
+     * id
      **************************************
      */
      public  function goods_info()
@@ -27,9 +27,9 @@ class Goods extends Controller
          //检索条件
          $where['label']=1;          //上架
          $where['goods_setting']=0;  //帮甩不限制
-         $id=input('get.id');
-         if($id){
-             $where['id']=$id;
+         $id=input();
+         if($id['id']){
+             $where['id']=$id['id'];
          }
          $where['end_date']=array('gt',time());
         //获取商品

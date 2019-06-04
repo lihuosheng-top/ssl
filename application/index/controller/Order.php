@@ -63,7 +63,17 @@ class Order extends Base
      * special_id
      */
     public function goods_order()
-    {   
+    {   //获取甩品配置信息
+        $key1='goods_limit';        //甩品限制
+        $info1=db('sys_setting')->where('key',$key1)->find();
+        $info1['value']=json_decode($info1['value'],true);   
+        $goods_num_limit=$info1['value']['limit_num'];    //同时甩限制个数
+        //获取当天甩次限制
+        $key2='goods_limit_own';       //自己甩品次数限制
+        $info2=db('sys_setting')->where('key',$key2)->find();
+        $info2['value']=json_decode($info2['value'],true);
+        $goods_limit_own=$info2['value']['person_up_num'];     //单个商品每天上限
+        $goods_limit_day=$info2['value']['own_num'];     //每天自己甩的上限
         $input=input();   //获取传递的参数
         //根据token获取会员id
         $member_id=db('member')->where('token',$this->token)->field('id')->find();
@@ -72,6 +82,43 @@ class Order extends Base
         if($re){     //商品已开甩
             if($re['order_type']=='1'){
                 return    ajax_error('商品已甩，不能开甩');
+            }
+        }
+        //判断用户是否是新的开甩商品
+        $kai_shuai=db('goods_receive')->where(['member_id'=>$member_id['id'],'goods_id'=>$input['goods_id'],'order_type'=>'0'])->find();    //正在甩
+        if($kai_shuai)     //商品已开甩
+        {
+            //用户当天这个商品的甩次
+            $pp['member_id']=$member_id['id'];
+            $pp['status']='2';
+            $start = date('Y-m-d 00:00:00');
+            $end = date('Y-m-d H:i:s');
+            $pp['create_time']=array('between',array($start,$end));
+            $pp['goods_id']=$input['goods_id'];
+            $day_num=db('order')->where($pp)->count();    //当前会员这个商品当天帅次
+            if($goods_limit_own<=$day_num)     //用户当天甩次达到上限
+            {
+                return    ajax_error('商品当天甩次达到上限，不能再甩');
+            }
+            // goods_limit_day
+            $pp2['member_id']=$member_id['id'];
+            $pp2['status']='2';
+            $start = date('Y-m-d 00:00:00');
+            $end = date('Y-m-d H:i:s');
+            $pp2['create_time']=array('between',array($start,$end));
+            $day_zong_num=db('order')->where($pp)->count();    //当天当前会员的总甩次
+            if($goods_limit_day<=$day_zong_num)
+            {     //用户当天总甩次达到上限
+                return    ajax_error('当天总甩次达到上限，不能再甩');
+            }
+
+
+        }else{
+            //商品未开甩
+            $goods_num=db('goods_receive')->where(['member_id'=>$member_id['id'],'order_type'=>'0'])->group('goods_id')->count();  // 用户同时甩的商品数量
+            if($goods_num>=$goods_num_limit)
+            {
+                return ajax_error('商品同时开甩达到上限，请完成开甩商品');
             }
         }
         if($input){
@@ -132,6 +179,11 @@ class Order extends Base
      */
     public function goods_order_help()
     {   
+        $key2='help_goods_limit';       //自己甩品次数限制
+        $info2=db('sys_setting')->where('key',$key2)->find();
+        $info2['value']=json_decode($info2['value'],true);
+        $goods_limit_help=$info2['value']['goods_limit_own'];     //帮甩单个商品每天上限
+        $goods_limit_zong=$info2['value']['own_help_num'];         //帮甩每天自己甩的上限
         $input=input();   //获取传递的参数
         //根据token获取会员id
         $member_id=db('member')->where('token',$this->token)->field('id')->find();
@@ -141,6 +193,29 @@ class Order extends Base
             if($re['order_type']=='1'){
                 return    ajax_error('商品已甩，不能开甩');
             }
+        }
+        //帮甩判断
+        $pp['goods_id']=$input['goods_id'];
+        $pp['help_id']=$member_id['id'];   //帮甩id
+        $pp['status']='2';
+        $start = date('Y-m-d 00:00:00');
+        $end = date('Y-m-d H:i:s');
+        $pp['create_time']=array('between',array($start,$end));
+        $day_num=db('order')->where($pp)->count();    //当前会员这个商品当天帮甩次数
+        if($goods_limit_help<=$day_num)     //用户当天帮甩次达到上限
+        {
+            return    ajax_error('商品当天帮甩次达到上限，不能再甩');
+        }
+        // goods_limit_day
+        $pp2['help_id']=$member_id['id'];
+        $pp2['status']='2';
+        $start = date('Y-m-d 00:00:00');
+        $end = date('Y-m-d H:i:s');
+        $pp2['create_time']=array('between',array($start,$end));
+        $day_zong_num=db('order')->where($pp)->count();    //当天当前会员的总甩次
+        if($goods_limit_zong<=$day_zong_num)
+        {     //用户当天总帮甩次达到上限
+            return    ajax_error('当天总甩次达到上限，不能再甩');
         }
         if($input){
             $data['order_number']=date('YmdHis',time());    //自定义生成订单号
@@ -218,21 +293,37 @@ class Order extends Base
         //获取当前用户的所有已付款甩记录
         $list=db('order')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>'2'])->select();
         $shuai_momey=db('order')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>'2'])->sum('order_amount');    //总甩费
+        $shuai_momey_own=db('order')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>'2','help_id'=>0])->sum('order_amount');    //自己甩费
+        $shuai_momey_help=$shuai_momey-$shuai_momey_own;    //帮甩费
         //保留两位小数
         $shuai_momey=sprintf("%.2f",$shuai_momey);      //总甩费
+        $shuai_momey_own=sprintf("%.2f",$shuai_momey_own);      //自己甩费
+        $shuai_momey_help=sprintf("%.2f",$shuai_momey_help);      //帮甩费
         $num=db('order')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>'2'])->count();    //总甩数
-        
+        $num_own=db('order')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>'2','help_id'=>0])->count();    //自己甩数
+        $num_help=$num-$num_own;    //帮甩数
+        //获取免单的笔数和金额
+        $free_money=db('captical_record')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'help_id'=>0])->sum('income'); //自己免单
+        $free_money=sprintf("%.2f",$free_money);      //总甩费
+        $free_num=db('captical_record')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'help_id'=>0])->count();
        //获取支付平台的扣费比率
        $key="admin_fei";
        $info=db('sys_setting')->where('key',$key)->find();
        $info['value']=json_decode($info['value'],true);
-       $fei=$info['value']['fei']['fei']/100;       //平台收费每笔
+       $fei=$info['value']['fei']['fei']/100;       //红包平台收费每笔
        $fei2=$fei*$goods_info['goods_price'];
        $fei2=sprintf("%.2f",$fei2);
        $data['shuai_fei']=$shuai_momey;    //总甩费
-       $data['fei']=$fei2;
-       $data['num']=$num;                  //总帅次
-       $data['goods_fei']=$goods_info['goods_price'];                  //总帅次
+       $data['shuai_momey_own']=$shuai_momey_own;    //自己甩费
+       $data['shuai_momey_help']=$shuai_momey_help;    //帮甩费
+       $data['fei']=$fei2;                  //平台收费
+       $data['num']=$num;                  //总甩次
+       $data['num_own']=$num_own;                  //自己甩次
+       $data['num_help']=$num_help;                  //帮甩次
+       $data['free_money']=$free_money;    //自己免单
+       $data['free_num']=$free_num;        //总免单次数
+       $data['goods_fei']=$goods_info['goods_price'];         //商品单次甩费
+       
        if($data)
        {
         return ajax_success('获取成功',$data);

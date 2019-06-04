@@ -468,11 +468,12 @@ class Admin extends Controller
     {
         $key="admin_fei";
         $info=db('sys_setting')->where('key',$key)->find();
-        $info['value']=json_decode($info['value'],true);
         if($info){
+            $info['value']=json_decode($info['value'],true);
             return view('admin_fei',['data'=>$info,'msg'=>1]);
         }else{
-            return view('admin_fei');
+            $data='0';
+            return view('admin_fei',['data'=>$data]);
         }
     }
     /**

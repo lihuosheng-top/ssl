@@ -442,18 +442,19 @@ class Game extends Base
         //获取用户信息
         $member=db('member')->where('token',$this->token)->find();
         $data['order_number']=$input['order_number'];
-      //根据商品设置，获取甩免单和红包的金额以及概率
-      $goods_info=db('goods')->where('id',$input['goods_id'])->find();
-      if($goods_info['free_tactics'])      //商品免单策略是否配置
-      {
-          $value=json_decode($goods_info['free_tactics'],true);
-          $free_percent_own=$value['own'][0]['percent']/100;
-          $free_percent_other=$value['other'][0]['percent']/100;
-      }else{
-          $map['status']='0';
-      }
-       //获取订单金额
-       $res=db('order')->where('order_number',$input['order_number'])->find();
+        
+        //根据商品设置，获取甩免单和红包的金额以及概率
+        $goods_info=db('goods')->where('id',$input['goods_id'])->find();
+        if($goods_info['free_tactics'])      //商品免单策略是否配置
+        {
+            $value=json_decode($goods_info['free_tactics'],true);
+            $free_percent_own=$value['own'][0]['percent']/100;
+            $free_percent_other=$value['other'][0]['percent']/100;
+        }else{
+            $map['status']='0';
+        }
+        //获取订单金额
+        $res=db('order')->where('order_number',$input['order_number'])->find();
         if($res['help_id']!='0')     
         {    //帮甩
             $map['free_money']=$res['order_amount']*$free_percent_other;
@@ -462,6 +463,66 @@ class Game extends Base
         }
         //免单金额返还客户（$map['free_money]）
         $money=$map['free_money'];
+        //根据商品设置，获取商品策略配置项
+        //增积分
+        if($goods_info['point_tactics'])      //商品增积分策略是否配置
+        {
+            $value2=json_decode($goods_info['point_tactics'],true);
+            $zpoint_own=$value2['own'];
+            $zpoint_other=$value2['other'];
+            $zpoint=$value2['zpoint'];
+            if($zpoint=='1')
+            {        //增积分开启
+                if($res['help_id']!='0')     
+                {    //帮甩
+                    db('goods_receive')->where(['member_id'=>$res['member_id'],'goods_id'=>$input['goods_id'],'order_type'=>'0'])->setInc('yi_shuai',$zpoint_own);
+                }else{    //自己甩
+                    db('goods_receive')->where(['member_id'=>$res['member_id'],'goods_id'=>$input['goods_id'],'order_type'=>'0'])->setInc('yi_shuai',$zpoint_other);
+                }  
+                $re=db('goods_receive')->where(['member_id'=>$res['member_id'],'goods_id'=>$input['goods_id'],'order_type'=>'0'])->find(); 
+                if($re['yi_shuai']>=$re['shuai_num'])
+                {
+                      $where2['order_type']=1;
+                      $where2['yi_shuai']=$re['shuai_num'];
+                      db('goods_receive')->where(['member_id'=>$res['member_id'],'goods_id'=>$input['goods_id'],'order_type'=>'0'])->update($where2);
+                }
+            }
+        }else{
+            $map['status']='0';    //商品未配置策略
+        }
+        //大满贯策略
+        if($goods_info['big_tactics'])      //商品增积分策略是否配置
+        {
+            $value3=json_decode($goods_info['big_tactics'],true);
+            $big_condition=$value3['condition'];      //满足条件
+            $big_zpoint=$value3['zpoint'];       //赠送积分
+            $big=$value3['big'];                //开启状态
+            if($big=='1')
+            {        //增积分开启
+               //判断是否达到大满贯的策略
+                $re2=db('goods_receive')->where(['member_id'=>$res['member_id'],'goods_id'=>$input['goods_id'],'order_type'=>'0'])->find();
+                //判断是否满足基本要求
+                $big_money=db('order')->where(['member_id'=>$res['member_id'],'goods_id'=>$input['goods_id'],'status'=>'2'])->sum('order_amount');
+                $is_money=$big_money-$goods_info['goods_cost']-$goods_info['goods_freight'];
+                if($is_money>0)
+                {
+                    $is_big=$re2['yi_shuai']/$re2['shuai_num']-$big_condition/100;
+                    if($is_big>=0)
+                    {     //满足第二条件
+                        $points_yu=$re2['shuai_num']-$re2['yi_shuai'];
+                        $points=$points_yu*$big_zpoint;
+                         db('goods')->where(['member_id'=>$res['member_id'],'goods_id'=>$input['goods_id'],'order_type'=>'0'])->setInc('yi_shuai',$points);
+                    }
+
+                }
+            }
+        }else{
+            $map['status']='0';
+        }
+        //其他商品配置策略
+
+
+        
         $pay=new pay();
         $data2=$pay->order_refunds($data['order_number'],$money,$res['order_amount']);
         if($data2["return_code"] == "SUCCESS"  ){
