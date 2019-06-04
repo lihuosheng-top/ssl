@@ -28,8 +28,10 @@ class Goods extends Controller
          $where['label']=1;          //上架
          $where['goods_setting']=0;  //帮甩不限制
          $id=input();
-         if($id['id']){
-             $where['id']=$id['id'];
+         if($id['id']=='0'){
+           
+         }else{
+          $where['id']=$id['id'];
          }
          $where['end_date']=array('gt',time());
         //获取商品
