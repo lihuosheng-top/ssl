@@ -144,7 +144,7 @@ class Login extends Controller{
                 $re=DB::name('member')->insertGetId($member);
                 if($re){
                       //新建会员表
-                      $sql="CREATE TABLE ".$re." (
+                      $sql="CREATE TABLE tb_".$re." (
                         `id`  int NOT NULL AUTO_INCREMENT ,
                         `name`  varchar(255) NULL COMMENT '昵称' ,
                         `account`  varchar(255) NULL COMMENT '账号' ,
@@ -186,14 +186,14 @@ class Login extends Controller{
                         //将token保存数据库
                         $re3=db('member')->where('account',$user_mobile)->update($data);
                         // $re4=db($re)->where('account',$user_mobile)->update($data);
-                        if($re){
-                             return   ajax_success('登录成功',$data);
+                            if($re){
+                                return   ajax_success('登录成功',$data);
+                            }else{
+                                return   ajax_error('登录失败');
+                            }
                         }else{
-                             return   ajax_error('登录失败');
-                        }
-                }else{
-                        return   ajax_error('登录失败');
-                    }
+                                return   ajax_error('登录失败');
+                            }
                 }else{
                     return   ajax_error('请输入摇一摇获取的验证码');
                 }
