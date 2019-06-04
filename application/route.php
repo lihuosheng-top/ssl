@@ -30,6 +30,7 @@ Route::group("",[
    "goods_order"=>"index/Order/goods_order",           //商品订单生成----自己甩
    "goods_order_help"=>"index/Order/goods_order_help", //商品订单生成----帮甩
    "order_refund"=>"index/Order/order_refund",         //商品账单展示
+   "order_refund_help"=>"index/Order/order_refund_help",   //帮甩商品账单展示
    "order_refund_do"=>"index/Order/order_refund_do",   //商品退款处理
 
 

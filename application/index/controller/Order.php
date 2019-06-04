@@ -312,6 +312,10 @@ class Order extends Base
        $info['value']=json_decode($info['value'],true);
        $fei=$info['value']['fei']['fei']/100;       //红包平台收费每笔
        $fei2=$fei*$goods_info['goods_price'];
+       if($fei2<0.01)
+       {
+           $fei2=0.01;
+       }
        $fei2=sprintf("%.2f",$fei2);
        $data['shuai_fei']=$shuai_momey;    //总甩费
        $data['shuai_momey_own']=$shuai_momey_own;    //自己甩费
@@ -330,6 +334,54 @@ class Order extends Base
        }else{
         return ajax_error('获取失败');
        }
+    }
+    /**
+     * lilu
+     * 帮甩退款账单
+     * goods_id
+     * token    当前token
+     * token_help
+     */
+    public function order_refund_help()
+    {
+         //获取参数信息
+         $input=input();
+         //获取商品信息
+         $goods_info=db('goods')->where('id',$input['goods_id'])->find();
+         //获取当前帮甩用户的信息
+         $member=db('member')->where('token',$this->token)->find();   
+         $member_info=db('member')->where('token',$input['token_help'])->find();    //  
+         //获取当前用户的所有已帮甩记录
+         $list=db('order')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>'2'])->select();
+         $shuai_momey=db('order')->where(['member_id'=>$member_info['id'],'goods_id'=>$input['goods_id'],'status'=>'2','help_id'=>$member['id']])->sum('order_amount');    //帮总甩费
+         $shuai_momey=sprintf("%.2f",$shuai_momey);      //总甩费
+         $shuai_num=db('order')->where(['member_id'=>$member_info['id'],'goods_id'=>$input['goods_id'],'status'=>'2','help_id'=>$member['id']])->count();    //帮总甩数
+         //获取免单的笔数和金额
+        $free_money=db('captical_record')->where(['member_id'=>$member_info['id'],'goods_id'=>$input['goods_id'],'help_id'=>$member['id']])->sum('income'); //自己免单
+        $free_money=sprintf("%.2f",$free_money);      //总甩费
+        $free_num=db('captical_record')->where(['member_id'=>$member_info['id'],'goods_id'=>$input['goods_id'],'help_id'=>$member['id']])->count();
+          //获取支付平台的扣费比率
+         $key="admin_fei";
+         $info=db('sys_setting')->where('key',$key)->find();
+         $info['value']=json_decode($info['value'],true);
+         $fei=$info['value']['fei']['fei']/100;       //红包平台收费每笔
+         $fei2=$fei*$goods_info['goods_price'];
+         if($fei2<0.01)
+         {
+           $fei2=0.01;
+        }
+         $data['goods_fei']=$goods_info['goods_price'];         //商品单次甩费
+         $data['shuai_fei']=$shuai_momey;    //总甩费
+         $data['fei']=$fei2;                  //平台收费
+         $data['num']=$shuai_num;                  //总甩次
+         $data['free_money']=$free_money;    //自己免单
+         $data['free_num']=$free_num;        //总免单次数
+         if($data)
+         {
+          return ajax_success('获取成功',$data);
+         }else{
+          return ajax_error('获取失败');
+         }
     }
     /**
      * lilu
