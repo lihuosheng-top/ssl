@@ -340,6 +340,8 @@ function xmlToArray($xml)
                     $where3['order_type']='0';
                     $where3['create_time']=time();
                     $res2=db('goods_receive')->insert($where3);
+                    //更改当前的人为旧人
+                    db('member')->where('id',$order_info['member_id'])->setField('is_new',0);
                 }
                 //消费记录
                 $where5['member_id']=$member['id'];

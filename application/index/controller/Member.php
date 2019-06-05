@@ -572,6 +572,7 @@ class Member extends Base
         $input=input();
         $member1=db('member')->where('token',$this->token)->find();
         $member2=db('member')->where('token',$input['token_help'])->find();
+        
         //判断是否为好友关系
         $is1=db($member1['id'])->where('account',$member2['account'])->find();   
         $is2=db($member2['id'])->where('account',$member1['account'])->find();

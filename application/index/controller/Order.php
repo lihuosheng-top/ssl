@@ -95,7 +95,47 @@ class Order extends Base
             $end = date('Y-m-d H:i:s');
             $pp['create_time']=array('between',array($start,$end));
             $pp['goods_id']=$input['goods_id'];
-            $day_num=db('order')->where($pp)->count();    //当前会员这个商品当天帅次
+            $day_num=db('order')->where($pp)->count();    //当前会员这个商品当天已甩次数
+            //判断是否有拉新人的赠甩次数
+            $la_xin=db('la_new_record')->where(['member_id'=>$member_id['id'],'goods_id'=>$input['goods_id']])->find();
+            if($la_xin)    //该用户有拉新人记录
+            {
+                //获取商品新人帮甩配置
+                $goods_info=db('goods')->where('id',$input['goods_id'])->find();
+                if($goods_info['new_tactics'])
+                {
+                    $value=json_decode($goods_info['new_tactics'],true);
+                    if($value['new']==1)
+                    {    //开启
+                     $new=$value['help_num'];
+                     $goods_limit_own +=$new*$la_xin['new_num'];
+                    }
+                }
+            }
+            //判断用户开甩当天的帮甩人数
+            $time2=time();
+            $time=date('Y-m-d',$kai_shuai['create_time']);
+            $start=strtotime($time);
+            $end=strtotime('Y-d-m',strtotime("+1 day",$time));
+            if($time2>$start && $time2<$end)   //判断是否为当天
+            {
+                $map2['create_time']=array('between',array($start,$end));
+                $map2['member_id']=$member_id['id'];
+                $map2['help_id']=array('gt',0);
+                $old_num=db('order')->where($map2)->count();   //老人当天的帮甩总次数
+                //获取老人帮甩的配置
+                $goods_info=db('goods')->where('id',$input['goods_id'])->find();
+                if($goods_info['old_tactics'])
+                {
+                        $value=json_decode($goods_info['old_tactics'],true);
+                        if($value['old']==1)
+                        {    //开启
+                         $old=$value['help_num'];
+                         $goods_limit_own +=$old_num*$old;
+                        }
+                }
+
+            }
             if($goods_limit_own<=$day_num)     //用户当天甩次达到上限
             {
                 return    ajax_error('商品当天甩次达到上限，不能再甩');
@@ -111,6 +151,8 @@ class Order extends Base
             {     //用户当天总甩次达到上限
                 return    ajax_error('当天总甩次达到上限，不能再甩');
             }
+            
+
 
 
         }else{
@@ -179,12 +221,32 @@ class Order extends Base
      */
     public function goods_order_help()
     {   
+        $input=input();   //获取传递的参数
+        //判断新人
+        $member1=db('member')->where('token',$this->token)->find();
+        $member2=db('member')->where('token',$input['token_help'])->find();
+        //判断用户是否有帮甩记录
+        $is_new=db('goods_receive')->where('member_id',$member1['id'])->find();
+        if(!$is_new)    //就是个新人
+        {
+            //判断该用户是否有拉新记录
+             $re=db('la_new_record')->where('member_id',$member2['id'])->find();
+             if($re)
+             {
+                db('la_new_record')->where('member_id',$member2['id'])->setInc('new_num',1);
+            }else{
+                $data3['member_id']=$member2['id'];
+                $data3['goods_id']=$input['goods_id'];
+                $data3['new_num']='1';
+                db('la_new_record')->insert($data3);
+             }
+        }
         $key2='help_goods_limit';       //自己甩品次数限制
         $info2=db('sys_setting')->where('key',$key2)->find();
         $info2['value']=json_decode($info2['value'],true);
         $goods_limit_help=$info2['value']['goods_limit_own'];     //帮甩单个商品每天上限
         $goods_limit_zong=$info2['value']['own_help_num'];         //帮甩每天自己甩的上限
-        $input=input();   //获取传递的参数
+       
         //根据token获取会员id
         $member_id=db('member')->where('token',$this->token)->field('id')->find();
         //判断甩商品订单帮甩数量
@@ -330,9 +392,10 @@ class Order extends Base
        $data['num']=$num;                  //总甩次
        $data['num_own']=$num_own;                  //自己甩次
        $data['num_help']=$num_help;                  //帮甩次
-       $data['free_money']=$free_money;    //自己免单
-       $data['free_num']=$free_num;        //总免单次数
+       $data['free_money']=$free_money;    //自己免单金额
+       $data['free_num']=$free_num;        //自己免单次数
        $data['goods_fei']=$goods_info['goods_price'];         //商品单次甩费
+    //    $data['big_flag']=1;         //超级
        
        if($data)
        {
@@ -357,6 +420,14 @@ class Order extends Base
          //获取当前帮甩用户的信息
          $member=db('member')->where('token',$this->token)->find();   
          $member_info=db('member')->where('token',$input['token_help'])->find();    //  
+         //判断用户是否已退款   token_help
+         $res=db('goods_receive')->where(['member_id'=>$member_info['id'],'goods_id'=>$input['goods_id']])->find();
+         if($res['order_type']=='0')
+         {
+            $data['shuai_status']=0;
+         }else{
+             $data['shuai_status']=-1;
+         }
          //获取当前用户的所有已帮甩记录
          $list=db('order')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>'2'])->select();
          $shuai_momey=db('order')->where(['member_id'=>$member_info['id'],'goods_id'=>$input['goods_id'],'status'=>'2','help_id'=>$member['id']])->sum('order_amount');    //帮总甩费
@@ -379,8 +450,8 @@ class Order extends Base
          $data['goods_fei']=$goods_info['goods_price'];         //商品单次甩费
          $data['shuai_fei']=$shuai_momey;    //总甩费
          $data['fei']=$fei2;                  //平台收费
-         $data['num']=$shuai_num;                  //总甩次
-         $data['free_money']=$free_money;    //自己免单
+         $data['num']=$shuai_num;             //总甩次
+         $data['free_money']=$free_money;    //自己免单金额
          $data['free_num']=$free_num;        //总免单次数
          if($data)
          {
@@ -414,7 +485,7 @@ class Order extends Base
          $orderid=[];
          foreach($list as $k=>$v)
          {
-            //  $list2=db('order')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>2,'help_id'=>$v['help_id']])->sum('order_amount');
+            //$list2=db('order')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>2,'help_id'=>$v['help_id']])->sum('order_amount');
             //循环遍历退款操作
            $money=$v['order_amount']*(1-$fei);
            $pay=new pay();
@@ -436,12 +507,12 @@ class Order extends Base
                 }else{
                     $where['order_status']='1';   //帮甩
                 }
-               
                 $re=db('captical_record')->insert($where);
            }
         }
+        //退款完成后，修改商品开甩记录的状态
+        $res=db('goods_receive')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id']])->setField('order_type',-1);
         return ajax_success('已退款成功');
-
     }
         
 }

@@ -499,13 +499,11 @@
             </form>
         </blockquote>
         <div class="seach_button_all">
-            <a href="{:url('admin/Order/order_status',['status'=>0])}" class="seach_button all0">全部</a>
-            <a href="{:url('admin/Order/order_status',['status'=>1])}" class="seach_button all1">待确定</a>
-            <a href="{:url('admin/Order/order_status',['status'=>2])}" class="seach_button all2">待发货</a>
-            <a href="{:url('admin/Order/order_status',['status'=>3])}" class="seach_button all3">已发货</a>
-			<a href="{:url('admin/Order/order_status',['status'=>4
-				
-				])}" class="seach_button all4">已完成</a>
+            <a href="{:url('admin/Order/order_status',['order_type'=>10])}" class="seach_button all0">全部</a>
+            <a href="{:url('admin/Order/order_status',['order_type'=>1])}" class="seach_button all1">待确定</a>
+            <a href="{:url('admin/Order/order_status',['order_type'=>2])}" class="seach_button all2">待发货</a>
+            <a href="{:url('admin/Order/order_status',['order_type'=>3])}" class="seach_button all3">已发货</a>
+			<a href="{:url('admin/Order/order_status',['order_type'=>4])}" class="seach_button all4">已完成</a>
         </div>
         <div class="layui-form news_list">
             <table class="layui-table">
@@ -522,7 +520,7 @@
                         <th>订单数量</th>
                         <th>用户账号</th>
                         <th>时间</th>
-                        <th>用户总订单金额</th>
+                        <!-- <th>用户总订单金额</th> -->
                         <th>订单状态</th>
                     </tr>
                 </thead>
@@ -533,13 +531,11 @@
                         <td><input type="checkbox" sname="" lay-skin="primary" lay-filter="choose" data-id="{$vo.id}">
                         </td>
                         <td>
-                            <!-- <div class="overflow"> -->
                             {$vo.order_number}
-                            <!-- </div> -->
                         </td>
                         {if !empty($vo["goods_image"])}
                         <td class="">
-                            <div class="tdimg"><img src="__UPLOADS__/{$vo.goods_image}" /></div>
+                            <div class="tdimg"><img src="{$vo.goods_image}" /></div>
                         </td>
                         {else}
                         <td class="">
@@ -550,21 +546,15 @@
                             <div class="overflow">{$vo.goods_name}</div>
                         </td>
                         <td>{$vo.goods_money}</td>
-                        <td>{$vo.order_quantity}</td>
+                        <td>1</td>
                         <td>{$vo.user_account_name}</td>
                         <td>{$vo.create_time|date="Y-m-d H:i:s",###}</td>
-                        <td>{$vo.order_amount}</td>
+                        <!-- <td>{$vo.goods_money}</td> -->
                         <td>
                             <div class="line">
-                                <div class="static_btus" data-id="{$vo.id}" data-value="{$vo.status}">
-                                    {$vo.status|show_order_status}
+                                <div class="static_btus" data-id="{$vo.id}" data-value="{$vo.order_type}">
+                                    {$vo.order_type|show_order_status}
                                 </div>
-                                <!--<div class="static_btus1">-->
-                                    <!--<div class="not_apply">未申请开票</div>-->
-                                <!--</div>-->
-                                <!--<div class="static_btus2" data-id="{$vo.id}">-->
-                                    <!--订单详情-->
-                                <!--</div>-->
                             </div>
                         </td>
                     </tr>
