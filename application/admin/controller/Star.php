@@ -128,6 +128,11 @@ class Star extends Controller
 		{
 			$goods_info=db('star_goods')->where('id',$v['star_goods_id'])->find();
 			$list[$k]['goods_name']=$goods_info['goods_name'];
+			$member=db('member')->where('id',$v['member_id'])->find();
+			if($member)
+			{
+				$list[$k]['member_name']=$member['name'];
+			}
 		}
 		$all_idents = $list;               //获取分页的数据
         $curPage = input('get.page') ? input('get.page') : 1;//接收前端分页传值
@@ -142,6 +147,120 @@ class Star extends Controller
         $list->appends($_GET);
         $this->assign('listpage', $list->render());
         return  view('list_exchange',['data'=>$list]);
+	}
+	/**
+	 * lilu
+	 * 奖品检索
+	 */
+	public function prize_search()
+	{
+		//获取检索的参数
+		$input=input();
+		if($input)
+		{
+		   $goods=db('star_goods')->where('goods_name',$input['goods_name'])->select();
+		   return  view('star_exchange',['data'=>$goods]);
+		}
+	}
+	/**
+	 * lilu
+	 * 星光商品批量删除
+	 */
+	public function prize_dels(Request $request)
+	{
+		 //获取会员id
+		 $id=$request->only(['id'])['id'];
+		 $num=count($id);
+		 $i=0;
+		 foreach ($id as $k=>$v){
+				 //1.删除会员信息
+				 $re=db('star_goods')->delete($v);
+				 if($re){
+					 $i++;
+				 }
+		 }
+		 if($i==$num){
+			 return ajax_success('批量删除成功');
+		 }else{
+			 return ajax_error('批量删除失败');
+		 }
+	   
+	}
+	/**
+	 * lilu
+	 * 星光值兑换检索
+	 */
+	public function exchange_list_search()
+	{
+		//获取检索的条件
+		$input=input();
+		if($input)
+		{
+			if($input['order_number'])    //订单编号
+			{
+                 $where['order_number']=$input['order_number'];
+			}
+			if($input['name'])    //昵称
+			{
+				$member=db('member')->where('name',$input['name'])->find();
+				if($member)
+				{
+					$where['member_id']=$member['id'];
+				}
+			}
+			if($input['date_min'] && $input['date_max']){
+					$where['create_time']=array('between',array($input['date_min'],$input['date_max']));
+			}
+			$list=db('exchange_list')->where($where)->select();
+			foreach($list as $k=>$v)
+		{
+			$goods_info=db('star_goods')->where('id',$v['star_goods_id'])->find();
+			$list[$k]['goods_name']=$goods_info['goods_name'];
+			$member=db('member')->where('id',$v['member_id'])->find();
+			if($member)
+			{
+				$list[$k]['member_name']=$member['name'];
+			}
+		}
+			//分页处理
+			$all_idents = $list;               //获取分页的数据
+			$curPage = input('get.page') ? input('get.page') : 1;//接收前端分页传值
+			$listRow = 10;//每页10行记录
+			$showdata = array_slice($all_idents, ($curPage - 1) * $listRow, $listRow, true);// 数组中根据条件取出一段值，并返回
+			$list = Bootstrap::make($showdata, $listRow, $curPage, count($all_idents), false, [
+				'var_page' => 'page',
+				'path' => url('admin/Star/list_exchange'),//这里根据需要修改url
+				'query' => [],
+				'fragment' => '',
+			]);
+			$list->appends($_GET);
+			$this->assign('listpage', $list->render());
+			return  view('list_exchange',['data'=>$list]);
+		}
+
+	}
+	/**
+	 * lilu
+	 * 星光值兑换列表删除
+	 */
+	public function exchange_list_dels(Request $request)
+	{
+		//获取会员id
+		$id=$request->only(['id'])['id'];
+		$num=count($id);
+		$i=0;
+		foreach ($id as $k=>$v){
+				//1.删除会员信息
+				$re=db('exchange_list')->delete($v);
+				if($re){
+					$i++;
+				}
+		}
+		if($i==$num){
+			return ajax_success('批量删除成功');
+		}else{
+			return ajax_error('批量删除失败');
+		}
 	}
 	
 }

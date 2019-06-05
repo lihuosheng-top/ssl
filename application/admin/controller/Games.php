@@ -19,7 +19,7 @@ class Games extends Controller
 	public function answer_bank()
 	{
         //获取后台的问题库
-        $problem=db('problem_house')->order('id desc')->select();
+        $problem=db('problem_house')->order('id asc')->select();
         foreach($problem as $k =>$v){
             $answer=json_decode($v['answer']);
             $problem[$k]['answer']=$answer;
@@ -124,6 +124,9 @@ class Games extends Controller
                 $problem[$k]['problem_status']="很难";
             }
         }
+        $problem=paging_data($problem,'admin/Member/member_list','15');   //分页函数处理
+        $problem->appends($_GET);
+        $this->assign('listpage', $problem->render());
          return view('answer_bank',['data'=>$problem]);
 	}
 

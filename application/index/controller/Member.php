@@ -572,7 +572,12 @@ class Member extends Base
         $input=input();
         $member1=db('member')->where('token',$this->token)->find();
         $member2=db('member')->where('token',$input['token_help'])->find();
-        
+        //判断是否是新人
+        $is_new=db('order')->where('member_id',$member1['id'])->find();
+        if(!$is_new)    //新人   添加上级id
+        {
+             db('member')->where('id',$member1['id'])->setField('pid',$member2['id']);
+        }
         //判断是否为好友关系
         $is1=db($member1['id'])->where('account',$member2['account'])->find();   
         $is2=db($member2['id'])->where('account',$member1['account'])->find();

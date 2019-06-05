@@ -226,7 +226,7 @@ class Order extends Base
         $member1=db('member')->where('token',$this->token)->find();
         $member2=db('member')->where('token',$input['token_help'])->find();
         //判断用户是否有帮甩记录
-        $is_new=db('goods_receive')->where('member_id',$member1['id'])->find();
+        $is_new=db('order')->where('member_id',$member1['id'])->find();
         if(!$is_new)    //就是个新人
         {
             //判断该用户是否有拉新记录
@@ -252,7 +252,7 @@ class Order extends Base
         //判断甩商品订单帮甩数量
         $re=db('goods_receive')->where(['goods_id'=>$input['goods_id'],'member_id'=>$member_id['id']])->find();
         if($re){     //商品已开甩
-            if($re['order_type']=='1'){
+            if($re['order_type'] !='0'){
                 return    ajax_error('商品已甩，不能开甩');
             }
         }

@@ -15,4 +15,12 @@ class Index
         
         return view('ssl_share');
     }
+    /**
+     * lilu
+     * 甩甩乐分享2
+     */
+    public function ssl(){
+        
+        return view('ssl');
+    }
 }

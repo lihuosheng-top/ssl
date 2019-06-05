@@ -66,6 +66,9 @@ use think\Request;
             $goods_list[$k]['order_quantity']='1';
 
         }
+        $goods_list=paging_data($goods_list,'admin/Order/order_list','10');   //分页函数处理
+        $goods_list->appends($_GET);
+        $this->assign('listpage', $goods_list->render());
         return view('order_list',['data'=>$goods_list]);
 
  	}

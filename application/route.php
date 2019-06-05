@@ -71,6 +71,7 @@ Route::group("",[
 
    /**甩甩乐分享 */
    'ssl_share'=>"index/Index/ssl_share"  ,                  //甩甩乐分享
+   'ssl_share2'=>"index/Index/ssl"  ,                  //甩甩乐分享
 
 
    /**星光值管理 */
@@ -211,12 +212,16 @@ Route::group("admin",[
     /*星光值管理*/   
     "star_exchange"=>"admin/Star/star_exchange",                       //星光值兑换
     "star_exchange_search"=>"admin/Star/star_exchange_search",         //星光值兑换
-    "prize_del"=>"admin/Star/prize_del",               //星光值兑换
-    "prize_edit"=>"admin/Star/prize_edit",             //星光值兑换
+    "prize_del"=>"admin/Star/prize_del",                     //星光值兑换
+    "prize_edit"=>"admin/Star/prize_edit",                   //星光值兑换
     "prize_edit_do"=>"admin/Star/prize_edit_do",             //星光值兑换
     "prize_add"=>"admin/Star/prize_add",                     //奖品添加
     "prize_add_do"=>"admin/Star/prize_add_do",               //奖品添加处理
     "list_exchange"=>"admin/Star/list_exchange",             //星光值兑换列表
+    "exchange_list_search"=>"admin/Star/exchange_list_search", //星光值兑换列表查询
+    "exchange_list_dels"=>"admin/Star/exchange_list_dels", //星光值兑换列表批量删除
+    "prize_search"=>"admin/Star/prize_search",               //星光商品检索
+    "prize_dels"=>"admin/Star/prize_dels",                   //星光商品批量删除
 
 
     /*会员管理*/

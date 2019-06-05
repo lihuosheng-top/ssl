@@ -25,16 +25,16 @@
 
     <div class="childrenBody">
         <blockquote class="layui-elem-quote news_search">
-            <form class="layui-form" action="{:url('')}">
+            <form class="layui-form" action="{:url('admin/Star/exchange_list_search')}">
                 <div class="seach">
                     <div class="seach_list">
                         <div class="seach_laber">订单编号</div>
                         <div class="seach_input">
-                            <input type="text" name="goods_number" lay-verify="title" autocomplete="off"
+                            <input type="text" name="order_number" lay-verify="title" autocomplete="off"
                                 placeholder=" " class="layui-input">
                         </div>
                     </div>
-                    <div class="seach_list">
+                    <!-- <div class="seach_list">
                         <div class="seach_laber">订单类型</div>
 						<div class="seach_input">
 							<select name="order_type">
@@ -43,11 +43,11 @@
 								<option value="2">现金</option>
 							</select>
 						</div>
-                    </div>
+                    </div> -->
                     <div class="seach_list">
                         <div class="seach_laber">用户账号</div>
                         <div class="seach_input">
-                            <input type="text" name="goods_number" lay-verify="title" autocomplete="off"
+                            <input type="text" name="name" lay-verify="title" autocomplete="off"
                                 placeholder=" " class="layui-input">
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                             <div class="tdimg"><img src="{$vo['goods_image']}" /></div>
                         </td>
                         <td>{$vo['goods_value']}</td>
-                        <td>{$vo['member_id']}</td>
+                        <td>{$vo['member_name']}</td>
                         <td>{$vo['create_time']|date=('Y-m-d H:i:s'),###}</td>
                         
                     </tr>
@@ -167,7 +167,7 @@
                         }
                         $.ajax({
                             type: "POST",
-                            url: "{:url('admin/Goods/goods_del')}",
+                            url: "{:url('admin/Star/exchange_list_dels')}",
                             data: {
                                 "id": data_id,
                             },
