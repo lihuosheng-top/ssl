@@ -52,9 +52,10 @@ Route::group("",[
    'get_helper_record'=>"index/Member/get_helper_record"  ,     //获取帮甩记录
    'member_ranking'=>"index/Member/member_ranking"  ,           //排行榜
    'rank_member_info'=>"index/Member/rank_member_info"  ,       //排行榜界面--个人信息
-   'get_openid'=>"index/Member/get_openid"  ,       //排行榜界面--个人信息
-   'help_setting'=>"index/Member/help_setting"  ,       //排行榜界面--个人信息
-   'friend'=>"index/Member/friend"  ,       //排行榜界面--个人信息
+   'get_openid'=>"index/Member/get_openid"  ,       //获取openid
+   'help_setting'=>"index/Member/help_setting"  ,   //帮甩设置
+   'friend'=>"index/Member/friend"  ,               //好友展示
+   'friend_add'=>"index/Member/friend_add"  ,       //分享----添加好友关系
    'goods_show'=>"index/Member/goods_show"  ,       //排行榜界面--个人信息
 
    /**游戏 */

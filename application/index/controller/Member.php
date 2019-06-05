@@ -559,7 +559,33 @@ class Member extends Base
         }else{
            return ajax_error('获取失败');
         }
-    } 
+    }
+    /**
+     * lilu
+     * 分享添加好友关系
+     * token
+     * token_help
+     */
+    public function friend_add()
+    {
+        //获取token
+        $input=input();
+        $member1=db('member')->where('token',$this->token)->find();
+        $member2=db('member')->where('token',$input['token_help'])->find();
+        //判断是否为好友关系
+        $is1=db($member1['id'])->where('account',$member2['account'])->find();   
+        $is2=db($member2['id'])->where('account',$member1['account'])->find();
+        if(!$is1)
+        {
+            db($member1['id'])->insert($member2);
+        }
+        if(!$is2)
+        {
+            db($member2['id'])->insert($member1);
+        }
+        return ajax_success('添加成功');
+    }
+     
 
 
 }
