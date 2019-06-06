@@ -312,22 +312,22 @@ class Order extends Base
                 $pay = new pay();//统一下单
                 $order= $pay->getPrePayOrder($body, $out_trade_no, $total_fee);
                 if ($order['prepay_id']){    //判断返回参数中是否有prepay_id
-                    // //添加好友关系----帮甩
-                    // $member_info=db('member')->where('id',$re3['id'])->find();     //
-                    // //判断是否已是好友
-                    // $is1=db($re3['id'])->where('account',$member_id['account'])->find();
-                    // $is2=db($member_id['id'])->where('account',$re3['account'])->find();
-                    // if($is1)
-                    // {   //已是好友关系
+                    //添加好友关系----帮甩
+                    $member_info=db('member')->where('id',$re3['id'])->find();     //
+                    //判断是否已是好友
+                    $is1=db($re3['id'])->where('account',$member_id['account'])->find();
+                    $is2=db($member_id['id'])->where('account',$re3['account'])->find();
+                    if($is1)
+                    {   //已是好友关系
 
-                    // }else{       //需添加好友关系
-                    //     db($re3['id'])->insert($member_id);
-                    // }
-                    // if(!$is2)
-                    // {  
-                    //    //需添加好友关系
-                    //     db($member_id['id'])->insert($re3);
-                    // }
+                    }else{       //需添加好友关系
+                        db($re3['id'])->insert($member_id);
+                    }
+                    if(!$is2)
+                    {  
+                       //需添加好友关系
+                        db($member_id['id'])->insert($re3);
+                    }
                     $order1 = $pay->getOrder($order['prepay_id'],$data['order_number']);//执行二次签名返回参数
                     return ajax_success('新建订单成功',$order1);
                     // echo json_encode(array('status' => 1, 'prepay_order' => no_null($order1)));

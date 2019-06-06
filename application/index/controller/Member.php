@@ -562,7 +562,7 @@ class Member extends Base
     }
     /**
      * lilu
-     * 分享添加好友关系
+     * 分享添加好友关系-----暂时屏蔽
      * token
      * token_help
      */

@@ -117,10 +117,12 @@ Route::group("admin",[
     "admin_status"=>"admin/admin/status",
     "admin_passwd"=>"admin/admin/passwd",
     "admin_opera"=>"admin/admin/admin_opera",                       //玩法广告
-    "admin_goods_tactics"=>"admin/admin/admin_goods_tactics",       //甩品策略
     "admin_agreement"=>"admin/Admin/admin_agreement",               //平台协议
+    "admin_agreement_do"=>"admin/Admin/admin_agreement_do",         //平台协议处理
     "admin_agreement_add"=>"admin/Admin/admin_agreement_add",       //添加平台协议
+    "admin_goods_tactics"=>"admin/admin/admin_goods_tactics",       //甩品策略
     "admin_message_note"=>"admin/admin/admin_message_note",         //消息提醒
+    "admin_message_note_do"=>"admin/admin/admin_message_note_do",   //消息提醒处理
     "admin_lock_time"=>"admin/admin/admin_lock_time",               //锁定时间
     "admin_lock_time_do"=>"admin/admin/admin_lock_time_do",         //锁定时间
     "admin_get_star"=>"admin/admin/admin_get_star",                 //星光值获取配置

@@ -45,20 +45,21 @@
 
     <div class="childrenBody">
         {include file="template/_top"/}
-        <div class="layui-form news_list">
-            <div class="form-item ">
-                <label class="form-label" style="width:10%">协议内容</label>
-                <div class="form-input">
-                    <textarea placeholder="协议内容" class="layui-textarea"  style="min-height: 500px;" name="one1[text]"></textarea>
+        <form class="layui-form layui-form-lists" action="{:url('admin/Admin/admin_agreement_do')}" method="post" enctype="multipart/form-data">
+            <div class="layui-form news_list">
+                <div class="form-item ">
+                    <label class="form-label" style="width:10%">协议内容</label>
+                    <div class="form-input">
+                        <textarea placeholder="协议内容" class="layui-textarea"  style="min-height: 500px;" name="agree[text]">{$data['value']['agree']['text']}</textarea>
+                    </div>
+                </div>
+                <div style="float: left; height: 52px;line-height: 52px; margin-left: 49%;">
+                        <input type="submit" id="opration_btu"
+                            style="width: 60px; background: #fff; color: #333333;border:#CCCCCC solid 1px;height: 38px;line-height: 38px;">
+                        </input>
                 </div>
             </div>
-            <div style="float: left; height: 52px;line-height: 52px; margin-left: 49%;">
-                    <button type="button" id="opration_btu"
-                        style="width: 60px; background: #fff; color: #333333;border:#CCCCCC solid 1px;height: 38px;line-height: 38px;">确定
-                    </button>
-            </div>
-
-        </div>
+        </form>
 
     </div> 
    

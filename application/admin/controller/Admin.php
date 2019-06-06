@@ -333,8 +333,44 @@ class Admin extends Controller
      */
     public function admin_agreement()
     {
-        
-            return view('admin_agreement');
+        $key="agree_ment";
+        $info=db('sys_setting')->where('key',$key)->find();
+        if($info){
+            $info['value']=json_decode($info['value'],true);
+            return view('admin_agreement',['data'=>$info,'msg'=>1]);
+        }else{
+            $data='0';
+            return view('admin_agreement',['data'=>$data]);
+        }
+    }
+    /**
+     * lilu
+     *  Notes:设置模块--平台协议处理
+     */
+    public function admin_agreement_do()
+    {
+        //获取参数
+        $input=input();
+        if($input)
+        {
+            $key="agree_ment";
+            $res=db('sys_setting')->where('key',$key)->find();
+            if($res)
+            {
+                $value['value']=json_encode($input);
+                $value['status']=1;
+                $value['key']='agree_ment';
+                db('sys_setting')->where('id',$res['id'])->update($value);
+                $this->success('更新成功',url('admin/Admin/admin_agreement'));
+            }else{
+                $value['value']=json_encode($input);
+                $value['status']=1;
+                $value['key']='agree_ment';
+                db('sys_setting')->insert($value);
+                $this->success('添加成功',url('admin/Admin/admin_agreement'));
+            }
+        }
+
     }
     /**
      * lilu
@@ -362,7 +398,44 @@ class Admin extends Controller
      */
     public function admin_message_note()
     {
+        $key="admin_message";
+        $info=db('sys_setting')->where('key',$key)->find();
+        if($info){
+            $info['value']=json_decode($info['value'],true);
+            return view('admin_message_note',['data'=>$info,'msg'=>1]);
+        }else{
+            $data='0';
+            return view('admin_message_note',['data'=>$data]);
+        }
        return view('admin_message_note');
+    }
+    /**
+     * lilu
+     *  Notes:设置模块--消息提醒处理
+     */
+    public function admin_message_note_do()
+    {
+        //获取参数
+        $input=input();
+        if($input)
+        {
+            $key="admin_message";
+            $res=db('sys_setting')->where('key',$key)->find();
+            if($res)
+            {
+                $value['value']=json_encode($input);
+                $value['status']=1;
+                $value['key']='admin_message';
+                db('sys_setting')->where('id',$res['id'])->update($value);
+                $this->success('更新成功',url('admin/Admin/admin_message_note'));
+            }else{
+                $value['value']=json_encode($input);
+                $value['status']=1;
+                $value['key']='admin_message';
+                db('sys_setting')->insert($value);
+                $this->success('添加成功',url('admin/Admin/admin_message_note'));
+            }
+        }
     }
     
     /**

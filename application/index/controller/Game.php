@@ -380,7 +380,7 @@ class Game extends Base
     }
     /**
      * lilu
-     * 判断答案是否正确----帮答题
+     * 判断答案是否正确--甩客答错题--帮答题
      * 问题id
      * 答案
      * token   帮答题token
@@ -393,6 +393,22 @@ class Game extends Base
              //帮答题
             $info=db('problem_house')->where('id',$input['answer_id'])->find();
             $order_number = $input['order_number'];
+            //添加好友关系----帮答题
+            $member_id=db('member')->where('token',$this->token)->find();   //帮答题人的信息
+            $order=db('order')->where('order_number',$input['order_number'])->find();
+            $re3=db('member')->where('id',$order['member_id'])->find();     //帅客的信息
+            //判断是否已是好友
+            $is1=db($re3['id'])->where('account',$member_id['account'])->find();
+            $is2=db($member_id['id'])->where('account',$re3['account'])->find();
+            if(!$is1)
+            {   //不是好友关系
+                db($re3['id'])->insert($member_id);
+            }
+            if(!$is2)
+            {  
+               //需添加好友关系
+                db($member_id['id'])->insert($re3);
+            }
             //插入答题列表
             if($info['true_ans']==$input['true_ans'])
             {
@@ -549,7 +565,7 @@ class Game extends Base
     }
   /**
    * lilu
-   * 点击红包，返还红包
+   * 点击红包，返还红包-----暂时不用
    * token
    * openid
    * order_number
