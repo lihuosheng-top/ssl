@@ -225,6 +225,7 @@ class Order extends Base
         $is_new=db('order')->where('member_id',$member1['id'])->find();
         if(!$is_new)    //就是个新人
         {
+            $rr=db('member')->where('id',$member1['id'])->setField('pid',$member2['id']);
             //判断该用户是否有拉新记录
              $re=db('la_new_record')->where('member_id',$member2['id'])->find();
              if($re)

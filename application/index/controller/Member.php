@@ -614,6 +614,11 @@ class Member extends Base
      */
     public function person_record()
     {
+        $input=input();
+        if($input['token']=='0')   //没有传递token
+        {
+            return ajax_error('获取失败');
+        }
         //获取用户信息
         $member=db('member')->where('token',$this->token)->find();        
         //获取用户免单

@@ -362,30 +362,18 @@ function xmlToArray($xml)
                  $info2=db('sys_setting')->where('key',$key)->find();
                  $info2['value']=json_decode($info2['value'],true);
                  //获取用户信息
-                 $member2=db('member')->where('id',$res['member_id'])->find();
-                 if($member2['is_new']==1)
-                 {
-                   $num=db('order')->where('member_id',$res['member_id'])->count();
-                   if($num>=$info2['value']['star_value']['num']){
-                       $mem_list=db('member')->order('create_time desc')->select();
-                       foreach($mem_list as $k =>$v)
-                       {
-                           if($v['fid'])
-                           {
-                               $fid=json_decode($v['fid'],true);
-                               if($fid){
-                                   foreach($fid as $k2 =>$v2)
-                                   {
-                                       if($v2==$res['member_id'])
-                                       {
-                                           db('member')->where('id',$v['id'])->setField('star_value',$info2['value']['star_value']['value']);
-                                       }
-                                   }
-                               }
-                           }
+                 if($res['help_id']!='0')
+                 {    //帮甩
+                    //  $is_new=db('order')->where('member_id',$res['help_id'])->find();
+                    $mm=db('member')->where('id',$res['help_id'])->find();
+                     if($mm['is_new']=='1')
+                     {      //新人
+                       $num=db('order')->where('member_id',$res['help_id'])->count();
+                       if($num>=$info2['value']['star_value']['num']){   //帮甩下单数大于配置数
+                           //给他的上级增加星光值
+                           db('member')->where('id',$mm['pid'])->setInc('star_value',$info2['value']['star_value']['value']);
                        }
-                   }
-    
+                     }
                  }
                    
                 }
