@@ -295,8 +295,8 @@ function xmlToArray($xml)
         $xml_data = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
         $val = json_decode(json_encode($xml_data), true);
         // if($val){
-        //     $data2['txt']=$xml;
-        //     db('text')->insert($data2);
+            $data2['txt']='ceshi';
+            db('text')->insert($data2);
         // }
         if($val["result_code"] == "SUCCESS" && $val["return_code"]=="SUCCESS"){
                 $data2['txt']='1231231321';
