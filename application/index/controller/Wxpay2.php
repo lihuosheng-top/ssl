@@ -397,7 +397,7 @@ function xmlToArray($xml)
             }
             echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
          }else{
-            echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[签名失败]]></return_msg></xml>';
+            echo '<xml><return_code><![CDATA[ERROR]]></return_code><return_msg><![CDATA[签名失败]]></return_msg></xml>';
             return ajax_error("失败");
          }
         }
