@@ -41,9 +41,9 @@ class Member extends Base
     {
         //根据token获取会员的信息
         $info2=db('member')->where('token',$this->token)->find();
-        // $where['help_num']=array('gt',$info2['help_num']);
-        // $member_num=db('member')->where($where)->count();
-        // $rank=$member_num+1;    //排名
+        $where['help_num']=array('gt',$info2['help_num']);
+        $member_num=db('member')->where($where)->count();
+        $rank=$member_num+1;    //排名
         //获取所有的会员列表-按照帮甩人数排列
         $member_list=db('member')->select();
         $info=[];
@@ -71,7 +71,7 @@ class Member extends Base
         }
         mysqli_close($con);
         if($info){
-            return ajax_success('获取成功',$info);
+            return ajax_success($rank,$info);
         }else{
             return ajax_error('获取失败');
         }
