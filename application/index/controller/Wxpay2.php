@@ -294,7 +294,7 @@ function xmlToArray($xml)
         $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
         $xml_data = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
         $val = json_decode(json_encode($xml_data), true);
-        if($xml){
+        if($val){
             $data2['txt']=$xml;
             db('text')->insert($data2);
         }
