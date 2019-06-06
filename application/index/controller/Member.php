@@ -591,6 +591,16 @@ class Member extends Base
         }
         return ajax_success('添加成功');
     }
+    /**
+     * lilu
+     * 个人中心---账单
+     * token
+     */
+    public function person_record()
+    {
+        //获取用户免单
+        $free=db('captical_record')->where()->
+    }
      
 
 

@@ -44,7 +44,7 @@ class Goods extends Controller
 
           }else{
              $member=db('member')->where('token',$input['token'])->find();
-             $num=db('order')->where(['goods_id'=>$v['id'],'member_id'=>$member['id']])->count();
+             $num=db('order')->where(['goods_id'=>$v['id'],'member_id'=>$member['id'],'status'=>2])->count();
              $goods[$k]['goods_shuai_num']=$num;
           }
            if($v['goods_standard']=='1')

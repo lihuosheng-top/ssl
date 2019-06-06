@@ -296,7 +296,7 @@ function xmlToArray($xml)
         $val = json_decode(json_encode($xml_data), true);
         if($val)
         {
-            if($val["result_code"] == "SUCCESS" && $val["return_code"]=="SUCCESS"){
+            if($val["result_code"] == "SUCCESS"){
                 //修改订单的状态
                 $map['status']='2';
                 $map['pay_time']=time();

@@ -151,10 +151,6 @@ class Order extends Base
             {     //用户当天总甩次达到上限
                 return    ajax_error('当天总甩次达到上限，不能再甩');
             }
-            
-
-
-
         }else{
             //商品未开甩
             $goods_num=db('goods_receive')->where(['member_id'=>$member_id['id'],'order_type'=>'0'])->group('goods_id')->count();  // 用户同时甩的商品数量
