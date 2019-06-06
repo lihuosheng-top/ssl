@@ -175,6 +175,7 @@ Route::group("admin",[
     "order_status"=>"admin/Order/order_status",               //订单检索
     "order_del"=>"admin/Order/order_del",                     //订单删除
     "get_orderinfo"=>"admin/Order/get_orderinfo",             //获取订单信息
+    "send_message"=>"admin/Order/send_message",             //获取订单信息
 
 
 

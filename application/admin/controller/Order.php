@@ -164,10 +164,45 @@ use think\Request;
       {
         $id=input('post.id');
         if($id){
-            $orderinfo=db('order')->where('id',$id)->find();
+            $orderinfo=db('goods_receive')->where('id',$id)->find();   //获取信息
+            //获取用户的默认地址
+            $address=db('member_address')->where(['member_id'=>$orderinfo['member_id'],'is_use'=>'1'])->find();
+            if($orderinfo['order_type']==1)
+            {   //待确定
+                $key="admin_message";
+                $info=db('sys_setting')->where('key',$key)->find();
+                $info['value']=json_decode($info['value'],true);
+            }
+            if($address)
+            {
+              $orderinfo['address']=$address['address'].$address['detail_address'];
+              $orderinfo['phone']=$address['phone'];
+            }else{
+                $orderinfo['address']='用户没有默认地址';
+                $orderinfo['phone']='0';
+            }
+            $orderinfo['message']=$info['value']['message']['message'];
             return ajax_success('获取成功',$orderinfo);
         }else{
             return  ajax_error('参数错误');
+        }
+    }
+    /**
+     * lilu
+     * 发送短信
+     */
+    public function send_message()
+    {
+        $input=input();
+        if($input)
+        {
+            // $pp=sms_message($input['phone'],$input['mes']);
+            if(1)
+            {
+                return ajax_success('发送成功');
+            }
+        }else{
+               return ajax_error('发送失败');
         }
     }
 

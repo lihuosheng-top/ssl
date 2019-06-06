@@ -383,20 +383,31 @@ class Member extends Base
             }
              $re=db('member')->where('token',$this->token)->find();   //获取会员信息
 
-             $list=db('order')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id'],'status'=>2])->group('help_id')->order('create_time desc')->select();
+             $list=db('order')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id'],'status'=>2])->order('create_time desc')->select();
              if(!$list)
              {
                  return ajax_error('数据获取错误');
              }
+            //获取帮甩头像以及帮甩次数
              foreach($list as $k=>$v){
-                    $num=db('order')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id'],'help_id'=>$v['help_id']])->count();
-                    $v['num']=$num;
-                    $head_pic=db('member')->where('id',$v['help_id'])->value('head_pic');
+                 if($v['help_id']==0)
+                 {
+                    $head_pic=db('member')->where('id',$v['member_id'])->value('head_pic');
+                 }else{
+                     $head_pic=db('member')->where('id',$v['help_id'])->value('head_pic');
+                    }
+                    $v['num']='1';
                     $v['head_pic']=$head_pic;
                     $data[]=$v;
              }
+             //简化数据
              foreach($data as $k=>$v){
-                $res[$k]['id']=$v['help_id'];
+                 if($v['help_id']=='0')
+                 {
+                     $res[$k]['id']=$v['member_id'];   //本人甩记录
+                 }else{
+                     $res[$k]['id']=$v['help_id'];
+                 }
                 $res[$k]['head_pic']=$v['head_pic'];
                 $res[$k]['num']=$v['num'];
                 $res[$k]['order_type']=$v['order_type'];   //帮甩类型    0  自己甩  1帮甩  2帮答题 3帮甩机会
@@ -413,9 +424,10 @@ class Member extends Base
                     $re3['num']=$v2['num'];
                     $re3['order_type']='3';   //帮甩类型    0  自己甩  1帮甩  2帮答题  3帮甩机会
                     $re3['goods_num']=$goods_num;
+                    $re3['create_time']=date('Y-m-d H:i',$v2['create_time']);
                     $data2[]=$re3;
-                    $data2[]=$v2;
                  }else{
+                    $v2['create_time']=date('Y-m-d H:i',$v2['create_time']);
                     $data2[]=$v2;
                  }
              }

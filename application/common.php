@@ -706,11 +706,11 @@ function order_type_status($label){
  * @param $status
  */
 function show_order_status($status){
-    if($status==0){
+    if($status==1){
         echo '<button type="button" class="state color9" >待确定订单</button>';
-    }else if($status==1){
+    }else if($status==2){
         echo '<button type="button" class="state color1" >待发货</button>';
-    }else  if($status==2){
+    }else  if($status==3){
         echo '<button type="button" class="state color2" >已收货</button>';
     }else  {   //status==3
         echo '<button type="button" class="state color3" >已完成</button>';

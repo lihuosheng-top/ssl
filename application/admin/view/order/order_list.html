@@ -299,10 +299,10 @@
                 </div>
                 <div class="repany">
                     <span class="span">官方短信</span>
-                    <input type="text" name="" lay-verify="title" autocomplete="off" placeholder="请输入处理备注"
-                        class="layui-input Information">
+                    <input type="text" name="message" lay-verify="title" autocomplete="off" placeholder="请输入处理备注"
+                        class="layui-input Information a11">
                 </div>
-                <div style="margin-left:650px;margin-top:180px;"><button class="layui-btn"
+                <div style="margin-left:650px;margin-top:180px;"><button  class="layui-btn one"
 							style="background-color:rgb(22, 155, 213);border-radius: 5px;">确定发送</button>
 				</div>
             </div>
@@ -702,7 +702,7 @@
 		$(".static_btus").click(function () {
 			var data_id = $(this).data("id");   //订单id
 			var data_value = $(this).data("value");   //订单状态
-			if(data_value=='0')
+			if(data_value=='1')
 			{       //待确定订单
 			    //获取订单的信息
 				$.ajax({
@@ -713,12 +713,14 @@
 					success : function(data)
 					{
 						var json=eval("("+data+")");
-						$('.popup_one').find('.a1').text(json.data.harvester_address);
+						$('.popup_one').find('.a1').text(json.data.address);
+						$('.popup_one').find('.a11').val(json.data.message);
+						$('.popup_one').append('<input type="hidden" name="phone1" value="'+json.data.phone+'" class="phone"> ' );
 					}
 				})
 				$(".popup_one").removeClass("noshow");
 
-			}else if(data_value=='1'){    //代发货
+			}else if(data_value=='2'){    //代发货
 			 //获取订单的信息
 			 $.ajax({
 					url:"get_orderinfo",
@@ -734,7 +736,7 @@
                 $(".popup_two").removeClass("noshow");
 
 
-			}else if(data_value=='2'){    //已收货
+			}else if(data_value=='3'){    //已收货
 				//获取订单的信息
 				$.ajax({
 						url:"get_orderinfo",
@@ -750,7 +752,7 @@
 				$(".popup_three").removeClass("noshow");
 
 
-			}else if(data_value=='3'){     //已完成
+			}else if(data_value=='4'){     //已完成
 			 //获取订单的信息
 			 $.ajax({
 					url:"get_orderinfo",
@@ -766,7 +768,7 @@
 			    $(".popup_four").removeClass("noshow");
 
 			}else{
-				akert('获取订单状态出错');
+				alert('获取订单状态出错');
 				return false;
 			}
 
@@ -948,6 +950,33 @@
 			s = date.getSeconds();
 			return Y + M + D;
 		}
+		//one点击事件待确定
+		$('.one').click(function(){
+			var mes=$('.one').parent().prev().find('.a11').val();
+			var phone=$('input[name="phone1"]').val();
+			if(phone==0)
+			{
+				alert('请填写用户地址');
+				return false;
+			}
+			$.ajax({
+				url:'send_message',
+				type:"post",
+				data:{mes:mes,phone:phone},
+				success : function(data)
+				{
+					var data = eval('(' + data + ')');
+					if(data.status)
+					{
+						alert('短信提醒成功');
+						window.location.reload();
+					}else{
+						alert('短信发送失败');
+						window.location.reload();
+					}
+				}
+			})
+		})
 	</script>
 
 	{/block}

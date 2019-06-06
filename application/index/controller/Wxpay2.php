@@ -375,7 +375,6 @@ function xmlToArray($xml)
                        }
                      }
                  }
-                   
                 }
                 echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
          }else{
