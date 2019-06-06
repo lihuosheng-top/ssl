@@ -27,8 +27,8 @@ class Index
      * lilu
      * 甩甩乐分享3
      */
-    public function abcd(){
+    public function abc(){
         
-        return view('abcd');
+        return view('abc');
     }
 }
