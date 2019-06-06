@@ -72,6 +72,7 @@ Route::group("",[
    /**甩甩乐分享 */
    'ssl_share'=>"index/Index/ssl_share"  ,                  //甩甩乐分享
    'ssl'=>"index/Index/ssl"  ,                  //甩甩乐分享
+   'abcd'=>"index/Index/abcd"  ,                  //甩甩乐分享
 
 
    /**星光值管理 */

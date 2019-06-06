@@ -23,4 +23,12 @@ class Index
         
         return view('ssl');
     }
+    /**
+     * lilu
+     * 甩甩乐分享3
+     */
+    public function abcd(){
+        
+        return view('abcd');
+    }
 }

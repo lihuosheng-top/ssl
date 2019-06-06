@@ -298,7 +298,7 @@ function xmlToArray($xml)
             $data2['txt']=$xml;
             db('text')->insert($data2);
         }
-        if($val["result_code"] == "SUCCESS" ){
+        if($val["result_code"] == "SUCCESS" &&$val["return_code"]=="SUCCESS"){
             //修改订单的状态
             $map['status']='2';
             $map['pay_time']=time();
