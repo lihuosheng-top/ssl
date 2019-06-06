@@ -550,8 +550,8 @@ class Game extends Base
             $where['order_number']= $input['order_number'];
             $where['income']=$map['free_money'];
             $where['pay']='0';
-            $where['pay_type']='2';   //weixin   
-            $where['order_type']='2';   //奖励红包
+            $where['pay_type']='2';       //weixin   
+            $where['order_type']='2';     //免单
             $where['order_status']='0';   //自己甩
             $re=db('captical_record')->insert($where);
         }
@@ -650,8 +650,8 @@ class Game extends Base
                 $where['order_number']= $input['order_number'];
                 $where['income']=$map['free_bao'];
                 $where['pay']='0';
-                $where['pay_type']='2';   //weixin   
-                $where['order_type']='3';   //奖励红包
+                $where['pay_type']='2';       //weixin   
+                $where['order_type']='3';     //奖励红包
                 $where['order_status']='0';   //自己甩
                 $re=db('captical_record')->insert($where);
             }

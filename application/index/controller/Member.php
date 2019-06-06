@@ -602,17 +602,73 @@ class Member extends Base
         $member=db('member')->where('token',$this->token)->find();        
         //获取用户免单
         $free_dan=db('captical_record')->where(['member_id'=>$member['id'],'order_type'=>2])->order('order_number')->group('goods_id')->select();
+        $arr=[];
         foreach($free_dan as $k=>$v)
         {
               $list=db('captical_record')->where(['member_id'=>$v['member_id'],'goods_id'=>$v['goods_id'],'order_type'=>2])->select();
               //单个商品处理
-            //   foreach($list as $k2=>$v2)
-            //   {
-                   
-            //   }
-              halt($list);
+              foreach($list as $k2=>$v2)
+              {
+                   $list3[$k2]['rank']=$k2+1;
+                   $goods_name=db('goods')->where('id',$v2['goods_id'])->find();
+                   if($goods_name)
+                   {
+                       $list3[$k2]['goods_name']=$goods_name['goods_name'];
+                   }
+                   $list3[$k2]['income']=$v2['income'];
+                   $list3[$k2]['create_time']=date('Y-m-d H:i:s',strtotime($v2['order_number']));
+                   $list3[$k2]['type']=1;      //甩免单
+                   $list3[$k2]['goods_id']=$v2['goods_id'];      //甩免单
+              }
+              $arr[]=$list3;
         }
-        halt($free_dan);
+        $record=[];
+        foreach($arr as $k=>$v)
+        {
+            foreach($v as $k3=>$v3)
+            {
+               $record[]=$v3;
+            }
+        }
+        //获取退款账单
+        $refund_dan=db('captical_record')->where(['member_id'=>$member['id'],'order_type'=>4])->order('order_number')->group('goods_id')->select();
+        $arr2=[];
+        foreach($refund_dan as $k=>$v)
+        {
+              $list2=db('captical_record')->where(['member_id'=>$v['member_id'],'goods_id'=>$v['goods_id'],'order_type'=>4])->select();
+              //单个商品处理
+              foreach($list2 as $k2=>$v2)
+              {
+                   $list4[$k2]['rank']=$k2+1;
+                   $goods_name=db('goods')->where('id',$v2['goods_id'])->find();
+                   if($goods_name)
+                   {
+                       $list4[$k2]['goods_name']=$goods_name['goods_name'];
+                   }
+                   $list4[$k2]['income']=$v2['income'];
+                   $list4[$k2]['create_time']=date('Y-m-d H:i:s',strtotime($v2['order_number']));
+                   $list4[$k2]['type']=2;     //退款记录
+                   $list4[$k2]['goods_id']=$v2['goods_id'];     //退款记录
+              }
+              $arr2[]=$list4;
+        }
+        foreach($arr2 as $k=>$v)
+        {
+            foreach($v as $k3=>$v3)
+            {
+               $record[]=$v3;
+            }
+        }
+        //根据字段last_name对数组$data进行降序排列
+        $order_number = array_column($record,'create_time');
+        array_multisort($order_number,SORT_DESC,$record);
+        if($record)
+        {
+            return ajax_success('获取成功',$record);
+        }else{
+            return ajax_error('获取失败');
+        }
+        
     }
      
 

@@ -496,7 +496,7 @@ class Order extends Base
                 $where['income']=$money;
                 $where['pay']='0';
                 $where['pay_type']='2';   //weixin   
-                $where['order_type']='2';   //奖励红包
+                $where['order_type']='4';   //退款记录
                 if($v['help_id']=='0')
                 {
                     $where['order_status']='0';   //自己甩
