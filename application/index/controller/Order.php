@@ -116,7 +116,7 @@ class Order extends Base
             $time2=time();
             $time=date('Y-m-d',$kai_shuai['create_time']);
             $start=strtotime($time);
-            $end=strtotime('Y-d-m',strtotime("+1 day",$time));
+            $end=$start+24*60*60;
             if($time2>$start && $time2<$end)   //判断是否为当天
             {
                 $map2['create_time']=array('between',array($start,$end));
