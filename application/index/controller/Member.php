@@ -69,6 +69,9 @@ class Member extends Base
             $info[$k]['help_num']=$num;
             $info[$k]['star_value']=$v['star_value'];
         }
+        //排序
+        $help_num = array_column($info,'help_num');
+        array_multisort($help_num,SORT_DESC,$info);
         mysqli_close($con);
         if($info){
             return ajax_success($rank,$info);
