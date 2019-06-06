@@ -294,113 +294,113 @@ function xmlToArray($xml)
         $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
         $xml_data = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
         $val = json_decode(json_encode($xml_data), true);
-        // if($val){
-            $data2['txt']='ceshi';
-            db('text')->insert($data2);
-        // }
-        if($val["result_code"] == "SUCCESS" && $val["return_code"]=="SUCCESS"){
-                $data2['txt']='1231231321';
-                db('text')->insert($data2);
-            //修改订单的状态
-            $map['status']='2';
-            $map['pay_time']=time();
-            $res=db('order')->where('order_number',$val['out_trade_no'])->find();
-            $res2=db('order')->where('order_number',$val['out_trade_no'])->update($map);
-            if($res['status']=='1'){
-                //新增加答题记录
-                $info=db('order')->where('order_number',$val['out_trade_no'])->find();
-                $where['goods_id']=$info['goods_id'];
-                $where['member_id']=$info['member_id'];
-                $where['help_id']=$info['help_id'];
-                $where['status']=2;
-                $where['order_number']=$val['out_trade_no'];
-                $re=db('answer_record')->insert($where);
-                //判断用户是否为第一次甩该商品
-                $order_info=db('order')->where('order_number',$val['out_trade_no'])->find();
-                $data['goods_id']=$order_info['goods_id'];
-                $data['member_id']=$order_info['member_id'];
-                $is_save=db('goods_receive')->where($data)->find();
-                if($is_save)
-                {    $yi_shuai=$is_save['yi_shuai'];
-                    $num= db('goods_receive')->where($data)->setField('yi_shuai',$yi_shuai+1);
-                    $info= db('goods_receive')->where($data)->find();
-                    if($info['yi_shuai']==$info['shuai_num'])
-                    {
-                        $where2['order_type']='1';
-                        db('goods_receive')->where($data)->update($where2);
+        if($val)
+        {
+            if($val["result_code"] == "SUCCESS" && $val["return_code"]=="SUCCESS"){
+                //修改订单的状态
+                $map['status']='2';
+                $map['pay_time']=time();
+                $res=db('order')->where('order_number',$val['out_trade_no'])->find();
+                $res2=db('order')->where('order_number',$val['out_trade_no'])->update($map);
+                if($res['status']=='1'){
+                    //新增加答题记录
+                    $info=db('order')->where('order_number',$val['out_trade_no'])->find();
+                    $where['goods_id']=$info['goods_id'];
+                    $where['member_id']=$info['member_id'];
+                    $where['help_id']=$info['help_id'];
+                    $where['status']=2;
+                    $where['order_number']=$val['out_trade_no'];
+                    $re=db('answer_record')->insert($where);
+                    //判断用户是否为第一次甩该商品
+                    $order_info=db('order')->where('order_number',$val['out_trade_no'])->find();
+                    $data['goods_id']=$order_info['goods_id'];
+                    $data['member_id']=$order_info['member_id'];
+                    $is_save=db('goods_receive')->where($data)->find();
+                    if($is_save)
+                    {    $yi_shuai=$is_save['yi_shuai'];
+                        $num= db('goods_receive')->where($data)->setField('yi_shuai',$yi_shuai+1);
+                        $info= db('goods_receive')->where($data)->find();
+                        if($info['yi_shuai']==$info['shuai_num'])
+                        {
+                            $where2['order_type']='1';
+                            db('goods_receive')->where($data)->update($where2);
+                        }
+                    }else{
+                        //新添加一条商品领取记录
+                        $where3['member_id']=$info['member_id'];
+                        $where3['help_id']=$info['help_id'];
+                        $where3['goods_id']=$info['goods_id'];
+                        $where3['order_number']=date('YmdHis',time());
+                        $where3['yi_shuai']=1;
+                        $points=db('goods')->where('id',$info['goods_id'])->find();
+                        $where3['shuai_num']=$points['points'];
+                        $where3['special_id']=$info['special_id'];
+                        $where3['order_type']='0';
+                        $where3['create_time']=time();
+                        $res2=db('goods_receive')->insert($where3);
+                        //更改当前的人为旧人
+                        db('member')->where('id',$order_info['member_id'])->setField('is_new',0);
                     }
-                }else{
-                    //新添加一条商品领取记录
-                    $where3['member_id']=$info['member_id'];
-                    $where3['help_id']=$info['help_id'];
-                    $where3['goods_id']=$info['goods_id'];
-                    $where3['order_number']=date('YmdHis',time());
-                    $where3['yi_shuai']=1;
-                    $points=db('goods')->where('id',$info['goods_id'])->find();
-                    $where3['shuai_num']=$points['points'];
-                    $where3['special_id']=$info['special_id'];
-                    $where3['order_type']='0';
-                    $where3['create_time']=time();
-                    $res2=db('goods_receive')->insert($where3);
-                    //更改当前的人为旧人
-                    db('member')->where('id',$order_info['member_id'])->setField('is_new',0);
-                }
-                //消费记录
-                $where5['member_id']=$member['id'];
-                $where5['help_id']='0';   //帮甩用户id
-                $where5['goods_id']=$info['goods_id'];
-                $where5['order_number']= $info['order_number'];
-                $where5['income']=0;
-                $where5['pay']=$info['order_amount'];
-                $where5['pay_type']='2';   //weixin   
-                if($info['help_id']==0)
-                {
-                    $where5['order_type']='1';
-                    $where5['order_status']='0';
-                }else{
-                    $where5['order_type']='5';
-                    $where5['order_status']='1';
-                }
-                $re=db('captical_record')->insert($where5);
-             //判断用户是否达拉新人条件
-             //1.获取配置信息
-             $key="star_value";
-             $info2=db('sys_setting')->where('key',$key)->find();
-             $info2['value']=json_decode($info2['value'],true);
-             //获取用户信息
-             $member2=db('member')->where('id',$res['member_id'])->find();
-             if($member2['is_new']==1)
-             {
-               $num=db('order')->where('member_id',$res['member_id'])->count();
-               if($num>=$info2['value']['star_value']['num']){
-                   $mem_list=db('member')->order('create_time desc')->select();
-                   foreach($mem_list as $k =>$v)
-                   {
-                       if($v['fid'])
+                    //消费记录
+                    $where5['member_id']=$member['id'];
+                    $where5['help_id']='0';   //帮甩用户id
+                    $where5['goods_id']=$info['goods_id'];
+                    $where5['order_number']= $info['order_number'];
+                    $where5['income']=0;
+                    $where5['pay']=$info['order_amount'];
+                    $where5['pay_type']='2';   //weixin   
+                    if($info['help_id']==0)
+                    {
+                        $where5['order_type']='1';
+                        $where5['order_status']='0';
+                    }else{
+                        $where5['order_type']='5';
+                        $where5['order_status']='1';
+                    }
+                    $re=db('captical_record')->insert($where5);
+                 //判断用户是否达拉新人条件
+                 //1.获取配置信息
+                 $key="star_value";
+                 $info2=db('sys_setting')->where('key',$key)->find();
+                 $info2['value']=json_decode($info2['value'],true);
+                 //获取用户信息
+                 $member2=db('member')->where('id',$res['member_id'])->find();
+                 if($member2['is_new']==1)
+                 {
+                   $num=db('order')->where('member_id',$res['member_id'])->count();
+                   if($num>=$info2['value']['star_value']['num']){
+                       $mem_list=db('member')->order('create_time desc')->select();
+                       foreach($mem_list as $k =>$v)
                        {
-                           $fid=json_decode($v['fid'],true);
-                           if($fid){
-                               foreach($fid as $k2 =>$v2)
-                               {
-                                   if($v2==$res['member_id'])
+                           if($v['fid'])
+                           {
+                               $fid=json_decode($v['fid'],true);
+                               if($fid){
+                                   foreach($fid as $k2 =>$v2)
                                    {
-                                       db('member')->where('id',$v['id'])->setField('star_value',$info2['value']['star_value']['value']);
+                                       if($v2==$res['member_id'])
+                                       {
+                                           db('member')->where('id',$v['id'])->setField('star_value',$info2['value']['star_value']['value']);
+                                       }
                                    }
                                }
                            }
                        }
                    }
-               }
-
-             }
-               
-            }
-            echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
+    
+                 }
+                   
+                }
+                echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>';
          }else{
-            echo '<xml><return_code><![CDATA[ERROR]]></return_code><return_msg><![CDATA[签名失败]]></return_msg></xml>';
+            echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[签名失败]]></return_msg></xml>';
             return ajax_error("失败");
          }
+        }else{
+            echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[签名失败]]></return_msg></xml>';
+            return ajax_error("失败"); 
         }
+    }
         /** 
          * LILU
         * 生成签名 
