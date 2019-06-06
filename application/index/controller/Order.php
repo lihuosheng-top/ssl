@@ -244,11 +244,11 @@ class Order extends Base
         $key2='help_goods_limit';       //自己甩品次数限制
         $info2=db('sys_setting')->where('key',$key2)->find();
         $info2['value']=json_decode($info2['value'],true);
-        $goods_limit_help=$info2['value']['goods_limit_own'];     //帮甩单个商品每天上限
+        $goods_limit_help=$info2['value']['goods_limit_num'];     //帮甩单个商品每天上限
         $goods_limit_zong=$info2['value']['own_help_num'];         //帮甩每天自己甩的上限
        
         //根据token获取会员id
-        $member_id=db('member')->where('token',$this->token)->field('id')->find();
+        $member_id=db('member')->where('token',$this->token)->find();
         //判断甩商品订单帮甩数量
         $re=db('goods_receive')->where(['goods_id'=>$input['goods_id'],'member_id'=>$member_id['id']])->find();
         if($re){     //商品已开甩
