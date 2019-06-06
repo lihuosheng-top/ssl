@@ -40,22 +40,38 @@ class Member extends Base
     public function member_ranking()
     {
         //根据token获取会员的信息
-        $info=db('member')->where('token',$this->token)->find();
-        $where['help_num']=array('gt',$info['help_num']);
-        $member_num=db('member')->where($where)->count();
-        $rank=$member_num+1;    //排名
+        $info2=db('member')->where('token',$this->token)->find();
+        // $where['help_num']=array('gt',$info2['help_num']);
+        // $member_num=db('member')->where($where)->count();
+        // $rank=$member_num+1;    //排名
         //获取所有的会员列表-按照帮甩人数排列
-        $member_list=db('member')->order('help_num desc')->select();
+        $member_list=db('member')->select();
         $info=[];
+        $con=mysqli_connect("rm-wz9l3z92630ora5wjwo.mysql.rds.aliyuncs.com","siring","Siringdatabase_123",'ssl');  //连接数据库
         foreach($member_list as $k =>$v){
             $info[$k]['id']=$v['id'];
             $info[$k]['name']=$v['name'];
             $info[$k]['head_pic']=$v['head_pic'];
-            $info[$k]['help_num']=$v['help_num'];
+            //判断数据表是否存在
+            if($con)
+            {     //数据库连接成功
+                mysqli_select_db($con,'tb_'.$v['id']);
+                $table='tb_'.$v['id'];
+                $result = mysqli_query($con,"SELECT * FROM $table");
+                if($result)
+                {   //表存在
+                    $num=db($v['id'])->count();
+                }else{    //表不存在
+                    $num=0;
+                }
+            }               
+            //获取当前用户的好友
+            $info[$k]['help_num']=$num;
             $info[$k]['star_value']=$v['star_value'];
         }
+        mysqli_close($con);
         if($info){
-            return ajax_success($rank,$info);
+            return ajax_success('获取成功',$info);
         }else{
             return ajax_error('获取失败');
         }
@@ -668,7 +684,7 @@ class Member extends Base
         }else{
             return ajax_error('获取失败');
         }
-        
+
     }
      
 

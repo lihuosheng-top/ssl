@@ -52,6 +52,7 @@ class Login extends Controller{
                 $user['account']=$post['account'];       //用户手机号
                 $user['passwd']=md5($post['account'].time());
                 $user['join_time']=time();
+                $user['head_pic']='/static/index/img/20190524/486d5d30fa27c86cb540bd0c4defc44d.jpg';
                 $re2=DB::name('member')
                     ->insert($user);                //添加用户信息
                 if($re2){
@@ -214,6 +215,7 @@ class Login extends Controller{
                 $member['account']=$user_mobile;
                 $member['passwd']=md5($member['account'].time());
                 $member['join_time']=time();
+                $member['head_pic']='/static/index/img/20190524/486d5d30fa27c86cb540bd0c4defc44d.jpg';
                 $re=DB::name('member')->insert($member);
                 $re2=DB::name('member')->where('account',$user_mobile)->find();
                 $re3=$re2['id'];
