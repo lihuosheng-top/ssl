@@ -294,8 +294,6 @@ function xmlToArray($xml)
         $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
         $xml_data = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
         $val = json_decode(json_encode($xml_data), true);
-        if($val)
-        {
             if($val["result_code"] == "SUCCESS"){
                 //修改订单的状态
                 $map['status']='2';
@@ -396,10 +394,6 @@ function xmlToArray($xml)
             echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[签名失败]]></return_msg></xml>';
             return ajax_error("失败");
          }
-        }else{
-            echo '<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[签名失败]]></return_msg></xml>';
-            return ajax_error("失败"); 
-        }
     }
         /** 
          * LILU

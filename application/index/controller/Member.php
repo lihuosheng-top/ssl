@@ -598,8 +598,21 @@ class Member extends Base
      */
     public function person_record()
     {
+        //获取用户信息
+        $member=db('member')->where('token',$this->token)->find();        
         //获取用户免单
-        $free=db('captical_record')->where()->
+        $free_dan=db('captical_record')->where(['member_id'=>$member['id'],'order_type'=>2])->order('order_number')->group('goods_id')->select();
+        foreach($free_dan as $k=>$v)
+        {
+              $list=db('captical_record')->where(['member_id'=>$v['member_id'],'goods_id'=>$v['goods_id'],'order_type'=>2])->select();
+              //单个商品处理
+            //   foreach($list as $k2=>$v2)
+            //   {
+                   
+            //   }
+              halt($list);
+        }
+        halt($free_dan);
     }
      
 

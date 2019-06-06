@@ -57,6 +57,7 @@ Route::group("",[
    'friend'=>"index/Member/friend"  ,               //好友展示
    'friend_add'=>"index/Member/friend_add"  ,       //分享----添加好友关系
    'goods_show'=>"index/Member/goods_show"  ,       //排行榜界面--个人信息
+   'person_record'=>"index/Member/person_record"  ,       //排行榜界面--个人信息账单
 
    /**游戏 */
    'game'=>"index/Game/game"  ,                           //游戏
