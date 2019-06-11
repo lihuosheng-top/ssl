@@ -711,7 +711,7 @@ function show_order_status($status){
     }else if($status==2){
         echo '<button type="button" class="state color1" >待发货</button>';
     }else  if($status==3){
-        echo '<button type="button" class="state color2" >已收货</button>';
+        echo '<button type="button" class="state color2" >已发货</button>';
     }else  {   //status==3
         echo '<button type="button" class="state color3" >已完成</button>';
     }

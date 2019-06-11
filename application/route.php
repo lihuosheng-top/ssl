@@ -27,17 +27,24 @@ Route::group("",[
    /*订单模块*/
    "help_record"=>"index/Order/help_record" ,          //生成帮甩记录
    "help_count"=>"index/Order/help_count"    ,         //帮甩统计
-   "goods_order"=>"index/Order/goods_order",           //商品订单生成----自己甩
-   "goods_order_help"=>"index/Order/goods_order_help", //商品订单生成----帮甩
+   "goods_order"=>"index/Order/goods_order",           //商品订单生成----自己甩----微信
+   "goods_order2"=>"index/Order/goods_order2",           //商品订单生成----自己甩---支付宝
+   "goods_order_help"=>"index/Order/goods_order_help",  //商品订单生成----帮甩---微信
+   "goods_order_help2"=>"index/Order/goods_order_help2", //商品订单生成----帮甩---支付宝
    "order_refund"=>"index/Order/order_refund",         //商品账单展示
    "order_refund_help"=>"index/Order/order_refund_help",   //帮甩商品账单展示
    "order_refund_do"=>"index/Order/order_refund_do",   //商品退款处理
 
 
 
-   /**支付*/
+   /**支付---微信*/
    'wxpaynotifyurl'=>"index/Wxpay2/wxpaynotifyurl"  ,          
+   
+   /**支付---支付宝 */
+   'alipay'=>"index/Alipay/alipay"  ,             //支付宝支付          
    'ali_pay'=>"index/Alipay/ali_pay"            ,
+
+
 
    /**会员模块 */
    'member_info'=>"index/Member/member_info"  ,            //会员信息
@@ -58,6 +65,9 @@ Route::group("",[
    'friend_add'=>"index/Member/friend_add"  ,       //分享----添加好友关系
    'goods_show'=>"index/Member/goods_show"  ,       //排行榜界面--个人信息
    'person_record'=>"index/Member/person_record"  ,       //排行榜界面--个人信息账单
+   'goods_get'=>"index/Member/goods_get"  ,          //领取甩好的商品
+   'goods_confirm'=>"index/Member/goods_confirm"  ,  //确认收货
+   'rank_three'=>"index/Member/rank_three"  ,        //当前商品的甩次排行前三
 
    /**游戏 */
    'game'=>"index/Game/game"  ,                           //游戏
@@ -175,7 +185,8 @@ Route::group("admin",[
     "order_status"=>"admin/Order/order_status",               //订单检索
     "order_del"=>"admin/Order/order_del",                     //订单删除
     "get_orderinfo"=>"admin/Order/get_orderinfo",             //获取订单信息
-    "send_message"=>"admin/Order/send_message",             //获取订单信息
+    "send_message"=>"admin/Order/send_message",               //发送短信---提醒
+    "order_save"=>"admin/Order/order_save",                   //快递单信息保存
 
 
 

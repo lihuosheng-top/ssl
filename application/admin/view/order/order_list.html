@@ -292,7 +292,7 @@
             </div>
             <div class="popup_content">
                 <div class="repany">
-                    <span class="span">用户申请邮寄地址：</span>
+                    <span class="span">邮寄地址：</span>
                     <!-- <input type="text" name="" lay-verify="title" readonly autocomplete="off" placeholder="用户地址"
 						class="layui-input Information"> -->
 						<span class="a1"></span>
@@ -307,7 +307,8 @@
 				</div>
             </div>
         </div>
-    </div>
+	</div>
+	<!-- 代发货 -->
     <div class="popup popup_two noshow">
         <div class="popup_doms">
             <div class="popup_title">
@@ -318,22 +319,35 @@
             </div>
 			<div class="popup_content">
                 <div class="repany">
-                    <span class="span">用户申请邮寄地址：</span>
+                    <span class="span">邮寄地址：</span>
                     <!-- <input type="text" name="" lay-verify="title" autocomplete="off" placeholder="用户地址"
 						class="layui-input Information"> -->
 						<span class="a2"></span>
                 </div>
                 <div class="repany">
                     <span class="span">官方备注</span>
-                    <input type="text" name="" lay-verify="title" autocomplete="off" placeholder="请输入处理备注"
-                        class="layui-input Information">
-                </div>
-				<div style="margin-left:650px;margin-top:180px;"><button class="layui-btn"
-							style="background-color:rgb(22, 155, 213);border-radius: 5px;">确定</button>
+                    <!-- <input type="text" name="order_info" lay-verify="title" autocomplete="off" placeholder="请输入处理备注"
+						class="layui-input Information"> -->
+						<textarea placeholder="官方备注" class="layui-textarea"  style="min-height: 200px;" name="order_info2"></textarea>
+				</div>
+				<div style="margin-top: 20px;width: 100%;">
+                    <div style="width:70%;float: left;padding-left:10%;">
+						 <span>选择快递</span>
+						 <select name="express" id="express" style="width: 100px;">
+                              <option value="1" >顺丰</option>
+                              <option value="2">圆通</option>
+						 </select>
+						 <input type="text" name="order2" placeholder="请输入快递单号" style="border: 1px solid #444;">
+					</div>
+					<div style="width:10%;float: left;padding-left: 10%;">
+						<button class="layui-btn two"
+								style="background-color:rgb(22, 155, 213);border-radius: 5px;">确定</button>
+					</div>
 				</div>
             </div>
         </div>
-    </div>
+	</div>
+	<!-- 已发货 -->
     <div class="popup popup_three noshow">
         <div class="popup_doms">
             <div class="popup_title">
@@ -344,22 +358,36 @@
             </div>
 			<div class="popup_content">
                 <div class="repany">
-                    <span class="span">用户申请邮寄地址：</span>
+                    <span class="span">邮寄地址：</span>
                     <!-- <input type="text" name="" lay-verify="title" autocomplete="off" placeholder="用户地址"
 						class="layui-input Information"> -->
 						<span class="a3"></span>
                 </div>
                 <div class="repany">
-                    <span class="span">官方短信</span>
-                    <input type="text" name="" lay-verify="title" autocomplete="off" placeholder="请输入处理备注"
-                        class="layui-input Information">
+                    <span class="span">官方备注</span>
+                    <!-- <input type="text" name="" lay-verify="title" autocomplete="off" placeholder="请输入处理备注"
+						class="layui-input Information"> -->
+						<textarea placeholder="官方备注" class="layui-textarea"  style="min-height: 200px;" name="order_info3"></textarea>
                 </div>
-                <div style="margin-left:650px;margin-top:180px;"><button class="layui-btn"
-							style="background-color:rgb(22, 155, 213);border-radius: 5px;">确定</button>
+                <div style="margin-top: 20px;width: 100%;">
+                    <div style="width:70%;float: left;padding-left:10%;">
+						 <span>选择快递</span>
+						 <!-- <select name="express" id="express3" style="width: 100px;">
+                              <option value="1" >顺丰</option>
+                              <option value="2">圆通</option>
+						 </select> -->
+						 <input type="text" name="express3" readonly="readonly">
+						 <input type="text" name="order3" placeholder="请输入快递单号"  readonly="readonly">
+					</div>
+					<div style="width:10%;float: left;padding-left: 10%;">
+						<button class="layui-btn three"
+								style="background-color:rgb(22, 155, 213);border-radius: 5px;">确定</button>
+					</div>
 				</div>
             </div>
         </div>
-    </div>
+	</div>
+	<!-- 已完成 -->
     <div class="popup popup_four noshow">
         <div class="popup_doms">
             <div class="popup_title">
@@ -370,7 +398,7 @@
             </div>
 			<div class="popup_content">
                 <div class="repany">
-                    <span class="span">用户申请邮寄地址：</span>
+                    <span class="span">邮寄地址：</span>
                     <!-- <input type="text" name="" lay-verify="title" autocomplete="off" placeholder="用户地址"
 						class="layui-input Information"> -->
 						<span class="a4">
@@ -380,10 +408,11 @@
                 </div>
                 <div class="repany">
                     <span class="span">官方备注</span>
-                    <input type="text" name="" lay-verify="title" autocomplete="off" placeholder="请输入处理备注"
-                        class="layui-input Information">
+                    <!-- <input type="text" name="" lay-verify="title" autocomplete="off" placeholder="请输入处理备注"
+						class="layui-input Information"> -->
+						<textarea placeholder="官方备注" class="layui-textarea"  style="min-height: 200px;" name="order_info4"></textarea>
                 </div>
-                <div style="margin-left:650px;margin-top:180px;"><button class="layui-btn"
+                <div style="margin-left:650px;margin-top:180px;"><button class="layui-btn four"
 							style="background-color:rgb(22, 155, 213);border-radius: 5px;">确定</button>
 				</div>
             </div>
@@ -716,11 +745,13 @@
 						$('.popup_one').find('.a1').text(json.data.address);
 						$('.popup_one').find('.a11').val(json.data.message);
 						$('.popup_one').append('<input type="hidden" name="phone1" value="'+json.data.phone+'" class="phone"> ' );
+						$('.popup_one').append('<input type="hidden" name="order_number1" value="'+json.data.order_number+'" class="phone"> ' );
+						$('.popup_one').append('<input type="hidden" name="express_id" value="'+json.data.express_id+'" class="express"> ' );
 					}
 				})
 				$(".popup_one").removeClass("noshow");
 
-			}else if(data_value=='2'){    //代发货
+			}else if(data_value=='2'){    //待发货
 			 //获取订单的信息
 			 $.ajax({
 					url:"get_orderinfo",
@@ -730,13 +761,16 @@
 					success : function(data)
 					{
 						var json=eval("("+data+")");
-						$('.popup_two').find('.a2').text(json.data.harvester_address);
+						$('.popup_two').find('.a2').text(json.data.address);
+				        $('.popup_two').append('<input type="hidden" name="phone2" value="'+json.data.phone+'" class="phone"> ' );
+				        $('.popup_two').append('<input type="hidden" name="order_number2" value="'+json.data.order_number+'" class="phone"> ' );
+				        $('.popup_two').append('<input type="hidden" name="address_id2" value="'+json.data.address_id+'" class="phone"> ' );
 					}
 				})
                 $(".popup_two").removeClass("noshow");
 
 
-			}else if(data_value=='3'){    //已收货
+			}else if(data_value=='3'){    //已发货
 				//获取订单的信息
 				$.ajax({
 						url:"get_orderinfo",
@@ -746,7 +780,13 @@
 						success : function(data)
 						{
 							var json=eval("("+data+")");
-							$('.popup_three').find('.a3').text(json.data.harvester_address);
+							$('.popup_three').find('.a3').text(json.data.address);
+							$('.popup_three').find('textarea[name="order_info3"]').val(json.data.order_info);
+							$('.popup_three').find('input[name="order3"]').val(json.data.express_number);
+							$('.popup_three').find('input[name="express3"]').val(json.data.express_name);
+							$('.popup_three').append('<input type="hidden" name="express_id3" value="'+json.data.express_id+'" class="express"> ' );
+							$('.popup_two').append('<input type="hidden" name="order_number3" value="'+json.data.order_number+'" class="phone"> ' );
+							$('.popup_two').append('<input type="hidden" name="address_id3" value="'+json.data.address_id+'" class="phone"> ' );
 						}
 					})
 				$(".popup_three").removeClass("noshow");
@@ -881,10 +921,8 @@
 					dhtm9 += '</tbody>';
 					dhtm9 += '	</table>';
 					$(".popup_content1").append(dhtm9);
-
 				},
 				error: function (data) {
-
 				}
 			});
 
@@ -966,17 +1004,107 @@
 				success : function(data)
 				{
 					var data = eval('(' + data + ')');
-					if(data.status)
+					if(data.status=='1')
 					{
 						alert('短信提醒成功');
 						window.location.reload();
 					}else{
-						alert('短信发送失败');
+						alert(data.info);
 						window.location.reload();
 					}
 				}
 			})
 		})
+		//two点击事件待确定-----代发货
+		$('.two').click(function(){
+			var phone=$('input[name="phone2"]').val();   
+			if(phone==0)      //判断用户是否有默认的收货地址
+			{
+				alert('请新增用户地址');
+				return false;
+			}
+			var order_info=$('textarea[name="order_info2"]').val();
+			var express=$('#express').find('option:selected').val();
+			var order=$('input[name="order2"]').val();    //快递订单号
+			var order_number=$('input[name="order_number2"]').val();
+			var address_id=$('input[name="address_id2"]').val();
+			if(address_id=='0')
+			{
+				alert('请新增用户地址');
+				return false;
+			}else{
+
+			}
+			$.ajax({
+				url:'order_save',
+				type:"post",
+				data:{order_info:order_info,
+				      phone:phone,
+					  order:order,
+					  order_number:order_number,
+					  address_id:address_id,
+					  express:express
+				},
+				success : function(data)
+				{
+					var data = eval('(' + data + ')');
+					if(data.status=='1')
+					{
+						alert(data.info);
+						window.location.reload();
+					}else{
+						alert(data.info);
+						window.location.reload();
+					}
+				}
+			})
+		})
+		//three点击事件待确定-----已发货
+		$('.three').click(function(){
+			var phone=$('input[name="phone2"]').val();   
+			if(phone==0)      //判断用户是否有默认的收货地址
+			{
+				alert('请新增用户地址');
+				return false;
+			}
+			var order_info=$('textarea[name="order_info3"]').val();
+			var express=$('input[name="express_id3"]').val();
+			var order=$('input[name="order3"]').val();    //快递订单号
+			var order_number=$('input[name="order_number3"]').val();
+			var address_id=$('input[name="address_id3"]').val();
+			if(address_id=='0')
+			{
+				alert('请新增用户地址');
+				return false;
+			}else{
+
+			}
+			$.ajax({
+				url:'order_save',
+				type:"post",
+				data:{order_info:order_info,
+				      phone:phone,
+					  order:order,
+					  order_number:order_number,
+					  address_id:address_id,
+					  express:express
+				},
+				success : function(data)
+				{
+					var data = eval('(' + data + ')');
+					if(data.status=='1')
+					{
+						alert(data.info);
+						window.location.reload();
+					}else{
+						alert(data.info);
+						window.location.reload();
+					}
+				}
+			})
+		})
+		
+	
 	</script>
 
 	{/block}

@@ -241,6 +241,8 @@ class Member extends Base
     /**
      * lilu 
      * 开甩界面----自己甩
+     * token
+     * goods_id
      */
     public function shuai_start()
     {
@@ -252,25 +254,28 @@ class Member extends Base
        $data['name']=$info['name'];
        $data['head_pic']=$info['head_pic'];
        $data['member_type']=$info['member_type'];
-       $data['goods_num']=$info['goods_num'];    //客户甩品数量
+       //统计客户甩品数量
+       $num_goods=db('goods_receive')->where('member_id',$info['id'])->group('goods_id')->count();
+       $data['goods_num']=$num_goods;    //客户甩品数量
        $data['member_type']=$info['member_type'];  //会员等级
        $repertory=db('goods')->where('id',$input['goods_id'])->find();
        $data['image']=$repertory['goods_images_two'];
        $data['goods_repertory']=$repertory['goods_repertory'];    //商品库存
        //当前商品帮甩人数
-       $helper_num=db('help_record')->where('goods_id',$input['goods_id'])->group('member_id')->count();
+       $helper_num=db('order')->where('goods_id',$input['goods_id'])->group('member_id')->count();
        $data['helper_num']=$helper_num;
        $data['end_date']=$repertory['end_date'];    //商品结束日期
        $data['shuai_num']=$repertory['points'];     //商品甩次
        //当前商品已甩次数
-       $goods_num=db('help_record')->where(['goods_id'=>$input['goods_id'],'member_id'=>$info['id']])->count();
+       $goods_num=db('goods_receive')->where(['goods_id'=>$input['goods_id'],'member_id'=>$info['id']])->value('yi_shuai');
        $data['yi_goods_num']=$goods_num;
        //获取当前用户当前甩品的免单金额
-       $free_money=db('help_record')->where(['member_id'=>$info['id'],'goods_id'=>$input['goods_id']])->sum('income');
+       $free_money=db('captical_record')->where(['member_id'=>$info['id'],'goods_id'=>$input['goods_id'],'help_id'=>0])->sum('income');
+       $free_money=number_format($free_money, 2);
        $data['free_money']=$free_money;
        //获取当前用户当前甩品的红包金额
-       $bao_money=db('help_record')->where(['member_id'=>$info['id'],'goods_id'=>$input['goods_id']])->sum('income');
-       $data['bao_money']=$bao_money;
+    //    $bao_money=db('help_record')->where(['member_id'=>$info['id'],'goods_id'=>$input['goods_id']])->sum('income');
+    //    $data['bao_money']=$bao_money;
        if($data)
        {
            return ajax_success('获取成功',$data);
@@ -377,7 +382,7 @@ class Member extends Base
         if($input){
             //获取用户该商品的每日增加次数
             $goods=db('goods')->where('id',$input['goods_id'])->find();
-            if($goods['new_tactics'])
+            if($goods['new_tactics'])    //新人策略
             {
                $tactics=json_decode($goods['new_tactics'],true);
                $goods_num=$tactics['help_num'];
@@ -561,20 +566,28 @@ class Member extends Base
         //获取参数信息
         $input=input();
         $member=db('member')->where('token',$this->token)->find();     //获取会员信息
-        $goods=db('goods_receive')->where(['member_id'=>$member['id'],'order_type'=>0])->select();
+        $goods=db('goods_receive')->where('member_id',$member['id'])->order('create_time desc')->select();
         foreach($goods as $k =>$v)
         {
             //获取商品信息
             $goods2=db('goods')->where('id',$v['goods_id'])->find();
             if($goods2['goods_repertory']=='0')
             {
-                $map[$k]['type']='2';         //订单状态    1  正在甩   2 已抢光    3 已发货
+                $map[$k]['type']='2';           //订单状态    1  正在甩   2 已抢光    3 待确定   4 未发货   5 已发货  6  已完成
             }
-            elseif($v['order_type']=='1')
+            elseif($v['order_type']=='1')       //可以领取----待确定
             { 
               $map[$k]['type']='3';
+            }elseif($v['order_type']=='2'){      //未发货
+                $map[$k]['type']='4';
+            }elseif($v['order_type']=='3')       //已发货
+            {
+                $map[$k]['type']='5';
+            }elseif($v['order_type']=='4')       //已完成
+            {
+                $map[$k]['type']='6';
             }else{
-                $map[$k]['type']='0';
+                $map[$k]['type']='1';            //正在甩
             }
             $map[$k]['id']=$goods2['id'];
             $map[$k]['goods_image']=$goods2['goods_images_three'];
@@ -583,6 +596,7 @@ class Member extends Base
             //当前商品的帅次
              $num=db('order')->where(['goods_id'=>$v['goods_id'],'member_id'=>$member['id']])->count();
              $map[$k]['goods_shuai_num']=$num;
+             $map[$k]['confirm_time']=$v['confirm_time'];
         }
         if($map)
         {
@@ -705,6 +719,94 @@ class Member extends Base
             return ajax_error('获取失败');
         }
 
+    }
+    /**
+     * lilu
+     * 领取已甩的商品
+     * token
+     * goods_id
+     */
+    public function goods_get()
+    {
+        //获取参数
+        $input=input();
+        if($input)
+        {
+            //获取会员id
+            $member=db('member')->where('token',$this->token)->find();
+            //获取参数
+            $re=db('goods_receive')->where(['goods_id'=>$input['goods_id'],'member_id'=>$member['id']])->find();
+            if($re)
+            {
+                //商品的库存减少
+                $res1=db('goods')->where('id',$input['goods_id'])->setDec('goods_repertory');
+                //修改商品订单的状态
+                $res2=db('goods_receive')->where(['goods_id'=>$input['goods_id'],'member_id'=>$member['id']])->setField('order_type',2);   //未发货
+                if($res1 && $res2)
+                {
+                    return ajax_success('领取成功');
+                }
+            }
+        }else{
+            return ajax_success('领取失败');
+        }
+    }
+    /**
+     * lilu
+     * 确认收货
+     * token
+     * goods_id
+     */
+    public function goods_confirm()
+    {
+        //获取信息
+        $input=input();
+        if($input)
+        {
+            //获取用户的信息
+            $member=db('member')->where('token',$this->token)->find();
+            $re=db('goods_receive')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id']])->setField('order_type',4);
+            if($re)
+            {
+               return ajax_success('确认收货成功');
+            }else{
+                return alax_error('确认收获失败');
+            }
+        }else{
+            return alax_error('参数错误');
+        }
+
+    }
+    /**
+     * lilu
+     * 个人信息-当前商品甩次排行榜
+     * token
+     * goods_id
+     */
+    public function rank_three()
+    {
+        //获取参数
+        $input=input();
+        if($input)
+        {
+             //获取前三
+             $list=db('goods_receive')->where('goods_id',$input['goods_id'])->order('yi_shuai desc')->limit('3')->select();
+             foreach($list as $k =>$v)
+             {
+                 $member=db('member')->where('id',$v['member_id'])->find();
+                 $map[$k]['id']=$member['id'];
+                 $map[$k]['head_pic']=$member['head_pic'];
+             }
+             if($map)
+             {
+                return ajax_success('获取成功',$map);
+             }else{
+                 return ajax_error('获取失败');
+
+             }
+        }else{
+             return ajax_error('获取参数错误');
+        }
     }
      
 

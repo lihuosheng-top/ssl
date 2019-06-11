@@ -3,8 +3,10 @@ namespace  app\index\controller;
 
 use think\Controller;
 use think\Console;
+use think\Request;
 use think\Db;
 use app\index\controller\Wxpay2 as pay;
+use app\index\controller\Alipay as alipay;
 use app\index\controller\Base ;
 
 /*
@@ -57,12 +59,164 @@ class Order extends Base
     }
     /**
      * lilu
-     * 订单生成----支付----自己甩
+     * 订单生成----微信支付----自己甩
      * goods_id
      * token
      * special_id
      */
     public function goods_order()
+    {
+        //获取甩品配置信息
+        $key1='goods_limit';        //甩品限制
+        $info1=db('sys_setting')->where('key',$key1)->find();
+        $info1['value']=json_decode($info1['value'],true);   
+        $goods_num_limit=$info1['value']['limit_num'];    //同时甩限制个数
+        //获取当天甩次限制
+        $key2='goods_limit_own';       //自己甩品次数限制
+        $info2=db('sys_setting')->where('key',$key2)->find();
+        $info2['value']=json_decode($info2['value'],true);
+        $goods_limit_own=$info2['value']['person_up_num'];     //单个商品每天上限
+        $goods_limit_day=$info2['value']['own_num'];     //每天自己甩的上限
+        $input=input();   //获取传递的参数
+        //根据token获取会员id
+        $member_id=db('member')->where('token',$this->token)->field('id')->find();
+        //判断甩商品订单帮甩数量
+        $re=db('goods_receive')->where(['goods_id'=>$input['goods_id'],'member_id'=>$member_id['id']])->find();
+        if($re){     //商品已开甩
+            if($re['order_type']=='1'){
+                return    ajax_error('商品已甩，不能开甩');
+            }
+        }
+        //判断用户是否是新的开甩商品
+        $kai_shuai=db('goods_receive')->where(['member_id'=>$member_id['id'],'goods_id'=>$input['goods_id'],'order_type'=>'0'])->find();    //正在甩
+        if($kai_shuai)     //商品已开甩
+        {
+            //用户当天这个商品的甩次
+            $pp['member_id']=$member_id['id'];
+            $pp['status']='2';
+            $start = date('Y-m-d 00:00:00');
+            $end = date('Y-m-d H:i:s');
+            $pp['create_time']=array('between',array($start,$end));
+            $pp['goods_id']=$input['goods_id'];
+            $day_num=db('order')->where($pp)->count();    //当前会员这个商品当天已甩次数
+            //判断是否有拉新人的赠甩次数
+            $la_xin=db('la_new_record')->where(['member_id'=>$member_id['id'],'goods_id'=>$input['goods_id']])->find();
+            if($la_xin)    //该用户有拉新人记录
+            {
+                //获取商品新人帮甩配置
+                $goods_info=db('goods')->where('id',$input['goods_id'])->find();
+                if($goods_info['new_tactics'])
+                {
+                    $value=json_decode($goods_info['new_tactics'],true);
+                    if($value['new']==1)
+                    {    //开启
+                     $new=$value['help_num'];
+                     $goods_limit_own +=$new*$la_xin['new_num'];
+                    }
+                }
+            }
+            //判断用户开甩当天的帮甩人数
+            $time2=time();
+            $time=date('Y-m-d',$kai_shuai['create_time']);
+            $start=strtotime($time);
+            $end=$start+24*60*60;
+            if($time2>$start && $time2<$end)   //判断是否为当天
+            {
+                $map2['create_time']=array('between',array($start,$end));
+                $map2['member_id']=$member_id['id'];
+                $map2['help_id']=array('gt',0);
+                $old_num=db('order')->where($map2)->count();   //老人当天的帮甩总次数
+                //获取老人帮甩的配置
+                $goods_info=db('goods')->where('id',$input['goods_id'])->find();
+                if($goods_info['old_tactics'])
+                {
+                        $value=json_decode($goods_info['old_tactics'],true);
+                        if($value['old']==1)
+                        {    //开启
+                         $old=$value['help_num'];
+                         $goods_limit_own +=$old_num*$old;
+                        }
+                }
+
+            }
+            if($goods_limit_own<=$day_num)     //用户当天甩次达到上限
+            {
+                return    ajax_error('商品当天甩次达到上限，不能再甩');
+            }
+            // goods_limit_day
+            $pp2['member_id']=$member_id['id'];
+            $pp2['status']='2';
+            $start = date('Y-m-d 00:00:00');
+            $end = date('Y-m-d H:i:s');
+            $pp2['create_time']=array('between',array($start,$end));
+            $day_zong_num=db('order')->where($pp)->count();    //当天当前会员的总甩次
+            if($goods_limit_day<=$day_zong_num)
+            {     //用户当天总甩次达到上限
+                return    ajax_error('当天总甩次达到上限，不能再甩');
+            }
+        }else{
+            //商品未开甩
+            $goods_num=db('goods_receive')->where(['member_id'=>$member_id['id'],'order_type'=>'0'])->group('goods_id')->count();  // 用户同时甩的商品数量
+            if($goods_num>=$goods_num_limit)
+            {
+                return ajax_error('商品同时开甩达到上限，请完成开甩商品');
+            }
+        }
+        if($input){
+            $data['order_number']=date('YmdHis',time());    //自定义生成订单号
+            $data['goods_id']=$input['goods_id'];            //甩品、商品id
+            //根据goods_id获取
+            if($input['special_id']=='0'){
+                $data['special_id']='0';
+                $price=db('goods')->where('id',$input['goods_id'])->find();
+                $data['goods_money']=$price['goods_price'];
+            }else{
+                $data['special_id']=$input['special_id'];
+                $price=db('special')->where('id',$input['special_id'])->find();
+                $data['goods_money']=$price['jilt'];
+           }
+            $data['order_amount']=$data['goods_money'];               //甩费、收入
+            // $data['pay_type']=$input['pay_type'];           //支付类型
+            // $data['order_type']=$input['order_type'];       //订单类型
+            $data['goods_name']=db('goods')->where('id',$data['goods_id'])->value('goods_name');
+            $data['create_time']=time();                    //订单创建时间
+            // $data['order_quantity']='1';   //商品数量
+            $data['help_id']=0;
+            $data['member_id']=$member_id['id'];         //会员id
+            $re=db('order')->insert($data);
+            if($re)
+            {
+                    //微信支付
+                    $body='微信支付';
+                    $out_trade_no=$data['order_number']; //商户订单号(自定义)
+                    $total_fee=$data['order_amount']*100;
+                    $pay = new pay();//统一下单
+                    $order= $pay->getPrePayOrder($body, $out_trade_no, $total_fee);
+                    if ($order['prepay_id']){//判断返回参数中是否有prepay_id
+                        $order1 = $pay->getOrder($order['prepay_id'],$data['order_number']);//执行二次签名返回参数
+                        return ajax_success('新建订单成功',$order1);
+                        // echo json_encode(array('status' => 1, 'prepay_order' => no_null($order1)));
+                    } else {
+                        return ajax_error('新建订单失败',$order['err_code_des']);
+                        // echo json_encode(array('status' => 0, 'msg' => $order['err_code_des']));
+                    }
+                    break;
+            }else{
+               return ajax_error('订单生成失败');
+            }
+            
+        }else{
+            ajax_error('参数错误');
+        }
+    }
+    /**
+     * lilu
+     * 订单生成----支付宝支付----自己甩
+     * goods_id
+     * token
+     * special_id
+     */
+    public function goods_order2()
     {   //获取甩品配置信息
         $key1='goods_limit';        //甩品限制
         $info1=db('sys_setting')->where('key',$key1)->find();
@@ -183,14 +337,165 @@ class Order extends Base
             $re=db('order')->insert($data);
             if($re)
             {
-                // $body, $out_trade_no, $total_fee
+                    //支付宝支付
+                    $total_amount=$data['order_amount'];              //订单价格
+                    $product_code=$data['order_number'];              //订单号
+                    $body='甩甩乐';                      //详细信息
+                    $ali = new alipay();//统一下单
+                    $res=$ali->alipay($body, $total_amount, $product_code);
+                    if($res)
+                    {
+                        $map['ali']=$res;
+                        $map['order_number']=$data['order_number'];
+                            // return $this->response($res, 1, '成功');
+                            return  ajax_success('新建订单成功',$map);
+                    }else {
+                            return  ajax_error('新建订单失败');
+                            // return $this->response('', 0, '对不起请检查相关参数');
+                    }
+
+            }else{
+               return ajax_error('订单生成失败');
+            }
+        }else{
+            ajax_error('参数错误');
+        }
+    }
+    /**
+     * lilu
+     * 帮甩订单生成----支付----帮甩----微信
+     * goods_id
+     * token
+     * token_help
+     * special_id
+     */
+    public function goods_order_help()
+    {   
+        $input=input();   //获取传递的参数
+        //判断新人
+        $member1=db('member')->where('token',$this->token)->find();
+        $member2=db('member')->where('token',$input['token_help'])->find();
+        //判断用户是否有帮甩记录
+        $is_new=db('order')->where('member_id',$member1['id'])->find();
+        if(!$is_new)    //就是个新人
+        {
+            //新人帮甩
+            $data['person_type']='1';
+            $rr=db('member')->where('id',$member1['id'])->setField('pid',$member2['id']);
+            //判断该用户是否有拉新记录
+             $re=db('la_new_record')->where('member_id',$member2['id'])->find();
+             if($re)
+             {
+                db('la_new_record')->where('member_id',$member2['id'])->setInc('new_num',1);
+            }else{
+                $data3['member_id']=$member2['id'];
+                $data3['goods_id']=$input['goods_id'];
+                $data3['new_num']='1';
+                db('la_new_record')->insert($data3);
+             }
+        }else{
+            $create=db('goods_receive')->where(['member_id'=>$member2['id'],'goods_id'=>$input['goods_id']])->value('create_time');
+            $start2 = strtotime(date('Y-m-d 00:00:00'));
+            $end2 = strtotime(date('Y-m-d H:i:s'));
+            if($create)
+            {
+                if($create>$start2 && $create<$end2)
+                {   //当天甩
+                    $data['person_type']='0';
+                }else{
+                    $data['person_type']='2';
+                }
+            }else{
+              $data['person_type']=0;
+            }
+           
+        }
+        $key2='help_goods_limit';       //自己甩品次数限制
+        $info2=db('sys_setting')->where('key',$key2)->find();
+        $info2['value']=json_decode($info2['value'],true);
+        $goods_limit_help=$info2['value']['goods_limit_num'];     //帮甩单个商品每天上限
+        $goods_limit_zong=$info2['value']['own_help_num'];         //帮甩每天自己甩的上限
+       
+        //根据token获取会员id
+        $member_id=db('member')->where('token',$this->token)->find();
+        //判断甩商品订单帮甩数量
+        $re=db('goods_receive')->where(['goods_id'=>$input['goods_id'],'member_id'=>$member_id['id']])->find();
+        if($re){     //商品已开甩
+            if($re['order_type'] !='0'){
+                return    ajax_error('商品已甩，不能开甩');
+            }
+        }
+        //帮甩判断
+        $pp['goods_id']=$input['goods_id'];
+        $pp['help_id']=$member_id['id'];   //帮甩id
+        $pp['status']='2';
+        $start = date('Y-m-d 00:00:00');
+        $end = date('Y-m-d H:i:s');
+        $pp['create_time']=array('between',array($start,$end));
+        $day_num=db('order')->where($pp)->count();    //当前会员这个商品当天帮甩次数
+        if($goods_limit_help<=$day_num)     //用户当天帮甩次达到上限
+        {
+            return    ajax_error('商品当天帮甩次达到上限，不能再甩');
+        }
+        // goods_limit_day
+        $pp2['help_id']=$member_id['id'];
+        $pp2['status']='2';
+        $start = date('Y-m-d 00:00:00');
+        $end = date('Y-m-d H:i:s');
+        $pp2['create_time']=array('between',array($start,$end));
+        $day_zong_num=db('order')->where($pp)->count();    //当天当前会员的总甩次
+        if($goods_limit_zong<=$day_zong_num)
+        {     //用户当天总帮甩次达到上限
+            return    ajax_error('当天总甩次达到上限，不能再甩');
+        }
+        if($input){
+            $data['order_number']=date('YmdHis',time());    //自定义生成订单号
+            $data['goods_id']=$input['goods_id'];            //甩品、商品id
+            //根据goods_id获取
+            if($input['special_id']=='0'){
+                $data['special_id']='0';
+                $price=db('goods')->where('id',$input['goods_id'])->find();
+                $data['goods_money']=$price['goods_price'];
+            }else{
+                $data['special_id']=$input['special_id'];
+                $price=db('special')->where('id',$input['special_id'])->find();
+                $data['goods_money']=$price['jilt'];
+           }
+            $data['order_amount']=$data['goods_money'];               //甩费、收入
+            // $data['pay_type']=$input['pay_type'];           //支付类型
+            // $data['order_type']=$input['order_type'];       //订单类型
+            $data['goods_name']=db('goods')->where('id',$data['goods_id'])->value('goods_name');
+            $data['create_time']=time();                    //订单创建时间
+            // $data['order_quantity']='1';   //商品数量
+            $data['help_id']=$member_id['id'];
+            $re3=db('member')->where('token',$input['token_help'])->find();
+            $data['member_id']=$re3['id'];         //会员id
+            $data['order_type']='1';         // 1   自己甩订单     2 帮甩订单
+            $re2=db('order')->insert($data);
+            if($re2)
+            {
                 $body='微信测试';
                 $out_trade_no=$data['order_number']; //商户订单号(自定义)
                 $total_fee=$data['order_amount']*100;
                 $pay = new pay();//统一下单
                 $order= $pay->getPrePayOrder($body, $out_trade_no, $total_fee);
-                if ($order['prepay_id']){//判断返回参数中是否有prepay_id
-                    
+                if ($order['prepay_id']){    //判断返回参数中是否有prepay_id
+                    //添加好友关系----帮甩
+                    $member_info=db('member')->where('id',$re3['id'])->find();     //
+                    //判断是否已是好友
+                    $is1=db($re3['id'])->where('account',$member_id['account'])->find();
+                    $is2=db($member_id['id'])->where('account',$re3['account'])->find();
+                    if($is1)
+                    {   //已是好友关系
+
+                    }else{       //需添加好友关系
+                        db($re3['id'])->insert($member_id);
+                    }
+                    if(!$is2)
+                    {  
+                       //需添加好友关系
+                        db($member_id['id'])->insert($re3);
+                    }
                     $order1 = $pay->getOrder($order['prepay_id'],$data['order_number']);//执行二次签名返回参数
                     return ajax_success('新建订单成功',$order1);
                     // echo json_encode(array('status' => 1, 'prepay_order' => no_null($order1)));
@@ -209,13 +514,13 @@ class Order extends Base
     }
     /**
      * lilu
-     * 帮甩订单生成----支付----帮甩
+     * 帮甩订单生成----支付----帮甩----支付宝
      * goods_id
      * token
      * token_help
      * special_id
      */
-    public function goods_order_help()
+    public function goods_order_help2()
     {   
         $input=input();   //获取传递的参数
         //判断新人
@@ -302,13 +607,14 @@ class Order extends Base
             $re2=db('order')->insert($data);
             if($re2)
             {
-                // $body, $out_trade_no, $total_fee
-                $body='微信测试';
-                $out_trade_no=$data['order_number']; //商户订单号(自定义)
-                $total_fee=$data['order_amount']*100;
-                $pay = new pay();//统一下单
-                $order= $pay->getPrePayOrder($body, $out_trade_no, $total_fee);
-                if ($order['prepay_id']){    //判断返回参数中是否有prepay_id
+                //支付宝支付
+                $total_amount=$data['order_amount'];              //订单价格
+                $product_code=$data['order_number'];              //订单号
+                $body='甩甩乐';                      //详细信息
+                $ali = new alipay();//统一下单
+                $res=$ali->alipay($body, $total_amount, $product_code);
+                if($res)
+                {
                     //添加好友关系----帮甩
                     $member_info=db('member')->where('id',$re3['id'])->find();     //
                     //判断是否已是好友
@@ -325,14 +631,45 @@ class Order extends Base
                        //需添加好友关系
                         db($member_id['id'])->insert($re3);
                     }
-                    $order1 = $pay->getOrder($order['prepay_id'],$data['order_number']);//执行二次签名返回参数
-                    return ajax_success('新建订单成功',$order1);
-                    // echo json_encode(array('status' => 1, 'prepay_order' => no_null($order1)));
-                } else {
-                    return ajax_error('新建订单失败',$order['err_code_des']);
-                    // echo json_encode(array('status' => 0, 'msg' => $order['err_code_des']));
+                        // return $this->response($res, 1, '成功');
+                        $map['ali']=$res;
+                        $map['order_number']=$data['order_number'];
+                    return  ajax_success('新建订单成功',$map);
+                }else {
+                        return  ajax_error('新建订单失败');
+                        // return $this->response('', 0, '对不起请检查相关参数');
                 }
-                break;
+                // $body, $out_trade_no, $total_fee
+                // $body='微信测试';
+                // $out_trade_no=$data['order_number']; //商户订单号(自定义)
+                // $total_fee=$data['order_amount']*100;
+                // $pay = new pay();//统一下单
+                // $order= $pay->getPrePayOrder($body, $out_trade_no, $total_fee);
+                // if ($order['prepay_id']){    //判断返回参数中是否有prepay_id
+                //     //添加好友关系----帮甩
+                //     $member_info=db('member')->where('id',$re3['id'])->find();     //
+                //     //判断是否已是好友
+                //     $is1=db($re3['id'])->where('account',$member_id['account'])->find();
+                //     $is2=db($member_id['id'])->where('account',$re3['account'])->find();
+                //     if($is1)
+                //     {   //已是好友关系
+
+                //     }else{       //需添加好友关系
+                //         db($re3['id'])->insert($member_id);
+                //     }
+                //     if(!$is2)
+                //     {  
+                //        //需添加好友关系
+                //         db($member_id['id'])->insert($re3);
+                //     }
+                //     $order1 = $pay->getOrder($order['prepay_id'],$data['order_number']);//执行二次签名返回参数
+                //     return ajax_success('新建订单成功',$order1);
+                //     // echo json_encode(array('status' => 1, 'prepay_order' => no_null($order1)));
+                // } else {
+                //     return ajax_error('新建订单失败',$order['err_code_des']);
+                //     // echo json_encode(array('status' => 0, 'msg' => $order['err_code_des']));
+                // }
+                // break;
             }else{
                return ajax_error('订单生成失败');
             }

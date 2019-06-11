@@ -10,7 +10,7 @@ class AopClient {
 	public $rsaPrivateKeyFilePath;
 
 	//私钥值
-	public $rsaPrivateKey;
+	public $rsaPrivateKey='';
 
 	//网关
 	public $gatewayUrl = "https://openapi.alipay.com/gateway.do";
@@ -126,9 +126,10 @@ class AopClient {
 			$priKey = file_get_contents($this->rsaPrivateKeyFilePath);
 			$res = openssl_get_privatekey($priKey);
 		}
-
+      
 		($res) or die('您使用的私钥格式错误，请检查RSA私钥配置'); 
-
+		// $pi =  openssl_pkey_get_private($res);//这个函数可用来判断私钥是否是可用的，可用返回资源id Resource id  
+        // halt($pi);
 		if ("RSA2" == $signType) {
 			openssl_sign($data, $sign, $res, OPENSSL_ALGO_SHA256);
 		} else {

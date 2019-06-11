@@ -2,12 +2,12 @@
 namespace app\index\controller;
 
 
-define("APPID", "2019042464293493"); // 商户账号appid
-define("AES", "ykxRWh+P0UtlsqjOejNcPw==");  //AES
-define("HTTPS", "https://openapi.alipay.com/gateway.do"); //支付宝链接
-define("RSA", "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAniRtd+MDzmDOrGJ8HWf/sNFp+4i1U+54KTo9SDGGSTj9eocbNX/VfcT/eCWDE09UrKMUZtLxNQudH7BI5p/0Z4v8/TL8awaDzi8l7jRpC+VWifNLEMEbOYVKFdQL/TyDfCnd0m/hC4vdWU6oHOtqaAjVE4PafUs6r4ivfll0RMxnjDjfCCrQU6r6krJfHUQ3PNSED3l4qHVY6aI1ZP3RxBsg246+T3UvFFS9qdggGJfhG/gWoLaAIxqGFXeWkOah1tPmjhHhwj1RAJs9HqDh/U4Tcr/tZ6KtwsAK++SbkdIFxdsePzvGl2wobsCFno2eto8WlMFp6luMb4jH6KtQ1wIDAQAB"); // 商户账号appid
 
 use think\Controller;
+use think\Config;
+use app\index\model\Alipay as ali;
+
+
 /**
  * lilu
  * 支付宝接口对接
@@ -19,7 +19,24 @@ class Alipay extends Controller
      * lilu
      * 支付宝支付
      */
-    public function ali_pay()
+    public function alipay($body, $total_amount, $product_code)
+    {
+        //测试假数据
+        $notify_url="https://ssl.siring.com.cn/alipay_notify";
+        $pay = new ali();            
+        $alipay= $pay->pay($body, $total_amount, $product_code, $notify_url);
+        if($alipay)
+        {
+            return $alipay;
+        }else{
+            return false;
+        }
+    }
+    /**
+     * lilu
+     * 支付宝支付
+     */
+    public function alipay2()
     {
         header("Content-type:text/html;charset=utf-8");
         include EXTEND_PATH . "/lib/payment/alipay/alipay.class.php";
@@ -43,4 +60,38 @@ class Alipay extends Controller
         halt($str_pay_html);
         return ajax_success();
     }
+    /**
+     * lilu
+     * 支付宝异步通知
+     */
+    public function notify_alipay()
+	{
+       //原始订单号
+       $out_trade_no = input('out_trade_no');
+       //支付宝交易号
+       $trade_no = input('trade_no');
+       //交易状态
+       $trade_status = input('trade_status');
+
+
+       if ($trade_status == 'TRADE_FINISHED' || $trade_status == 'TRADE_SUCCESS') {
+
+           $condition['ordersn'] = $out_trade_no;
+           $data['status'] = 2;
+           $data['third_ordersn'] = $trade_no;
+
+           $result=db('order')->where($condition)->update($data);//修改订单状态,支付宝单号到数据库
+
+           if($result){
+               echo 'success';
+           }else{
+               echo 'fail';
+           }
+
+       }else{
+           echo "fail";
+       }
+
+	}
+
 }

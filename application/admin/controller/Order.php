@@ -167,21 +167,24 @@ use think\Request;
             $orderinfo=db('goods_receive')->where('id',$id)->find();   //获取信息
             //获取用户的默认地址
             $address=db('member_address')->where(['member_id'=>$orderinfo['member_id'],'is_use'=>'1'])->find();
+            $orderinfo['express_name']=db('delivery')->where('id',$orderinfo['express_id'])->value('express_name');
             if($orderinfo['order_type']==1)
             {   //待确定
                 $key="admin_message";
                 $info=db('sys_setting')->where('key',$key)->find();
                 $info['value']=json_decode($info['value'],true);
+                $orderinfo['message']=$info['value']['message']['message'];
             }
             if($address)
             {
               $orderinfo['address']=$address['address'].$address['detail_address'];
               $orderinfo['phone']=$address['phone'];
+              $orderinfo['address_id']=$address['id'];
             }else{
                 $orderinfo['address']='用户没有默认地址';
                 $orderinfo['phone']='0';
+                $orderinfo['address_id']='0';
             }
-            $orderinfo['message']=$info['value']['message']['message'];
             return ajax_success('获取成功',$orderinfo);
         }else{
             return  ajax_error('参数错误');
@@ -196,14 +199,54 @@ use think\Request;
         $input=input();
         if($input)
         {
-            // $pp=sms_message($input['phone'],$input['mes']);
-            if(1)
+            //判断是否开启了短信开启功能  key="admin_message"
+            $key="admin_message";   
+            $info=db('sys_setting')->where('key',$key)->find();
+            $info['value']=json_decode($info['value'],true);
+            if($info['value']['message']['status']=='1')
+            {
+               
+                $pp=sms_message($input['phone'],$input['mes']);
+            }else{
+                return ajax_error('发送失败,短信功能未开启');
+            }
+            if($pp)
             {
                 return ajax_success('发送成功');
             }
         }else{
                return ajax_error('发送失败');
         }
+    }
+    /**
+     * lilu
+     * 快递单信息保存
+     */
+    public function order_save()
+    {
+        //获取信息
+        $input=input();
+        if($input)
+        {
+            //获取用户的地址
+            $address=db('member_address')->where('id',$input['address_id'])->find();
+            $data['receiver']=db('member')->where('id',$address['member_id'])->value('name');
+            $data['receive_phone']=$address['phone'];
+            $data['receive_address']=$address['address'].$address['detail_address'];
+            $data['order_info']=$input['order_info'];
+            $data['express_number']=$input['order'];
+            $data['express_id']=$input['express'];
+            $data['order_type']='3';
+            $res=db('goods_receive')->where('order_number',$input['order_number'])->update($data);
+            if($res)
+            {
+                return ajax_success('保存成功');
+            }
+        }else{
+                return ajax_error('参数获取失败');
+        }
+         
+            
     }
 
 
