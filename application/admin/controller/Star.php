@@ -21,6 +21,18 @@ class Star extends Controller
 	{
 		//获取星光值奖品的商品
 		$list=db('star_goods')->select();
+		$all_idents = $list;               //获取分页的数据
+        $curPage = input('get.page') ? input('get.page') : 1;//接收前端分页传值
+        $listRow = 10;//每页10行记录
+        $showdata = array_slice($all_idents, ($curPage - 1) * $listRow, $listRow, true);// 数组中根据条件取出一段值，并返回
+        $list = Bootstrap::make($showdata, $listRow, $curPage, count($all_idents), false, [
+            'var_page' => 'page',
+            'path' => url('admin/Star/list_exchange'),//这里根据需要修改url
+            'query' => [],
+            'fragment' => '',
+        ]);
+        $list->appends($_GET);
+		$this->assign('listpage', $list->render());
 		if($list)
 		{
 			return  view('star_exchange',['data'=>$list]);

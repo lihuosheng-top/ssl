@@ -43,6 +43,7 @@ Route::group("",[
    /**支付---支付宝 */
    'alipay'=>"index/Alipay/alipay"  ,             //支付宝支付          
    'ali_pay'=>"index/Alipay/ali_pay"            ,
+   'alipaynotify'=>"index/Alipay/alipaynotify"            ,
 
 
 

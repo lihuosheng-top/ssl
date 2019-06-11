@@ -22,7 +22,7 @@ class Alipay extends Controller
     public function alipay($body, $total_amount, $product_code)
     {
         //测试假数据
-        $notify_url="https://ssl.siring.com.cn/alipay_notify";
+        $notify_url="https://ssl.siring.com.cn/alipaynotify";
         $pay = new ali();            
         $alipay= $pay->pay($body, $total_amount, $product_code, $notify_url);
         if($alipay)
@@ -34,37 +34,9 @@ class Alipay extends Controller
     }
     /**
      * lilu
-     * 支付宝支付
-     */
-    public function alipay2()
-    {
-        header("Content-type:text/html;charset=utf-8");
-        include EXTEND_PATH . "/lib/payment/alipay/alipay.class.php";
-        $int_order_id = intval(12);
-        $obj_alipay = new \alipay();
-        $arr_data = array(
-            "return_url" => trim("http://sss.siring.com.cn/index"),
-            "notify_url" => trim("http://sss.siring.com.cn/alipaynotify"),
-            "service" => "create_direct_pay_by_user",
-            "payment_type" => 1, //
-            "seller_email" => 'lilusiring@163.com',
-            "out_trade_no" => time(),
-            "subject" => "siring支付测试", //商品订单的名称
-            "total_fee" => number_format('0.01', 2, '.', ''),
-        );
-        if (isset($arr_order['paymethod']) && isset($arr_order['defaultbank']) && $arr_order['paymethod'] === "bankPay" && $arr_order['defaultbank'] != "") {
-            $arr_data['paymethod'] = "bankPay";
-            $arr_data['defaultbank'] = $arr_order['defaultbank'];
-        }
-        $str_pay_html = $obj_alipay->make_form($arr_data, true);
-        halt($str_pay_html);
-        return ajax_success();
-    }
-    /**
-     * lilu
      * 支付宝异步通知
      */
-    public function notify_alipay()
+    public function alipaynotify()
 	{
        //原始订单号
        $out_trade_no = input('out_trade_no');
@@ -76,18 +48,93 @@ class Alipay extends Controller
 
        if ($trade_status == 'TRADE_FINISHED' || $trade_status == 'TRADE_SUCCESS') {
 
-           $condition['ordersn'] = $out_trade_no;
-           $data['status'] = 2;
-           $data['third_ordersn'] = $trade_no;
+        //    $condition['order_number'] = $out_trade_no;
+        //    $data['status'] = 2;
+        // //    $data['third_ordersn'] = $trade_no;
 
-           $result=db('order')->where($condition)->update($data);//修改订单状态,支付宝单号到数据库
-
-           if($result){
-               echo 'success';
-           }else{
-               echo 'fail';
-           }
-
+        //    $result=db('order')->where($condition)->update($data);//修改订单状态,支付宝单号到数据库
+        //修改订单的状态
+        $map['status']='2';
+        $map['pay_time']=time();
+        $res=db('order')->where('order_number',$val['out_trade_no'])->find();
+        $res2=db('order')->where('order_number',$val['out_trade_no'])->update($map);
+        if($res['status']=='1'){
+            //新增加答题记录
+            $info=db('order')->where('order_number',$val['out_trade_no'])->find();
+            $where['goods_id']=$info['goods_id'];
+            $where['member_id']=$info['member_id'];
+            $where['help_id']=$info['help_id'];
+            $where['status']=2;
+            $where['order_number']=$val['out_trade_no'];
+            $re=db('answer_record')->insert($where);
+            //判断用户是否为第一次甩该商品
+            $order_info=db('order')->where('order_number',$val['out_trade_no'])->find();
+            $data['goods_id']=$order_info['goods_id'];
+            $data['member_id']=$order_info['member_id'];
+            $is_save=db('goods_receive')->where($data)->find();
+            if($is_save)
+            {    $yi_shuai=$is_save['yi_shuai'];
+                $num= db('goods_receive')->where($data)->setField('yi_shuai',$yi_shuai+1);
+                $info= db('goods_receive')->where($data)->find();
+                if($info['yi_shuai']==$info['shuai_num'])
+                {
+                    $where2['order_type']='1';
+                    db('goods_receive')->where($data)->update($where2);
+                }
+            }else{
+                //新添加一条商品领取记录
+                $where3['member_id']=$info['member_id'];
+                $where3['help_id']=$info['help_id'];
+                $where3['goods_id']=$info['goods_id'];
+                $where3['order_number']=date('YmdHis',time());
+                $where3['yi_shuai']=1;
+                $points=db('goods')->where('id',$info['goods_id'])->find();
+                $where3['shuai_num']=$points['points'];
+                $where3['special_id']=$info['special_id'];
+                $where3['order_type']='0';
+                $where3['create_time']=time();
+                $res2=db('goods_receive')->insert($where3);
+                //更改当前的人为旧人
+                db('member')->where('id',$order_info['member_id'])->setField('is_new',0);
+            }
+            //消费记录
+            $where5['member_id']=$member['id'];
+            $where5['help_id']='0';   //帮甩用户id
+            $where5['goods_id']=$info['goods_id'];
+            $where5['order_number']= $info['order_number'];
+            $where5['income']=0;
+            $where5['pay']=$info['order_amount'];
+            $where5['pay_type']='2';   //weixin   
+            if($info['help_id']==0)
+            {
+                $where5['order_type']='1';
+                $where5['order_status']='0';
+            }else{
+                $where5['order_type']='5';
+                $where5['order_status']='1';
+            }
+            $re=db('captical_record')->insert($where5);
+         //判断用户是否达拉新人条件
+         //1.获取配置信息
+         $key="star_value";
+         $info2=db('sys_setting')->where('key',$key)->find();
+         $info2['value']=json_decode($info2['value'],true);
+         //获取用户信息
+         if($res['help_id']!='0')
+         {    //帮甩
+            //  $is_new=db('order')->where('member_id',$res['help_id'])->find();
+            $mm=db('member')->where('id',$res['help_id'])->find();
+             if($mm['is_new']=='1')
+             {      //新人
+               $num=db('order')->where('member_id',$res['help_id'])->count();
+               if($num>=$info2['value']['star_value']['num']){   //帮甩下单数大于配置数
+                   //给他的上级增加星光值
+                   db('member')->where('id',$mm['pid'])->setInc('star_value',$info2['value']['star_value']['value']);
+               }
+             }
+         }
+        }
+          echo 'success';
        }else{
            echo "fail";
        }

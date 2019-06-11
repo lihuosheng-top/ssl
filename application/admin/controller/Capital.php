@@ -19,7 +19,7 @@ class Capital extends Controller
     public function  capital()
     {
 		//获取资金流水的所有记录
-		$list=db('help_record')->order('create_time desc')->select();
+		$list=db('captical_record')->order('create_time desc')->select();
 		$all_idents = $list; 
 		$curPage = input('get.page') ? input('get.page') : 1;//接收前端分页传值
         $listRow = 10;//每页10行记录
