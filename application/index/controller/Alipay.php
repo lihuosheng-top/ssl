@@ -58,11 +58,11 @@ class Alipay extends Controller
         //修改订单的状态
         $map['status']='2';
         $map['pay_time']=time();
-        $res=db('order')->where('order_number',$val['out_trade_no'])->find();
-        $res2=db('order')->where('order_number',$val['out_trade_no'])->update($map);
+        $res=db('order')->where('order_number',$out_trade_no)->find();
+        $res2=db('order')->where('order_number',$out_trade_no)->update($map);
         if($res['status']=='1'){
             //新增加答题记录
-            $info=db('order')->where('order_number',$val['out_trade_no'])->find();
+            $info=db('order')->where('order_number',$out_trade_no)->find();
             $where['goods_id']=$info['goods_id'];
             $where['member_id']=$info['member_id'];
             $where['help_id']=$info['help_id'];
@@ -70,7 +70,7 @@ class Alipay extends Controller
             $where['order_number']=$val['out_trade_no'];
             $re=db('answer_record')->insert($where);
             //判断用户是否为第一次甩该商品
-            $order_info=db('order')->where('order_number',$val['out_trade_no'])->find();
+            $order_info=db('order')->where('order_number',$out_trade_no)->find();
             $data['goods_id']=$order_info['goods_id'];
             $data['member_id']=$order_info['member_id'];
             $is_save=db('goods_receive')->where($data)->find();
@@ -109,10 +109,10 @@ class Alipay extends Controller
             $where5['pay_type']='2';   //weixin   
             if($info['help_id']==0)
             {
-                $where5['order_type']='1';
+                $where5['order_type']='1';    //自己甩
                 $where5['order_status']='0';
             }else{
-                $where5['order_type']='5';
+                $where5['order_type']='5';     //帮甩
                 $where5['order_status']='1';
             }
             $re=db('captical_record')->insert($where5);
