@@ -47,9 +47,8 @@ class Alipay extends Controller
        //插入数据库
        $pp['txt']=$out_trade_no.$trade_no.$trade_status;
        db('text')->insert($pp);
-
-       if ($trade_status == 'TRADE_FINISHED' || $trade_status == 'TRADE_SUCCESS') {
-
+       if ($trade_status == 'TRADE_FINISHED' || $trade_status == 'TRADE_SUCCESS') 
+       {
         //    $condition['order_number'] = $out_trade_no;
         //    $data['status'] = 2;
         // //    $data['third_ordersn'] = $trade_no;
@@ -100,8 +99,8 @@ class Alipay extends Controller
                 db('member')->where('id',$order_info['member_id'])->setField('is_new',0);
             }
             //消费记录
+            $member=db('member')->where('id',$info['member_id'])->find();
             $where5['member_id']=$member['id'];
-            $where5['help_id']='0';   //帮甩用户id
             $where5['goods_id']=$info['goods_id'];
             $where5['order_number']= $info['order_number'];
             $where5['income']=0;
@@ -115,6 +114,7 @@ class Alipay extends Controller
                 $where5['order_type']='5';     //帮甩
                 $where5['order_status']='1';
             }
+            $where5['help_id']=$info['help_id'];
             $re=db('captical_record')->insert($where5);
          //判断用户是否达拉新人条件
          //1.获取配置信息
