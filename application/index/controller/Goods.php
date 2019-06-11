@@ -54,6 +54,9 @@ class Goods extends Controller
            }else{
             //    $goods[$k]['attr']='';
            }
+           //获取当前商品甩客数量
+           $shuai_num=db('order')->where('goods_id',$input['id'])->group('member_id')->count();
+           $goods[$k]['person_num']=$shuai_num;
         }
 //        $num = db("goods")->count();        //获取商品总数
 //         $all_idents = $goods;               //获取分页的数据

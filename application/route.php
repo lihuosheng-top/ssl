@@ -68,6 +68,7 @@ Route::group("",[
    'goods_get'=>"index/Member/goods_get"  ,          //领取甩好的商品
    'goods_confirm'=>"index/Member/goods_confirm"  ,  //确认收货
    'rank_three'=>"index/Member/rank_three"  ,        //当前商品的甩次排行前三
+   'get_new_old_record'=>"index/Member/get_new_old_record"  ,        //甩甩乐档案--新旧人帮甩
 
    /**游戏 */
    'game'=>"index/Game/game"  ,                           //游戏

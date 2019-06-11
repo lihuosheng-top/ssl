@@ -526,6 +526,7 @@ class Member extends Base
           $data[$k]['name']=$v['name'];
           $data[$k]['star_value']=$v['star_value'];
           $data[$k]['head_pic']=$v['head_pic'];
+          $data[$k]['token']=$v['token'];
           if($v['member_type']=='1')
           {
               $data[$k]['member_type']='vip';
@@ -806,6 +807,70 @@ class Member extends Base
              }
         }else{
              return ajax_error('获取参数错误');
+        }
+    }
+    /**
+     * lilu
+     * 甩甩乐档案--帮甩新旧人头衔展示
+     * token
+     * goods_id
+     */
+    public function get_new_old_record()
+    {
+        //获取参数
+        $input=input();
+        if($input)
+        {
+            //获取用户的信息
+            $member=db('member')->where('token',$this->token)->find();
+            //获取当前商品的帮甩记录
+            $where['help_id']=array('gt',0);
+            $where['person_type']=array('lt',2);
+            $where['goods_id']=$input['goods_id'];
+            $where['member_id']=$member['id'];
+            $order_list=db('order')->where($where)->order('create_time desc')->select();
+            //获取当前商品的新旧人帮甩策略
+            $goods=db('goods')->where('id',$input['goods_id'])->find();
+            if($goods['new_tactics'])    //新人策略
+            {
+               $tactics=json_decode($goods['new_tactics'],true);
+               if($tactics['new']==1)    //新人策略开启
+               {
+                   $goods_num=$tactics['help_num'];
+               }
+            }else{
+                $goods_num='0';
+            }
+            if($goods['old_tactics'])
+            {
+                    $value=json_decode($goods['old_tactics'],true);
+                    if($value['old']==1)
+                    {    //开启
+                     $old=$value['help_num'];
+                    }
+            }
+            foreach($order_list as $k=>$v)
+            {
+                if($v['person_type']==1)
+                {   //新人   每天
+                    $data[$k]['type']=1;  
+                    $data[$k]['num']=$goods_num;
+                }else{
+                    $data[$k]['type']=2;     //当天
+                    $data[$k]['num']=$old;
+                }
+                $member_help=db('member')->where('id',$v['help_id'])->find();
+                $data[$k]['id']=$member_help['id'];
+                $data[$k]['head_pic']=$member_help['head_pic'];
+            }
+            if($data)
+            {
+               return ajax_success('获取成功',$data);
+            }else{
+            return  ajax_error('获取失败');
+            }
+        }else{
+             return ajax_error('参数错误');
         }
     }
      

@@ -408,7 +408,6 @@ class Order extends Base
             }else{
               $data['person_type']=0;
             }
-           
         }
         $key2='help_goods_limit';       //自己甩品次数限制
         $info2=db('sys_setting')->where('key',$key2)->find();
@@ -530,6 +529,7 @@ class Order extends Base
         $is_new=db('order')->where('member_id',$member1['id'])->find();
         if(!$is_new)    //就是个新人
         {
+            $data['person_type']='1';
             $rr=db('member')->where('id',$member1['id'])->setField('pid',$member2['id']);
             //判断该用户是否有拉新记录
              $re=db('la_new_record')->where('member_id',$member2['id'])->find();
@@ -542,6 +542,21 @@ class Order extends Base
                 $data3['new_num']='1';
                 db('la_new_record')->insert($data3);
              }
+        }else{
+            $create=db('goods_receive')->where(['member_id'=>$member2['id'],'goods_id'=>$input['goods_id']])->value('create_time');
+            $start2 = strtotime(date('Y-m-d 00:00:00'));
+            $end2 = strtotime(date('Y-m-d H:i:s'));
+            if($create)
+            {
+                if($create>$start2 && $create<$end2)
+                {   //当天甩
+                    $data['person_type']='0';
+                }else{
+                    $data['person_type']='2';
+                }
+            }else{
+              $data['person_type']=0;
+            }
         }
         $key2='help_goods_limit';       //自己甩品次数限制
         $info2=db('sys_setting')->where('key',$key2)->find();
