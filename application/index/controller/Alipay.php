@@ -44,7 +44,9 @@ class Alipay extends Controller
        $trade_no = input('trade_no');
        //交易状态
        $trade_status = input('trade_status');
-
+       //插入数据库
+       $pp['txt']=$out_trade_no.$trade_no.$trade_status;
+       db('text')->insert($pp);
 
        if ($trade_status == 'TRADE_FINISHED' || $trade_status == 'TRADE_SUCCESS') {
 
