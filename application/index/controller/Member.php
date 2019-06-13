@@ -24,6 +24,15 @@ class Member extends Base
         //获取参数信息
         $input=input('');
         $res=db('member')->where('token',$this->token)->find();
+        //总推送金额
+        $money_zong=db('order')->where(['member_id'=>$res['id'],'status'=>2])->sum('order_amount');
+        //统计总的免单金额和退款金额
+        $money_free=db('captical_record')->where(['member_id'=>$res['id'],'order_type'=>2])->sum('income');
+        $money_free2=db('captical_record')->where(['member_id'=>$res['id'],'order_type'=>4])->sum('income');
+        $money=$money_zong-$money_free-$money_free2;
+        //保留二位小数
+        $money=number_format($money, 2);
+        $res['money']=$money;
         unset($res['token']);
         unset($res['token_time']);
         if($res){
@@ -828,7 +837,7 @@ class Member extends Base
             $where['person_type']=array('lt',2);
             $where['goods_id']=$input['goods_id'];
             $where['member_id']=$member['id'];
-            $order_list=db('order')->where($where)->order('create_time desc')->select();
+            $order_list=db('order')->where($where)->order('create_time desc')->group('help_id')->select();
             //获取当前商品的新旧人帮甩策略
             $goods=db('goods')->where('id',$input['goods_id'])->find();
             if($goods['new_tactics'])    //新人策略
@@ -867,7 +876,7 @@ class Member extends Base
             {
                return ajax_success('获取成功',$data);
             }else{
-            return  ajax_error('获取失败');
+              return  ajax_error('获取失败');
             }
         }else{
              return ajax_error('参数错误');
