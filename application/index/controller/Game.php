@@ -349,10 +349,10 @@ class Game extends Base
                 //答题正确,修改客户答题记录
                 $map['status']='1';
                 $re=db('answer_record')->where('order_number',$order_number)->update($map);
-                if($re){
+                // if($re){
                     $lock['lock_time']='';
                     return ajax_success('答题正确',$lock);
-                }
+                // }
                 // //根据概率，判断小游戏的种类
                 // $youxi =new Game2();
                 // $game=$youxi->get_games_chance();
