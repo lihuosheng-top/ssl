@@ -840,24 +840,21 @@ class Member extends Base
             $order_list=db('order')->where($where)->order('create_time desc')->group('help_id')->select();
             //获取当前商品的新旧人帮甩策略
             $goods=db('goods')->where('id',$input['goods_id'])->find();
-            if($goods['new_tactics'])    //新人策略
-            {
+            
                $tactics=json_decode($goods['new_tactics'],true);
                if($tactics['new']==1)    //新人策略开启
                {
                    $goods_num=$tactics['help_num'];
+               }else{
+                   return  ajax_error('获取失败');
                }
-            }else{
-                $goods_num='0';
-            }
-            if($goods['old_tactics'])
-            {
-                    $value=json_decode($goods['old_tactics'],true);
-                    if($value['old']==1)
-                    {    //开启
+               $value=json_decode($goods['old_tactics'],true);
+                if($value['old']==1)
+                {    //开启
                      $old=$value['help_num'];
-                    }
-            }
+                }else{
+                    return  ajax_error('获取失败');
+                }
             foreach($order_list as $k=>$v)
             {
                 if($v['person_type']==1)
