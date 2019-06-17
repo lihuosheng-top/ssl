@@ -24,6 +24,17 @@ class Member extends Base
         //获取参数信息
         $input=input('');
         $res=db('member')->where('token',$this->token)->find();
+        //获取用户默认地址
+        $map['is_use']='1';
+        $map['member_id']=$res['id'];
+        $address=db('member_address')->where($map)->find();
+        if($address)
+        {
+            $is_address=$address['address'].$address['detail_address'];
+        }else{
+            $is_address='';
+        }
+        $res['address']=$is_address;
         //总推送金额
         $money_zong=db('order')->where(['member_id'=>$res['id'],'status'=>2])->sum('order_amount');
         //统计总的免单金额和退款金额
