@@ -35,6 +35,9 @@ class Member extends Base
             $is_address='';
         }
         $res['address']=$is_address;
+        //当前客户正在甩的商品
+        $goods_num=db('goods_receive')->where(['member_id'=>$res['id'],'order_type'=>0])->count();
+        $res['goods_num']=$goods_num;
         //总推送金额
         $money_zong=db('order')->where(['member_id'=>$res['id'],'status'=>2])->sum('order_amount');
         //统计总的免单金额和退款金额
