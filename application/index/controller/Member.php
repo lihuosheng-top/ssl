@@ -270,6 +270,17 @@ class Member extends Base
        $input=input();   //商品id
        //获取当前甩客信息
        $info=db('member')->where('token',$this->token)->find();
+       //获取当前用户的地址
+        $map['is_use']='1';
+        $map['member_id']=$info['id'];
+        $address=db('member_address')->where($map)->find();
+        if($address)
+        {
+            $is_address=$address['address'].$address['detail_address'];
+        }else{
+            $is_address='';
+        }
+       $data['address']=$is_address;
        $data['id']=$info['id'];
        $data['name']=$info['name'];
        $data['head_pic']=$info['head_pic'];
