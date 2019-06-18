@@ -54,7 +54,7 @@ class Alipay extends Controller
         $map['pay_time']=time();
         $res2=db('order')->where('order_number',$out_trade_no)->update($map);
             //新增加答题记录
-            $info=db('order')->where('order_number',$val['out_trade_no'])->find();
+            $info=db('order')->where('order_number',$out_trade_no)->find();
             $where['goods_id']=$info['goods_id'];
             $where['member_id']=$info['member_id'];
             $where['help_id']=$info['help_id'];
