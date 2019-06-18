@@ -49,17 +49,24 @@ class Alipay extends Controller
        db('text')->insert($pp);
        if ($trade_status == 'TRADE_FINISHED' || $trade_status == 'TRADE_SUCCESS') 
        {
+        //    $condition['order_number'] = $out_trade_no;
+        //    $data['status'] = 2;
+        // //    $data['third_ordersn'] = $trade_no;
+
+        //    $result=db('order')->where($condition)->update($data);//修改订单状态,支付宝单号到数据库
         //修改订单的状态
         $map['status']='2';
         $map['pay_time']=time();
+        $res=db('order')->where('order_number',$out_trade_no)->find();
         $res2=db('order')->where('order_number',$out_trade_no)->update($map);
+        if($res['status']=='1'){
             //新增加答题记录
             $info=db('order')->where('order_number',$out_trade_no)->find();
             $where['goods_id']=$info['goods_id'];
             $where['member_id']=$info['member_id'];
             $where['help_id']=$info['help_id'];
-            $where['status']=2;        
-            $where['order_number']='2019123132132';
+            $where['status']=2;
+            $where['order_number']=$out_trade_no;
             $where['create_time']=time();
             $re=db('answer_record')->insert($where);
             //判断用户是否为第一次甩该商品
@@ -129,7 +136,7 @@ class Alipay extends Controller
                }
              }
          }
-        // }
+        }
           echo 'success';
        }else{
            echo "fail";
