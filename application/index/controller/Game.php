@@ -184,7 +184,7 @@ class Game extends Base
                 }
                 $map['lock_time']=$lock_time;
                 $map['answer_status']='0';
-                return ajax_success('用户答题错误',$map);
+                return ajax_error('用户答题错误',$map);
             }
             $map['answer_status']='1';
             $map['lock_time']='';
