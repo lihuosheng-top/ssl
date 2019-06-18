@@ -225,7 +225,16 @@ class Order extends Base
      * special_id
      */
     public function goods_order2()
-    {   //获取甩品配置信息
+    {  
+        //判断当前用户当前商品是否锁定
+        $input=input();
+        $mem2=db('member')->where('token',$this->token)->find();
+        $is_shuai=db('answer_record')->where(['member_id'=>$mem2['id'],'goods_id'=>$input['goods_id'],'status'=>0])->find();
+        if($is_shuai)
+        {
+            return ajax_error('商品已锁定，请先解锁');
+        }
+         //获取甩品配置信息
         $key1='goods_limit';        //甩品限制
         $info1=db('sys_setting')->where('key',$key1)->find();
         $info1['value']=json_decode($info1['value'],true);   
