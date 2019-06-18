@@ -615,18 +615,20 @@ class Member extends Base
       $friend=db($member['id'])->order('join_time desc')->select();
       foreach($friend as $k =>$v)
       {
+          //获取好友的信息
+          $info=db('member')->where('id',$v['id'])->find();
           $data[$k]['id']=$v['id'];
-          $data[$k]['name']=$v['name'];
-          $data[$k]['star_value']=$v['star_value'];
-          $data[$k]['head_pic']=$v['head_pic'];
-          $data[$k]['token']=$v['token'];
-          if($v['member_type']=='1')
+          $data[$k]['name']=$info['name'];
+          $data[$k]['star_value']=$info['star_value'];
+          $data[$k]['head_pic']=$info['head_pic'];
+          $data[$k]['token']=$info['token'];
+          if($info['member_type']=='1')
           {
               $data[$k]['member_type']='vip';
           }else{
               $data[$k]['member_type']='普通会员';
           }
-          $id=db('member')->where('account',$v['account'])->find();  //当前好友信息
+          $id=db('member')->where('account',$info['account'])->find();  //当前好友信息
           //获取好友甩的商品
           $goods=db('goods_receive')->where(['member_id'=>$id['id'],'order_type'=>0])->select();
           if($goods){

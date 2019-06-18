@@ -45,7 +45,7 @@ class Goods extends Controller
           }else{
              $member=db('member')->where('token',$input['token'])->find();
              $num=db('order')->where(['goods_id'=>$v['id'],'member_id'=>$member['id'],'status'=>2])->count();
-             $goods[$k]['goods_shuai_num']=$num;
+             $goods[$k]['goods_shuai_num']=$num;     //商品已甩次数
           }
            if($v['goods_standard']=='1')
            {         //特殊规格

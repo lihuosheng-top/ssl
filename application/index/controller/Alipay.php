@@ -59,7 +59,7 @@ class Alipay extends Controller
         $map['pay_time']=time();
         $res=db('order')->where('order_number',$out_trade_no)->find();
         $res2=db('order')->where('order_number',$out_trade_no)->update($map);
-        if($res['status']=='1'){
+        // if($res['status']=='1'){
             //新增加答题记录
             $info=db('order')->where('order_number',$out_trade_no)->find();
             $where['goods_id']=$info['goods_id'];
@@ -68,6 +68,8 @@ class Alipay extends Controller
             $where['status']=2;
             $where['order_number']=$val['out_trade_no'];
             $where['create_time']=time();
+            $pp2['txt']=$where;
+            db('text')->insert($pp2);
             $re=db('answer_record')->insert($where);
             //判断用户是否为第一次甩该商品
             $order_info=db('order')->where('order_number',$out_trade_no)->find();
@@ -136,7 +138,7 @@ class Alipay extends Controller
                }
              }
          }
-        }
+        // }
           echo 'success';
        }else{
            echo "fail";
