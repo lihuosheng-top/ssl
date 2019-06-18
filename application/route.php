@@ -81,6 +81,7 @@ Route::group("",[
    'is_right_help2'=>"index/Game/is_right_help2"  ,         //判断是否答题
    'get_money'=>"index/Game/get_money"  ,                   //获取免单金额和红包金额
    'back_bao_money'=>"index/Game/back_bao_money"  ,         //红包反还
+   'unlock'=>"index/Game/unlock"  ,                         //自动解锁记录
 
    /**甩甩乐分享 */
    'ssl_share'=>"index/Index/ssl_share"  ,                  //甩甩乐分享

@@ -294,7 +294,7 @@ class Game extends Base
           //判断用户是否有未答的题或锁定的题
           $memb=db('member')->where('token',$input['token'])->find();
           $res=db('answer_record')->where('order_number',$input['order_number'])->find();
-          $re=db('help_answer')->where('order_number',$input['order_number'])->find();
+          $re=db('help_answer')->where(['order_number'=>$input['order_number'],'help_id'=>$memb['id'],'status'=>0])->find();
            //添加好友关系----帮答题
            $member_info=db('member')->where('id',$order['member_id'])->find();     //
            //判断是否已是好友
@@ -315,7 +315,7 @@ class Game extends Base
         //           db('member')->where('id',$res['member_id'])->setField('fid',$fid2);
         //       }
         //   }
-          if($res['status']=='1'){
+          if($res['status']=='1' || $res['status']=='3' || $res['status']=='4'){
               $map2['lock_time']='';
               return   ajax_success('用户已解锁',$map2);
           }
@@ -330,7 +330,7 @@ class Game extends Base
     }
     /**
      * lilu
-     * 判断答案是否正确----自己答题
+     * 判断答案是否正确----自己答题----自己甩
      * 问题id
      * 答案
      * token
@@ -413,8 +413,9 @@ class Game extends Base
             if($info['true_ans']==$input['true_ans'])
             {
                 //答题正确,修改客户答题记录
-                $map['status']='1';
+                $map['status']='4';
                 $map['lock_time']='';
+                $map['unlock_time']=time();
                 $re=db('answer_record')->where('order_number',$order_number)->update($map);
                 $res=db('answer_record')->where('order_number',$order_number)->find();
                 $lock['goods_id']=$res['goods_id'];
@@ -431,6 +432,10 @@ class Game extends Base
                 // $game=$youxi->get_games_chance();
                 // $data=$game;
             }else{
+                $map3['status']='5';
+                $map3['lock_time']=time()+60*60*24*30*12*10;
+                $map3['unlock_time']=time();
+                $re=db('answer_record')->where('order_number',$order_number)->update($map3);
                 //帮答题错误，生成帮答题错误记录，以及锁定时间
                      $res=db('answer_record')->where('order_number',$order_number)->find();
                      $lock_time=time()+60*60*24*30*12*10;
@@ -440,6 +445,7 @@ class Game extends Base
                      $lock['help_id']=$mem['id'];
                      $lock['order_number']=$order_number;
                      $lock['status']='0';
+                     $lock['member_id']=$mem['id'];
                      $re=db('help_answer')->insert($lock);
                      $map2['lock_time']=$lock_time;
                      return ajax_error('答题失败',$map2);
@@ -458,7 +464,6 @@ class Game extends Base
         //获取用户信息
         $member=db('member')->where('token',$this->token)->find();
         $data['order_number']=$input['order_number'];
-        
         //根据商品设置，获取甩免单和红包的金额以及概率
         $goods_info=db('goods')->where('id',$input['goods_id'])->find();
         if($goods_info['free_tactics'])      //商品免单策略是否配置
@@ -662,4 +667,26 @@ class Game extends Base
   }
 
  }
+ /**
+  * lilu
+  * 自动解锁记录
+  * token
+  *goods_id
+  */
+  public function unlock()
+  {
+      //
+      $input=input();
+      $member=db('member')->where('token',$this->token)->find();
+      //更新答题错误记录
+      $map['status']=3;
+      $map['unlock_time']=time();
+      $answer=db('answer_record')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>0])->update($map);
+      if($answer)
+      {
+          return ajax_success('获取成功');
+      }else{
+          return ajax_error('参数错误');
+      }
+  }
 }

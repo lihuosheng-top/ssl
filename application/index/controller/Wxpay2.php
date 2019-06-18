@@ -306,8 +306,9 @@ function xmlToArray($xml)
                     $where['goods_id']=$info['goods_id'];
                     $where['member_id']=$info['member_id'];
                     $where['help_id']=$info['help_id'];
-                    $where['status']=2;
+                    $where['status']=2;        
                     $where['order_number']=$val['out_trade_no'];
+                    $where['create_time']=time();
                     $re=db('answer_record')->insert($where);
                     //判断用户是否为第一次甩该商品
                     $order_info=db('order')->where('order_number',$val['out_trade_no'])->find();

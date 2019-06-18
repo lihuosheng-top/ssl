@@ -401,9 +401,9 @@ class Order extends Base
             {
                 if($create>$start2 && $create<$end2)
                 {   //当天甩
-                    $data['person_type']='0';
+                    $data['person_type']='0';      //当天甩
                 }else{
-                    $data['person_type']='2';
+                    $data['person_type']='2';      //
                 }
             }else{
               $data['person_type']=0;
