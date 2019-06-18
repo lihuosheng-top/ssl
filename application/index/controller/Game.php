@@ -348,6 +348,7 @@ class Game extends Base
             {
                 //答题正确,修改客户答题记录
                 $map['status']='1';
+                $map['answer_id']=$input['answer_id'];
                 $re=db('answer_record')->where('order_number',$order_number)->update($map);
                 // if($re){
                     $lock['lock_time']='';
@@ -359,6 +360,7 @@ class Game extends Base
                 // $data=$game;
             }else{
                 $map2['status']='0';
+                $map2['answer_id']=$input['answer_id'];
                 $re=db('answer_record')->where('order_number',$order_number)->update($map2);
                 $res=db('answer_record')->where('order_number',$order_number)->find();
                 //根据配置获取锁定时间
