@@ -67,6 +67,7 @@ class Order extends Base
     public function goods_order()
     {
         //判断当前用户当前商品是否锁定
+        $input=input();
         $mem2=db('member')->where('token',$this->token)->find();
         $is_shuai=db('answer_record')->where(['member_id'=>$mem2['id'],'goods_id'=>$input['goods_id'],'status'=>0])->find();
         if($is_shuai)
