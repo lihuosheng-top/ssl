@@ -57,7 +57,7 @@ class Alipay extends Controller
         //修改订单的状态
         $map['status']='2';
         $map['pay_time']=time();
-        $res=db('order')->where('order_number',$out_trade_no)->find();
+        // $res=db('order')->where('order_number',$out_trade_no)->find();
         $res2=db('order')->where('order_number',$out_trade_no)->update($map);
         // if($res['status']=='1'){
             //新增加答题记录
@@ -66,7 +66,7 @@ class Alipay extends Controller
             $where['member_id']=$info['member_id'];
             $where['help_id']=$info['help_id'];
             $where['status']=2;
-            $where['order_number']=$val['out_trade_no'];
+            $where['order_number']=$out_trade_no;
             $where['create_time']=time();
             $pp2['txt']=$where;
             db('text')->insert($pp2);
