@@ -477,14 +477,16 @@ class Member extends Base
                         $head_pic=db('member')->where('id',$v['member_id'])->value('head_pic');
                         $data2[$k]['num']='0';
                         $data2[$k]['head_pic']=$head_pic;
-                   }elseif($v['lock_time']=='3'){    //自动解锁
+                        $data2[$k]['create_time']=date('Y-m-d H:i',$v['create_time']);
+                   }elseif($v['status']=='3'){    //自动解锁
                         $data2[$k]['id']=$v['member_id'];
                         $data2[$k]['order_type']='6';
                         $data2[$k]['unlock_time']=date('Y-m-d H:i',$v['unlock_time']);
                         $head_pic=db('member')->where('id',$v['member_id'])->value('head_pic');
                         $data2[$k]['head_pic']=$head_pic;
                         $data2[$k]['num']='0';
-                   }elseif($v['lock_time']=='4'){     //助力解锁
+                        $data2[$k]['create_time']=date('Y-m-d H:i',$v['create_time']);
+                   }elseif($v['status']=='4'){     //助力解锁
                         $head_pic2=db('member')->where('id',$v['help_id'])->value('head_pic');
                         $data2[$k]['help_pic']=$head_pic2;    //帮答题的头像
                         $data2[$k]['help_id']=$v['help_id'];
@@ -494,20 +496,22 @@ class Member extends Base
                         $data2[$k]['order_type']='7';
                         $head_pic=db('member')->where('id',$v['member_id'])->value('head_pic');
                         $data2[$k]['head_pic']=$head_pic;
+                        $data2[$k]['create_time']=date('Y-m-d H:i',$v['create_time']);
                    }elseif($v['status']=='5'){        //帮答题失败 
                         $data[$k]['id']=$v['help_id']; 
                         $data2[$k]['order_type']='10';
                         $head_pic=db('member')->where('id',$v['help_id'])->value('head_pic');
                         $data2[$k]['num']='0';
                         $data2[$k]['head_pic']=$head_pic;
+                        $data2[$k]['create_time']=date('Y-m-d H:i',$v['create_time']);
                    }elseif($v['status']=='1'){         //答题正确
                         $data2[$k]['id']=$v['member_id'];
                         $data2[$k]['order_type']='4';
                         $head_pic=db('member')->where('id',$v['member_id'])->value('head_pic');
                         $data2[$k]['num']='0';
                         $data2[$k]['head_pic']=$head_pic;
+                        $data2[$k]['create_time']=date('Y-m-d H:i',$v['create_time']);
                    }
-                   $data2[$k]['create_time']=date('Y-m-d H:i',$v['create_time']);
             }
             //获取免单记录
             $free_dan=db('captical_record')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id']])->select();
@@ -531,9 +535,8 @@ class Member extends Base
             //排序
             $create_time = array_column($res,'create_time');
             array_multisort($create_time,SORT_DESC,$res);
-            halt($res);
-             if($data2){
-                 return ajax_success('获取成功',$data2);
+             if($res){
+                 return ajax_success('获取成功',$res);
              }else{
                  return ajax_error('获取失败');
              }
