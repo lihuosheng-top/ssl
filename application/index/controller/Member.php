@@ -471,7 +471,7 @@ class Member extends Base
              }
              foreach($answer_record as $k=>$v){
                    if($v['status']=='0')
-                   {    //答题错误被锁
+                   {    //自己答题错误被锁
                         $data2[$k]['id']=$v['member_id'];
                         $data2[$k]['order_type']='5';  
                         $head_pic=db('member')->where('id',$v['member_id'])->value('head_pic');

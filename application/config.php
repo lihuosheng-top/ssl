@@ -137,7 +137,11 @@ return [
         // 标签库标签结束标记
         'taglib_end'   => '}',
     ],
-    
+    // //模板常量配置
+    // 'tpl_replace_string'  =>  [
+    //     '__STATIC__'=>'./static',
+    //     '__PUBLIC__'=>'/public'
+    // ],
     // 视图输出字符串内容替换
     'view_replace_str'       => [
         '__PUBLIC__'=>'/uploads',
