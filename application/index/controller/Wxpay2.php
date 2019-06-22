@@ -316,7 +316,8 @@ function xmlToArray($xml)
                     $data['member_id']=$order_info['member_id'];
                     $is_save=db('goods_receive')->where($data)->find();
                     if($is_save)
-                    {    $yi_shuai=$is_save['yi_shuai'];
+                    {   
+                         $yi_shuai=$is_save['yi_shuai'];
                         $num= db('goods_receive')->where($data)->setField('yi_shuai',$yi_shuai+1);
                         $info= db('goods_receive')->where($data)->find();
                         if($info['yi_shuai']==$info['shuai_num'])
@@ -333,7 +334,7 @@ function xmlToArray($xml)
                         $where3['yi_shuai']=1;
                         $points=db('goods')->where('id',$info['goods_id'])->find();
                         $where3['shuai_num']=$points['points'];
-                        $where3['special_id']=$info['special_id'];
+                        $where3['special_id']=0;
                         $where3['order_type']='0';
                         $where3['create_time']=time();
                         $res2=db('goods_receive')->insert($where3);
