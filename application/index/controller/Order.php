@@ -423,7 +423,7 @@ class Order extends Base
         $member1=db('member')->where('token',$this->token)->find();
         $member2=db('member')->where('token',$input['token_help'])->find();
         //判断用户解锁时间是否到
-        $is_lock=db('answer_record')->where(['member_id'=>$mem2['id'],'goods_id'=>$input['goods_id'],'status'=>0])->find();
+        $is_lock=db('answer_record')->where(['member_id'=>$member2['id'],'goods_id'=>$input['goods_id'],'status'=>0])->find();
         if($is_lock)
         {
             $time=time()-$is_lock['lock_time'];
@@ -432,7 +432,7 @@ class Order extends Base
             }else{
                 $mm['status']=3;
                 $mm['unlock_time']=time();
-                $answer=db('answer_record')->where(['member_id'=>$mem2['id'],'goods_id'=>$input['goods_id'],'status'=>0])->update($mm);
+                $answer=db('answer_record')->where(['member_id'=>$member2['id'],'goods_id'=>$input['goods_id'],'status'=>0])->update($mm);
             }
         }
         //判断用户是否有帮甩记录
@@ -587,7 +587,7 @@ class Order extends Base
         $member1=db('member')->where('token',$this->token)->find();
         $member2=db('member')->where('token',$input['token_help'])->find();
         //判断用户解锁时间是否到
-        $is_lock=db('answer_record')->where(['member_id'=>$mem2['id'],'goods_id'=>$input['goods_id'],'status'=>0])->find();
+        $is_lock=db('answer_record')->where(['member_id'=>$member2['id'],'goods_id'=>$input['goods_id'],'status'=>0])->find();
         if($is_lock)
         {
             $time=time()-$is_lock['lock_time'];
@@ -596,7 +596,7 @@ class Order extends Base
             }else{
                 $mm['status']=3;
                 $mm['unlock_time']=time();
-                $answer=db('answer_record')->where(['member_id'=>$mem2['id'],'goods_id'=>$input['goods_id'],'status'=>0])->update($mm);
+                $answer=db('answer_record')->where(['member_id'=>$member2['id'],'goods_id'=>$input['goods_id'],'status'=>0])->update($mm);
             }
         }
         //判断用户是否有帮甩记录
