@@ -341,8 +341,7 @@ function xmlToArray($xml)
                         db('member')->where('id',$order_info['member_id'])->setField('is_new',0);
                     }
                     //消费记录
-                    $where5['member_id']=$member['id'];
-                    $where5['help_id']='0';   //帮甩用户id
+                    $where5['member_id']=$info['member_id'];
                     $where5['goods_id']=$info['goods_id'];
                     $where5['order_number']= $info['order_number'];
                     $where5['income']=0;
