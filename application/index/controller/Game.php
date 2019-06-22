@@ -240,6 +240,7 @@ class Game extends Base
      * 问题id
      * 答案
      * token
+     * token_help
      * goods_id
      */
     public function is_right_help2()
@@ -249,8 +250,10 @@ class Game extends Base
             //自己答题
             $info=db('problem_house')->where('id',$input['answer_id'])->find();
             // $order_number = $input['order_number'];
-            $member=db('member')->where('token',$this->token)->find();
+            $member=db('member')->where('token',$input['token_help'])->find();
+            $member2=db('member')->where('token',$input['token'])->find();
             $ww['member_id']=$member['id'];
+            $ww['help_id']=$member2['id'];
             $ww['goods_id']=$input['goods_id'];
             $ww['status']=2;
             //插入答题列表
