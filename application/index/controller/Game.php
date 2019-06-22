@@ -270,15 +270,13 @@ class Game extends Base
                 // $data=$game;
             }else{
                 $map2['status']='0';
-                $re=db('answer_record')->where($ww)->update($map2);
-                $res=db('answer_record')->where($ww)->find();
                 //根据配置获取锁定时间
                 $key="lock_time";
                 $info=db('sys_setting')->where('key',$key)->find();
                 $info['value']=json_decode($info['value'],true);
                 $lock_time=time()+$info['value']['lock_time']['other']*60;
-                $lock['lock_time']=$lock_time;
-                db('answer_record')->where($ww)->update($lock);
+                $map2['lock_time']=$lock_time;
+                $re=db('answer_record')->where($ww)->update($map2);
                 return ajax_error('答题失败',$lock);
             }
     }
