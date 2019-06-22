@@ -514,24 +514,24 @@ class Member extends Base
                    }
             }
             //获取免单记录
-            $free_dan=db('captical_record')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id']])->select();
-            foreach($free_dan as $k =>$v)
-            {
-                if($v['help_id']=='0')
-                {    //自己答对，获得免单
-                     $data3[$k]['id']=$v['member_id'];
-                     $data3[$k]['order_type']='8';
-                     $data3[$k]['head_pic']=db('member')->where('id',$v['member_id'])->value('head_pic');
-                }else{
-                    //帮甩答对，获得免单
-                    $data3[$k]['id']=$v['help_id'];
-                    $data3[$k]['order_type']='9';
-                    $data3[$k]['head_pic']=db('member')->where('id',$v['help_id'])->value('head_pic');
-                }
-                $data3[$k]['num']='0';
-                $data3[$k]['create_time']=date('Y-m-d H:i',$v['create_time']);
-            }
-            $res=array_merge($data,$data2,$data3);
+            // $free_dan=db('captical_record')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id']])->select();
+            // foreach($free_dan as $k =>$v)
+            // {
+            //     if($v['help_id']=='0')
+            //     {    //自己答对，获得免单
+            //          $data3[$k]['id']=$v['member_id'];
+            //          $data3[$k]['order_type']='8';
+            //          $data3[$k]['head_pic']=db('member')->where('id',$v['member_id'])->value('head_pic');
+            //     }else{
+            //         //帮甩答对，获得免单
+            //         $data3[$k]['id']=$v['help_id'];
+            //         $data3[$k]['order_type']='9';
+            //         $data3[$k]['head_pic']=db('member')->where('id',$v['help_id'])->value('head_pic');
+            //     }
+            //     $data3[$k]['num']='0';
+            //     $data3[$k]['create_time']=date('Y-m-d H:i',$v['create_time']);
+            // }
+            $res=array_merge($data,$data2);
             //排序
             $create_time = array_column($res,'create_time');
             array_multisort($create_time,SORT_DESC,$res);
