@@ -268,6 +268,7 @@ return [
         'charset'           => 'UTF-8',
         'signType'          => 'RSA2',
         'transport'         => 'http',
+        'version'           => '1.0',
     ],
 
 ];

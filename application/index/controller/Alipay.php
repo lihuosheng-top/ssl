@@ -142,6 +142,22 @@ class Alipay extends Controller
            echo "fail";
        }
 
-	}
+    }
+    /**
+     * lilu
+     * 支付宝退款流程
+     */
+    public function ali_order_refound($total_amount,$product_code)
+    {
+          //测试假数据
+            $pay = new ali();            
+            $alipay= $pay->order_refound( $total_amount, $product_code);
+            if($alipay)
+            {
+                return $alipay;
+            }else{
+                return false;
+            }
+    }
 
 }

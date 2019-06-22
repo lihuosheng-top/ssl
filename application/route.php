@@ -82,6 +82,7 @@ Route::group("",[
    'get_money'=>"index/Game/get_money"  ,                   //获取免单金额和红包金额
    'back_bao_money'=>"index/Game/back_bao_money"  ,         //红包反还
    'unlock'=>"index/Game/unlock"  ,                         //自动解锁记录
+   'member_answer_lock'=>"index/Game/member_answer_lock"  , //扫码分享--判断用户是否解锁
 
    /**甩甩乐分享 */
    'ssl_share'=>"index/Index/ssl_share"  ,                  //甩甩乐分享

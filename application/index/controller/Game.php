@@ -691,4 +691,25 @@ class Game extends Base
           return ajax_error('参数错误');
       }
   }
+  /**
+   * lilu
+   * 扫码分享后，判断用户是否已解锁
+   * token 
+   * token_help
+   * order_number
+   */
+  public function  member_answer_lock()
+  {
+      //获取参数
+      $input=input();
+      $res=db('answer_record')->where('order_number',$input['order_number'])->find();
+      if($res['status']==0)    //用户锁定
+      {
+           return  ajax_success('用户锁定',1);
+      }else{
+           return  ajax_success('用户已解锁',2);
+      }
+  }
+  
+  
 }

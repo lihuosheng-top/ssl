@@ -53,6 +53,45 @@ class  Alipay extends Model
         return $response;
 
     }
+    /**
+     * lilu
+     * 发起支付宝支付
+     * $body            名称
+     * $total_amount    价格
+     * $product_code    订单号
+     * $notify_url      异步回调地址
+     */
+    public function order_refound($total_amount, $product_code)
+    {
+
+        /**
+         * 调用支付宝接口。
+         */
+        include('../extend/Alipay/aop/AopClient.php');
+        include('../extend/Alipay/aop/request/AlipayTradeAppPayRequest.php');
+        $aop = new \AopClient();
+        
+        $aop->gatewayUrl            = Config::get('alipay')['gatewayUrl'];
+        $aop->appId                 = Config::get('alipay')['appId'];
+        $aop->rsaPrivateKey         = Config::get('alipay')['rsaPrivateKey'];
+        $aop->format                = Config::get('alipay')['format'];
+        $aop->charset               = Config::get('alipay')['charset'];
+        $aop->signType              = Config::get('alipay')['signType'];
+        $aop->alipayrsaPublicKey    = Config::get('alipay')['alipayrsaPublicKey'];
+        $aop->aliVersion            = Config::get('alipay')['version'];
+        $request = new \AlipayTradeRefundRequest();
+        $arr['refund_reason']       = '正常退款';
+        $arr['out_trade_no']        = $product_code;
+        $arr['refund_currency']     = 'CNY';
+        $arr['refund_amount']       = floatval($total_amount);
+
+        $json = json_encode($arr);
+        $request->setBizContent($json);
+        $response = $aop->sdkExecute($request);
+       
+        return $response;
+
+    }
     
  
 

@@ -69,6 +69,20 @@ class Order extends Base
         //判断当前用户当前商品是否锁定
         $input=input();
         $mem2=db('member')->where('token',$this->token)->find();
+        //判断用户解锁时间是否到
+        $is_lock=db('answer_record')->where(['member_id'=>$mem2['id'],'goods_id'=>$input['goods_id'],'status'=>0])->find();
+        if($is_lock)
+        {
+            $time=time();
+            if($is_lock['lock_time']<=$time){
+                return ajax_error('商品已锁定，请先解锁');
+            }else{
+                $mm['status']=3;
+                $mm['unlock_time']=time();
+                $answer=db('answer_record')->where(['member_id'=>$mem2['id'],'goods_id'=>$input['goods_id'],'status'=>0])->update($mm);
+            }
+        }
+
         $is_shuai=db('answer_record')->where(['member_id'=>$mem2['id'],'goods_id'=>$input['goods_id'],'status'=>0])->find();
         if($is_shuai)
         {
@@ -191,6 +205,7 @@ class Order extends Base
             // $data['order_quantity']='1';   //商品数量
             $data['help_id']=0;
             $data['member_id']=$member_id['id'];         //会员id
+            $data['pay_type']='1';         // 微信
             $re=db('order')->insert($data);
             if($re)
             {
@@ -226,9 +241,23 @@ class Order extends Base
      */
     public function goods_order2()
     {  
+           
         //判断当前用户当前商品是否锁定
         $input=input();
         $mem2=db('member')->where('token',$this->token)->find();
+        //判断用户解锁时间是否到
+        $is_lock=db('answer_record')->where(['member_id'=>$mem2['id'],'goods_id'=>$input['goods_id'],'status'=>0])->find();
+        if($is_lock)
+        {
+            $time=time();
+            if($is_lock['lock_time']<=$time){
+                return ajax_error('商品已锁定，请先解锁');
+            }else{
+                $mm['status']=3;
+                $mm['unlock_time']=time();
+                $answer=db('answer_record')->where(['member_id'=>$mem2['id'],'goods_id'=>$input['goods_id'],'status'=>0])->update($mm);
+            }
+        }
         $is_shuai=db('answer_record')->where(['member_id'=>$mem2['id'],'goods_id'=>$input['goods_id'],'status'=>0])->find();
         if($is_shuai)
         {
@@ -351,6 +380,7 @@ class Order extends Base
             // $data['order_quantity']='1';   //商品数量
             $data['help_id']=0;
             $data['member_id']=$member_id['id'];         //会员id
+            $data['pay_type']='2';         // 支付宝
             $re=db('order')->insert($data);
             if($re)
             {
@@ -392,6 +422,19 @@ class Order extends Base
         //判断新人
         $member1=db('member')->where('token',$this->token)->find();
         $member2=db('member')->where('token',$input['token_help'])->find();
+        //判断用户解锁时间是否到
+        $is_lock=db('answer_record')->where(['member_id'=>$member1['id'],'goods_id'=>$input['goods_id'],'status'=>0])->find();
+        if($is_lock)
+        {
+            $time=time();
+            if($is_lock['lock_time']<=$time){
+                return ajax_error('商品已锁定，请先解锁');
+            }else{
+                $mm['status']=3;
+                $mm['unlock_time']=time();
+                $answer=db('answer_record')->where(['member_id'=>$member1['id'],'goods_id'=>$input['goods_id'],'status'=>0])->update($mm);
+            }
+        }
         //判断用户是否有帮甩记录
         $is_new=db('order')->where('member_id',$member1['id'])->find();
         if(!$is_new)    //就是个新人
@@ -487,6 +530,7 @@ class Order extends Base
             $re3=db('member')->where('token',$input['token_help'])->find();
             $data['member_id']=$re3['id'];         //会员id
             $data['order_type']='1';         // 1   自己甩订单     2 帮甩订单
+            $data['pay_type']='1';         // 微信
             $re2=db('order')->insert($data);
             if($re2)
             {
@@ -542,6 +586,19 @@ class Order extends Base
         //判断新人
         $member1=db('member')->where('token',$this->token)->find();
         $member2=db('member')->where('token',$input['token_help'])->find();
+        //判断用户解锁时间是否到
+        $is_lock=db('answer_record')->where(['member_id'=>$member1['id'],'goods_id'=>$input['goods_id'],'status'=>0])->find();
+        if($is_lock)
+        {
+            $time=time();
+            if($is_lock['lock_time']<=$time){
+                return ajax_error('商品已锁定，请先解锁');
+            }else{
+                $mm['status']=3;
+                $mm['unlock_time']=time();
+                $answer=db('answer_record')->where(['member_id'=>$member1['id'],'goods_id'=>$input['goods_id'],'status'=>0])->update($mm);
+            }
+        }
         //判断用户是否有帮甩记录
         $is_new=db('order')->where('member_id',$member1['id'])->find();
         if(!$is_new)    //就是个新人
@@ -636,6 +693,7 @@ class Order extends Base
             $re3=db('member')->where('token',$input['token_help'])->find();
             $data['member_id']=$re3['id'];         //会员id
             $data['order_type']='1';         // 1   自己甩订单     2 帮甩订单
+            $data['pay_type']='2';         // 支付宝
             $re2=db('order')->insert($data);
             if($re2)
             {
@@ -853,28 +911,55 @@ class Order extends Base
          {
             //$list2=db('order')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>2,'help_id'=>$v['help_id']])->sum('order_amount');
             //循环遍历退款操作
-           $money=$v['order_amount']*(1-$fei);
-           $pay=new pay();
-           $data2=$pay->order_refunds($v['order_number'],$money,$v['order_amount']);
-           if($data2["return_code"] == "SUCCESS"  ){
-            //退款记录
-                $info=db('order')->where('order_number',$v['order_number'])->find();
-                $where['member_id']=$member['id'];
-                $where['help_id']=$v['help'];   //帮甩用户id
-                $where['goods_id']=$info['goods_id'];
-                $where['order_number']= $v['order_number'];
-                $where['income']=$money;
-                $where['pay']='0';
-                $where['pay_type']='2';   //weixin   
-                $where['order_type']='4';   //退款记录
-                if($v['help_id']=='0')
-                {
-                    $where['order_status']='0';   //自己甩
-                }else{
-                    $where['order_status']='1';   //帮甩
+            if($v['pay_type']==1)     //微信
+            {
+                $money=$v['order_amount']*(1-$fei);
+                $pay=new pay();
+                $data2=$pay->order_refunds($v['order_number'],$money,$v['order_amount']);
+                if($data2["return_code"] == "SUCCESS"  ){
+                    //退款记录
+                        $info=db('order')->where('order_number',$v['order_number'])->find();
+                        $where['member_id']=$member['id'];
+                        $where['help_id']=$v['help'];   //帮甩用户id
+                        $where['goods_id']=$info['goods_id'];
+                        $where['order_number']= $v['order_number'];
+                        $where['income']=$money;
+                        $where['pay']='0';
+                        $where['pay_type']='2';   //weixin   
+                        $where['order_type']='4';   //退款记录
+                        if($v['help_id']=='0')
+                        {
+                            $where['order_status']='0';   //自己甩
+                        }else{
+                            $where['order_status']='1';   //帮甩
+                        }
+                        $re=db('captical_record')->insert($where);
                 }
-                $re=db('captical_record')->insert($where);
-           }
+            }else{      //支付宝
+               $money=$v['order_amount']*(1-$fei);
+               $ali=new alipay();
+               $data3=$ali->ali_order_refound($money,$v['order_number']);
+               if($data3["return_code"] == "SUCCESS"  ){
+                //退款记录
+                    $info=db('order')->where('order_number',$v['order_number'])->find();
+                    $where['member_id']=$member['id'];
+                    $where['help_id']=$v['help'];   //帮甩用户id
+                    $where['goods_id']=$info['goods_id'];
+                    $where['order_number']= $v['order_number'];
+                    $where['income']=$money;
+                    $where['pay']='0';
+                    $where['pay_type']='2';   //weixin   
+                    $where['order_type']='4';   //退款记录
+                    if($v['help_id']=='0')
+                    {
+                        $where['order_status']='0';   //自己甩
+                    }else{
+                        $where['order_status']='1';   //帮甩
+                    }
+                    $re=db('captical_record')->insert($where);
+            }
+            }
+           
         }
         //退款完成后，修改商品开甩记录的状态
         $res=db('goods_receive')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id']])->setField('order_type',-1);
