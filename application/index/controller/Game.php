@@ -194,6 +194,7 @@ class Game extends Base
      * lilu
      * 判断用户是否答题----帮甩
      * token
+     * token_help
      * goods_id
      */
     public function is_answer_help2()
@@ -201,13 +202,16 @@ class Game extends Base
         //获取参数
         $input=input();
             $member=db('member')->where('token',$this->token)->find();
+            $member2=db('member')->where('token',$input['token_help'])->find();
             //没有答题判断
-            $data['member_id']=$member['id'];
+            $data['member_id']=$member2['id'];
+            $data['help_id']=$member['id'];
             $data['goods_id']=$input['goods_id'];
             $data['status']='2';
             $re=db('answer_record')->where($data)->find();
             //答错题
-            $data2['member_id']=$member['id'];
+            $data2['member_id']=$member2['id'];
+            $data2['help_id']=$member['id'];
             $data2['goods_id']=$input['goods_id'];
             $data2['status']='0';
             $re2=db('answer_record')->where($data2)->find();
@@ -217,10 +221,6 @@ class Game extends Base
                 return ajax_success('用户没有答题',$map);
             }
             if($re2){
-                 //根据配置获取锁定时间
-                $key="lock_time";
-                $info=db('sys_setting')->where('key',$key)->find();
-                $info['value']=json_decode($info['value'],true);
                 if($re2['help_id']=='0'){
                     $lock_time=$re2['lock_time'];
                 }else{
