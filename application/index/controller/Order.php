@@ -73,8 +73,8 @@ class Order extends Base
         $is_lock=db('answer_record')->where(['member_id'=>$mem2['id'],'goods_id'=>$input['goods_id'],'status'=>0])->find();
         if($is_lock)
         {
-            $time=time();
-            if($is_lock['lock_time']<=$time){
+            $time=time()-$is_lock['lock_time'];
+            if($time>=0){
                 return ajax_error('商品已锁定，请先解锁');
             }else{
                 $mm['status']=3;

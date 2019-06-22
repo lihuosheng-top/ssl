@@ -693,7 +693,7 @@ class Member extends Base
             $map[$k]['points']=$goods2['points'];
             $map[$k]['goods_name']=$goods2['goods_name'];
             //当前商品的帅次
-             $num=db('order')->where(['goods_id'=>$v['goods_id'],'member_id'=>$member['id']])->count();
+             $num=db('order')->where(['goods_id'=>$v['goods_id'],'member_id'=>$member['id'],'status'=>2])->count();
              $map[$k]['goods_shuai_num']=$num;
              $map[$k]['confirm_time']=$v['confirm_time'];
         }
