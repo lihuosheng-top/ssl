@@ -277,6 +277,7 @@ class Game extends Base
                 $lock_time=time()+$info['value']['lock_time']['other']*60;
                 $map2['lock_time']=$lock_time;
                 $re=db('answer_record')->where($ww)->update($map2);
+                $lock['lock_time']=$lock_time;
                 return ajax_error('答题失败',$lock);
             }
     }
