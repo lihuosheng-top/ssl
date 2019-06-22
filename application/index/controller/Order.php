@@ -939,7 +939,7 @@ class Order extends Base
                $money=$v['order_amount']*(1-$fei);
                $ali=new alipay();
                $data3=$ali->ali_order_refound($money,$v['order_number']);
-               if($data3["return_code"] == "SUCCESS"  ){
+               if($data3=='1'){    //成功
                 //退款记录
                     $info=db('order')->where('order_number',$v['order_number'])->find();
                     $where['member_id']=$member['id'];
@@ -957,13 +957,16 @@ class Order extends Base
                         $where['order_status']='1';   //帮甩
                     }
                     $re=db('captical_record')->insert($where);
+                    //退款完成后，修改商品开甩记录的状态
+                    $res=db('goods_receive')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id']])->setField('order_type',-1);
+                    return ajax_success('已退款成功');
+            }else{
+                return ajax_success('退款失败');
             }
             }
            
         }
-        //退款完成后，修改商品开甩记录的状态
-        $res=db('goods_receive')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id']])->setField('order_type',-1);
-        return ajax_success('已退款成功');
+        
     }
         
 }

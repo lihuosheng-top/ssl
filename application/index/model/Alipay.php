@@ -68,7 +68,7 @@ class  Alipay extends Model
          * 调用支付宝接口。
          */
         include('../extend/Alipay/aop/AopClient.php');
-        include('../extend/Alipay/aop/request/AlipayTradeAppPayRequest.php');
+        include('../extend/Alipay/aop/request/AlipayTradeRefundRequest.php');
         $aop = new \AopClient();
         
         $aop->gatewayUrl            = Config::get('alipay')['gatewayUrl'];
@@ -87,9 +87,16 @@ class  Alipay extends Model
 
         $json = json_encode($arr);
         $request->setBizContent($json);
-        $response = $aop->sdkExecute($request);
-       
-        return $response;
+        // $response = $aop->sdkExecute($request);
+        $result = $aop->execute ( $request); 
+
+        $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
+        $resultCode = $result->$responseNode->code;
+        if(!empty($resultCode)&&$resultCode == 10000){
+            return  '1';    //成功
+        } else {
+          return   '2';
+        }
 
     }
     
