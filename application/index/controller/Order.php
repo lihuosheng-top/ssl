@@ -74,7 +74,7 @@ class Order extends Base
         if($is_lock)
         {
             $time=time()-$is_lock['lock_time'];
-            if($time>=0){
+            if($time<0){
                 return ajax_error('商品已锁定，请先解锁');
             }else{
                 $mm['status']=3;
