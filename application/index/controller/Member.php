@@ -927,6 +927,9 @@ class Member extends Base
             $where['goods_id']=$input['goods_id'];
             $where['member_id']=$member['id'];
             $order_list=db('order')->where($where)->order('create_time desc')->group('help_id')->select();
+            if(!$order_list){
+                return ajax_error('参数错误');
+            }
             //获取当前商品的新旧人帮甩策略
             $goods=db('goods')->where('id',$input['goods_id'])->find();
             
