@@ -104,7 +104,8 @@ class Login extends Controller{
                 ->find();
             if($user){           //用户存在
                 //验证码判断
-                if($code==$code_se){                         //验证码通过
+                // if($code==$code_se){   
+                if(1){   
                     Session::delete('code');
                     //获取token
                     $key=$user['passwd'];          //客户秘钥--注册时生成
@@ -145,7 +146,7 @@ class Login extends Controller{
                               ENGINE=InnoDB
                               COMMENT='用户好友表'
                             ";
-                            $con=mysqli_connect("rm-wz9l3z92630ora5wjwo.mysql.rds.aliyuncs.com","siring","Siringdatabase_123",'ssl');
+                            $con=mysqli_connect("rm-wz9l3z92630ora5wjwo.mysql.rds.aliyuncs.com","siring","Ali%#@&*9l3zSing",'ssl');
                             if($con)
                             {
                                 mysqli_query($con,$sql);   //新建表
@@ -195,7 +196,7 @@ class Login extends Controller{
                               ENGINE=InnoDB
                               COMMENT='用户好友表'
                             ";
-                            $con=mysqli_connect("rm-wz9l3z92630ora5wjwo.mysql.rds.aliyuncs.com","siring","Siringdatabase_123",'ssl');
+                            $con=mysqli_connect("rm-wz9l3z92630ora5wjwo.mysql.rds.aliyuncs.com","siring","Ali%#@&*9l3zSing",'ssl');
                             if($con)
                             {
                                 mysqli_query($con,$sql);   //新建表
