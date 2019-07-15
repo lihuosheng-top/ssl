@@ -38,7 +38,8 @@ Route::group("",[
 
 
    /**支付---微信*/
-   'wxpaynotifyurl'=>"index/Wxpay2/wxpaynotifyurl"  ,          
+   'wxpaynotifyurl'=>"index/Wxpay2/wxpaynotifyurl"  ,    //微信支付回调地址      
+   'wxpayrefundurl'=>"index/Wxpay2/wxpayrefundurl"  ,    //退款回调地址      
    
    /**支付---支付宝 */
    'alipay'=>"index/Alipay/alipay"  ,             //支付宝支付          

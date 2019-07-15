@@ -915,55 +915,64 @@ class Order extends Base
             if($v['pay_type']==1)     //微信
             {
                 $money=$v['order_amount']*(1-$fei);
+                //资金明细中插入退款记录
+                $info=db('order')->where('order_number',$v['order_number'])->find();
+                $where['member_id']=$member['id'];
+                $where['help_id']=$v['help_id'];   //帮甩用户id
+                $where['goods_id']=$info['goods_id'];
+                $where['order_number']= $v['order_number'];
+                $where['income']=$money;
+                $where['pay']='0';
+                $where['pay_type']='2';   //weixin   
+                $where['order_type']='4';   //退款记录----未到账
+                if($v['help_id']=='0')
+                {
+                    $where['order_status']='0';   //自己甩
+                }else{
+                    $where['order_status']='1';   //帮甩
+                }
+                $re=db('captical_record')->insert($where);
                 $pay=new pay();
                 $data2=$pay->order_refunds($v['order_number'],$money,$v['order_amount']);
-                if($data2["return_code"] == "SUCCESS"  ){
+                if($data2["return_code"] == "SUCCESS"){
                     //退款记录
-                        $info=db('order')->where('order_number',$v['order_number'])->find();
-                        $where['member_id']=$member['id'];
-                        $where['help_id']=$v['help'];   //帮甩用户id
-                        $where['goods_id']=$info['goods_id'];
-                        $where['order_number']= $v['order_number'];
-                        $where['income']=$money;
-                        $where['pay']='0';
-                        $where['pay_type']='2';   //weixin   
-                        $where['order_type']='4';   //退款记录
-                        if($v['help_id']=='0')
-                        {
-                            $where['order_status']='0';   //自己甩
-                        }else{
-                            $where['order_status']='1';   //帮甩
-                        }
-                        $re=db('captical_record')->insert($where);
-                }
-            }else{      //支付宝
-               $money=$v['order_amount']*(1-$fei);
-               $ali=new alipay();
-               $data3=$ali->ali_order_refound($money,$v['order_number']);
-               if($data3=='1'){    //成功
-                //退款记录
-                    $info=db('order')->where('order_number',$v['order_number'])->find();
-                    $where['member_id']=$member['id'];
-                    $where['help_id']=$v['help'];   //帮甩用户id
-                    $where['goods_id']=$info['goods_id'];
-                    $where['order_number']= $v['order_number'];
-                    $where['income']=$money;
-                    $where['pay']='0';
-                    $where['pay_type']='2';   //weixin   
-                    $where['order_type']='4';   //退款记录
-                    if($v['help_id']=='0')
-                    {
-                        $where['order_status']='0';   //自己甩
-                    }else{
-                        $where['order_status']='1';   //帮甩
-                    }
-                    $re=db('captical_record')->insert($where);
+                    $mm['order_type']='6';    //退款到账
+                    $ree=db('captical_record')->where('order_number',$v['order_number'])->update($mm);
                     //退款完成后，修改商品开甩记录的状态
                     $res=db('goods_receive')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id']])->setField('order_type',-1);
                     return ajax_success('已退款成功');
-            }else{
-                return ajax_success('退款失败');
-            }
+                }
+            }else{      //支付宝
+               $money=$v['order_amount']*(1-$fei);
+                //退款记录
+                $info=db('order')->where('order_number',$v['order_number'])->find();
+                $where['member_id']=$member['id'];
+                $where['help_id']=$v['help_id'];   //帮甩用户id
+                $where['goods_id']=$info['goods_id'];
+                $where['order_number']= $v['order_number'];
+                $where['income']=$money;
+                $where['pay']='0';
+                $where['pay_type']='2';   //weixin   
+                $where['order_type']='4';   //退款记录
+                if($v['help_id']=='0')
+                {
+                    $where['order_status']='0';   //自己甩
+                }else{
+                    $where['order_status']='1';   //帮甩
+                }
+                $re=db('captical_record')->insert($where);
+               $ali=new alipay();
+               $data3=$ali->ali_order_refound($money,$v['order_number']);
+               if($data3=='1'){    //成功
+                     //退款记录
+                     $mm['order_type']='6';    //退款到账
+                     $ree=db('captical_record')->where('order_number',$v['order_number'])->update($mm);
+                    //退款完成后，修改商品开甩记录的状态
+                    $res=db('goods_receive')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id']])->setField('order_type',-1);
+                    return ajax_success('已退款成功');
+                }else{
+                    return ajax_success('退款失败');
+                }
             }
            
         }
