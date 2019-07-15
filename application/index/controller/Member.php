@@ -70,7 +70,7 @@ class Member extends Base
         //获取所有的会员列表-按照帮甩人数排列
         $member_list=db('member')->select();
         $info=[];
-        $con=mysqli_connect("rm-wz9l3z92630ora5wjwo.mysql.rds.aliyuncs.com","siring","Siringdatabase_123",'ssl');  //连接数据库
+        $con=mysqli_connect("rm-wz9l3z92630ora5wjwo.mysql.rds.aliyuncs.com","siring","Ali%#@&*9l3zSing",'ssl');  //连接数据库
         foreach($member_list as $k =>$v){
             $info[$k]['id']=$v['id'];
             $info[$k]['name']=$v['name'];
