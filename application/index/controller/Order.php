@@ -796,18 +796,20 @@ class Order extends Base
         $num_own=db('order')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>'2','help_id'=>0])->count();    //自己甩数
         $num_help=$num-$num_own;    //帮甩数
         //获取免单的笔数和金额
-        $free_money=db('captical_record')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'help_id'=>0])->sum('income'); //自己免单
+        $free_money=db('captical_record')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'help_id'=>0,'order_type'=>2])->sum('income'); //自己免单
         $free_money=sprintf("%.2f",$free_money);      //总甩费
-        $free_num=db('captical_record')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'help_id'=>0])->count();
+        $free_num=db('captical_record')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'help_id'=>0,'order_type'=>2])->count();
        //获取支付平台的扣费比率
        $key="admin_fei";
        $info=db('sys_setting')->where('key',$key)->find();
        $info['value']=json_decode($info['value'],true);
        $fei=$info['value']['fei']['fei']/100;       //红包平台收费每笔
        $fei2=$fei*$goods_info['goods_price'];
-       if($fei2<0.01)
+       if($fei2==0)
        {
-           $fei2=0.01;
+           $fei2=0.00;
+        }elseif($fei2<=0.01 && $fei2 !=0){
+            $fei2=0.01;
        }
        $fei2=sprintf("%.2f",$fei2);
        $data['shuai_fei']=$shuai_momey;    //总甩费
@@ -821,6 +823,14 @@ class Order extends Base
        $data['free_num']=$free_num;        //自己免单次数
        $data['goods_fei']=$goods_info['goods_price'];         //商品单次甩费
     //    $data['big_flag']=1;         //超级
+        //获取当前商品的信息
+        $good=db('goods')->where('id',$input['goods_id'])->field('id,goods_name,goods_bottom_money,goods_standard')->find();
+        $pp2['status']=array('gt',1);
+        $pp2['goods_id']=$input['goods_id'];
+        $good['shuai_num']=db('order')->where($pp2)->group('member_id')->count();
+        if($good){
+            $data['goods_info']=$good;
+        }
        
        if($data)
        {
@@ -988,7 +998,7 @@ class Order extends Base
                      $ree=db('captical_record')->where(['order_number'=>$v['order_number'],'order_type'=>'4'])->update($mm);
                     //退款完成后，修改商品开甩记录的状态
                     $res=db('goods_receive')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id']])->setField('order_type',-1);
-                    $res2=db('order')->where('order_number',$v['order_number'])->setField('status',-1);     //已退款
+                     $res2=db('order')->where('order_number',$v['order_number'])->setField('status',-1);     //已退款
                     return ajax_success('已退款成功');
                 }else{
                     return ajax_success('退款失败');
