@@ -945,15 +945,24 @@ class Order extends Base
                 if($data2["return_code"] == "SUCCESS"){
                     //退款记录
                     $mm['order_type']='6';    //退款到账
-                    $ree=db('captical_record')->where('order_number',$v['order_number'])->update($mm);
+                    $ree=db('captical_record')->where(['order_number'=>$v['order_number'],'order_type'=>'4'])->update($mm);
                     //退款完成后，修改商品开甩记录的状态
                     $res=db('goods_receive')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id']])->setField('order_type',-1);
+                    $res2=db('order')->where('order_number',$v['order_number'])->setField('status',-1);     //已退款
                     return ajax_success('已退款成功');
                 }else{
                     return ajax_success('已退款失败');
                 }
             }else{      //支付宝
-               $money=$v['order_amount']*(1-$fei);
+              //判断是否免单，获取免单金额
+              $mian=db('captical_record')->where('order_number',$v['order_number'])->find(); 
+              if($mian){
+                  $money=$v['order_amount']*(1-$fei)-$mian['income'];
+              } else{
+                  $money=$v['order_amount']*(1-$fei);    //退款金额
+              }
+                // $money=floor($money*100)/100;    //上线使用
+                $money=round($money,2);     //测试使用
                 //退款记录
                 $info=db('order')->where('order_number',$v['order_number'])->find();
                 $where['member_id']=$member['id'];
@@ -976,9 +985,10 @@ class Order extends Base
                if($data3=='1'){    //成功
                      //退款记录
                      $mm['order_type']='6';    //退款到账
-                     $ree=db('captical_record')->where('order_number',$v['order_number'])->update($mm);
+                     $ree=db('captical_record')->where(['order_number'=>$v['order_number'],'order_type'=>'4'])->update($mm);
                     //退款完成后，修改商品开甩记录的状态
                     $res=db('goods_receive')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id']])->setField('order_type',-1);
+                    $res2=db('order')->where('order_number',$v['order_number'])->setField('status',-1);     //已退款
                     return ajax_success('已退款成功');
                 }else{
                     return ajax_success('退款失败');
