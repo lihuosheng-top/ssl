@@ -914,7 +914,15 @@ class Order extends Base
             //循环遍历退款操作
             if($v['pay_type']==1)     //微信
             {
-                $money=$v['order_amount']*(1-$fei);
+                //判断是否免单，获取免单金额
+                $mian=db('captical_record')->where('order_number',$v['order_number'])->find(); 
+                if($mian){
+                    $money=$v['order_amount']*(1-$fei)-$mian['income'];
+                } else{
+                    $money=$v['order_amount']*(1-$fei);    //退款金额
+                }
+                // $money=floor($money*100)/100;
+                $money=round($money,2);
                 //资金明细中插入退款记录
                 $info=db('order')->where('order_number',$v['order_number'])->find();
                 $where['member_id']=$member['id'];
@@ -941,6 +949,8 @@ class Order extends Base
                     //退款完成后，修改商品开甩记录的状态
                     $res=db('goods_receive')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id']])->setField('order_type',-1);
                     return ajax_success('已退款成功');
+                }else{
+                    return ajax_success('已退款失败');
                 }
             }else{      //支付宝
                $money=$v['order_amount']*(1-$fei);
