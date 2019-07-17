@@ -415,53 +415,64 @@ class Member extends Base
         $input=input();
         if($input){
             //获取用户该商品的每日增加次数
-            $goods=db('goods')->where('id',$input['goods_id'])->find();
-            if($goods['new_tactics'])    //新人策略
-            {
-               $tactics=json_decode($goods['new_tactics'],true);
-               $goods_num=$tactics['help_num'];
-            }else{
-                $goods_num='0';
-            }
-            if($goods['old_tactics'])    //新人策略
-            {
-               $tactics2=json_decode($goods['old_tactics'],true);
-               $goods_num2=$tactics2['help_num'];
-            }else{
-                $goods_num2='0';
-            }
+            // $goods=db('goods')->where('id',$input['goods_id'])->find();
+            // if($goods['new_tactics'])    //新人策略
+            // {
+            //    $tactics=json_decode($goods['new_tactics'],true);
+            //    $goods_num=$tactics['help_num'];
+            // }else{
+            //     $goods_num='0';
+            // }
+            // if($goods['old_tactics'])    //新人策略
+            // {
+            //    $tactics2=json_decode($goods['old_tactics'],true);
+            //    $goods_num2=$tactics2['help_num'];
+            // }else{
+            //     $goods_num2='0';
+            // }
              $re=db('member')->where('token',$this->token)->find();   //获取会员信息
             //当前用户当前商品的甩品记录
-             $list=db('order')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id'],'status'=>2])->order('create_time desc')->select();
+            $where['member_id']=$re['id'];
+            $where['goods_id']=$input['goods_id'];
+            $where['status']=array('gt',1);
+            $where['person_type']=array('lt',2);
+             $list=db('order')->where($where)->order('create_time desc')->select();
+             $list_num=db('order')->where($where)->order('create_time desc')->count();
              if(!$list)
              {
                  return ajax_error('数据获取错误');
              }
             //获取帮甩头像以及帮甩次数
              foreach($list as $k=>$v){
+                 $data[$k]['rank']=$list_num-$k;
+                 //自己甩
                  if($v['help_id']==0)
-                 {  //自己甩
+                 {  
                     $data[$k]['id']=$v['member_id'];
-                    $data[$k]['order_type']='0';
-                    $data[$k]['num']='1';
+                    $data[$k]['order_type']='0';      //自己甩
+                    // $data[$k]['num']='1';
                     $head_pic=db('member')->where('id',$v['member_id'])->value('head_pic');
-                 }else{    //帮甩
-                    if($v['person_type']=='0')
-                    {    //旧人帮甩
-                        $data[$k]['order_type']='3';
-                        $data[$k]['num']=$goods_num2;
-                    }elseif($v['person_type']=='1'){    //新人帮甩
-                        $data[$k]['order_type']='2';
-                        $data[$k]['num']=$goods_num;
-                    }else{                   //帮甩
-                        $data[$k]['num']='1';
-                        $data[$k]['order_type']='1';
-                    }
+                    $data[$k]['head_pic']='';
+                 }else{    
+                     //帮甩
+                    // if($v['person_type']=='0')
+                    // {    //旧人帮甩
+                    //     $data[$k]['order_type']='3';
+                    //     $data[$k]['num']=$goods_num2;
+                    // }elseif($v['person_type']=='1'){    //新人帮甩
+                    //     $data[$k]['order_type']='2';
+                    //     $data[$k]['num']=$goods_num;
+                    // }else{                   //帮甩
+                    //     $data[$k]['num']='1';
+                    //     $data[$k]['order_type']='1';
+                    // }
+                     $data[$k]['order_type']='1';
                      $head_pic=db('member')->where('id',$v['help_id'])->value('head_pic');
                      $data[$k]['id']=$v['help_id'];
+                     $data[$k]['head_pic']=$head_pic;
+
                 }
                     $data[$k]['create_time']=date('Y-m-d H:i',$v['create_time']);
-                    $data[$k]['head_pic']=$head_pic;
              }
              //获取答题记录
              $answer_record=db('answer_record')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id']])->select();
@@ -475,43 +486,45 @@ class Member extends Base
                         $data2[$k]['id']=$v['member_id'];
                         $data2[$k]['order_type']='5';  
                         $head_pic=db('member')->where('id',$v['member_id'])->value('head_pic');
-                        $data2[$k]['num']='0';
-                        $data2[$k]['head_pic']=$head_pic;
+                        // $data2[$k]['num']='0';
+                        $data2[$k]['head_pic']='';
                         $data2[$k]['create_time']=date('Y-m-d H:i',$v['create_time']);
                    }elseif($v['status']=='3'){    //自动解锁
+                        //创建假数据---被锁定
                         $data2[$k]['id']=$v['member_id'];
                         $data2[$k]['order_type']='6';
                         $data2[$k]['unlock_time']=date('Y-m-d H:i',$v['unlock_time']);
                         $head_pic=db('member')->where('id',$v['member_id'])->value('head_pic');
-                        $data2[$k]['head_pic']=$head_pic;
-                        $data2[$k]['num']='0';
+                        $data2[$k]['head_pic']='';
+                        // $data2[$k]['num']='0';
                         $data2[$k]['create_time']=date('Y-m-d H:i',$v['create_time']);
                    }elseif($v['status']=='4'){     //助力解锁
                         $head_pic2=db('member')->where('id',$v['help_id'])->value('head_pic');
-                        $data2[$k]['help_pic']=$head_pic2;    //帮答题的头像
+                        $data2[$k]['head_pic']=$head_pic2;    //帮答题的头像
                         $data2[$k]['help_id']=$v['help_id'];
                         $data2[$k]['id']=$v['member_id'];
                         $data2[$k]['unlock_time']=date('Y-m-d H:i',$v['unlock_time']);
-                        $data2[$k]['num']='0';
+                        // $data2[$k]['num']='0';
                         $data2[$k]['order_type']='7';
                         $head_pic=db('member')->where('id',$v['member_id'])->value('head_pic');
-                        $data2[$k]['head_pic']=$head_pic;
+                        // $data2[$k]['head_pic']='';
                         $data2[$k]['create_time']=date('Y-m-d H:i',$v['create_time']);
                    }elseif($v['status']=='5'){        //帮答题失败 
                         $data[$k]['id']=$v['help_id']; 
                         $data2[$k]['order_type']='10';
                         $head_pic=db('member')->where('id',$v['help_id'])->value('head_pic');
-                        $data2[$k]['num']='0';
+                        // $data2[$k]['num']='0';
                         $data2[$k]['head_pic']=$head_pic;
                         $data2[$k]['create_time']=date('Y-m-d H:i',$v['create_time']);
                    }elseif($v['status']=='1'){         //答题正确
                         $data2[$k]['id']=$v['member_id'];
                         $data2[$k]['order_type']='4';
                         $head_pic=db('member')->where('id',$v['member_id'])->value('head_pic');
-                        $data2[$k]['num']='0';
-                        $data2[$k]['head_pic']=$head_pic;
+                        // $data2[$k]['num']='0';
+                        $data2[$k]['head_pic']='';
                         $data2[$k]['create_time']=date('Y-m-d H:i',$v['create_time']);
                    }
+                   $data2[$k]['rank']=-1;
             }
             //获取免单记录
             // $free_dan=db('captical_record')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id']])->select();
@@ -778,7 +791,7 @@ class Member extends Base
                $record[]=$v3;
             }
         }
-        //获取退款账单
+        //获取退款账单---未到账
         $refund_dan=db('captical_record')->where(['member_id'=>$member['id'],'order_type'=>4])->order('order_number desc')->group('goods_id')->select();
         $arr2=[];
         foreach($refund_dan as $k=>$v)
@@ -801,6 +814,37 @@ class Member extends Base
               $arr2[]=$list4;
         }
         foreach($arr2 as $k5=>$v5)
+        {
+            foreach($v5 as $k6=>$v6)
+            {
+               $record[]=$v6;
+            }
+        }
+        //获取退款账单---已到账
+        $refund_dan2=db('captical_record')->where(['member_id'=>$member['id'],'order_type'=>6])->order('order_number desc')->group('goods_id')->select();
+        $arr3=[];
+        foreach($refund_dan2 as $k=>$v)
+        {
+              $list3[$k]=db('captical_record')->where(['member_id'=>$v['member_id'],'goods_id'=>$v['goods_id'],'order_type'=>6])->select();
+              //单个商品处理
+              foreach($list3[$k] as $k2=>$v2)
+              {
+                   $list5[$k2]['rank']=$k2+1;
+                   $goods_name=db('goods')->where('id',$v2['goods_id'])->find();
+                   if($goods_name)
+                   {
+                       $list5[$k2]['goods_name']=$goods_name['goods_name'];
+                   }
+                   $list5[$k2]['income']=$v2['income'];
+                   $list5[$k2]['create_time']=$v2['order_number'];
+                   $list5[$k2]['type']=3;     //退款记录
+                   $list5[$k2]['goods_id']=$v2['goods_id'];     //退款记录
+              }
+              if($list5){
+                  $arr3[]=$list5;
+              }
+        }
+        foreach($arr3 as $k5=>$v5)
         {
             foreach($v5 as $k6=>$v6)
             {

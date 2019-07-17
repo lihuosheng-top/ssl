@@ -808,7 +808,7 @@ class Order extends Base
        if($fei2==0)
        {
            $fei2=0.00;
-        }elseif($fei2<=0.01 && $fei2 !=0){
+        }elseif($fei2<=0.01 && $fei2!=0){
             $fei2=0.01;
        }
        $fei2=sprintf("%.2f",$fei2);
