@@ -798,7 +798,7 @@ class Order extends Base
         //获取免单的笔数和金额
         $free_money=db('captical_record')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'help_id'=>0,'order_type'=>2])->sum('income'); //自己免单
         $free_money=sprintf("%.2f",$free_money);      //总甩费
-        $free_num=db('captical_record')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'help_id'=>0,'order_type'=>2])->count();
+        $free_num=db('captical_record')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'order_type'=>2])->count();  //总免单次数
        //获取支付平台的扣费比率
        $key="admin_fei";
        $info=db('sys_setting')->where('key',$key)->find();
@@ -820,11 +820,11 @@ class Order extends Base
        $data['num_own']=$num_own;                  //自己甩次
        $data['num_help']=$num_help;                  //帮甩次
        $data['free_money']=$free_money;    //自己免单金额
-       $data['free_num']=$free_num;        //自己免单次数
+       $data['free_num']=$free_num;        //总免单次数
        $data['goods_fei']=$goods_info['goods_price'];         //商品单次甩费
     //    $data['big_flag']=1;         //超级
         //获取当前商品的信息
-        $good=db('goods')->where('id',$input['goods_id'])->field('id,goods_name,goods_bottom_money,goods_standard')->find();
+        $good=db('goods')->where('id',$input['goods_id'])->field('id,goods_name,goods_bottom_money,goods_standard,goods_show_image')->find();
         $pp2['status']=array('gt',1);
         $pp2['goods_id']=$input['goods_id'];
         $good['shuai_num']=db('order')->where($pp2)->group('member_id')->count();
