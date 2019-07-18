@@ -831,7 +831,6 @@ class Order extends Base
         if($good){
             $data['goods_info']=$good;
         }
-       
        if($data)
        {
         return ajax_success('获取成功',$data);
