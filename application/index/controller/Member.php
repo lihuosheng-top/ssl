@@ -475,7 +475,7 @@ class Member extends Base
                      $data[$k]['head_pic']=$head_pic;
 
                 }
-                    $data[$k]['create_time']=date('Y-m-d H:i',$v['create_time']);
+                    $data[$k]['create_time']=$v['create_time'];
              }
              //获取答题记录
              $answer_record=db('answer_record')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id']])->select();
@@ -491,41 +491,41 @@ class Member extends Base
                         $head_pic=db('member')->where('id',$v['member_id'])->value('head_pic');
                         // $data2[$k]['num']='0';
                         $data2[$k]['head_pic']='';
-                        $data2[$k]['create_time']=date('Y-m-d H:i',$v['create_time']);
+                        $data2[$k]['create_time']=$v['create_time'];
                    }elseif($v['status']=='3'){    //自动解锁
                         //创建假数据---被锁定
                         $data2[$k]['id']=$v['member_id'];
                         $data2[$k]['order_type']='6';
-                        $data2[$k]['unlock_time']=date('Y-m-d H:i',$v['unlock_time']);
+                        $data2[$k]['unlock_time']=$v['unlock_time'];
                         $head_pic=db('member')->where('id',$v['member_id'])->value('head_pic');
                         $data2[$k]['head_pic']='';
                         // $data2[$k]['num']='0';
-                        $data2[$k]['create_time']=date('Y-m-d H:i',$v['create_time']);
+                        $data2[$k]['create_time']=$v['create_time'];
                    }elseif($v['status']=='4'){     //助力解锁
                         $head_pic2=db('member')->where('id',$v['help_id'])->value('head_pic');
                         $data2[$k]['head_pic']=$head_pic2;    //帮答题的头像
                         $data2[$k]['help_id']=$v['help_id'];
                         $data2[$k]['id']=$v['member_id'];
-                        $data2[$k]['unlock_time']=date('Y-m-d H:i',$v['unlock_time']);
+                        $data2[$k]['unlock_time']=$v['unlock_time'];
                         // $data2[$k]['num']='0';
                         $data2[$k]['order_type']='7';
                         $head_pic=db('member')->where('id',$v['member_id'])->value('head_pic');
                         // $data2[$k]['head_pic']='';
-                        $data2[$k]['create_time']=date('Y-m-d H:i',$v['create_time']);
+                        $data2[$k]['create_time']=$v['create_time'];
                    }elseif($v['status']=='5'){        //帮答题失败 
                         $data[$k]['id']=$v['help_id']; 
                         $data2[$k]['order_type']='10';
                         $head_pic=db('member')->where('id',$v['help_id'])->value('head_pic');
                         // $data2[$k]['num']='0';
                         $data2[$k]['head_pic']=$head_pic;
-                        $data2[$k]['create_time']=date('Y-m-d H:i',$v['create_time']);
+                        $data2[$k]['create_time']=$v['create_time'];
                    }elseif($v['status']=='1'){         //答题正确
                         $data2[$k]['id']=$v['member_id'];
                         $data2[$k]['order_type']='4';
                         $head_pic=db('member')->where('id',$v['member_id'])->value('head_pic');
                         // $data2[$k]['num']='0';
                         $data2[$k]['head_pic']='';
-                        $data2[$k]['create_time']=date('Y-m-d H:i',$v['create_time']);
+                        $data2[$k]['create_time']=$v['create_time'];
                    }
                    $data2[$k]['rank']=-1;
             }
@@ -782,12 +782,12 @@ class Member extends Base
                    }
                    $list3[$k][$k2]['income']=$v2['income'];
                    $list3[$k][$k2]['goods_show_image']=$goods_name['goods_show_image'];
-                   $list3[$k][$k2]['create_time']=$v2['order_number'];
+                   $list3[$k][$k2]['create_time']=strtotime($v2['order_number']);
                    if($v2['help_id']==0){
 
                        $list3[$k][$k2]['type']=1;      //甩免单---自己甩
                     }else{
-                        $list3[$k][$k2]['type']=4;      //甩免单---帮甩甩
+                        $list3[$k][$k2]['type']=4;      //甩免单---帮甩
                    }
                    $list3[$k][$k2]['goods_id']=$v2['goods_id'];      //甩免单
               }
@@ -817,7 +817,7 @@ class Member extends Base
                    }
                    $list4[$k2]['income']=$v2['income'];
                    $list4[$k2]['goods_show_image']=$goods_name['goods_show_image'];
-                   $list4[$k2]['create_time']=$v2['order_number'];
+                   $list4[$k2]['create_time']=strtotime($v2['order_number']);
                    $list4[$k2]['type']=2;     //退款记录
                    $list4[$k2]['goods_id']=$v2['goods_id'];     //退款记录
               }
@@ -847,7 +847,7 @@ class Member extends Base
                    }
                    $list5[$k2]['income']=$v2['income'];
                    $list3[$k2]['goods_show_image']=$goods_name['goods_show_image'];
-                   $list5[$k2]['create_time']=$v2['order_number'];
+                   $list5[$k2]['create_time']=strtotime($v2['order_number']);;
                    $list5[$k2]['type']=3;     //退款记录
                    $list5[$k2]['goods_id']=$v2['goods_id'];     //退款记录
               }
