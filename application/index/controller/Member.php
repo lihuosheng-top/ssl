@@ -310,6 +310,9 @@ class Member extends Base
        //获取当前用户当前甩品的红包金额
     //    $bao_money=db('help_record')->where(['member_id'=>$info['id'],'goods_id'=>$input['goods_id']])->sum('income');
     //    $data['bao_money']=$bao_money;
+        //获取当前商品的甩费--新增
+        $data['good_price']=$repertory['good_price'];
+        $data['goods_bottom_money']=$repertory['goods_bottom_money'];
        if($data)
        {
            return ajax_success('获取成功',$data);
@@ -780,7 +783,12 @@ class Member extends Base
                    $list3[$k][$k2]['income']=$v2['income'];
                    $list3[$k][$k2]['goods_show_image']=$goods_name['goods_show_image'];
                    $list3[$k][$k2]['create_time']=$v2['order_number'];
-                   $list3[$k][$k2]['type']=1;      //甩免单
+                   if($v2['help_id']==0){
+
+                       $list3[$k][$k2]['type']=1;      //甩免单---自己甩
+                    }else{
+                        $list3[$k][$k2]['type']=4;      //甩免单---帮甩甩
+                   }
                    $list3[$k][$k2]['goods_id']=$v2['goods_id'];      //甩免单
               }
         }
