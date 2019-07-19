@@ -311,7 +311,7 @@ class Member extends Base
     //    $bao_money=db('help_record')->where(['member_id'=>$info['id'],'goods_id'=>$input['goods_id']])->sum('income');
     //    $data['bao_money']=$bao_money;
         //获取当前商品的甩费--新增
-        $data['good_price']=$repertory['good_price'];
+        $data['good_price']=$repertory['goods_price'];
         $data['goods_bottom_money']=$repertory['goods_bottom_money'];
        if($data)
        {
