@@ -271,6 +271,7 @@ class Member extends Base
     {
        //获取信息
        $input=input();   //商品id
+       $goods_info=db('goods')->where('id',$input['goods_id'])->find();
        //获取当前甩客信息
        $info=db('member')->where('token',$this->token)->find();
        //获取当前用户的地址
@@ -304,15 +305,39 @@ class Member extends Base
        $goods_num=db('goods_receive')->where(['goods_id'=>$input['goods_id'],'member_id'=>$info['id']])->value('yi_shuai');
        $data['yi_goods_num']=$goods_num;
        //获取当前用户当前甩品的免单金额
-       $free_money=db('captical_record')->where(['member_id'=>$info['id'],'goods_id'=>$input['goods_id'],'help_id'=>0])->sum('income');
+       $free_money=db('captical_record')->where(['member_id'=>$info['id'],'goods_id'=>$input['goods_id'],'help_id'=>0,'order_type'=>2])->count();
+       $free_money=$free_money*$goods_info['goods_price'];
        $free_money=number_format($free_money, 2);
        $data['free_money']=$free_money;
+       //获取当前用户当前甩品的免单金额
+       $free_money2=db('captical_record')->where(['member_id'=>$info['id'],'goods_id'=>$input['goods_id'],'order_type'=>2])->count();
+       $free_money2=$free_money2*$goods_info['goods_price'];
+       $free_money2=number_format($free_money2, 2);
+       $data['free_money2']=$free_money2;    //本商品免单金额（自己甩+帮甩）
        //获取当前用户当前甩品的红包金额
     //    $bao_money=db('help_record')->where(['member_id'=>$info['id'],'goods_id'=>$input['goods_id']])->sum('income');
     //    $data['bao_money']=$bao_money;
         //获取当前商品的甩费--新增
         $data['good_price']=$repertory['goods_price'];
         $data['goods_bottom_money']=$repertory['goods_bottom_money'];
+        //甩购零钱
+        $pp['member_id']=$info['id'];
+        $pp['goods_id']=$input['goods_id'];
+        $pp['status']=array('between',array(2,8));
+        $shuai_zong=db('order')->where($pp)->count();   //该客户该商品总甩费
+        $shuai_zong=$shuai_zong*$goods_info['goods_price'];
+        $shuai_zong=number_format($shuai_zong, 2);
+        $ling_money=$shuai_zong-$free_money2;   //甩购零钱
+        $ling_money=number_format($ling_money, 2);
+        $data['ling_money']=$ling_money;
+        //库存
+        $ku_zong=db('goods')->where('id',$input['goods_id'])->value('goods_repertory');    //总库存
+        $status['goods_id']=$input['goods_id'];
+        $status['order_type']=array('gt',0);
+        $sell_num=db('goods_receive')->where($status)->count();   //该客户该商品总甩费
+        $yu_num=$ku_zong-$sell_num;
+        $data['sell_num']=$sell_num;
+        $data['yu_num']=$yu_num;
        if($data)
        {
            return ajax_success('获取成功',$data);
