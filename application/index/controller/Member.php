@@ -338,6 +338,7 @@ class Member extends Base
         $yu_num=$ku_zong-$sell_num;
         $data['sell_num']=$sell_num;
         $data['yu_num']=$yu_num;
+        $data['ku_zong']=$ku_zong;
        if($data)
        {
            return ajax_success('获取成功',$data);
