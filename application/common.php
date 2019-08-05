@@ -30,25 +30,66 @@ function curl($url){
     curl_close($ch);
     return $output;
 }
-/*
- * curl_post请求短信发送函数
- * $text  欲请求的文本内容
- * return json数据
+// /*
+//  * curl_post请求短信发送函数
+//  * $text  欲请求的文本内容
+//  * return json数据
+//  */
+// function sms_message( $phone = "" ,$content = ""){
+//     $account='shuaishuaile';
+//     $password="123qwe";
+//     $url = "http://120.26.38.54:8000/interface/smssend.aspx";
+//     $post_data = array ("account" => $account,"password" => $password,"mobile"=>$phone,"content"=>$content);
+//     $ch = curl_init();
+//     curl_setopt($ch, CURLOPT_URL,$url);
+//     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+//     curl_setopt($ch, CURLOPT_POST, 1);
+//     curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+//     $output = curl_exec($ch);
+//     curl_close($ch);
+//     return $output;
+// }
+/**
+ * @param string $content  短信内容
+ * @param string $mobile   手机号
+ * @return 成功时返回，其他抛异常
  */
-function sms_message( $phone = "" ,$content = ""){
-    $account='shuaishuaile';
-    $password="123qwe";
-    $url = "http://120.26.38.54:8000/interface/smssend.aspx";
-    $post_data = array ("account" => $account,"password" => $password,"mobile"=>$phone,"content"=>$content);
+function sms_message($content,$mobile)
+{
+    // $content = '【Wordphone】短信内容';//带签名的短息内容
+    // $mobile = '15872844800';//手机号
+    $url = "http://47.107.123.77:8860/sendSms";//请求URL
+    $api_code = "240022";//对接协议中的API代码
+    $api_secret = "SCPR87L6RF";//对接协议中的API密码
+    $sign = md5($content.$api_secret);//md加密后短信内容+API密码 获得签名
+    $bodys = [
+        'cust_code'=>$api_code,
+        'content' => $content,
+        'destMobiles' => $mobile,
+        'sign' => $sign,
+    ];
+    $data_string = json_encode($bodys);
+    if (!function_exists('curl_init'))
+    {
+        return '';
+    }
+    //设置url
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL,$url);
+    curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-    $output = curl_exec($ch);
-    curl_close($ch);
-    return $output;
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+
+    curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type: text/html'));// 文本提交方式，必须声明请求头
+    $data = curl_exec($ch);
+    if($data === false){
+        var_dump(curl_error($ch));
+    }else{
+        curl_close($ch);
+    }
+    return $data;
 }
+
 //获取当天天气预报情况
 function message(){
     $city = curl("http://www.sojson.com/open/api/weather/json.shtml?city=%E9%83%91%E5%B7%9E");
