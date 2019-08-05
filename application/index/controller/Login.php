@@ -39,6 +39,7 @@ class Login extends Controller{
                 // $content='您的验证码：'.$code;
                 $content="【甩甩乐】尊敬的用户，您本次验证码为{$code}，十分钟内有效";
                 $re2= sms_message();
+                halt($re2);
                 //获取token
 //                $key=$re['passwd'];          //客户秘钥--注册时生成
 //                $data['time']=time();        //当前时间戳
