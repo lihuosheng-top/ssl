@@ -37,7 +37,7 @@ class Login extends Controller{
                 $code=rand(100,999);
                 Session::set('code',$code);
                 // $content='您的验证码：'.$code;
-                $content="【甩甩乐】尊敬的用户，您本次验证码为{$code}，十分钟内有效";
+                
                 $re2= sms_message();
                 halt($re2);
                 //获取token

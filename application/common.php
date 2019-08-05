@@ -56,8 +56,8 @@ function curl($url){
  */
 function sms_message()
 {
-    $content = '短信内容';//带签名的短息内容
-    $mobile = '13502882637';//手机号
+    $content="【甩甩乐】尊敬的用户，您本次验证码为{$code}，十分钟内有效";//带签名的短息内容
+    $mobile = "13502882637";//手机号
     $url = "http://47.107.123.77:8860/sendSms";//请求URL
     $api_code = "240022";//对接协议中的API代码
     $api_secret = "SCPR87L6RF";//对接协议中的API密码
