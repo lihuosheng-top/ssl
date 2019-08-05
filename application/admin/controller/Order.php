@@ -206,7 +206,7 @@ use think\Request;
             if($info['value']['message']['status']=='1')
             {
                
-                $pp=sms_message($input['phone'],$input['mes']);
+                $pp=sms_message($input['mes'],$input['phone']);
             }else{
                 return ajax_error('发送失败,短信功能未开启');
             }

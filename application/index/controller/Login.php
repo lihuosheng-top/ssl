@@ -37,7 +37,7 @@ class Login extends Controller{
                 $code=rand(100,999);
                 Session::set('code',$code);
                 $content='您的验证码：'.$code;
-                $re2= sms_message($post['account'],$content);
+                $re2= sms_message($content,$post['account']);
                 //获取token
 //                $key=$re['passwd'];          //客户秘钥--注册时生成
 //                $data['time']=time();        //当前时间戳
@@ -60,7 +60,7 @@ class Login extends Controller{
                     $code=rand(100,999);
                     Session::set('code',$code);
                     $content='您的验证码：'.$code;
-                    $re3=sms_message($post['account'],$content);
+                    $re3=sms_message($content,$post['account']);
 //                        //获取token
 //                        $key=$user['passwd'];          //客户秘钥--注册时生成
 //                        $data['time']=time();        //当前时间戳
