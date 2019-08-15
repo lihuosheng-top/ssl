@@ -8,7 +8,7 @@ use think\Session;
 use think\Request;
 use think\Db;
 use app\index\controller\Wxpay2 as pay;
-use app\index\controller\Aipay as alipay;
+use app\index\controller\Alipay as alipay;
 
 /**
  * lilu
@@ -546,8 +546,6 @@ class Game extends Base
             $map['status']='0';
         }
         //其他商品配置策略
-
-
         if($res['pay_type']==1){   //微信
             $pay=new pay();
             $data2=$pay->order_refunds($data['order_number'],$money,$res['order_amount']);
