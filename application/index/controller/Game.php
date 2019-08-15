@@ -725,7 +725,7 @@ class Game extends Base
       //获取参数
       $input=input();
       //判断是否自动解锁或解锁时间已过
-      $answer=db('answer_record')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>0])->find();
+      $answer=db('answer_record')->where(['order_number'=>$input['order_number'],'status'=>0])->find();
       if($answer && $answer['unlock_time']>time()){
           //锁定
           return  ajax_success('用户锁定',1);
