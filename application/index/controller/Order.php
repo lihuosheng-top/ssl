@@ -995,7 +995,6 @@ class Order extends Base
                     $where['order_status']='1';   //帮甩
                 }
                 $re=db('captical_record')->insert($where);
-                halt($money);
                $ali=new alipay();
                $data3=$ali->ali_order_refound($money,$v['order_number']);
                if($data3=='1'){    //成功
