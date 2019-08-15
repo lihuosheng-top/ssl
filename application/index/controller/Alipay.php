@@ -146,6 +146,7 @@ class Alipay extends Controller
     /**
      * lilu
      * 支付宝退款流程
+     * product_code  订单编号
      */
     public function ali_order_refound($total_amount,$product_code)
     {

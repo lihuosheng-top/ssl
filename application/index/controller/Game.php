@@ -8,6 +8,7 @@ use think\Session;
 use think\Request;
 use think\Db;
 use app\index\controller\Wxpay2 as pay;
+use app\index\controller\Aipay as alipay;
 
 /**
  * lilu
@@ -547,22 +548,44 @@ class Game extends Base
         //其他商品配置策略
 
 
-        
-        $pay=new pay();
-        $data2=$pay->order_refunds($data['order_number'],$money,$res['order_amount']);
-        if($data2["return_code"] == "SUCCESS"  ){
-            //红包记录
-            $info=db('order')->where('order_number',$input['order_number'])->find();
-            $where['member_id']=$member['id'];
-            $where['help_id']='0';   //帮甩用户id
-            $where['goods_id']=$info['goods_id'];
-            $where['order_number']= $input['order_number'];
-            $where['income']=$map['free_money'];
-            $where['pay']='0';
-            $where['pay_type']='2';       //weixin   
-            $where['order_type']='2';     //免单
-            $where['order_status']='0';   //自己甩
-            $re=db('captical_record')->insert($where);
+        if($res['pay_type']==1){   //微信
+            $pay=new pay();
+            $data2=$pay->order_refunds($data['order_number'],$money,$res['order_amount']);
+            if($data2["return_code"] == "SUCCESS"  ){
+                //免单记录
+                $info=db('order')->where('order_number',$input['order_number'])->find();
+                $where['member_id']=$member['id'];
+                $where['help_id']='0';   //帮甩用户id
+                $where['goods_id']=$info['goods_id'];
+                $where['order_number']= $input['order_number'];
+                $where['income']=$map['free_money'];
+                $where['pay']='0';
+                $where['pay_type']='2';       //weixin   
+                $where['order_type']='2';     //免单
+                $where['order_status']='0';   //自己甩
+                $re=db('captical_record')->insert($where);
+            }
+        }else{
+            //支付宝
+            $alipay= new alipay();
+            $data3=$alipay->ali_order_refound($money,$res['order_number']);
+            $pp['txt']=$data3.date('Y-m-d H:i',time());
+            db('text')->insert($pp);
+            if($data3==1){
+                //退款成功----免单成功
+                //免单记录
+                $info=db('order')->where('order_number',$input['order_number'])->find();
+                $where['member_id']=$member['id'];
+                $where['help_id']='0';   //帮甩用户id
+                $where['goods_id']=$info['goods_id'];
+                $where['order_number']= $input['order_number'];
+                $where['income']=$map['free_money'];
+                $where['pay']='0';
+                $where['pay_type']='1';       //alipay   
+                $where['order_type']='2';     //免单
+                $where['order_status']='0';   //自己甩
+                $re=db('captical_record')->insert($where);
+            }
         }
         if($map)
         {

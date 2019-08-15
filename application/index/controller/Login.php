@@ -36,15 +36,9 @@ class Login extends Controller{
                 //发送短信
                 $code=rand(100,999);
                 Session::set('code',$code);
-                // $content='您的验证码：'.$code;
-                // $content="【甩甩乐】尊敬的用户，您本次验证码为{$code}，十分钟内有效";
                 $content="【甩甩乐】尊敬的用户，您本次验证码为".$code."，十分钟内有效";//带签名的短息内容
                 $mobile = $post['account'];//手机号
                 $re2= sms_message($content,$mobile);
-                //获取token
-//                $key=$re['passwd'];          //客户秘钥--注册时生成
-//                $data['time']=time();        //当前时间戳
-//                $data['token']=md5($key.md5($data['time']));    //token加密
                 if($re2){
                     return  ajax_success('发送短信成功');
                 }else{
