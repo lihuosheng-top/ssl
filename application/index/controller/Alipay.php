@@ -78,7 +78,9 @@ class Alipay extends Controller
             {    $yi_shuai=$is_save['yi_shuai'];
                 $num= db('goods_receive')->where($data)->setField('yi_shuai',$yi_shuai+1);
                 $info= db('goods_receive')->where($data)->find();
-                if($info['yi_shuai']==$info['shuai_num'])
+                //统计已支付的订单数
+                $order_num=db('order')->where(['goods_id'=>$res['goods_id'],'member_id'=>$res['member_id'],'status'=>2])->count();
+                if($order_num ==$info['shuai_num'])
                 {
                     $where2['order_type']='1';
                     db('goods_receive')->where($data)->update($where2);
