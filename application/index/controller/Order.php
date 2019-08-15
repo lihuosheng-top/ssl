@@ -783,11 +783,11 @@ class Order extends Base
         //获取用户的信息
         $member=db('member')->where('token',$this->token)->find();
         //判断当前商品当前用户是否退款
-        $is_refund=db('goods_receive')->where(['goods_id'=>$input['good_id'],'member_id'=>$member['id']])->value('order_type');
+        $is_refund=db('goods_receive')->where(['goods_id'=>$input['goods_id'],'member_id'=>$member['id']])->value('order_type');
         if($is_refund<0){
            $data['order_status']=1;   //已退款
         }else{
-            $data['order_status']=0;   //已退款
+            $data['order_status']=0;   //未退款
 
         }
         //获取当前用户的所有已付款甩记录
