@@ -44,7 +44,6 @@ class  Alipay extends Model
         $arr['timeout_express']     = '30m';
         $arr['total_amount']        = floatval($total_amount);
         $arr['product_code']        = 'QUICK_MSECURITY_PAY';
-        $arr['out_request_no']        = date('YmdHis').'000';
 
         $json = json_encode($arr);
         $request->setNotifyUrl($notify_url);
@@ -85,6 +84,8 @@ class  Alipay extends Model
         $arr['out_trade_no']        = $product_code;
         $arr['refund_currency']     = 'CNY';
         $arr['refund_amount']       = floatval($total_amount);
+        $arr['out_request_no']        = date('YmdHis').'000';
+
 
         $json = json_encode($arr);
         $request->setBizContent($json);
