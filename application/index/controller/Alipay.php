@@ -108,7 +108,7 @@ class Alipay extends Controller
             $where5['order_number']= $info['order_number'];
             $where5['income']=0;
             $where5['pay']=$info['order_amount'];
-            $where5['pay_type']='2';   //weixin   
+            $where5['pay_type']='1';   //weixin   
             if($info['help_id']==0)
             {
                 $where5['order_type']='1';    //自己甩

@@ -788,7 +788,6 @@ class Order extends Base
            $data['order_status']=1;   //已退款
         }else{
             $data['order_status']=0;   //未退款
-
         }
         //获取当前用户的所有已付款甩记录
         $list=db('order')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>'2'])->select();
@@ -971,7 +970,7 @@ class Order extends Base
                 }
             }else{      //支付宝
               //判断是否免单，获取免单金额
-              $mian=db('captical_record')->where('order_number',$v['order_number'])->find(); 
+              $mian=db('captical_record')->where(['order_number'=>$v['order_number'],'order_type'=>2])->find(); 
               if($mian){
                   $money=$v['order_amount']*(1-$fei)-$mian['income'];
               } else{
@@ -996,6 +995,7 @@ class Order extends Base
                     $where['order_status']='1';   //帮甩
                 }
                 $re=db('captical_record')->insert($where);
+                halt($money);
                $ali=new alipay();
                $data3=$ali->ali_order_refound($money,$v['order_number']);
                if($data3=='1'){    //成功

@@ -63,7 +63,6 @@ class  Alipay extends Model
      */
     public function order_refound($total_amount, $product_code)
     {
-
         /**
          * 调用支付宝接口。
          */
