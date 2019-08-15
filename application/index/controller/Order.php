@@ -782,6 +782,14 @@ class Order extends Base
         $goods_info=db('goods')->where('id',$input['goods_id'])->find();
         //获取用户的信息
         $member=db('member')->where('token',$this->token)->find();
+        //判断当前商品当前用户是否退款
+        $is_refund=db('goods_receive')->where(['goods_id'=>$input['good_id'],'member_id'=>$member['id']])->value('order_type');
+        if($is_refund<0){
+           $data['order_status']=1;   //已退款
+        }else{
+            $data['order_status']=0;   //已退款
+
+        }
         //获取当前用户的所有已付款甩记录
         $list=db('order')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>'2'])->select();
         $shuai_momey=db('order')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>'2'])->sum('order_amount');    //总甩费
@@ -908,7 +916,7 @@ class Order extends Base
          //获取用户的信息
          $member=db('member')->where('token',$this->token)->find();
          //获取当前用户的所有已付款甩记录
-         $list=db('order')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>'2'])->group('help_id')->select();
+         $list=db('order')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>'2'])->select();
          //获取支付平台的扣费比率
         $key="admin_fei";
         $info=db('sys_setting')->where('key',$key)->find();
@@ -956,7 +964,7 @@ class Order extends Base
                     $ree=db('captical_record')->where(['order_number'=>$v['order_number'],'order_type'=>'4'])->update($mm);
                     //退款完成后，修改商品开甩记录的状态
                     $res=db('goods_receive')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id']])->setField('order_type',-1);
-                    $res2=db('order')->where('order_number',$v['order_number'])->setField('status',-1);     //已退款
+                    // $res2=db('order')->where('order_number',$v['order_number'])->setField('status',-1);     //已退款
                     return ajax_success('已退款成功');
                 }else{
                     return ajax_success('已退款失败');
@@ -979,7 +987,7 @@ class Order extends Base
                 $where['order_number']= $v['order_number'];
                 $where['income']=$money;
                 $where['pay']='0';
-                $where['pay_type']='2';   //weixin   
+                $where['pay_type']='1';     //alipay   
                 $where['order_type']='4';   //退款记录
                 if($v['help_id']=='0')
                 {
@@ -996,7 +1004,7 @@ class Order extends Base
                      $ree=db('captical_record')->where(['order_number'=>$v['order_number'],'order_type'=>'4'])->update($mm);
                     //退款完成后，修改商品开甩记录的状态
                     $res=db('goods_receive')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id']])->setField('order_type',-1);
-                     $res2=db('order')->where('order_number',$v['order_number'])->setField('status',-1);     //已退款
+                    //  $res2=db('order')->where('order_number',$v['order_number'])->setField('status',-1);     //已退款
                     return ajax_success('已退款成功');
                 }else{
                     return ajax_success('退款失败');
