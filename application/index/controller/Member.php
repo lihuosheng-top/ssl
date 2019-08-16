@@ -856,6 +856,7 @@ class Member extends Base
                $record[]=$v6;
             }
         }
+        // halt($record);
         //获取退款账单---已到账
         $refund_dan2=db('captical_record')->where(['member_id'=>$member['id'],'order_type'=>6])->order('order_number desc')->group('goods_id')->select();
         $arr3=[];
@@ -872,7 +873,7 @@ class Member extends Base
                        $list5[$k2]['goods_name']=$goods_name['goods_name'];
                    }
                    $list5[$k2]['income']=$v2['income'];
-                   $list3[$k2]['goods_show_image']=$goods_name['goods_show_image'];
+                   $list5[$k2]['goods_show_image']=$goods_name['goods_show_image'];
                    $list5[$k2]['create_time']=strtotime($v2['order_number']);;
                    $list5[$k2]['type']=3;     //退款记录
                    $list5[$k2]['goods_id']=$v2['goods_id'];     //退款记录
