@@ -809,7 +809,7 @@ class Member extends Base
                    }
                    $list3[$k][$k2]['income']=$v2['income'];
                    $list3[$k][$k2]['goods_show_image']=$goods_name['goods_show_image'];
-                   $list3[$k][$k2]['create_time']=strtotime($v2['create_time']);
+                   $list3[$k][$k2]['create_time']=$v2['create_time'];
                    if($v2['help_id']==0){
 
                        $list3[$k][$k2]['type']=1;      //甩免单---自己甩
@@ -844,7 +844,7 @@ class Member extends Base
                    }
                    $list4[$k2]['income']=$v2['income'];
                    $list4[$k2]['goods_show_image']=$goods_name['goods_show_image'];
-                   $list4[$k2]['create_time']=strtotime($v2['create_time']);
+                   $list4[$k2]['create_time']=$v2['create_time'];
                    $list4[$k2]['type']=2;     //退款记录
                    $list4[$k2]['goods_id']=$v2['goods_id'];     //退款记录
               }
@@ -875,7 +875,7 @@ class Member extends Base
                    }
                    $list5[$k2]['income']=$v2['income'];
                    $list5[$k2]['goods_show_image']=$goods_name['goods_show_image'];
-                   $list5[$k2]['create_time']=strtotime($v2['create_time']);
+                   $list5[$k2]['create_time']=$v2['create_time'];
                    $list5[$k2]['type']=3;     //退款记录
                    $list5[$k2]['goods_id']=$v2['goods_id'];     //退款记录
               }
