@@ -808,7 +808,7 @@ class Member extends Base
                        $list3[$k][$k2]['goods_name']=$goods_name['goods_name'];
                    }
                    $list3[$k][$k2]['income']=$v2['income'];
-                   $list3[$k][$k2]['goods_show_image']=$goods_name['goods_show_image'];
+                   $list3[$k][$k2]['goods_show_image']=$goods_name['goods_images_three'];
                    $list3[$k][$k2]['create_time']=$v2['create_time'];
                    if($v2['help_id']==0){
 
