@@ -502,6 +502,7 @@ class Member extends Base
 
                 }
                     $data[$k]['create_time']=$v['create_time'];
+
              }
              //获取答题记录
              $answer_record=db('answer_record')->where(['member_id'=>$re['id'],'goods_id'=>$input['goods_id']])->select();
@@ -539,7 +540,7 @@ class Member extends Base
                         // $data2[$k]['head_pic']='';
                         $data2[$k]['create_time']=$v['create_time'];
                    }elseif($v['status']=='5'){        //帮答题失败 
-                        $data[$k]['id']=$v['help_id']; 
+                        $data2[$k]['id']=$v['help_id']; 
                         $data2[$k]['order_type']='10';
                         $head_pic=db('member')->where('id',$v['help_id'])->value('head_pic');
                         // $data2[$k]['num']='0';
@@ -808,7 +809,7 @@ class Member extends Base
                    }
                    $list3[$k][$k2]['income']=$v2['income'];
                    $list3[$k][$k2]['goods_show_image']=$goods_name['goods_show_image'];
-                   $list3[$k][$k2]['create_time']=strtotime($v2['order_number']);
+                   $list3[$k][$k2]['create_time']=strtotime($v2['create_time']);
                    if($v2['help_id']==0){
 
                        $list3[$k][$k2]['type']=1;      //甩免单---自己甩
@@ -843,7 +844,7 @@ class Member extends Base
                    }
                    $list4[$k2]['income']=$v2['income'];
                    $list4[$k2]['goods_show_image']=$goods_name['goods_show_image'];
-                   $list4[$k2]['create_time']=strtotime($v2['order_number']);
+                   $list4[$k2]['create_time']=strtotime($v2['create_time']);
                    $list4[$k2]['type']=2;     //退款记录
                    $list4[$k2]['goods_id']=$v2['goods_id'];     //退款记录
               }
@@ -874,7 +875,7 @@ class Member extends Base
                    }
                    $list5[$k2]['income']=$v2['income'];
                    $list5[$k2]['goods_show_image']=$goods_name['goods_show_image'];
-                   $list5[$k2]['create_time']=strtotime($v2['order_number']);;
+                   $list5[$k2]['create_time']=strtotime($v2['create_time']);
                    $list5[$k2]['type']=3;     //退款记录
                    $list5[$k2]['goods_id']=$v2['goods_id'];     //退款记录
               }

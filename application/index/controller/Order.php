@@ -960,6 +960,7 @@ class Order extends Base
                 $where['pay']='0';
                 $where['pay_type']='2';   //weixin   
                 $where['order_type']='4';   //退款记录----未到账
+                $where['create_time']=time();   //退款记录----未到账
                 if($v['help_id']=='0')
                 {
                     $where['order_status']='0';   //自己甩
@@ -972,6 +973,7 @@ class Order extends Base
                 if($data2["return_code"] == "SUCCESS"){
                     //退款记录
                     $mm['order_type']='6';    //退款到账
+                    $mm['create_time']=time();    //退款到账
                     $ree=db('captical_record')->where(['order_number'=>$v['order_number'],'order_type'=>'4'])->update($mm);
                     //退款完成后，修改商品开甩记录的状态
                     $res=db('goods_receive')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id']])->setField('order_type',-1);
@@ -1000,6 +1002,7 @@ class Order extends Base
                 $where['pay']='0';
                 $where['pay_type']='1';     //alipay   
                 $where['order_type']='4';   //退款记录
+                $where['create_time']=time();   //退款记录
                 if($v['help_id']=='0')
                 {
                     $where['order_status']='0';   //自己甩
@@ -1012,6 +1015,7 @@ class Order extends Base
                if($data3=='1'){    //成功
                      //退款记录
                      $mm['order_type']='6';    //退款到账
+                     $mm['create_time']=time();    //退款到账
                      $ree=db('captical_record')->where(['order_number'=>$v['order_number'],'order_type'=>'4'])->update($mm);
                     //退款完成后，修改商品开甩记录的状态
                     $res=db('goods_receive')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id']])->setField('order_type',-1);
