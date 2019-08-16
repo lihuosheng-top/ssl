@@ -561,6 +561,7 @@ class Game extends Base
                 $where['pay_type']='2';       //weixin   
                 $where['order_type']='2';     //免单
                 $where['order_status']='0';   //自己甩
+                $where['create_time']=time();   //自己甩
                 $re=db('captical_record')->insert($where);
             }
         }else{
@@ -582,6 +583,7 @@ class Game extends Base
                 $where['pay_type']='1';       //alipay   
                 $where['order_type']='2';     //免单
                 $where['order_status']='0';   //自己甩
+                $where['create_time']=time();   //自己甩
                 $re=db('captical_record')->insert($where);
             }
         }
