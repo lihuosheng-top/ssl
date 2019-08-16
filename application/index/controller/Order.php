@@ -105,10 +105,10 @@ class Order extends Base
         //判断甩商品订单帮甩数量
         $re=db('goods_receive')->where(['goods_id'=>$input['goods_id'],'member_id'=>$member_id['id']])->find();
         if($re){     //商品已开甩
-            if($re['order_type']='1'){
+            if($re['order_type']=='1'){
                 return    ajax_error('商品已甩，不能开甩');
             }
-            if($re['order_type']='-1'){
+            if($re['order_type']=='-1'){
                 return    ajax_error('商品退款，不能开甩');
             }
         }
@@ -283,10 +283,10 @@ class Order extends Base
         //判断甩商品订单帮甩数量
         $re=db('goods_receive')->where(['goods_id'=>$input['goods_id'],'member_id'=>$member_id['id']])->find();
         if($re){     //商品已开甩
-            if($re['order_type']='1'){
+            if($re['order_type']=='1'){
                 return    ajax_error('商品已甩，不能开甩');
             }
-            if($re['order_type']='-1'){
+            if($re['order_type']=='-1'){
                 return    ajax_error('商品退款，不能开甩');
             }
         }
@@ -486,10 +486,10 @@ class Order extends Base
         //判断甩商品订单帮甩数量
         $re=db('goods_receive')->where(['goods_id'=>$input['goods_id'],'member_id'=>$member_id['id']])->find();
         if($re){     //商品已开甩
-            if($re['order_type']='1'){
+            if($re['order_type']=='1'){
                 return    ajax_error('商品已甩，不能开甩');
             }
-            if($re['order_type']='-1'){
+            if($re['order_type']=='-1'){
                 return    ajax_error('商品退款，不能开甩');
             }
         }
@@ -652,10 +652,10 @@ class Order extends Base
         //判断甩商品订单帮甩数量
         $re=db('goods_receive')->where(['goods_id'=>$input['goods_id'],'member_id'=>$member_id['id']])->find();
         if($re){     //商品已开甩
-            if($re['order_type']='1'){
+            if($re['order_type']=='1'){
                 return    ajax_error('商品已甩，不能开甩');
             }
-            if($re['order_type']='-1'){
+            if($re['order_type']=='-1'){
                 return    ajax_error('商品退款，不能开甩');
             }
         }
