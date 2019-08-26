@@ -243,7 +243,7 @@ class Role extends Controller
         $data = $request->only(["name","pid","status","desc"]);
         $data["menu_role_id"] = empty($request->only(["menu_role_id"])["menu_role_id"]) ? '' : implode(',', $request->only(["menu_role_id"])["menu_role_id"]);
         $boolData = db("role")->where("id",$id)->update($data);
-        if($boolData){
+        if($boolData !==false){
             $this->success("角色修改成功",url("admin/role/index"));
         }else{
             $this->error("添加修改失败",url("admin/role/add"));
@@ -264,7 +264,7 @@ class Role extends Controller
             if($status == 0) {
                 $id = $request->only(["id"])["id"];
                 $bool = db("role")->where("id", $id)->update(["status" => 0]);
-                if ($bool) {
+                if ($bool !== false) {
                     $this->redirect(url("admin/role/index"));
                 } else {
                     $this->error("修改失败", url("admin/role/index"));

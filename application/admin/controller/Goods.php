@@ -302,7 +302,7 @@ class Goods extends Base
                 $goods_data['end_date']=strtotime($goods_data['end_date']);
                 // $goods_data['goods_sign']=json_encode($goods_data['goods_sign']);
                 $re=db('goods')->where('id',$goods_data['id'])->update($goods_data);
-                if($re){
+                if($re !== false){
                     $this->success("编辑成功", url("admin/Goods/goods_index"));
                 }else{
                     $this->error("编辑失败");
@@ -441,7 +441,7 @@ class Goods extends Base
             if ($status == 1) {
                 $id = $request->only(["id"])["id"];
                 $bool = db("goods")->where("id", $id)->update(["label" => 1]);
-                if ($bool) {
+                if ($bool !== false) {
                     $this->redirect(url("admin/Goods/goods_index"));
                 } else {
                     $this->error("修改失败", url("admin/Goods/goods_index"));
@@ -525,7 +525,7 @@ class Goods extends Base
             if (!empty($id)) {
                 $photo = db("special")->where("id", $id)->update(["images" => null]);
             }
-            if ($photo) {
+            if ($photo !==false) {
                 return ajax_success('更新成功!');
             } else {
                 return ajax_error('更新失败');
@@ -690,7 +690,7 @@ class Goods extends Base
         }
         if($data){
             $re=db('goods')->where('id',$input['id'])->update($data);
-            if($re){
+            if($re !== false){
                 $this->success('保存成功',url('admin/Goods/goods_index'));
             }else{
                 $this->error('保存失败');

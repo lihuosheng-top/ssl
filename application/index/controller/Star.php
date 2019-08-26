@@ -58,7 +58,7 @@ class Star extends Base
             $star_num['star_value']=$re['star_value']-$value;
             $star_num['exchange_star_value']=$re['exchange_star_value']+$value;
             $res=db('member')->where('token',$this->token)->update($star_num);
-            if($res)
+            if($res !==false)
             {
                 // //修改商品领取状态
                 // $re2=db('goods_receive')->where(['member_id'=>$re['id'],'goods_id'=>])->update();

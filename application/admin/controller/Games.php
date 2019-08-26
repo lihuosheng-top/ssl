@@ -207,7 +207,7 @@ class Games extends Controller
                 $data['key']='answer_bri';
                 $data['status']='1';
                 $re=db('sys_setting')->where('id',$input['id'])->update($data);
-                if($re){
+                if($re !== false){
                    $this->success('保存成功',url('admin/Games/answer_bri'));
                 }else{
                    $this->error('保存失败');
@@ -271,7 +271,7 @@ class Games extends Controller
                 $data['value']=$value;
                 $data['status']='1';
                 $re=db('sys_setting')->where('id',$input['id'])->update($data);
-                if($re){
+                if($re !==false){
                     $this->success('保存成功');
                 }else{
                     $this->error('保存失败');
@@ -489,7 +489,7 @@ class Games extends Controller
                 $data['problem_type']=$problem_type;
                 $data['problem_status']=$input['b'];    //问题难度
                 $re=db('problem_house')->where('id',$input['id'])->update($data);
-                if($re)
+                if($re !== false)
                 {
                     $this->success('保存成功',url('admin/Games/answer_bank'));
                 }else{

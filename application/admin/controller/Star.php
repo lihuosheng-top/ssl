@@ -99,7 +99,7 @@ class Star extends Controller
 		   $goods_data['goods_image'] = '/uploads/'.str_replace("\\", "/", $info->getSaveName()); 
 	   }
 	   $re=db('star_goods')->where('id',$goods_data['id'])->update($goods_data);
-	   if($re){
+	   if($re !== false){
             $this->success('编辑成功',url('admin/Star/star_exchange'));
 	   }else{
              $this->error('编辑失败');

@@ -708,7 +708,7 @@ class Game extends Base
       $map['status']=3;
       $map['unlock_time']=time();
       $answer=db('answer_record')->where(['member_id'=>$member['id'],'goods_id'=>$input['goods_id'],'status'=>0])->update($map);
-      if($answer)
+      if($answer !== false)
       {
           return ajax_success('获取成功');
       }else{

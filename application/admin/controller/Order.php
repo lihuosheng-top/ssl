@@ -238,7 +238,7 @@ use think\Request;
             $data['express_id']=$input['express'];
             $data['order_type']='3';
             $res=db('goods_receive')->where('order_number',$input['order_number'])->update($data);
-            if($res)
+            if($res !==false)
             {
                 return ajax_success('保存成功');
             }

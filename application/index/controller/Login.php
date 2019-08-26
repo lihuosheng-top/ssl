@@ -160,7 +160,7 @@ class Login extends Controller{
                     $data['token']=md5($key.md5($data['token_time']));    //token加密
                     //将token保存数据库
                     $re=db('member')->where('account',$user_mobile)->update($data);
-                    if($re){
+                    if($re !== false){
                         //清空code缓存
                       Session::delete('code');
                       //

@@ -94,7 +94,7 @@ namespace app\admin\controller;
 		  $input['pid']=$pid;
 		  //更新信息
 		  $res=db('member')->where('id',$input['id'])->update($input);
-		  if($res)
+		  if($res !== false)
 		  {
            $this->success('编辑成功',url('admin/Member/member_list'));
 		  }else{

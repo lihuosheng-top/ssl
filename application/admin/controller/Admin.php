@@ -128,7 +128,7 @@ class Admin extends Controller
         $data["stime"] = date("Y-m-d H:i:s");
         $id = $request->only(['id'])['id'];
         $bool = db("Admin")->where('id', $id)->update($data);
-        if ($bool){
+        if ($bool !== false){
             $this->success("编辑成功","admin/admin/index");
         }else{
             $this->error("编辑失败","admin/admin/edit");
@@ -179,7 +179,7 @@ class Admin extends Controller
         $id = $request->only(['id'])['id'];
         $passwd = md5($request->only(["passwd"])["passwd"]);
         $bool = db("Admin")->where("id",$id)->update(["passwd"=>$passwd]);
-        if($bool){
+        if($bool !== false){
             $this->success("修改成功，请重新登录", "admin/Login/index");
         }
     }

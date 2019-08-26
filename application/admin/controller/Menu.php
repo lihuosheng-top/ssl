@@ -84,7 +84,7 @@ class Menu extends Controller
     public function updata(Request $request,$id){
         $data = $request->param();
         $bool = db("Menu")->where('id',$id)->update($data);
-        if ($bool){
+        if ($bool !== false){
             $this->success("编辑成功",url("admin/admin/index"));
         }else{
             $this->error("编辑失败",url("admin/admin/edit"));
