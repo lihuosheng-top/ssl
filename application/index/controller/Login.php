@@ -143,7 +143,7 @@ class Login extends Controller{
                               ENGINE=InnoDB
                               COMMENT='用户好友表'
                             ";
-                            $con=mysqli_connect("rm-wz9l3z92630ora5wjwo.mysql.rds.aliyuncs.com","siring","Ali%#@&*9l3zSing",'ssl');
+                            $con=mysqli_connect("rm-wz9l3z92630ora5wjwo.mysql.rds.aliyuncs.com","siring","ei%&#w9l3z3",'ssl');
                             if($con)
                             {
                                 mysqli_query($con,$sql);   //新建表
@@ -193,7 +193,7 @@ class Login extends Controller{
                               ENGINE=InnoDB
                               COMMENT='用户好友表'
                             ";
-                            $con=mysqli_connect("rm-wz9l3z92630ora5wjwo.mysql.rds.aliyuncs.com","siring","Ali%#@&*9l3zSing",'ssl');
+                            $con=mysqli_connect("rm-wz9l3z92630ora5wjwo.mysql.rds.aliyuncs.com","siring","ei%&#w9l3z3",'ssl');
                             if($con)
                             {
                                 mysqli_query($con,$sql);   //新建表
@@ -244,7 +244,7 @@ class Login extends Controller{
                         ENGINE=InnoDB
                         COMMENT='用户好友表'
                       ";
-                      $con=mysqli_connect("rm-wz9l3z92630ora5wjwo.mysql.rds.aliyuncs.com","siring","Ali%#@&*9l3zSing",'ssl');
+                      $con=mysqli_connect("rm-wz9l3z92630ora5wjwo.mysql.rds.aliyuncs.com","siring","ei%&#w9l3z3",'ssl');
                       if($con)
                       {
                           mysqli_query($con,$sql);   //新建表
@@ -356,7 +356,7 @@ class Login extends Controller{
     //     ENGINE=InnoDB
     //     COMMENT='用户好友表'
     //   ";
-    //   $con=mysqli_connect("rm-wz9l3z92630ora5wjwo.mysql.rds.aliyuncs.com","siring","Ali%#@&*9l3zSing",'ssl');
+    //   $con=mysqli_connect("rm-wz9l3z92630ora5wjwo.mysql.rds.aliyuncs.com","siring","ei%&#w9l3z3",'ssl');
     //   if($con)
     //   {
     //       mysqli_query($con,$sql);
@@ -393,7 +393,7 @@ class Login extends Controller{
              ENGINE=InnoDB
              COMMENT='用户好友表'
            ";
-           $con=mysqli_connect("rm-wz9l3z92630ora5wjwo.mysql.rds.aliyuncs.com","siring","Ali%#@&*9l3zSing",'ssl');
+           $con=mysqli_connect("rm-wz9l3z92630ora5wjwo.mysql.rds.aliyuncs.com","siring","ei%&#w9l3z3",'ssl');
            if($con)
            {
                mysqli_query($con,$sql);   //新建表
